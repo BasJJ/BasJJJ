@@ -5,8 +5,6 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesManager.UI", "CoursesManager.UI\CoursesManager.UI.csproj", "{B4BFB776-DE39-4C07-8739-F14FA5F20674}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesManager.MVVM", "CoursesManager.MVVM\CoursesManager.MVVM.csproj", "{9D4FCD77-CFC5-40F2-91AF-B403997F157C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{B4BFB776-DE39-4C07-8739-F14FA5F20674}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BFB776-DE39-4C07-8739-F14FA5F20674}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4BFB776-DE39-4C07-8739-F14FA5F20674}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D4FCD77-CFC5-40F2-91AF-B403997F157C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D4FCD77-CFC5-40F2-91AF-B403997F157C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D4FCD77-CFC5-40F2-91AF-B403997F157C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D4FCD77-CFC5-40F2-91AF-B403997F157C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
