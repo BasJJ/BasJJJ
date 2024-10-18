@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesManager.UI", "Course
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesManager.MVVM", "CoursesManager.MVVM\CoursesManager.MVVM.csproj", "{A9381B70-7E8C-4B83-A33F-918903A5DE56}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoursesManager.MVVM.Dialogs", "CoursesManager.MVVM.Dialogs\CoursesManager.MVVM.Dialogs.csproj", "{89422143-DC04-44EC-BCAF-8C0ABA305DA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A9381B70-7E8C-4B83-A33F-918903A5DE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9381B70-7E8C-4B83-A33F-918903A5DE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9381B70-7E8C-4B83-A33F-918903A5DE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89422143-DC04-44EC-BCAF-8C0ABA305DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89422143-DC04-44EC-BCAF-8C0ABA305DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89422143-DC04-44EC-BCAF-8C0ABA305DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89422143-DC04-44EC-BCAF-8C0ABA305DA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
