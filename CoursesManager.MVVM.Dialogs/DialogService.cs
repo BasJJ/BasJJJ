@@ -3,20 +3,37 @@ using System.Windows;
 
 namespace CoursesManager.MVVM.Dialogs;
 
-public class DialogService : IDialogService
+public sealed class DialogService : IDialogService
 {
     private readonly Dictionary<Type, (Type windowType, Func<ViewModel> viewModelFactory)> _dialogMapping = new();
 
-    public void RegisterDialog<TDialogViewModel, TDialogWindow, TDialogResponseType>(Func<TDialogViewModel> viewModelFactory) where TDialogViewModel : BaseDialogViewModel<TDialogResponseType> where TDialogWindow : Window, new() where TDialogResponseType : class
+    public void RegisterDialog<TDialogViewModel, TDialogWindow, TDialogResultType>(Func<TDialogViewModel> viewModelFactory)
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+        where TDialogWindow : Window, new()
+        where TDialogResultType : class
     {
         ArgumentNullException.ThrowIfNull(viewModelFactory);
 
         _dialogMapping[typeof(TDialogViewModel)] = (typeof(TDialogWindow), viewModelFactory);
     }
 
-    public Task<DialogResponse<TDialogResponseType>> ShowDialogAsync<TDialogViewModel, TDialogResponseType>()
-        where TDialogViewModel : BaseDialogViewModel<TDialogResponseType>
-        where TDialogResponseType : class
+    public Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>()
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+        where TDialogResultType : class
+    {
+        return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(null);
+    }
+
+    public Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(TDialogResultType initialData)
+        where TDialogViewModel : DialogViewModelInitialData<TDialogResultType>
+        where TDialogResultType : class
+    {
+        return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(initialData);
+    }
+
+    private Task<DialogResult<TDialogResultType>> ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(TDialogResultType? initialData)
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+        where TDialogResultType : class
     {
         if (!_dialogMapping.TryGetValue(typeof(TDialogViewModel), out var mappingTuple))
         {
@@ -26,11 +43,16 @@ public class DialogService : IDialogService
         var (windowType, viewModelFactory) = mappingTuple;
 
         var window = (Window)Activator.CreateInstance(windowType)!;
-        var viewModel = (BaseDialogViewModel<TDialogResponseType>)viewModelFactory();
+        var viewModel = (DialogViewModel<TDialogResultType>)viewModelFactory();
+
+        if (initialData != null && viewModel is DialogViewModelInitialData<TDialogResultType> vm)
+        {
+            vm.SetInitialData(initialData);
+        }
 
         window.DataContext = viewModel;
 
-        var tcs = new TaskCompletionSource<DialogResponse<TDialogResponseType>>();
+        var tcs = new TaskCompletionSource<DialogResult<TDialogResultType>>();
 
         viewModel.RegisterResponseCallback(response =>
         {
@@ -45,7 +67,7 @@ public class DialogService : IDialogService
         {
             if (tcs.Task.IsCompleted) return;
 
-            var failureResponse = DialogResponse<TDialogResponseType>.Builder()
+            var failureResponse = DialogResult<TDialogResultType>.Builder()
                 .SetFailure("Dialog was closed by the user")
                 .Build();
 

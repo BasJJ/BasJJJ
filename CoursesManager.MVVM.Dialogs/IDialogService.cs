@@ -5,12 +5,16 @@ namespace CoursesManager.MVVM.Dialogs;
 
 public interface IDialogService
 {
-    void RegisterDialog<TDialogViewModel, TDialogWindow, TDialogResponseType>(Func<TDialogViewModel> viewModelFactory)
-        where TDialogViewModel : BaseDialogViewModel<TDialogResponseType>
-        where TDialogResponseType : class
-        where TDialogWindow : Window, new();
+    void RegisterDialog<TDialogViewModel, TDialogWindow, TDialogResultType>(Func<TDialogViewModel> viewModelFactory)
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+        where TDialogWindow : Window, new()
+        where TDialogResultType : class;
 
-    Task<DialogResponse<TDialogResponseType>> ShowDialogAsync<TDialogViewModel, TDialogResponseType>()
-        where TDialogViewModel : BaseDialogViewModel<TDialogResponseType>
-        where TDialogResponseType : class;
+    Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>()
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+        where TDialogResultType : class;
+
+    Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(TDialogResultType initialData)
+        where TDialogViewModel : DialogViewModelInitialData<TDialogResultType>
+        where TDialogResultType : class;
 }
