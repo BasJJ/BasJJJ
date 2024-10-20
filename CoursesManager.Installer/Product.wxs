@@ -18,6 +18,10 @@
         <Property Id="DB_NAME" Value="MyDatabase" />
         <Property Id="DB_USER" Value="admin" />
         <Property Id="DB_PASSWORD" Value="example" /> -->
+
+		<Icon Id="CoursesManagerIcon" SourceFile="..\CoursesManager.UI\Resources\Icons\A3Logo.ico" />
+
+		<Property Id="ARPPRODUCTICON" Value="CoursesManagerIcon" />
 		
         <ui:WixUI Id="WixUI_Minimal" InstallDirectory="INSTALLFOLDER" />
 
@@ -29,7 +33,7 @@
 
 		<ComponentGroup Id="MainComponents">
 			<Component Id="MainExecutable" Guid="49BCCDE1-5E00-452A-85D3-81B6FCE3DE20">
-	            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="CoursesManager" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]CoursesManager.UI.exe" />
+	            <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="CoursesManager" WorkingDirectory="INSTALLFOLDER" Target="[INSTALLFOLDER]CoursesManager.UI.exe" Icon="CoursesManagerIcon" />
 
 	            <RemoveFile Id="RemoveDesktopShortcut" Name="CoursesManager.lnk" Directory="DesktopFolder" On="uninstall"/>
 
