@@ -1,0 +1,30 @@
+<Project Sdk="WixToolset.Sdk/5.0.1">
+  <PropertyGroup>
+    <OutputName>CoursesManager_$(Platform)</OutputName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Platforms>x86;x64</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.rtf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../CoursesManager.UI/CoursesManager.UI.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DefineConstants>
+      ProductVersion=$(ProductVersion);
+      licenseRtf=$(MSBuildProjectDirectory)\license.rtf;
+    </DefineConstants>
+  </PropertyGroup>
+</Project>
