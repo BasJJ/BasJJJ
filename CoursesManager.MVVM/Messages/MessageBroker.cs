@@ -12,7 +12,9 @@ public class MessageBroker : IMessageBroker
         {
             if (!_subscribers.TryGetValue(typeof(TMessageType), out var subscriber)) return false;
 
-            subscriber.ForEach(a => ((Action<TMessageType>)a).Invoke(message));
+            var subscriberList = subscriber.ToList();
+
+            subscriberList.ForEach(a => ((Action<TMessageType>)a)?.Invoke(message));
             return true;
         }
     }
@@ -39,7 +41,7 @@ public class MessageBroker : IMessageBroker
         lock (_subscribers)
         {
             if (!_subscribers.ContainsKey(typeof(TMessageType))) return;
-            
+
             _subscribers[typeof(TMessageType)].RemoveAll(h => h.Equals(handler));
         }
     }

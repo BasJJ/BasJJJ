@@ -22,7 +22,8 @@ public sealed class DialogResult<TDialogResultType>
     public TDialogResultType? Data { get; private set; }
 
     // Private constructor to force use of the builder.
-    private DialogResult() { }
+    private DialogResult()
+    { }
 
     /// <summary>
     /// Creates and returns a new builder for constructing a <see cref="DialogResult{TDialogResultType}"/>.
@@ -77,7 +78,7 @@ public sealed class DialogResult<TDialogResultType>
         /// <param name="data">The data returned by the dialog.</param>
         /// <param name="outcomeMessage">An optional message describing the successful outcome.</param>
         /// <returns>The current <see cref="DialogResultBuilder"/> instance.</returns>
-        public DialogResultBuilder SetSuccess(TDialogResultType data, string? outcomeMessage)
+        public DialogResultBuilder SetSuccess(TDialogResultType data, string? outcomeMessage = null)
         {
             _dialogResult.Data = data;
             _dialogResult.OutcomeMessage = outcomeMessage;
@@ -120,4 +121,8 @@ public sealed class DialogResult<TDialogResultType>
             return _dialogResult;
         }
     }
+}
+
+public abstract class DialogResultType
+{
 }

@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoursesManager.MVVM.Dialogs\CoursesManager.MVVM.Dialogs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Icons\A3Logo.ico" />
   </ItemGroup>
 
