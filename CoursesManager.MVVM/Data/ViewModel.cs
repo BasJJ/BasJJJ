@@ -6,6 +6,13 @@ namespace CoursesManager.MVVM.Data;
 
 public abstract class ViewModel : IsObservable, INotifyDataErrorInfo
 {
+    private string? _viewTitle;
+    public string? ViewTitle
+    {
+        get => _viewTitle;
+        set => SetProperty(ref _viewTitle, value);
+    }
+
     private Dictionary<string, List<string>> _allErrors = new();
 
     public bool HasErrors => _allErrors.Count != 0;

@@ -15,6 +15,7 @@
         (na toevoegen ctrl+b om te builden!)
         
         -->
+
         <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
             <views:StudentManagerView />
         </DataTemplate>

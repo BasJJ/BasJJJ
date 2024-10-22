@@ -1,10 +1,5 @@
 ﻿using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -12,6 +7,7 @@ namespace CoursesManager.UI.ViewModels
     {
         public StudentManagerViewModel(INavigationService navigationService) : base(navigationService)
         {
+            ViewTitle = "Cursisten beheer";
         }
     }
 }

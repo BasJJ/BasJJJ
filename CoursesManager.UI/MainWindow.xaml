@@ -3,10 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:CoursesManager.UI.Views"
+        xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
+        xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         xmlns:local="clr-namespace:CoursesManager.UI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="1080" Width="1920"
+        >
+    <!--<Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
+            <views:StudentManagerView />
+        </DataTemplate>
+    </Window.Resources>-->
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <controls:HeaderView Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1" DataContext="{Binding HeaderViewModel}"></controls:HeaderView>
+
+        <Grid Grid.Row="1">
+            
+            <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
+        </Grid>
     </Grid>
 </Window>

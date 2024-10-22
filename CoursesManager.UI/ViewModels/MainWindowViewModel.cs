@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.ViewModels.Controls;
 
-namespace CoursesManager.UI.ViewModels 
+namespace CoursesManager.UI.ViewModels;
+
+public class MainWindowViewModel
 {
-    public class MainWindowViewModel
-    {
-        INavigationService NavigationService;
+    public HeaderViewModel HeaderViewModel { get; }
+    public INavigationService NavigationService { get; set; }
 
-        public MainWindowViewModel(INavigationService navigationService)
-        {
-            NavigationService = navigationService;
-        }
+    public MainWindowViewModel(INavigationService navigationService)
+    {
+        NavigationService = navigationService;
+        HeaderViewModel = new HeaderViewModel(navigationService);
     }
 }
