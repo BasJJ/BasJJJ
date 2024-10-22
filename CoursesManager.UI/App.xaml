@@ -5,8 +5,18 @@
              xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
              xmlns:views="clr-namespace:CoursesManager.UI.Views">
     <Application.Resources>
-        
-        <!-- DataTemplate for example: UserControl1 
+        <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
+            <views:StudentManagerView />
+        </DataTemplate>
+
+        <SolidColorBrush x:Key="TestBrush" Color="Red"/>
+    </Application.Resources>
+</Application>
+
+
+
+
+<!-- DataTemplate for example: UserControl1 
         
         <DataTemplate DataType="{x:Type viewModels:UserControlViewModel}">
             <views:UserControl1 />
@@ -15,11 +25,3 @@
         (na toevoegen ctrl+b om te builden!)
         
         -->
-
-        <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
-            <views:StudentManagerView />
-        </DataTemplate>
-
-
-    </Application.Resources>
-</Application>

@@ -1,4 +1,11 @@
-﻿using CoursesManager.MVVM.Navigation;
+﻿using System.Configuration;
+using System.Data;
+using System.Windows;
+using System.Windows.Input;
+using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Navigation;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.ViewModels;
 using System.Windows;
 using CoursesManager.MVVM.Dialogs;
@@ -11,17 +18,15 @@ namespace CoursesManager.UI
         {
             base.OnStartup(e);
 
+            INavigationService.RegisterViewModelFactory<StudentManagerViewModel>((navigationService) => new StudentManagerViewModel(navigationService));
+
             INavigationService mainNavigationService = new NavigationService();
             IDialogService dialogService = new DialogService();
 
-            INavigationService.RegisterViewModelFactory<StudentManagerViewModel>((navigationService) => new StudentManagerViewModel(navigationService));
-
             mainNavigationService.NavigateTo<StudentManagerViewModel>();
 
-            MainWindowViewModel mainWindowViewModel = new(mainNavigationService);
-
             MainWindow mw = new();
-            mw.DataContext = mainWindowViewModel; 
+            mw.DataContext = new MainWindowViewModel(mainNavigationService);
 
             mw.Show();
         }
