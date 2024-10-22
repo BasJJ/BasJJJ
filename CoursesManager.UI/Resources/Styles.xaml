@@ -6,9 +6,9 @@
         <GradientStop Color="#FF1E0F74" Offset="1" />
     </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="SecondaryGradiant">
+    <LinearGradientBrush x:Key="SecondaryGradiant" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#51BAF7" Offset="0" />
-        <GradientStop Color="#D5F0FF" Offset="0" />
+        <GradientStop Color="#D5F0FF" Offset="1" />
     </LinearGradientBrush>
 
     <Style x:Key="PrimaryHeaderBorder" TargetType="Border">
@@ -22,43 +22,52 @@
         </Setter>
     </Style>
 
-    <!--<Style TargetType="TextBox">
+    <LinearGradientBrush x:Key="ButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#948DFF" Offset="0" />
+        <GradientStop Color="#584FE3" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ButtonPressedGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#584FE3" Offset="0" />
+        <GradientStop Color="#948DFF" Offset="1" />
+    </LinearGradientBrush>
+
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <!--<Setter Property="Background" Value="{StaticResource PrimaryGradient}" />-->
+        <Setter Property="BorderBrush" Value="#6C66D1" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
-                    <Grid>
-                        -->
-    <!-- Actual TextBox content -->
-    <!--
-                        <ScrollViewer x:Name="PART_ContentHost" />
-
-                        -->
-    <!-- Placeholder Text (Visible only when the TextBox is empty) -->
-    <!--
-                        <TextBlock x:Name="PlaceholderTextBlock"
-                                   Text="{Binding Path=(local:TextBoxHelper.PlaceholderText), RelativeSource={RelativeSource TemplatedParent}}"
-                                   Foreground="Gray"
-                                   Margin="5,0,0,0"
-                                   VerticalAlignment="Center"
-                                   IsHitTestVisible="False"
-                                   Visibility="Collapsed" />
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        -->
-    <!-- Trigger to show/hide the placeholder text -->
-    <!--
-                        <Trigger Property="Text" Value="">
-                            <Setter TargetName="PlaceholderTextBlock" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter TargetName="PlaceholderTextBlock" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="PlaceholderTextBlock" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="15" Height="80" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
+        <Setter Property="Foreground" Value="White" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonHoverGradient}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonPressedGradient}" />
+                <Setter Property="BorderBrush" Value="#FF635BDC" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="6" ShadowDepth="5" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

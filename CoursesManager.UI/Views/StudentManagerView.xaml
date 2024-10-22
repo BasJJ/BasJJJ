@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:CoursesManager.UI.Views"
+             xmlns:rs="clr-namespace:CoursesManager.UI.Resources"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="1030" d:DesignWidth="1920" d:Background="{StaticResource SecondaryGradiant}">
     <Grid>
@@ -26,9 +28,15 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="1" ></TextBox>
-            <Button Grid.Column="3">Data importeren</Button>
-            <Button Grid.Column="5">Data exporteren</Button>
+            <Border Grid.Column="1" CornerRadius="15">
+                <rs:PlaceholderTextBox Placeholder="Hinted search text" VerticalContentAlignment="Center" FontSize="36" BorderBrush="{x:Null}" ></rs:PlaceholderTextBox>
+            </Border>
+
+            <!--<rs:SearchBox Grid.Column="1" Text="{Binding SearchText, Mode=TwoWay}"
+                             SearchCommand="{Binding SearchCommand}" />-->
+
+            <Button Grid.Column="3" Style="{StaticResource PrimaryButton}">Data importeren</Button>
+            <Button Grid.Column="5" Style="{StaticResource PrimaryButton}">Data exporteren</Button>
         </Grid>
 
         <Grid Grid.Row="3">
