@@ -7,7 +7,7 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="SecondaryGradiant">
-        <GradientStop Color="#64C2F9" Offset="0" />
+        <GradientStop Color="#51BAF7" Offset="0" />
         <GradientStop Color="#D5F0FF" Offset="0" />
     </LinearGradientBrush>
 
