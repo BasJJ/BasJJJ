@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace CoursesManager.UI.Resources;
+namespace CoursesManager.UI.Views.Controls;
 
 public static class TextBoxHelper
 {
