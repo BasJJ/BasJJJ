@@ -5,23 +5,26 @@
              xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
              xmlns:views="clr-namespace:CoursesManager.UI.Views">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
-            <views:StudentManagerView />
-        </DataTemplate>
+        <ResourceDictionary>
+            <!-- Merged Dictionaries -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <SolidColorBrush x:Key="TestBrush" Color="Red"/>
+            <!-- Directly defined resources (such as DataTemplates) -->
+            <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
+                <views:StudentManagerView />
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
 
+<!-- DataTemplate for example: UserControl1
 
-
-
-<!-- DataTemplate for example: UserControl1 
-        
         <DataTemplate DataType="{x:Type viewModels:UserControlViewModel}">
             <views:UserControl1 />
         </DataTemplate>
-        
+
         (na toevoegen ctrl+b om te builden!)
-        
+
         -->

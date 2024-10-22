@@ -9,13 +9,7 @@
         xmlns:local="clr-namespace:CoursesManager.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920"
-        >
-    <!--<Window.Resources>
-        <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
-            <views:StudentManagerView />
-        </DataTemplate>
-    </Window.Resources>-->
+        Title="MainWindow" Height="1080" Width="1920" Background="{StaticResource SecondaryGradiant}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -25,7 +19,6 @@
         <controls:HeaderView Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1" DataContext="{Binding HeaderViewModel}"></controls:HeaderView>
 
         <Grid Grid.Row="1">
-            
             <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
         </Grid>
     </Grid>
