@@ -9,7 +9,7 @@
              d:DesignHeight="1080" d:DesignWidth="1920">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -18,22 +18,44 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource PrimaryHeaderBorder}">
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource PrimaryHeaderBorder}" MouseDown="Header_MouseDown">
             <Grid Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="LeftRightColumn" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" SharedSizeGroup="LeftRightColumn" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="10" />
                 </Grid.ColumnDefinitions>
 
-                <materialDesign:PackIcon Grid.Column="1" Kind="Menu"
+                <Button Grid.Row="1" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" Foreground="Transparent">
+                    <materialDesign:PackIcon Kind="Menu"
                                      Height="48" Width="48" VerticalAlignment="Center"
-                                     Foreground="White" />
+                                     Foreground="White" Style="{StaticResource IconWithShadowStyle}" />
+                </Button>
 
-                <TextBlock Grid.Column="2" Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle, FallbackValue=Title}" HorizontalAlignment="Center" VerticalAlignment="Center"
                        FontSize="28" Foreground="White" />
+
+                <Button Grid.Row="1" Grid.Column="3" Background="Transparent" BorderBrush="Transparent" Foreground="Transparent" Click="MinimizeWindow_Click">
+                    <materialDesign:PackIcon Kind="WindowMinimize" Width="48" Height="48" Foreground="White" Style="{StaticResource IconWithShadowStyle}" />
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="4" Background="Transparent" BorderBrush="Transparent" Foreground="Transparent" Click="MaximizeWindow_Click">
+                    <materialDesign:PackIcon Kind="FullscreenExit" Width="48" Height="48" Foreground="White" Style="{StaticResource IconWithShadowStyle}" />
+                </Button>
+
+                <Button Grid.Row="1" Grid.Column="5" Background="Transparent" BorderBrush="Transparent" Foreground="Transparent" Command="{Binding CloseCommand}">
+                    <materialDesign:PackIcon Kind="Close" Width="48" Height="48" Foreground="White" Style="{StaticResource IconWithShadowStyle}" />
+                </Button>
             </Grid>
         </Border>
 

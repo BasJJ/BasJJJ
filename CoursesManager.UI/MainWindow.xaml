@@ -7,20 +7,33 @@
         xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         xmlns:local="clr-namespace:CoursesManager.UI"
-
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" d:Height="1080" d:Width="1920" Background="{StaticResource SecondaryGradiant}">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        Title="MainWindow"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        d:Height="1080" d:Width="1920">
 
-        <controls:HeaderView Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1" DataContext="{Binding HeaderViewModel}"></controls:HeaderView>
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      ResizeBorderThickness="5"
+                      GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>-->
 
-        <Grid Grid.Row="1">
-            <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
+    <Border CornerRadius="15" Background="{StaticResource SecondaryGradiant}" BorderBrush="Gray" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <controls:HeaderView Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1" DataContext="{Binding HeaderViewModel}" />
+
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>

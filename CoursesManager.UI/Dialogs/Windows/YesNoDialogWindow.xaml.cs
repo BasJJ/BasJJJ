@@ -11,19 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CoursesManager.UI.Resources;
 
-namespace CoursesManager.UI
+namespace CoursesManager.UI.Dialogs.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for YesNoDialogWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class YesNoDialogWindow : Window
     {
-        public MainWindow()
+        public YesNoDialogWindow()
         {
             InitializeComponent();
-            var resizer = new WindowResizer(this);
         }
     }
 }

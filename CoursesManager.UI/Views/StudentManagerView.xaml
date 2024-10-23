@@ -28,10 +28,6 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <!--<Border Grid.Column="1" CornerRadius="15">
-                <rs:PlaceholderTextBox Placeholder="Hinted search text" VerticalContentAlignment="Center" FontSize="36" BorderBrush="{x:Null}" ></rs:PlaceholderTextBox>
-            </Border>-->
-
             <rs:SearchBox Grid.Column="1" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <Button Grid.Column="3" Style="{StaticResource PrimaryButton}">Data importeren</Button>
