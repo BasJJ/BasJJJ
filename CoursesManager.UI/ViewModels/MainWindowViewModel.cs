@@ -1,18 +1,42 @@
-﻿using CoursesManager.MVVM.Data;
+﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
-using CoursesManager.UI.ViewModels.Controls;
+using System.Windows.Input;
+using CoursesManager.MVVM.Data;
+using CoursesManager.UI.Messages;
 
 namespace CoursesManager.UI.ViewModels;
 
-public class MainWindowViewModel
+public class MainWindowViewModel : ViewModel
 {
-    public HeaderViewModel HeaderViewModel { get; }
     public INavigationService NavigationService { get; set; }
+    private readonly IMessageBroker _messageBroker;
+
+    public ICommand CloseCommand { get; private set; }
+
+    public ICommand OpenSidebarCommand { get; private set; }
+
+    private bool _isSidebarHidden;
+
+    public bool IsSidebarHidden
+    {
+        get => _isSidebarHidden;
+        set => SetProperty(ref _isSidebarHidden, value);
+    }
 
     public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker)
     {
         NavigationService = navigationService;
-        HeaderViewModel = new HeaderViewModel(navigationService, messageBroker);
+        _messageBroker = messageBroker;
+
+        CloseCommand = new RelayCommand(() =>
+        {
+            _messageBroker.Publish<ApplicationCloseRequestedMessage>(new ApplicationCloseRequestedMessage());
+        });
+
+        OpenSidebarCommand = new RelayCommand(() =>
+        {
+            IsSidebarHidden = !IsSidebarHidden;
+        });
     }
 }

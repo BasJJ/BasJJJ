@@ -25,6 +25,21 @@
                 <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                <Setter Property="CornerRadius" Value="0" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SidebarBorder" TargetType="Border">
+        <Setter Property="Background" Value="#808080" />
+        <Setter Property="CornerRadius" Value="15,0,0,15" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                <Setter Property="CornerRadius" Value="0" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="PrimaryDialogHeaderBorder" TargetType="Border">
