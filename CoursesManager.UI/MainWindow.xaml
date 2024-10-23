@@ -11,6 +11,11 @@
         AllowsTransparency="True"
         Background="Transparent"
         d:Height="1080" d:Width="1920">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+
     <Window.Resources>
         <Style TargetType="Border" x:Key="WindowBorder">
             <Setter Property="CornerRadius" Value="15" />

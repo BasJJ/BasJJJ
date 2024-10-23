@@ -27,7 +27,7 @@
         </Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="CornerRadius" Value="0,0,15,15" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
