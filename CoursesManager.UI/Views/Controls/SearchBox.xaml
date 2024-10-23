@@ -28,7 +28,7 @@
 
     <Border CornerRadius="40" Background="White">
         <Border.Effect>
-            <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="3" Direction="3"/>
+            <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3"/>
         </Border.Effect>
         <Grid>
             <rs:PlaceholderTextBox Style="{DynamicResource PlaceholderTextBoxStyle1}" x:Name="SearchTextBox"
