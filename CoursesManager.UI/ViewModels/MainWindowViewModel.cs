@@ -16,6 +16,10 @@ public class MainWindowViewModel : ViewModel
 
     public ICommand OpenSidebarCommand { get; private set; }
 
+    public ICommand GoForwardCommand { get; private set; }
+
+    public ICommand GoBackCommand { get; private set; }
+
     private bool _isSidebarHidden;
 
     public bool IsSidebarHidden
@@ -38,5 +42,15 @@ public class MainWindowViewModel : ViewModel
         {
             IsSidebarHidden = !IsSidebarHidden;
         });
+
+        GoForwardCommand = new RelayCommand(() =>
+        {
+            NavigationService.GoForward();
+        }, NavigationService.CanGoForward);
+
+        GoBackCommand = new RelayCommand(() =>
+        {
+            NavigationService.GoBack();
+        }, NavigationService.CanGoBack);
     }
 }
