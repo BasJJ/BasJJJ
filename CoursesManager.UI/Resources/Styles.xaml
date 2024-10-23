@@ -189,12 +189,21 @@
 
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Foreground" Value="#66FFFFFF" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="Button" x:Key="SmallIconButtonWithShadowStyle" BasedOn="{StaticResource IconButtonWithShadowStyle}">
+        <!-- Override the Foreground to make the icon blue -->
+        <Setter Property="Foreground" Value="Blue" />
+
+        <!-- Make the icon smaller -->
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
     </Style>
 
 
