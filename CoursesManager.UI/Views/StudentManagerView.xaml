@@ -41,7 +41,12 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="1">
+            <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                      Style="{DynamicResource DataGridStyle1}" Grid.Column="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Voornaam" Width="*"/>
+                    <DataGridTextColumn Header="Achternaam" Width="*"/>
+                </DataGrid.Columns>
             </DataGrid>
         </Grid>
     </Grid>
