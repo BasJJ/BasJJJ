@@ -47,7 +47,7 @@ namespace CoursesManager.UI.ViewModels
         {
             ViewTitle = "Cursisten beheer";
 
-            _studentRecords = DesignStudentManagerViewModel.GenerateRandomStudents(1200);
+            _studentRecords = DesignStudentManagerViewModel.GenerateRandomStudents(150);
             FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
         }
 

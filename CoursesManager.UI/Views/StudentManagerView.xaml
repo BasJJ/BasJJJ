@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <rs:SearchBox Grid.Column="1" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <rs:SearchBox Grid.Column="1" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded"/>
 
             <Button Grid.Column="3" Style="{StaticResource PrimaryButton}" Command="{Binding DataImportCommand}">Data importeren</Button>
             <Button Grid.Column="5" Style="{StaticResource PrimaryButton}" Command="{Binding DataExportCommand}">Data exporteren</Button>
@@ -40,7 +40,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
 
             <DataGrid 
@@ -51,10 +52,11 @@
                 Grid.Column="1" 
                 ItemsSource="{Binding FilteredStudentRecords}" 
                 IsReadOnly="True">
+                
                 <DataGrid.Columns>
                     
 
-                    <DataGridTemplateColumn Header="First Name" Width="*">
+                    <DataGridTemplateColumn Header="Voornaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
@@ -62,7 +64,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Last Name" Width="*">
+                    <DataGridTemplateColumn Header="Achternaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding LastName}" VerticalAlignment="Center"/>
@@ -78,7 +80,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Actions">
+                    <DataGridTemplateColumn Header="" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -101,6 +103,27 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DataGrid 
+                RowStyle="{DynamicResource DataGridRowStyle1}" 
+                CellStyle="{DynamicResource DataGridCellStyle1}" 
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                Style="{DynamicResource DataGridStyle1}" 
+                Grid.Column="2" 
+                IsReadOnly="True"
+                Margin="50 0 0 0">
+                <DataGrid.Columns>
+
+                    <DataGridTemplateColumn Header="Cursussen" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
 
