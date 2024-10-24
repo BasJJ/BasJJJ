@@ -17,7 +17,7 @@ public interface INavigationService
     /// </summary>
     /// <typeparam name="TViewModel">The type of the view model to navigate to, which must be a subclass of <see cref="NavigatableViewModel"/>.</typeparam>
     /// <exception cref="InvalidOperationException">Thrown when no factory is registered for the specified view model type.</exception>
-    void NavigateTo<TViewModel>() where TViewModel : NavigatableViewModel;
+    void NavigateTo<TViewModel>() where TViewModel : ViewModel;
 
     /// <summary>
     /// Navigates back to the previous view model in the navigation history.
@@ -44,7 +44,8 @@ public interface INavigationService
     /// <summary>
     /// Contains factories for creating instances of view models used in navigation.
     /// </summary>
-    public static readonly Dictionary<Type, Func<NavigationService, NavigatableViewModel>> ViewModelFactories = new();
+    public static readonly Dictionary<Type, Func<ViewModel>> ViewModelFactories = new();
+    public static readonly Dictionary<Type, Func<NavigationService, NavigatableViewModel>> NavigatableViewModelFactories = new();
 
     /// <summary>
     /// Registers a factory for creating instances of the specified view model type.
@@ -53,6 +54,22 @@ public interface INavigationService
     /// <param name="viewModelFactory">A factory function that creates an instance of the view model.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="viewModelFactory"/> is null.</exception>
     public static void RegisterViewModelFactory<TViewModel>(Func<NavigationService, TViewModel> viewModelFactory) where TViewModel : NavigatableViewModel
+    {
+        ArgumentNullException.ThrowIfNull(viewModelFactory);
+
+        if (NavigatableViewModelFactories.ContainsKey(typeof(TViewModel))) return;
+
+        NavigatableViewModelFactories.Add(typeof(TViewModel), viewModelFactory);
+    }
+
+    /// <summary>
+    /// Registers a factory for creating instances of the specified view model type. Specifically for viewmodels that do not need a INavigation service.
+    /// </summary>
+    /// <typeparam name="TViewModel">The type of the view model to register, which must be a subclass of <see cref="NavigatableViewModel"/>.</typeparam>
+    /// <param name="viewModelFactory">A factory function that creates an instance of the view model.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="viewModelFactory"/> is null.</exception>
+    public static void RegisterViewModelFactory<TViewModel>(Func<TViewModel> viewModelFactory)
+        where TViewModel : ViewModel
     {
         ArgumentNullException.ThrowIfNull(viewModelFactory);
 

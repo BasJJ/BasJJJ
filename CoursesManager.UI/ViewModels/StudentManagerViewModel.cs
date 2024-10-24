@@ -12,7 +12,7 @@ using CoursesManager.UI.ViewModels.Design;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class StudentManagerViewModel : NavigatableViewModel
+    public class StudentManagerViewModel : ViewModel
     {
         #region View fields
 
@@ -35,7 +35,7 @@ namespace CoursesManager.UI.ViewModels
 
         #endregion View fields
 
-        public StudentManagerViewModel(INavigationService navigationService) : base(navigationService)
+        public StudentManagerViewModel()
         {
             ViewTitle = "Cursisten beheer";
 

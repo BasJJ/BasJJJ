@@ -18,6 +18,10 @@
                 <views:StudentManagerView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:TestViewModel}">
+                <views:TestView />
+            </DataTemplate>
+
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
         </ResourceDictionary>
     </Application.Resources>
