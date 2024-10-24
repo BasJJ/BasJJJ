@@ -10,6 +10,7 @@
         ResizeMode="CanResize"
         AllowsTransparency="True"
         Background="Transparent"
+        MinWidth="500"
         d:Height="1080" d:Width="1920">
 
     <WindowChrome.WindowChrome>
@@ -29,8 +30,6 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
-        
     </Window.Resources>
 
     <Border Style="{StaticResource WindowBorder}">
@@ -71,71 +70,70 @@
                             <ColumnDefinition Width="10" />
                         </Grid.ColumnDefinitions>
 
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="1" 
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="1"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding OpenSidebarCommand}">
                             <materialDesign:PackIcon Kind="Menu"
-                                                     Height="48" Width="48" 
+                                                     Height="48" Width="48"
                                                      VerticalAlignment="Center"
-                                                     Foreground="White" 
-                                                     Style="{StaticResource IconWithShadowStyle}"/>
+                                                     Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
                         </Button>
 
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="2" 
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="2"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding GoBackCommand}">
                             <materialDesign:PackIcon Kind="ArrowLeft"
-                                                     Height="48" Width="48" 
+                                                     Height="48" Width="48"
                                                      VerticalAlignment="Center"
                                                      Style="{StaticResource IconWithShadowStyle}" />
-
                         </Button>
 
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="3" 
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="3"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding GoForwardCommand}">
                             <materialDesign:PackIcon Kind="ArrowRight"
-                                                     Height="48" Width="48" 
+                                                     Height="48" Width="48"
                                                      VerticalAlignment="Center"
-                                                     Style="{StaticResource IconWithShadowStyle}"/>
-                        </Button>
-
-                        <TextBlock 
-                            Grid.Row="1" 
-                            Grid.Column="0"
-                            Grid.ColumnSpan="7" 
-                            Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle, FallbackValue=Title}" 
-                            HorizontalAlignment="Center" 
-                            VerticalAlignment="Center"
-                            FontSize="28" Foreground="White" />
-
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="5" 
-                            Style="{StaticResource IconButtonWithShadowStyle}"
-                            Click="MinimizeWindow_Click">
-                            <materialDesign:PackIcon Kind="WindowMinimize" Width="48" Height="48" Foreground="White" 
                                                      Style="{StaticResource IconWithShadowStyle}" />
                         </Button>
 
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="6" 
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="7"
+                            Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle, FallbackValue=Title}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="28" Foreground="White" />
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="5"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Click="MinimizeWindow_Click">
+                            <materialDesign:PackIcon Kind="WindowMinimize" Width="48" Height="48" Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="6"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Click="MaximizeWindow_Click">
                             <materialDesign:PackIcon Kind="FullscreenExit" Width="48" Height="48" Foreground="White"
                                                      Style="{StaticResource IconWithShadowStyle}" />
                         </Button>
 
-                        <Button 
-                            Grid.Row="1" 
-                            Grid.Column="7" 
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="7"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding CloseCommand}">
                             <materialDesign:PackIcon Kind="Close" Width="48" Height="48" Foreground="White"

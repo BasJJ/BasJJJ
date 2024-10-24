@@ -87,7 +87,7 @@ public class WindowResizer
             // Handle the GetMinMaxInfo of the Window
             case 0x0024:/* WM_GETMINMAXINFO */
                 WmGetMinMaxInfo(hwnd, lParam);
-                handled = true;
+                handled = false;
                 break;
         }
 
