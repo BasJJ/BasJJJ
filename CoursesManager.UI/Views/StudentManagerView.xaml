@@ -58,7 +58,7 @@
 
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Voornaam" Width="Auto">
+                    <DataGridTemplateColumn Header="Voornaam" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
@@ -66,7 +66,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Achternaam" Width="Auto">
+                    <DataGridTemplateColumn Header="Achternaam" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding LastName}" VerticalAlignment="Center" />
@@ -74,7 +74,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Email" Width="Auto">
+                    <DataGridTemplateColumn Header="Email" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Email}" VerticalAlignment="Center" />
@@ -82,7 +82,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="" Width="Auto">
+                    <DataGridTemplateColumn Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MaxWidth="200">
