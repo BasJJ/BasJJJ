@@ -23,11 +23,15 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         </Style>
+        
     </UserControl.Resources>
 
-    <Border CornerRadius="40" BorderThickness="1" BorderBrush="Gray" Background="White">
+    <Border CornerRadius="40" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3"/>
+        </Border.Effect>
         <Grid>
-            <rs:PlaceholderTextBox x:Name="SearchTextBox"
+            <rs:PlaceholderTextBox Style="{DynamicResource PlaceholderTextBoxStyle1}" x:Name="SearchTextBox"
                                    Placeholder="Hinted search text"
                                    VerticalContentAlignment="Center"
                                    FontSize="36"
@@ -38,7 +42,7 @@
                                    FocusVisualStyle="{x:Null}"
                                    Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <materialDesign:PackIcon Kind="Search" Width="36" Height="36" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,25,0" />
+            <materialDesign:PackIcon Kind="Search" Width="36" Height="36" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Gray" Margin="0,0,25,0" />
         </Grid>
     </Border>
 </UserControl>
