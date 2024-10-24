@@ -163,25 +163,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="HoverEnterStoryBoard"
-                                      Content="{TemplateBinding Content}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      RenderTransformOrigin="0.5, 0.5">
-                            <ContentPresenter.RenderTransform>
-                                <ScaleTransform ScaleX="1" ScaleY="1" />
-                            </ContentPresenter.RenderTransform>
-                        </ContentPresenter>
-                        <ContentPresenter x:Name="MyContentPresenter"
-                                      Content="{TemplateBinding Content}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"
-                                      RenderTransformOrigin="0.5, 0.5">
-                            <ContentPresenter.RenderTransform>
-                                <ScaleTransform ScaleX="1" ScaleY="1" />
-                            </ContentPresenter.RenderTransform>
-                        </ContentPresenter>
-                        <ContentPresenter x:Name="HoverExitStoryBoard"
+                        <ContentPresenter x:Name="MyContentPresenter" 
                                       Content="{TemplateBinding Content}"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
@@ -196,11 +178,10 @@
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True" />
-                                <Condition Property="IsMouseCaptured" Value="False" />
-                                <Condition Property="IsPressed" Value="False" />
+                                <Condition Property="IsPressed" Value="False"/>
                             </MultiTrigger.Conditions>
                             <MultiTrigger.EnterActions>
-                                <BeginStoryboard>
+                                <BeginStoryboard Name="HoverEnterStoryboard">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
@@ -212,9 +193,9 @@
                                 </BeginStoryboard>
                             </MultiTrigger.EnterActions>
                             <MultiTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-
+                                <RemoveStoryboard BeginStoryboardName="HoverEnterStoryboard" />
+                                <BeginStoryboard Name="HoverExitStoryboard">
+                                    <Storyboard FillBehavior="Stop">
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
                                      To="1" Duration="0:0:0.2" />
@@ -228,32 +209,34 @@
 
                         <Trigger Property="IsPressed" Value="True">
                             <Trigger.EnterActions>
+                                <RemoveStoryboard BeginStoryboardName="HoverEnterStoryboard" />
+                                <RemoveStoryboard BeginStoryboardName="HoverExitStoryboard" />
                                 <BeginStoryboard>
-                                    <Storyboard>
+                                    <Storyboard FillBehavior="Stop">
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
-                                     To="0.9" Duration="0:0:0.2" />
+                                     To="0.9" Duration="0:0:0.1" />
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
-                                     To="0.9" Duration="0:0:0.2" />
+                                     To="0.9" Duration="0:0:0.1" />
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"
-                                     To="2" Duration="0:0:0.2" />
+                                     To="2" Duration="0:0:0.1" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
-                                    <Storyboard>
+                                    <Storyboard FillBehavior="Stop">
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleX)"
-                                     To="1" Duration="0:0:0.2" />
+                                     To="1" Duration="0:0:0.1" />
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(ScaleTransform.ScaleY)"
-                                     To="1" Duration="0:0:0.2" />
+                                     To="1" Duration="0:0:0.1" />
                                         <DoubleAnimation Storyboard.TargetName="MyContentPresenter"
                                      Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"
-                                     To="0" Duration="0:0:0.2" />
+                                     To="0" Duration="0:0:0.1" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
