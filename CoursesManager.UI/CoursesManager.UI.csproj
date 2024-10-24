@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <ApplicationIcon>Resources\Icons\A3Logo.ico</ApplicationIcon>
+    <Version>$(ProductVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
