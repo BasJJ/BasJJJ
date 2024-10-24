@@ -272,6 +272,9 @@
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsMouseOver}" Value="True">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>
