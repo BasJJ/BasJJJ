@@ -33,11 +33,11 @@
 
             <materialDesign:PackIcon Kind="AccountsAdd" Grid.Column="1" Width="80" Height="80" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="white" Margin="0,0,75,0">
                 <materialDesign:PackIcon.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3"/>
+                    <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3" />
                 </materialDesign:PackIcon.Effect>
             </materialDesign:PackIcon>
-             
-            <rs:SearchBox Grid.Column="2" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded"/>
+
+            <rs:SearchBox Grid.Column="2" SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded" />
 
             <Button Grid.Column="4" Style="{StaticResource PrimaryButton}" Command="{Binding DataImportCommand}">Data importeren</Button>
             <Button Grid.Column="6" Style="{StaticResource PrimaryButton}" Command="{Binding DataExportCommand}">Data exporteren</Button>
@@ -47,26 +47,25 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="400"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <DataGrid 
-                RowStyle="{DynamicResource DataGridRowStyle1}" 
-                CellStyle="{DynamicResource DataGridCellStyle1}" 
-                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                Style="{DynamicResource DataGridStyle1}" 
-                Grid.Column="1" 
-                ItemsSource="{Binding FilteredStudentRecords}" 
+            <DataGrid
+                RowStyle="{DynamicResource DataGridRowStyle1}"
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                Style="{DynamicResource DataGridStyle1}"
+                Grid.Column="1"
+                ItemsSource="{Binding FilteredStudentRecords}"
                 IsReadOnly="True">
-                
+
                 <DataGrid.Columns>
-                    
 
                     <DataGridTemplateColumn Header="Voornaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -74,7 +73,7 @@
                     <DataGridTemplateColumn Header="Achternaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding LastName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding LastName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -82,7 +81,7 @@
                     <DataGridTemplateColumn Header="Email" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Email}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Email}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -113,12 +112,12 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <DataGrid 
-                RowStyle="{DynamicResource DataGridRowStyle1}" 
-                CellStyle="{DynamicResource DataGridCellStyle1}" 
-                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                Style="{DynamicResource DataGridStyle1}" 
-                Grid.Column="2" 
+            <DataGrid
+                RowStyle="{DynamicResource DataGridRowStyle1}"
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                Style="{DynamicResource DataGridStyle1}"
+                Grid.Column="2"
                 IsReadOnly="True"
                 Margin="50 0 0 0">
                 <DataGrid.Columns>
@@ -126,14 +125,12 @@
                     <DataGridTemplateColumn Header="Cursussen" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
                 </DataGrid.Columns>
             </DataGrid>
-
         </Grid>
     </Grid>
 </UserControl>
