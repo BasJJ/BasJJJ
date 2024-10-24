@@ -9,7 +9,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=dvm:DesignStudentManagerViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="1030" d:DesignWidth="1920" d:Background="{StaticResource SecondaryGradiant}">
+             d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradiant}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -58,7 +58,7 @@
 
                 <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Voornaam" Width="*">
+                    <DataGridTemplateColumn Header="Voornaam" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
@@ -66,7 +66,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Achternaam" Width="*">
+                    <DataGridTemplateColumn Header="Achternaam" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding LastName}" VerticalAlignment="Center" />
@@ -114,7 +114,7 @@
                 Grid.Column="1"
                 Margin="0,4,65,0"
                 Command="{Binding AddRecordCommand}">
-                <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}"/>
+                <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}" />
             </Button>
 
             <DataGrid

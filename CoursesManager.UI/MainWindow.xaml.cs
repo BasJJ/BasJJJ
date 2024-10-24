@@ -24,7 +24,7 @@ namespace CoursesManager.UI
         public MainWindow()
         {
             InitializeComponent();
-            // var resizer = new WindowResizer(this);
+            var resizer = new WindowResizer(this);
             Loaded += (s, e) =>
             {
                 var window = Window.GetWindow(this);
