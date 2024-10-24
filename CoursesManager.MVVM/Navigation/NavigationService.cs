@@ -6,33 +6,63 @@ public class NavigationService : INavigationService
 {
     public NavigationStore NavigationStore { get; } = new();
 
-    private readonly Stack<NavigatableViewModel> _forwardViewModels = new();
+    private readonly Stack<ViewModel> _forwardViewModels = new();
 
-    private readonly Stack<NavigatableViewModel> _backwardViewModels = new();
+    private readonly Stack<ViewModel> _backwardViewModels = new();
 
-    public void NavigateTo<TViewModel>() where TViewModel : NavigatableViewModel
+    public void NavigateTo<TViewModel>() where TViewModel : ViewModel
     {
-        if (!INavigationService.ViewModelFactories.TryGetValue(typeof(TViewModel), out var factory))
+        if (typeof(NavigatableViewModel).IsAssignableFrom(typeof(TViewModel)))
         {
-            throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
-        }
+            if (!INavigationService.NavigatableViewModelFactories.TryGetValue(typeof(TViewModel), out var navigatableFactory))
+            {
+                throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
+            }
 
-        _forwardViewModels.Clear();
+            _forwardViewModels.Clear();
 
-        if (NavigationStore.CurrentViewModel is not null)
-        {
-            _backwardViewModels.Push(NavigationStore.CurrentViewModel);
-        }
-        
-        var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
+            if (NavigationStore.CurrentViewModel is not null)
+            {
+                _backwardViewModels.Push(NavigationStore.CurrentViewModel);
+            }
 
-        if (existingViewModel is not null)
-        {
-            NavigationStore.CurrentViewModel = existingViewModel;
+            var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
+
+            if (existingViewModel is not null)
+            {
+                NavigationStore.CurrentViewModel = existingViewModel;
+            }
+            else
+            {
+                // Create using factory for NavigatableViewModel
+                NavigationStore.CurrentViewModel = navigatableFactory(this);
+            }
         }
         else
         {
-            NavigationStore.CurrentViewModel = factory(this);
+            if (!INavigationService.ViewModelFactories.TryGetValue(typeof(TViewModel), out var factory))
+            {
+                throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
+            }
+
+            _forwardViewModels.Clear();
+
+            if (NavigationStore.CurrentViewModel is not null)
+            {
+                _backwardViewModels.Push(NavigationStore.CurrentViewModel);
+            }
+
+            var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
+
+            if (existingViewModel is not null)
+            {
+                NavigationStore.CurrentViewModel = existingViewModel;
+            }
+            else
+            {
+                // Create using factory for regular ViewModel
+                NavigationStore.CurrentViewModel = factory();
+            }
         }
     }
 

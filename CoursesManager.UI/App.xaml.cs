@@ -26,6 +26,14 @@ public partial class App : Application
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage>(ApplicationCloseRequestedHandler);
 
         NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<TestViewModel>();
+        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<TestViewModel>();
+        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<TestViewModel>();
+        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<TestViewModel>();
+        NavigationService.NavigateTo<StudentManagerViewModel>();
 
         MainWindow mw = new()
         {
@@ -41,7 +49,8 @@ public partial class App : Application
 
     private void RegisterViewModels()
     {
-        INavigationService.RegisterViewModelFactory<StudentManagerViewModel>((navigationService) => new StudentManagerViewModel(navigationService));
+        INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel());
+        INavigationService.RegisterViewModelFactory(() => new TestViewModel());
     }
 
     /// <summary>
