@@ -30,7 +30,7 @@
         </Border.Effect>
         <Grid>
             <rs:PlaceholderTextBox Style="{DynamicResource PlaceholderTextBoxStyle1}" x:Name="SearchTextBox"
-                                   Placeholder="Hinted search text"
+                                   Placeholder="Zoeken..."
                                    VerticalContentAlignment="Center"
                                    FontSize="36"
                                    Padding="20,0,60,0"
@@ -47,8 +47,8 @@
                 Margin="0,0,25,0"
                 Style="{StaticResource IconButtonWithShadowStyle}"
                 Command="{Binding SearchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                <materialDesign:PackIcon Kind="Search" Width="48" Height="48" Foreground="White"
-                                         Style="{StaticResource IconWithShadowStyle}" />
+                <materialDesign:PackIcon Kind="Search" Width="48" Height="48" Foreground="Gray"
+                                         />
             </Button>
         </Grid>
     </Border>
