@@ -10,29 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CoursesManager.UI.Views
+namespace CoursesManager.UI.Dialogs.Windows
 {
     /// <summary>
-    /// Interaction logic for StudentManagerView.xaml
+    /// Interaction logic for YesNoDialogWindow.xaml
     /// </summary>
-    public partial class StudentManagerView : UserControl
+    public partial class YesNoDialogWindow : Window
     {
-        public StudentManagerView()
+        public YesNoDialogWindow()
         {
             InitializeComponent();
-        }
-
-        private void SearchBox_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

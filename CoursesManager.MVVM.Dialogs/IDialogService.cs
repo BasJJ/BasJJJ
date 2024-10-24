@@ -33,7 +33,7 @@ public interface IDialogService
     /// </summary>
     /// <typeparam name="TDialogViewModel">The type of the dialog view model, which should be <see cref="DialogViewModel{TDialogResultType}"/>.</typeparam>
     /// <typeparam name="TDialogResultType">The type of the dialog result data.</typeparam>
-    /// <param name="initialData">The initial data to be passed to the dialog view model.</param>
+    /// <param name="initialData">The initial data to be passed to the dialog view model. If this is a reference type make a deep copy!</param>
     /// <returns>A task representing the asynchronous operation, containing the result of the dialog.</returns>
     /// <exception cref="InvalidOperationException">Thrown when there is no mapping registered for the specified view model type.</exception>
     Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(TDialogResultType initialData)

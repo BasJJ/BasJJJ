@@ -3,10 +3,165 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CoursesManager.UI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MinWidth="1500"
+        MinHeight="600"
+        d:Height="1080" d:Width="1920">
 
-    </Grid>
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="5" CaptionHeight="0" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <Style TargetType="Border" x:Key="WindowBorder">
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Background" Value="{StaticResource SecondaryGradiant}" />
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="1" />
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                    <Setter Property="CornerRadius" Value="0" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Style="{StaticResource WindowBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.RowSpan="2" Panel.ZIndex="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource PrimaryHeaderBorder}" MouseDown="Header_MouseDown">
+                    <Grid Grid.IsSharedSizeScope="True">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Command="{Binding OpenSidebarCommand}">
+                            <materialDesign:PackIcon Kind="Menu"
+                                                     Height="48" Width="48"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Command="{Binding GoBackCommand}">
+                            <materialDesign:PackIcon Kind="ArrowLeft"
+                                                     Height="48" Width="48"
+                                                     VerticalAlignment="Center"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Command="{Binding GoForwardCommand}">
+                            <materialDesign:PackIcon Kind="ArrowRight"
+                                                     Height="48" Width="48"
+                                                     VerticalAlignment="Center"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="7"
+                            Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle, FallbackValue=Title}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="28" Foreground="White" />
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="5"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Click="MinimizeWindow_Click">
+                            <materialDesign:PackIcon Kind="WindowMinimize" Width="48" Height="48" Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="6"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Click="MaximizeWindow_Click">
+                            <materialDesign:PackIcon Kind="FullscreenExit" Width="48" Height="48" Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="7"
+                            Style="{StaticResource IconButtonWithShadowStyle}"
+                            Command="{Binding CloseCommand}">
+                            <materialDesign:PackIcon Kind="Close" Width="48" Height="48" Foreground="White"
+                                                     Style="{StaticResource IconWithShadowStyle}" />
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="Sidebar" Style="{StaticResource SidebarBorder}"
+        Panel.ZIndex="1" Visibility="{Binding IsSidebarHidden, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="1">
+
+                            <TextBlock Text="Sidebar Content" Foreground="White" FontSize="18" Margin="10" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
+            </Grid>
+        </Grid>
+    </Border>
 </Window>

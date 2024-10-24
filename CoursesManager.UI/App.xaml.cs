@@ -1,30 +1,63 @@
-﻿using CoursesManager.MVVM.Navigation;
-using CoursesManager.UI.ViewModels;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.ViewModels;
+using CoursesManager.MVVM.Messages;
+using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Dialogs.Windows;
+using CoursesManager.UI.Messages;
+using CoursesManager.UI.Dialogs.ResultTypes;
 
-namespace CoursesManager.UI
+namespace CoursesManager.UI;
+
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public static INavigationService NavigationService { get; set; } = new NavigationService();
+    public static IMessageBroker MessageBroker { get; set; } = new MessageBroker();
+    public static IDialogService DialogService { get; set; } = new DialogService();
+
+    protected override void OnStartup(StartupEventArgs e)
     {
-        protected override void OnStartup(StartupEventArgs e)
-        { 
-            MainWindow mw = new();
-            INavigationService navigationService = new NavigationService();
-            MainWindowViewModel mainWindowViewModel = new(navigationService);
-            IDialogService dialogService = new DialogService();
-            mw.Show();
-            INavigationService.RegisterViewModelFactory<StudentManagerViewModel>((navigationService) =>
-            {
-                return new StudentManagerViewModel(navigationService);
-            });
-        }
+        base.OnStartup(e);
+
+        RegisterViewModels();
+        RegisterDialogs();
+
+        MessageBroker.Subscribe<ApplicationCloseRequestedMessage>(ApplicationCloseRequestedHandler);
+
+        NavigationService.NavigateTo<StudentManagerViewModel>();
+
+        MainWindow mw = new()
+        {
+            DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
+        };
+        mw.Show();
     }
 
+    private void RegisterDialogs()
+    {
+        DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
+    }
+
+    private void RegisterViewModels()
+    {
+        INavigationService.RegisterViewModelFactory<StudentManagerViewModel>((navigationService) => new StudentManagerViewModel(navigationService));
+    }
+
+    /// <summary>
+    /// Enables us to close the app by sending a message through the messenger.
+    /// </summary>
+    /// <param name="obj"></param>
+    private static async void ApplicationCloseRequestedHandler(ApplicationCloseRequestedMessage obj)
+    {
+        var result = await DialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
+        {
+            DialogTitle = "CoursesManager",
+            DialogText = "Wil je de app afsluiten?"
+        });
+
+        if (result.Data is null) return;
+
+        if (result.Data.Result) Application.Current.Shutdown();
+    }
 }

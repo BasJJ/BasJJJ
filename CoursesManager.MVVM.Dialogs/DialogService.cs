@@ -5,7 +5,6 @@ namespace CoursesManager.MVVM.Dialogs;
 
 public sealed class DialogService : IDialogService
 {
-    private readonly Dictionary<Type, (Type windowType, Func<ViewModel> viewModelFactory)> _dialogMapping2 = new();
     private readonly Dictionary<Type, (Type windowType, Func<object, ViewModel> viewModelFactory)> _dialogMapping = new();
 
     public void RegisterDialog<TDialogViewModel, TDialogWindow, TDialogResultType>(Func<TDialogResultType?, TDialogViewModel> viewModelFactory)
