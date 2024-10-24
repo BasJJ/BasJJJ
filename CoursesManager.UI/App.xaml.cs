@@ -34,6 +34,7 @@ public partial class App : Application
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<FixingTableViewModel>();
 
         MainWindow mw = new()
         {
@@ -51,6 +52,7 @@ public partial class App : Application
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel());
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
+        INavigationService.RegisterViewModelFactory(() => new FixingTableViewModel());
     }
 
     /// <summary>
