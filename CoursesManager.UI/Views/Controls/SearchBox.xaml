@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:CoursesManager.UI.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
              mc:Ignorable="d"
@@ -23,12 +22,11 @@
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         </Style>
-        
     </UserControl.Resources>
 
     <Border CornerRadius="40" Background="White">
         <Border.Effect>
-            <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3"/>
+            <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3" />
         </Border.Effect>
         <Grid>
             <rs:PlaceholderTextBox Style="{DynamicResource PlaceholderTextBoxStyle1}" x:Name="SearchTextBox"
@@ -37,12 +35,21 @@
                                    FontSize="36"
                                    Padding="20,0,60,0"
                                    Background="Transparent"
-                                   BorderBrush="Transparent"
-                                   BorderThickness="0"
-                                   FocusVisualStyle="{x:Null}"
-                                   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                   Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <rs:PlaceholderTextBox.InputBindings>
+                    <KeyBinding Command="{Binding SearchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter" />
+                </rs:PlaceholderTextBox.InputBindings>
+            </rs:PlaceholderTextBox>
 
-            <materialDesign:PackIcon Kind="Search" Width="36" Height="36" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="Gray" Margin="0,0,25,0" />
+            <Button
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Margin="0,0,25,0"
+                Style="{StaticResource IconButtonWithShadowStyle}"
+                Command="{Binding SearchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                <materialDesign:PackIcon Kind="Search" Width="48" Height="48" Foreground="White"
+                                         Style="{StaticResource IconWithShadowStyle}" />
+            </Button>
         </Grid>
     </Border>
 </UserControl>

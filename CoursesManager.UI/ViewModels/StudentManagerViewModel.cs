@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
@@ -13,28 +14,38 @@ namespace CoursesManager.UI.ViewModels
 {
     public class StudentManagerViewModel : NavigatableViewModel
     {
-        private CancellationTokenSource _cancellationTokenSource;
+        #region View fields
 
         private string _searchText;
+
         public string SearchText
         {
             get => _searchText;
-            set
-            {
-                SetProperty(ref _searchText, value);
-                // Debounce the filter operation
-                DebounceFilterStudentRecords();
-            }
+            set => SetProperty(ref _searchText, value);
         }
-
 
         private ObservableCollection<Student> _studentRecords;
         private ObservableCollection<Student> _filteredStudentRecords;
+
         public ObservableCollection<Student> FilteredStudentRecords
         {
             get => _filteredStudentRecords;
             set => SetProperty(ref _filteredStudentRecords, value);
         }
+
+        #endregion View fields
+
+        public StudentManagerViewModel(INavigationService navigationService) : base(navigationService)
+        {
+            ViewTitle = "Cursisten beheer";
+
+            _studentRecords = DesignStudentManagerViewModel.GenerateRandomStudents(150);
+            FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
+
+            SearchCommand = new RelayCommand(OnSearchCommand);
+        }
+
+        #region Commands
 
         public ICommand DataImportCommand { get; private set; }
         public ICommand DataExportCommand { get; private set; }
@@ -43,37 +54,20 @@ namespace CoursesManager.UI.ViewModels
         public ICommand EditRecordCommand { get; private set; }
         public ICommand AddRecordCommand { get; private set; }
 
-        public StudentManagerViewModel(INavigationService navigationService) : base(navigationService)
-        {
-            ViewTitle = "Cursisten beheer";
+        #region SearchCommand
 
-            _studentRecords = DesignStudentManagerViewModel.GenerateRandomStudents(150);
-            FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
+        public ICommand SearchCommand { get; private set; }
+
+        private void OnSearchCommand()
+        {
+            FilterStudentRecordsAsync();
         }
 
-        private async void DebounceFilterStudentRecords()
-        {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-            var token = _cancellationTokenSource.Token;
+        #endregion SearchCommand
 
-            try
-            {
-                await Task.Delay(300, token); 
+        #endregion Commands
 
-                await FilterStudentRecordsAsync(token);
-            }
-            catch (TaskCanceledException)
-            {
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
-
-        private async Task FilterStudentRecordsAsync(CancellationToken cancellationToken)
+        private async Task FilterStudentRecordsAsync()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
@@ -86,11 +80,10 @@ namespace CoursesManager.UI.ViewModels
                 var filtered = await Task.Run(() =>
                 {
                     return _studentRecords.Where(student => student.TableFilter().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
-                }, cancellationToken);
+                });
 
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
             }
-
 
             OnPropertyChanged(nameof(FilteredStudentRecords));
         }

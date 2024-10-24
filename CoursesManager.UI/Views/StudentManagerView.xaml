@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-            <rs:SearchBox Grid.Column="1" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded"/>
+            <rs:SearchBox Grid.Column="1" SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded" />
 
             <Button Grid.Column="3" Style="{StaticResource PrimaryButton}" Command="{Binding DataImportCommand}">Data importeren</Button>
             <Button Grid.Column="5" Style="{StaticResource PrimaryButton}" Command="{Binding DataExportCommand}">Data exporteren</Button>
@@ -40,29 +40,26 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="400"/>
-                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="50" />
             </Grid.ColumnDefinitions>
 
-
-
-            <DataGrid 
-                RowStyle="{DynamicResource DataGridRowStyle1}" 
-                CellStyle="{DynamicResource DataGridCellStyle1}" 
-                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                Style="{DynamicResource DataGridStyle1}" 
-                Grid.Column="1" 
-                ItemsSource="{Binding FilteredStudentRecords}" 
+            <DataGrid
+                RowStyle="{DynamicResource DataGridRowStyle1}"
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                Style="{DynamicResource DataGridStyle1}"
+                Grid.Column="1"
+                ItemsSource="{Binding FilteredStudentRecords}"
                 IsReadOnly="True"
                 Margin="0 0 50 0">
-                
+
                 <DataGrid.Columns>
-                    
 
                     <DataGridTemplateColumn Header="Voornaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -70,7 +67,7 @@
                     <DataGridTemplateColumn Header="Achternaam" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding LastName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding LastName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -78,7 +75,7 @@
                     <DataGridTemplateColumn Header="Email" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Email}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Email}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -89,17 +86,17 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource SmallIconButtonWithShadowStyle}">
+                                            CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                         <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
                                     </Button>
 
                                     <Button Command="{Binding DataContext.EditRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource SmallIconButtonWithShadowStyle}">
+                                            CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                         <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
                                     </Button>
 
                                     <Button Command="{Binding DataContext.OpenRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}" ToolTip="Open" Style="{StaticResource SmallIconButtonWithShadowStyle}">
+                                            CommandParameter="{Binding}" ToolTip="Open" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                         <materialDesign:PackIcon Kind="ArrowTopRight" Height="24" Width="24" />
                                     </Button>
                                 </StackPanel>
@@ -118,26 +115,24 @@
                 <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}"/>
             </Button>
 
-            <DataGrid 
-                RowStyle="{DynamicResource DataGridRowStyle1}" 
-                CellStyle="{DynamicResource DataGridCellStyle1}" 
-                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                Style="{DynamicResource DataGridStyle1}" 
-                Grid.Column="2" 
+            <DataGrid
+                RowStyle="{DynamicResource DataGridRowStyle1}"
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                Style="{DynamicResource DataGridStyle1}"
+                Grid.Column="2"
                 IsReadOnly="True">
                 <DataGrid.Columns>
 
                     <DataGridTemplateColumn Header="Cursussen" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
                 </DataGrid.Columns>
             </DataGrid>
-
         </Grid>
     </Grid>
 </UserControl>
