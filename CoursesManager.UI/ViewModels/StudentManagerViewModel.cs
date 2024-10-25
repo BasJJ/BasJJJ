@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
-using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.ViewModels.Design;
 
@@ -69,17 +64,25 @@ namespace CoursesManager.UI.ViewModels
 
         private async Task FilterStudentRecordsAsync()
         {
+            var emily = new Student
+            {
+                FirsName = "Emily",
+                Insertion = "van der",
+                LastName = "John",
+                Email = "emilyjohn@gmail.nl"
+            };
+
             if (string.IsNullOrWhiteSpace(SearchText))
             {
                 FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
             }
             else
             {
-                string searchTerm = SearchText.Trim().ToLower();
+                string searchTerm = SearchText.Trim().Replace(" ", "").ToLower();
 
                 var filtered = await Task.Run(() =>
                 {
-                    return _studentRecords.Where(student => student.TableFilter().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+                    return _studentRecords.Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
                 });
 
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
