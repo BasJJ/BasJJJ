@@ -22,10 +22,6 @@
                 <views:TestView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:FixingTableViewModel}">
-                <views:FixingTableView />
-            </DataTemplate>
-
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
         </ResourceDictionary>
     </Application.Resources>

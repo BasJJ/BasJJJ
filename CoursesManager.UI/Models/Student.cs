@@ -40,7 +40,7 @@ public class Student : ViewModel
 
     public string PhoneNumber
     {
-        get => _phoneNumber; 
+        get => _phoneNumber;
         set => SetProperty(ref _phoneNumber, value);
     }
 
@@ -48,7 +48,7 @@ public class Student : ViewModel
 
     public string PostCode
     {
-        get => _postCode; 
+        get => _postCode;
         set => SetProperty(ref _postCode, value);
     }
 
@@ -78,6 +78,6 @@ public class Student : ViewModel
 
     public string TableFilter()
     {
-        return $"{FirsName}{Insertion}{LastName}";
+        return $"{FirsName}{Insertion}{LastName}{Email}".Replace(" ", "");
     }
 }

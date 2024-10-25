@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoursesManager.MVVM.Data;
+﻿using CoursesManager.MVVM.Data;
 
-namespace CoursesManager.UI.ViewModels
+namespace CoursesManager.UI.ViewModels;
+
+public class TestViewModel : ViewModel
 {
-    public class TestViewModel : ViewModel
-    {
-    }
 }
