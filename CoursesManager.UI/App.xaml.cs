@@ -23,7 +23,7 @@ public partial class App : Application
         RegisterViewModels();
         RegisterDialogs();
 
-        MessageBroker.Subscribe<ApplicationCloseRequestedMessage>(ApplicationCloseRequestedHandler);
+        MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();

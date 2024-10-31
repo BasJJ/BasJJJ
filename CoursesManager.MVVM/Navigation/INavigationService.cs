@@ -44,8 +44,7 @@ public interface INavigationService
     /// <summary>
     /// Contains factories for creating instances of view models used in navigation.
     /// </summary>
-    public static readonly Dictionary<Type, Func<ViewModel>> ViewModelFactories = new();
-    public static readonly Dictionary<Type, Func<NavigationService, NavigatableViewModel>> NavigatableViewModelFactories = new();
+    public static readonly Dictionary<Type, Delegate> ViewModelFactories = new();
 
     /// <summary>
     /// Registers a factory for creating instances of the specified view model type.
@@ -57,9 +56,9 @@ public interface INavigationService
     {
         ArgumentNullException.ThrowIfNull(viewModelFactory);
 
-        if (NavigatableViewModelFactories.ContainsKey(typeof(TViewModel))) return;
+        if (ViewModelFactories.ContainsKey(typeof(TViewModel))) return;
 
-        NavigatableViewModelFactories.Add(typeof(TViewModel), viewModelFactory);
+        ViewModelFactories.Add(typeof(TViewModel), viewModelFactory);
     }
 
     /// <summary>
