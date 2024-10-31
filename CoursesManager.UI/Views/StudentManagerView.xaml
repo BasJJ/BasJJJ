@@ -61,7 +61,7 @@
                     <DataGridTemplateColumn Header="Voornaam" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding FirstName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -137,7 +137,7 @@
                     <DataGridTemplateColumn Header="Cursussen" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FirsName}" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding FirstName}" VerticalAlignment="Center" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -48,10 +48,9 @@ namespace CoursesManager.UI.ViewModels
         public ICommand DeleteRecordCommand { get; private set; }
         public ICommand EditRecordCommand { get; private set; }
         public ICommand AddRecordCommand { get; private set; }
+        public ICommand SearchCommand { get; private set; }
 
         #region SearchCommand
-
-        public ICommand SearchCommand { get; private set; }
 
         private void OnSearchCommand()
         {
@@ -66,7 +65,7 @@ namespace CoursesManager.UI.ViewModels
         {
             var emily = new Student
             {
-                FirsName = "Emily",
+                FirstName = "Emily",
                 Insertion = "van der",
                 LastName = "John",
                 Email = "emilyjohn@gmail.nl"

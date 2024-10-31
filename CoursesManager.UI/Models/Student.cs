@@ -4,12 +4,12 @@ namespace CoursesManager.UI.Models;
 
 public class Student : ViewModel
 {
-    private string _firsName;
+    private string _firstName;
 
-    public string FirsName
+    public string FirstName
     {
-        get => _firsName;
-        set => SetProperty(ref _firsName, value);
+        get => _firstName;
+        set => SetProperty(ref _firstName, value);
     }
 
     private string _insertion;
@@ -78,6 +78,6 @@ public class Student : ViewModel
 
     public string TableFilter()
     {
-        return $"{FirsName}{Insertion}{LastName}{Email}".Replace(" ", "");
+        return $"{FirstName}{Insertion}{LastName}{Email}".Replace(" ", "");
     }
 }

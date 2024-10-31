@@ -29,7 +29,7 @@ namespace CoursesManager.UI.ViewModels.Design
             {
                 Student student = new Student
                 {
-                    FirsName = GetRandomFirstName(),
+                    FirstName = GetRandomFirstName(),
                     Insertion = GetRandomInsertion(),
                     LastName = GetRandomLastName(),
                     Email = $"{GetRandomFirstName()}.{GetRandomLastName()}@example.com".ToLower(),
