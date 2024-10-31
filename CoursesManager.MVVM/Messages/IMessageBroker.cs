@@ -12,7 +12,7 @@ public interface IMessageBroker
     /// <param name="message">The message instance to publish.</param>
     /// <returns><c>true</c> if the message was published successfully; otherwise, <c>false</c> which means nobody was listening.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="message"/> is <c>null</c>.</exception>
-    bool Publish<TMessageType>(TMessageType message) where TMessageType : BaseMessage;
+    bool Publish<TMessageType>(TMessageType message) where TMessageType : BaseMessage<TMessageType>;
 
     /// <summary>
     /// Subscribes to a specific message type by providing a handler to process the message when it is published.
@@ -20,7 +20,7 @@ public interface IMessageBroker
     /// <typeparam name="TMessageType">The type of message to subscribe to, which must inherit from <see cref="BaseMessage"/>.</typeparam>
     /// <param name="handler">The action to invoke when a message of type <typeparamref name="TMessageType"/> is published.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="handler"/> is <c>null</c>.</exception>
-    void Subscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage;
+    void Subscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage<TMessageType>;
 
     /// <summary>
     /// Unsubscribes a previously registered handler from a specific message type.
@@ -28,7 +28,7 @@ public interface IMessageBroker
     /// <typeparam name="TMessageType">The type of message to unsubscribe from, which must inherit from <see cref="BaseMessage"/>.</typeparam>
     /// <param name="handler">The handler that was previously registered with <see cref="Subscribe{TMessageType}(Action{TMessageType})"/>.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="handler"/> is <c>null</c>.</exception>
-    void Unsubscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage;
+    void Unsubscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage<TMessageType>;
 
     /// <summary>
     /// Unsubscribes all handlers for a specific recipient from all message types.
