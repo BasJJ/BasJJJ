@@ -4,7 +4,7 @@ public class MessageBroker : IMessageBroker
 {
     private readonly Dictionary<Type, List<object>> _subscribers = new();
 
-    public bool Publish<TMessageType>(TMessageType message) where TMessageType : BaseMessage
+    public bool Publish<TMessageType>(TMessageType message) where TMessageType : BaseMessage<TMessageType>
     {
         ArgumentNullException.ThrowIfNull(message);
 
@@ -14,12 +14,12 @@ public class MessageBroker : IMessageBroker
 
             var subscriberList = subscriber.ToList();
 
-            subscriberList.ForEach(a => ((Action<TMessageType>)a)?.Invoke(message));
+            subscriberList.ForEach(a => ((Action<TMessageType>)a)?.Invoke(message.Clone()));
             return true;
         }
     }
 
-    public void Subscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage
+    public void Subscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage<TMessageType>
     {
         ArgumentNullException.ThrowIfNull(handler);
 
@@ -34,7 +34,7 @@ public class MessageBroker : IMessageBroker
         }
     }
 
-    public void Unsubscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage
+    public void Unsubscribe<TMessageType>(Action<TMessageType> handler) where TMessageType : BaseMessage<TMessageType>
     {
         ArgumentNullException.ThrowIfNull(handler);
 
