@@ -1,4 +1,5 @@
 ﻿using CoursesManager.MVVM.Messages;
+using NUnit.Framework.Internal;
 
 namespace CoursesManager.MVVM.Tests.Messages;
 
@@ -41,7 +42,16 @@ public class MessageBrokerTests
     {
         Assert.Throws<ArgumentNullException>(() =>
         {
-            _messageBroker.Subscribe<TestMessageOne>(null);
+            _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(null, this);
+        });
+    }
+
+    [Test]
+    public void Subscribe_ThrowsArgumentNullException_WhenRecipientIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ => { }, null);
         });
     }
 
@@ -60,15 +70,15 @@ public class MessageBrokerTests
         var shouldBeInvoked = false;
         var shouldNotBeInvoked = true;
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             shouldBeInvoked = true;
-        });
+        }, this);
 
-        _messageBroker.Subscribe<TestMessageTwo>(_ =>
+        _messageBroker.Subscribe<TestMessageTwo, MessageBrokerTests>(_ =>
         {
             shouldNotBeInvoked = false;
-        });
+        }, this);
 
         _messageBroker.Publish(new TestMessageOne());
 
@@ -82,15 +92,15 @@ public class MessageBrokerTests
         var shouldBeInvoked = false;
         var shouldNotBeInvoked = true;
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             shouldNotBeInvoked = false;
-        });
+        }, this);
 
-        _messageBroker.Subscribe<TestMessageTwo>(_ =>
+        _messageBroker.Subscribe<TestMessageTwo, MessageBrokerTests>(_ =>
         {
             shouldBeInvoked = true;
-        });
+        }, this);
 
         _messageBroker.Publish(new TestMessageTwo());
 
@@ -104,15 +114,15 @@ public class MessageBrokerTests
         TestMessageTwo subscriberOneMessage = null;
         TestMessageTwo subscriberTwoMessage = null;
 
-        _messageBroker.Subscribe<TestMessageTwo>(message =>
+        _messageBroker.Subscribe<TestMessageTwo, MessageBrokerTests>(message =>
         {
             subscriberOneMessage = message;
-        });
+        }, this);
 
-        _messageBroker.Subscribe<TestMessageTwo>(message =>
+        _messageBroker.Subscribe<TestMessageTwo, MessageBrokerTests>(message =>
         {
             subscriberTwoMessage = message;
-        });
+        }, this);
 
         _messageBroker.Publish(new TestMessageTwo());
 
@@ -128,7 +138,7 @@ public class MessageBrokerTests
     [Test]
     public void Publish_ReturnsTrue_WhenThereAreSubscribers()
     {
-        _messageBroker.Subscribe<TestMessageOne>(_ => { });
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ => { }, this);
 
         Assert.IsTrue(_messageBroker.Publish(new TestMessageOne()));
     }
@@ -139,15 +149,15 @@ public class MessageBrokerTests
         var shouldBeInvoked = true;
         var shouldAlsoBeInvoked = true;
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             shouldBeInvoked = true;
-        });
+        }, this);
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             shouldAlsoBeInvoked = true;
-        });
+        }, this);
 
         _messageBroker.Publish(new TestMessageOne());
 
@@ -174,7 +184,7 @@ public class MessageBrokerTests
             notInvoked = false;
         }
 
-        _messageBroker.Subscribe<TestMessageOne>(Handler);
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(Handler, this);
 
         _messageBroker.Unsubscribe<TestMessageOne>(Handler);
 
@@ -197,8 +207,8 @@ public class MessageBrokerTests
             handlerTwoInvoked = true;
         }
 
-        _messageBroker.Subscribe<TestMessageOne>(HandlerOne);
-        _messageBroker.Subscribe<TestMessageOne>(HandlerTwo);
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(HandlerOne, this);
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(HandlerTwo, this);
 
         _messageBroker.Unsubscribe<TestMessageOne>(HandlerOne);
 
@@ -223,15 +233,15 @@ public class MessageBrokerTests
         var handlerOneNotInvoked = true;
         var handlerTwoNotInvoked = true;
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             handlerOneNotInvoked = false;
-        });
+        }, this);
 
-        _messageBroker.Subscribe<TestMessageOne>(_ =>
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
         {
             handlerTwoNotInvoked = false;
-        });
+        }, this);
 
         _messageBroker.UnsubscribeMe(this);
 
@@ -242,12 +252,53 @@ public class MessageBrokerTests
     }
 
     [Test]
-    public void Publish_Concurrency_WhenManyPublishesAreMade()
+    public async Task Publish_Concurrency_WhenManyPublishesAreMade()
     {
+        var message = new TestMessageOne();
+
+        int received = 0;
+        int totalSubscribers = 1000;
+        int amountOfPublishes = 100;
+        int expectedReceived = totalSubscribers * amountOfPublishes;
+
+        Parallel.For(0, totalSubscribers, _ =>
+        {
+            _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ => Interlocked.Increment(ref received), this);
+        });
+
+        var tasks = new List<Task>();
+        for (int i = 0; i < amountOfPublishes; i++)
+        {
+            tasks.Add(Task.Run(() => _messageBroker.Publish(message)));
+        }
+
+        await Task.WhenAll(tasks);
+
+        Assert.That(received, Is.EqualTo(expectedReceived));
     }
 
     [Test]
     public void UnsubscribeAll_DoesAsStated()
     {
+        var handlerOneNotInvoked = true;
+        var handlerTwoNotInvoked = true;
+
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
+        {
+            handlerOneNotInvoked = false;
+        }, this);
+
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ =>
+        {
+            handlerTwoNotInvoked = false;
+        }, this);
+
+        _messageBroker.UnsubscribeAll();
+
+        _messageBroker.Publish(new TestMessageOne());
+
+        Assert.IsTrue(handlerOneNotInvoked);
+        Assert.IsTrue(handlerTwoNotInvoked);
     }
+
 }
