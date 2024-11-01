@@ -45,7 +45,10 @@ jobs:
         id: read_release_notes
         run: |
           $notes = Get-Content -Path RELEASE_NOTES.md -Raw
-          echo "release_notes=$notes" >> $GITHUB_OUTPUT
+          # Write the output to the GITHUB_OUTPUT file
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$notes" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         id: create_release
