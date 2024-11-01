@@ -1,10 +1,21 @@
-﻿using CoursesManager.MVVM.Commands;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace CoursesManager.MVVM.Commands
 {
-    public class RelayCommand(Action execute, Func<bool>? canExecute = null) : ICommand
+    public class RelayCommand : ICommand
     {
+        private readonly Action _execute;
+
+        private readonly Func<bool>? _canExecute;
+
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
+        {
+            ArgumentNullException.ThrowIfNull(execute);
+
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
         public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
@@ -13,12 +24,12 @@ namespace CoursesManager.MVVM.Commands
 
         public bool CanExecute(object? parameter)
         {
-            return canExecute == null || canExecute();
+            return _canExecute == null || _canExecute();
         }
 
         public void Execute(object? parameter)
         {
-            execute.Invoke();
+            _execute.Invoke();
         }
 
         public void RaiseCanExecuteChanged()

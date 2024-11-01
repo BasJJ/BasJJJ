@@ -65,7 +65,7 @@ public partial class App : Application
         var serviceCollection = new ServiceCollection();
         ConfigureServices(serviceCollection);
         ServiceProvider = serviceCollection.BuildServiceProvider();
-        MessageBroker.Subscribe<ApplicationCloseRequestedMessage>(ApplicationCloseRequestedHandler);
+        MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();

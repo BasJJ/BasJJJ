@@ -2,6 +2,14 @@
 
 namespace CoursesManager.UI.Messages;
 
-public class ApplicationCloseRequestedMessage : BaseMessage
+public class ApplicationCloseRequestedMessage : BaseMessage<ApplicationCloseRequestedMessage>
 {
+    public override ApplicationCloseRequestedMessage Clone()
+    {
+        return new ApplicationCloseRequestedMessage
+        {
+            MessageId = MessageId,
+            TimeStamp = new(TimeStamp.Ticks)
+        };
+    }
 }
