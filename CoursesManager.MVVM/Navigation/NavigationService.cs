@@ -12,56 +12,39 @@ public class NavigationService : INavigationService
 
     public void NavigateTo<TViewModel>() where TViewModel : ViewModel
     {
-        if (typeof(NavigatableViewModel).IsAssignableFrom(typeof(TViewModel)))
+        if (!INavigationService.ViewModelFactories.TryGetValue(typeof(TViewModel), out var factory))
         {
-            if (!INavigationService.NavigatableViewModelFactories.TryGetValue(typeof(TViewModel), out var navigatableFactory))
-            {
-                throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
-            }
+            throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
+        }
 
-            _forwardViewModels.Clear();
+        _forwardViewModels.Clear();
 
-            if (NavigationStore.CurrentViewModel is not null)
-            {
-                _backwardViewModels.Push(NavigationStore.CurrentViewModel);
-            }
+        if (NavigationStore.CurrentViewModel is not null)
+        {
+            _backwardViewModels.Push(NavigationStore.CurrentViewModel);
+        }
 
-            var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
+        var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
 
-            if (existingViewModel is not null)
-            {
-                NavigationStore.CurrentViewModel = existingViewModel;
-            }
-            else
-            {
-                // Create using factory for NavigatableViewModel
-                NavigationStore.CurrentViewModel = navigatableFactory(this);
-            }
+        if (existingViewModel is not null)
+        {
+            NavigationStore.CurrentViewModel = existingViewModel;
         }
         else
         {
-            if (!INavigationService.ViewModelFactories.TryGetValue(typeof(TViewModel), out var factory))
+            if (typeof(NavigatableViewModel).IsAssignableFrom(typeof(TViewModel)))
             {
-                throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
-            }
-
-            _forwardViewModels.Clear();
-
-            if (NavigationStore.CurrentViewModel is not null)
-            {
-                _backwardViewModels.Push(NavigationStore.CurrentViewModel);
-            }
-
-            var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
-
-            if (existingViewModel is not null)
-            {
-                NavigationStore.CurrentViewModel = existingViewModel;
+                if (factory is Func<NavigationService, NavigatableViewModel> navigatableviewModelFactory)
+                {
+                    NavigationStore.CurrentViewModel = navigatableviewModelFactory(this);
+                }
             }
             else
             {
-                // Create using factory for regular ViewModel
-                NavigationStore.CurrentViewModel = factory();
+                if (factory is Func<ViewModel> viewModelFactory)
+                {
+                    NavigationStore.CurrentViewModel = viewModelFactory();
+                }
             }
         }
     }

@@ -1,7 +1,9 @@
 ﻿namespace CoursesManager.MVVM.Messages;
 
-public abstract class BaseMessage
+public abstract class BaseMessage<T> : ICloneable<T> where T : BaseMessage<T>
 {
-    public Guid MessageId { get; private set; } = new();
-    public DateTime TimeStamp { get; private set; } = DateTime.Now;
+    public Guid MessageId { get; protected set; } = new();
+    public DateTime TimeStamp { get; protected set; } = DateTime.Now;
+
+    public abstract T Clone();
 }
