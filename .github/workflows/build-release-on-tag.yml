@@ -1,0 +1,74 @@
+name: Build and Test
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: nowsprinting/check-version-format-action@v3
+        id: version
+        with:
+          prefix: "v"
+
+      - name: Test tag
+        run: echo "${{ steps.version.outputs.full_without_prefix }}"
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install WiX
+        run: dotnet tool install --global wix
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Run unit tests
+        run: dotnet test --configuration Release
+
+      - name: Build the installer for x64
+        run: dotnet build --configuration Release -p:Platform=x64 -p:ProductVersion=${{ steps.version.outputs.full_without_prefix }} CoursesManager.Installer/CoursesManager.Installer.wixproj
+
+      - name: Build the installer for x86
+        run: dotnet build --configuration Release -p:Platform=x86 -p:ProductVersion=${{ steps.version.outputs.full_without_prefix }} CoursesManager.Installer/CoursesManager.Installer.wixproj
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.version.outputs.full_without_prefix }}
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload x64 installer to GitHub Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: CoursesManager.Installer/bin/x64/Release/CoursesManager_x64.msi
+          asset_name: CoursesManager_x64.msi
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload x86 installer to GitHub Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: CoursesManager.Installer/bin/x86/Release/CoursesManager_x86.msi
+          asset_name: CoursesManager_x86.msi
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
