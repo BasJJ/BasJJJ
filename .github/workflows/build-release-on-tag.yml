@@ -41,12 +41,11 @@ jobs:
       - name: Build the installer for x86
         run: dotnet build --configuration Release -p:Platform=x86 -p:ProductVersion=${{ steps.version.outputs.full_without_prefix }} CoursesManager.Installer/CoursesManager.Installer.wixproj
 
-      - name: Get tag description
-        id: tag_description
+      - name: Read Release Notes
+        id: read_release_notes
         run: |
-          description=$(git for-each-ref --format='%(contents)' refs/tags/${GITHUB_REF##*/})
-          echo "description=$description" >> $GITHUB_ENV
-        shell: bash
+          $notes = Get-Content -Path RELEASE_NOTES.md -Raw
+          Add-Content -Path $env:GITHUB_ENV -Value "RELEASE_NOTES=$notes"
 
       - name: Create GitHub Release
         id: create_release
@@ -54,7 +53,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ steps.version.outputs.full_without_prefix }}
-          body: ${{ env.description }}
+          body: ${{ env.RELEASE_NOTES }}
           draft: false
           prerelease: false
         env:
