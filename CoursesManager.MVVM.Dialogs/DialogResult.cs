@@ -25,6 +25,7 @@ public sealed class DialogResult<TDialogResultType>
     private DialogResult()
     { }
 
+
     /// <summary>
     /// Creates and returns a new builder for constructing a <see cref="DialogResult{TDialogResultType}"/>.
     /// </summary>

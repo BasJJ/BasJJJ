@@ -4,6 +4,8 @@ namespace CoursesManager.UI.Models;
 
 public class Student : ViewModel
 {
+    public int Id { get; set; }
+
     private string _firstName;
 
     public string FirstName
@@ -80,4 +82,8 @@ public class Student : ViewModel
     {
         return $"{FirstName}{Insertion}{LastName}{Email}".Replace(" ", "");
     }
+    public string City { get; set; }
+    public DateTime DateCreated { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime? DateDeleted { get; set; }
 }

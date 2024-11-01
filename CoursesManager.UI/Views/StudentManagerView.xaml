@@ -121,7 +121,7 @@
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Grid.Column="1"
                 Margin="0,4,65,0"
-                Command="{Binding AddRecordCommand}">
+                Command="{Binding AddStudentCommand}">
                 <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}" />
             </Button>
 

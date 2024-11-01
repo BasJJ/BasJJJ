@@ -29,4 +29,13 @@ public abstract class DialogViewModel<TDialogResultType>(TDialogResultType? dial
     /// </summary>
     /// <param name="dialogResult">The result of the dialog.</param>
     protected abstract void InvokeResponseCallback(DialogResult<TDialogResultType> dialogResult);
+
+    /// <summary>
+    /// Closes the dialog with the specified result.
+    /// </summary>
+    /// <param name="dialogResult">The result of the dialog.</param>
+    protected void CloseDialogWithResult(DialogResult<TDialogResultType> dialogResult)
+    {
+        InvokeResponseCallback(dialogResult);
+    }
 }
