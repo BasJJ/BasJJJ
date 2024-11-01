@@ -45,7 +45,8 @@ jobs:
         id: read_release_notes
         run: |
           $notes = Get-Content -Path RELEASE_NOTES.md -Raw
-          Add-Content -Path $env:GITHUB_ENV -Value "RELEASE_NOTES=$notes"
+          echo "::set-output name=release_notes::$notes"
+        shell: pwsh
 
       - name: Create GitHub Release
         id: create_release
@@ -53,7 +54,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ steps.version.outputs.full_without_prefix }}
-          body: ${{ env.RELEASE_NOTES }}
+          body: ${{ steps.read_release_notes.outputs.release_notes }}
           draft: false
           prerelease: false
         env:
