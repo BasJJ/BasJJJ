@@ -46,7 +46,6 @@ jobs:
         run: |
           $notes = Get-Content -Path RELEASE_NOTES.md -Raw
           echo "::set-output name=release_notes::$notes"
-        shell: pwsh
 
       - name: Create GitHub Release
         id: create_release
