@@ -44,9 +44,9 @@ jobs:
       - name: Get tag description
         id: tag_description
         run: |
-          $TAG_DESCRIPTION = git for-each-ref --format='%(contents)' refs/tags/${{ github.ref_name }}
-          echo "description=$TAG_DESCRIPTION" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
-      
+          description=$(git for-each-ref --format='%(contents)' refs/tags/${GITHUB_REF##*/})
+          echo "description=$description" >> $GITHUB_ENV
+        shell: bash
 
       - name: Create GitHub Release
         id: create_release
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: CoursesManager.Installer/bin/x64/Release/CoursesManager_x86.msi
+          asset_path: CoursesManager.Installer/bin/x86/Release/CoursesManager_x86.msi
           asset_name: CoursesManager_x86.msi
           asset_content_type: application/octet-stream
         env:
