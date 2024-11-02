@@ -40,11 +40,7 @@ public class Student : ViewModel
 
     private string _phoneNumber;
 
-    public string PhoneNumber
-    {
-        get => _phoneNumber;
-        set => SetProperty(ref _phoneNumber, value);
-    }
+    public string PhoneNumber { get; set; }
 
     private string _postCode;
 

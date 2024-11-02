@@ -102,11 +102,9 @@ namespace CoursesManager.UI.ViewModels
         private async void OpenAddStudentPopup()
         {
             var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
-            System.Diagnostics.Debug.WriteLine($"DialogResult created with message: {dialogResult.OutcomeMessage}");
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
             {
-                MessageBox.Show(dialogResult.OutcomeMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadStudents();
             }
         }

@@ -7,7 +7,9 @@ using CoursesManager.UI.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
+using CoursesManager.UI.Views.Students;
 
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
@@ -60,6 +62,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
                !string.IsNullOrEmpty(Student.Email) &&
                !string.IsNullOrEmpty(Student.PhoneNumber) &&
                !string.IsNullOrEmpty(Student.PostCode) &&
+               !string.IsNullOrEmpty(Student.City) &&
                !string.IsNullOrEmpty(SelectedCourse) &&
                IsValidEmail(Student.Email) &&
                IsNumber(Student.PhoneNumber) &&
@@ -70,9 +73,12 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         if (!FieldsValidations())
         {
-            throw new Exception("Invalid student data");
+            var dialogResult = DialogResult<bool>.Builder()
+                .SetSuccess(false, "Vereiste velden moeten correct worden ingevuld")
+                .Build();
+            ShowWarningDialog(dialogResult);
+            return;
         }
-        _studentRepository.Add(Student);
 
         var course = _courseRepository.GetAll().FirstOrDefault(c => c.CourseName == SelectedCourse);
         if (course != null)
@@ -88,21 +94,26 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
                 IsActive = true,
                 DateCreated = DateTime.Now
             };
-
+            _studentRepository.Add(Student);
             _registrationRepository.Add(registration);
         }
         else
         {
-            throw new Exception("Selected course not found");
+            var dialogResult = DialogResult<bool>.Builder()
+                .SetSuccess(false, "Geselecteerde cursus niet gevonden")
+                .Build();
+            ShowWarningDialog(dialogResult);
+            return;
         }
 
-        var dialogResult = DialogResult<bool>.Builder()
+        var successDialogResult = DialogResult<bool>.Builder()
             .SetSuccess(true, "Student succesvol toegevoegd")
             .Build();
-        System.Diagnostics.Debug.WriteLine($"DialogResult created with message: {dialogResult.OutcomeMessage}");
+
+        ShowSuccessDialog(successDialogResult);
 
         StudentAdded?.Invoke(this, Student);
-        CloseDialogWithResult(dialogResult);
+        CloseDialogWithResult(successDialogResult);
     }
 
     private void Cancel()
@@ -147,5 +158,14 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     protected override void InvokeResponseCallback(DialogResult<bool> dialogResult)
     {
         ResponseCallback?.Invoke(dialogResult);
+    }
+    protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
+    {
+        MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+    }
+
+    protected virtual void ShowSuccessDialog(DialogResult<bool> dialogResult)
+    {
+        MessageBox.Show(dialogResult.OutcomeMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
