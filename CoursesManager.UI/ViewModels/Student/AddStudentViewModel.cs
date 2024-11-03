@@ -62,15 +62,23 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
                !string.IsNullOrEmpty(Student.Email) &&
                !string.IsNullOrEmpty(Student.PhoneNumber) &&
                !string.IsNullOrEmpty(Student.PostCode) &&
-               !string.IsNullOrEmpty(Student.City) &&
+               !string.IsNullOrEmpty(Student.PostCode) &&
                !string.IsNullOrEmpty(SelectedCourse) &&
                IsValidEmail(Student.Email) &&
-               IsNumber(Student.PhoneNumber) &&
-               IsUniqueEmail(Student.Email);
+               IsNumber(Student.PhoneNumber);
     }
 
     private void Save()
     {
+        if (!IsUniqueEmail(Student.Email))
+        {
+            var dialogResult = DialogResult<bool>.Builder()
+                .SetSuccess(false, "Het emailadres bestaat al")
+                .Build();
+            ShowWarningDialog(dialogResult);
+            return;
+        }
+
         if (!FieldsValidations())
         {
             var dialogResult = DialogResult<bool>.Builder()
