@@ -1,9 +1,16 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Printing;
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.ViewModels.Design;
+using CoursesManager.UI.Models.Repositories;
+using CoursesManager.UI.Models.Repositories.StudentRepository;
+using CoursesManager.UI.Views.Students;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -11,7 +18,10 @@ namespace CoursesManager.UI.ViewModels
     {
         #region View fields
 
+        public ObservableCollection<Student> students;
         private string _searchText;
+        private readonly IDialogService _dialogService;
+        private StudentRepository _studentRepository;
 
         public string SearchText
         {
@@ -19,7 +29,6 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _searchText, value);
         }
 
-        private ObservableCollection<Student> _studentRecords;
         private ObservableCollection<Student> _filteredStudentRecords;
 
         public ObservableCollection<Student> FilteredStudentRecords
@@ -30,14 +39,22 @@ namespace CoursesManager.UI.ViewModels
 
         #endregion View fields
 
-        public StudentManagerViewModel()
+        public StudentManagerViewModel(IDialogService dialogService)
         {
             ViewTitle = "Cursisten beheer";
 
-            _studentRecords = DesignStudentManagerViewModel.GenerateRandomStudents(150);
-            FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
+            _dialogService = dialogService;
 
+            _studentRepository = new StudentRepository();
+            LoadStudents();
+            AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
             SearchCommand = new RelayCommand(OnSearchCommand);
+        }
+
+        private void LoadStudents()
+        {
+            students = new ObservableCollection<Student>(_studentRepository.GetAll());
+            FilteredStudentRecords = new ObservableCollection<Student>(students);
         }
 
         #region Commands
@@ -47,7 +64,7 @@ namespace CoursesManager.UI.ViewModels
         public ICommand OpenRecordCommand { get; private set; }
         public ICommand DeleteRecordCommand { get; private set; }
         public ICommand EditRecordCommand { get; private set; }
-        public ICommand AddRecordCommand { get; private set; }
+        public ICommand AddStudentCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
 
         #region SearchCommand
@@ -63,17 +80,9 @@ namespace CoursesManager.UI.ViewModels
 
         private async Task FilterStudentRecordsAsync()
         {
-            var emily = new Student
-            {
-                FirstName = "Emily",
-                Insertion = "van der",
-                LastName = "John",
-                Email = "emilyjohn@gmail.nl"
-            };
-
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                FilteredStudentRecords = new ObservableCollection<Student>(_studentRecords);
+                FilteredStudentRecords = new ObservableCollection<Student>(students);
             }
             else
             {
@@ -81,13 +90,34 @@ namespace CoursesManager.UI.ViewModels
 
                 var filtered = await Task.Run(() =>
                 {
-                    return _studentRecords.Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+                    return students.Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
                 });
 
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
             }
 
             OnPropertyChanged(nameof(FilteredStudentRecords));
+        }
+
+        private async void OpenAddStudentPopup()
+        {
+            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+
+            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            {
+                LoadStudents();
+            }
+        }
+
+        private void OnStudentAdded(object sender, Student e)
+        {
+            LoadStudents();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

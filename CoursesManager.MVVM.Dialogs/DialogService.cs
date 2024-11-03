@@ -13,7 +13,7 @@ public sealed class DialogService : IDialogService
     {
         ArgumentNullException.ThrowIfNull(viewModelFactory);
 
-        _dialogMapping[typeof(TDialogViewModel)] = (typeof(TDialogWindow), obj => viewModelFactory((TDialogResultType)obj));
+        _dialogMapping[typeof(TDialogViewModel)] = (typeof(TDialogWindow), obj => viewModelFactory((TDialogResultType?)obj));
     }
 
     public Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>()
@@ -28,6 +28,14 @@ public sealed class DialogService : IDialogService
         return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(initialData);
     }
 
+    public Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(bool someFlag)
+        where TDialogViewModel : DialogViewModel<TDialogResultType>
+    {
+        // Implement the method logic based on the flag
+        // For now, let's assume it behaves similarly to the other ShowDialogAsync methods
+        return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>();
+    }
+
     private Task<DialogResult<TDialogResultType>> ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(TDialogResultType? initialData = default)
         where TDialogViewModel : DialogViewModel<TDialogResultType>
     {
@@ -40,7 +48,7 @@ public sealed class DialogService : IDialogService
 
         var window = (Window)Activator.CreateInstance(windowType)!;
 
-        var viewModel = (DialogViewModel<TDialogResultType>)viewModelFactory(initialData);
+        var viewModel = (DialogViewModel<TDialogResultType>)viewModelFactory(initialData!);
 
         window.DataContext = viewModel;
 
