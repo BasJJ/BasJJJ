@@ -9,6 +9,7 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories;
+using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 
@@ -21,7 +22,8 @@ namespace CoursesManager.UI.ViewModels
         public ObservableCollection<Student> students;
         private string _searchText;
         private readonly IDialogService _dialogService;
-        private StudentRepository _studentRepository;
+        private readonly StudentRepository _studentRepository;
+        private readonly ICourseRepository _courseRepository;
 
         public string SearchText
         {
@@ -48,6 +50,7 @@ namespace CoursesManager.UI.ViewModels
             _studentRepository = new StudentRepository();
             LoadStudents();
             AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
+            EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, (s) => true);
             SearchCommand = new RelayCommand(OnSearchCommand);
         }
 
@@ -63,7 +66,7 @@ namespace CoursesManager.UI.ViewModels
         public ICommand DataExportCommand { get; private set; }
         public ICommand OpenRecordCommand { get; private set; }
         public ICommand DeleteRecordCommand { get; private set; }
-        public ICommand EditRecordCommand { get; private set; }
+        public ICommand EditStudentCommand { get; private set; }
         public ICommand AddStudentCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
 
@@ -108,6 +111,23 @@ namespace CoursesManager.UI.ViewModels
                 LoadStudents();
             }
         }
+
+        private async void OpenEditStudentPopup(Student student)
+        {
+            if (student == null) return;
+
+            // Directly pass the selected student to the EditStudentViewModel
+            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
+
+            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            {
+                LoadStudents();
+            }
+        }
+
+
+
+
 
         private void OnStudentAdded(object sender, Student e)
         {

@@ -1,4 +1,5 @@
 ﻿using CoursesManager.MVVM.Data;
+using System.Collections.ObjectModel;
 
 namespace CoursesManager.UI.Models;
 
@@ -82,4 +83,11 @@ public class Student : ViewModel
     public DateTime DateCreated { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DateDeleted { get; set; }
+
+    private ObservableCollection<Course> _courses = new ObservableCollection<Course>();
+    public ObservableCollection<Course> Courses
+    {
+        get => _courses;
+        set => SetProperty(ref _courses, value);
+    }
 }

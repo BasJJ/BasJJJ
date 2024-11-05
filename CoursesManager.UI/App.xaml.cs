@@ -113,6 +113,12 @@ public partial class App : Application
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
+        DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
+        (student) => new EditStudentViewModel(
+            ServiceProvider.GetRequiredService<IStudentRepository>(),
+            ServiceProvider.GetRequiredService<ICourseRepository>(),
+            student)
+         );
     }
 
     /// <summary>
