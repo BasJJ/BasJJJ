@@ -18,9 +18,14 @@ namespace CoursesManager.MVVM.Commands
 
         public void Execute(object? parameter)
         {
-            if (parameter is T validParameter) Execute(validParameter);
-            
-            throw new ArgumentException($"Invalid parameter type. Expected {typeof(T)}, but got {parameter?.GetType()}.", nameof(parameter));
+            if (parameter is T validParameter)
+            {
+                Execute(validParameter);
+            }
+            else
+            {
+                throw new ArgumentException($"Invalid parameter type. Expected {typeof(T)}, but got {parameter?.GetType()}.", nameof(parameter));
+            }
         }
 
         public void Execute(T parameter)

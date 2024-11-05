@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class EditStudentViewModel : DialogViewModel<Student>, INotifyPropertyChanged
+    public class EditStudentViewModel : DialogViewModel<Student>
     {
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
@@ -28,13 +28,13 @@ namespace CoursesManager.UI.ViewModels
         public ObservableCollection<Course> AllCourses { get; }
         public ObservableCollection<Course> SelectedCourses { get; }
 
-        public EditStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, Student student)
+        public EditStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, Student? student)
         : base(student)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
 
-            Student = student ?? new Student();
+            Student = student != null ? CreateStudentCopy(student) : new Student();
 
             AllCourses = new ObservableCollection<Course>(_courseRepository.GetAll());
 
@@ -66,30 +66,29 @@ namespace CoursesManager.UI.ViewModels
 
                 _studentRepository.Update(Student);
 
-                var result = DialogResult<Student>.Builder()
+                var dialogResult = DialogResult<Student>.Builder()
                     .SetSuccess(Student, "Student succesvol opgeslagen.")
                     .Build();
 
-                ShowSuccessDialog(result);
+                ShowSuccessDialog(dialogResult);
 
-                InvokeResponseCallback(result);
-                CloseRequested?.Invoke(this, EventArgs.Empty);
+                InvokeResponseCallback(dialogResult);
             }
             else
             {
-                ShowWarningDialog("Controleer of alle velden correct zijn ingevuld.");
+
             }
         }
 
 
         private void OnCancel()
         {
-            var result = DialogResult<Student>.Builder()
-                .SetCanceled("Wijziging is geannuleerd door de gebruiker.")
+            var dialogResult = DialogResult<Student>.Builder()
+                .SetSuccess(Student, "Wijziging is geannuleerd door de gebruiker.")
                 .Build();
 
-            InvokeResponseCallback(result);
-            CloseRequested?.Invoke(this, EventArgs.Empty);
+            InvokeResponseCallback(dialogResult);
+            return;
         }
 
 
@@ -107,7 +106,7 @@ namespace CoursesManager.UI.ViewModels
 
             if (!IsUniqueEmail(Student.Email))
             {
-                ShowWarningDialog("Email address is al in gebruik.");
+
                 return false;
             }
 
@@ -119,20 +118,14 @@ namespace CoursesManager.UI.ViewModels
             return !_studentRepository.EmailExists(email) || email == Student.Email;
         }
 
-        private void ShowWarningDialog(string message)
+        private void ShowWarningDialog(DialogResult<Student> dialogResult)
         {
+            MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
         {
             ResponseCallback?.Invoke(dialogResult);
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

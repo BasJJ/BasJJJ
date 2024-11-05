@@ -1,9 +1,10 @@
 ﻿using CoursesManager.MVVM.Data;
 using System.Collections.ObjectModel;
 
+
 namespace CoursesManager.UI.Models;
 
-public class Student : ViewModel
+public class Student : ViewModel, ICopyable<Student>
 {
     public int Id { get; set; }
 
@@ -79,6 +80,20 @@ public class Student : ViewModel
     {
         return $"{FirstName}{Insertion}{LastName}{Email}".Replace(" ", "");
     }
+
+    public Student Copy()
+    {
+        throw new NotImplementedException();
+        return new Student
+        {
+            AwaitingPayement = this.AwaitingPayement,
+            HouseNumber = this.HouseNumber,
+            HouseNumberExtension = this.HouseNumberExtension,
+            Courses = this.Courses,
+
+        };
+    }
+
     public string City { get; set; }
     public DateTime DateCreated { get; set; }
     public bool IsDeleted { get; set; }

@@ -30,7 +30,7 @@
             <TextBox Text="{Binding Student.HouseNumber, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Text="Plaats" />
-            <TextBox Text="{Binding Student.Plaats, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Text="{Binding Student.City, UpdateSourceTrigger=PropertyChanged}" />
 
             <!-- Courses Selection -->
             <TextBlock Text="Cursussen" Margin="0,10,0,0" />
