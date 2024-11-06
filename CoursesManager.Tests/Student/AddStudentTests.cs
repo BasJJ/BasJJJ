@@ -30,14 +30,14 @@ namespace CoursesManager.Tests
             _viewModel = new TestableAddStudentViewModel(_mockStudentRepository.Object, _mockCourseRepository.Object, _mockRegistrationRepository.Object)
             {
                 Student = new Student(),
-                Courses = new ObservableCollection<string>(_mockCourseRepository.Object.GetAll().Select(c => c.CourseName))
+                Courses = new ObservableCollection<string>(_mockCourseRepository.Object.GetAll().Select(c => c.Name))
             };
         }
 
         [Test]
         public void Save_ValidStudent_AddsStudentAndRegistration()
         {
-            var course = new Course { ID = 1, CourseName = "Course1" };
+            var course = new Course { ID = 1, Name = "Course1" };
             _mockCourseRepository.Setup(repo => repo.GetAll()).Returns(new List<Course> { course });
             // Arrange
             _viewModel.Student.FirstName = "John";
