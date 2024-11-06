@@ -56,9 +56,12 @@ namespace CoursesManager.UI.Models
                     Course course = new Course
                     {
                         ID = i + 1,
-                        CourseName = $"Course{i + 1}",
+                        Name = $"Course{i + 1}",
+                        Code = GenerateRandomCourseCode(),
                         Description = $"Description for Course{i + 1}",
+                        Participants = _random.Next(0, 100),
                         IsActive = _random.Next(0, 2) == 1, // Randomly true or false
+                        IsPayed = _random.Next(0, 2) == 1, // Randomly true or false
                         Category = $"Category{i % 3 + 1}",
                         StartDate = DateTime.Now.AddDays(_random.Next(1, 30)),
                         EndDate = DateTime.Now.AddDays(_random.Next(31, 60)),
@@ -155,6 +158,13 @@ namespace CoursesManager.UI.Models
             {
                 string[] extensions = { "", "A", "B", "C", "D", "E" };
                 return extensions[_random.Next(extensions.Length)];
+            }
+
+            private static string GenerateRandomCourseCode()
+            {
+                string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                return
+                    $"{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}.{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}";
             }
         }
     }

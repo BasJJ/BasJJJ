@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="CoursesManager.UI.Views.Controls.Toggle"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="55" d:DesignWidth="155">
+    <UserControl.Resources>
+        <Style TargetType="ToggleButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid Width="60" Height="30">
+                            <Border x:Name="BackgroundTrack" CornerRadius="15" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="1"/>
+                            <Ellipse x:Name="Thumb" Width="26" Height="26" Fill="White" HorizontalAlignment="Left" Margin="2" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="BackgroundTrack" Property="Background" Value="#02008C"/>
+                                <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="BackgroundTrack" Property="Background" Value="Transparent"/>
+                                <Setter TargetName="BackgroundTrack" Property="BorderBrush" Value="#02008C"/>
+                                <Setter TargetName="BackgroundTrack" Property="BorderThickness" Value="1"/>
+                                <Setter TargetName="Thumb" Property="Fill" Value="#02008C"/>
+                                <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Left"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <ToggleButton Grid.Column="1" x:Name="SwitchToggle" IsChecked="{Binding IsToggled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Command="{Binding ToggleCommand}"/>
+    </Grid>
+</UserControl>
