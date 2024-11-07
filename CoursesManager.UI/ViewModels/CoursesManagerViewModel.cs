@@ -10,7 +10,7 @@ namespace CoursesManager.UI.ViewModels
     public class CoursesManagerViewModel : ViewModel
     {
         // Properties
-        private readonly CourseRepository _courseRepository;
+        private readonly ICourseRepository _courseRepository;
         private string _searchText = String.Empty;
         private bool _isToggled = true;
 
@@ -36,10 +36,10 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Contructor
-        public CoursesManagerViewModel()
+        public CoursesManagerViewModel(ICourseRepository pRepo)
         {
             ViewTitle = "Cursus beheer";
-            _courseRepository = new CourseRepository();
+            _courseRepository = pRepo;
 
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
