@@ -16,6 +16,7 @@ using CoursesManager.UI.Models.Repositories.LocationRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
+using CoursesManager.UI.ViewModels.Courses;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CoursesManager.UI;
@@ -76,6 +77,8 @@ public partial class App : Application
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<CoursesManagerViewModel>();
+ 
 
         MainWindow mw = new()
         {
@@ -110,11 +113,12 @@ public partial class App : Application
         services.AddTransient<CoursesManagerViewModel>();
         // Register other view models...
     }
+   
 
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
-        INavigationService.RegisterViewModelFactory(() => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), ServiceProvider.GetService<IRegistrationRepository>()));
+        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), ServiceProvider.GetService<IRegistrationRepository>(), nav));
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
         (student) => new EditStudentViewModel(
