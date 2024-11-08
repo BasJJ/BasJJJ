@@ -119,6 +119,7 @@ public partial class App : Application
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
         INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), nav));
         INavigationService.RegisterViewModelFactory(() => new CourseOverViewViewModel());
+
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
     }
 

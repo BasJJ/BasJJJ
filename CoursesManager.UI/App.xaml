@@ -34,6 +34,7 @@
             </DataTemplate>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters:StartDateToBooleanConverter>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
