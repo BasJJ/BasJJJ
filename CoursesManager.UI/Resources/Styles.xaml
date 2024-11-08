@@ -257,6 +257,7 @@
         </Style.Triggers>
     </Style>
 
+    
     <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
         <Setter Property="Background" Value="{StaticResource ErrorGradient}" />
         <!--<Setter Property="Background" Value="{StaticResource PrimaryGradient}" />-->

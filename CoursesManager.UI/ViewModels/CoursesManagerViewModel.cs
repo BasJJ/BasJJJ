@@ -5,6 +5,7 @@ using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 
 namespace CoursesManager.UI.ViewModels

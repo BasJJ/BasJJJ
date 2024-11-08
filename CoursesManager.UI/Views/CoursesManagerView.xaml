@@ -56,7 +56,7 @@
         </Grid>
 
         <!-- Scrollable Card Grid -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
             <ItemsControl ItemsSource="{Binding FilteredCourses}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
