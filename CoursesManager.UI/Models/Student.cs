@@ -52,6 +52,30 @@ public class Student : ViewModel, ICopyable<Student>
         set => SetProperty(ref _postCode, value);
     }
 
+    public string _country;
+
+    public string Country
+    {
+        get => _country;
+        set => SetProperty(ref _country, value);
+    }
+
+    public string _city;
+
+    public string City
+    {
+        get => _city;
+        set => SetProperty(ref _city, value);
+    }
+
+    public string _streetname;
+
+    public string StreetName
+    {
+        get => _streetname;
+        set => SetProperty(ref _streetname, value);
+    }
+
     private int _houseNumber;
 
     public int HouseNumber
@@ -60,20 +84,20 @@ public class Student : ViewModel, ICopyable<Student>
         set => SetProperty(ref _houseNumber, value);
     }
 
-    private string _houseNumberExtension;
-
-    public string HouseNumberExtension
-    {
-        get => _houseNumberExtension;
-        set => SetProperty(ref _houseNumberExtension, value);
-    }
-
-    private bool _awaitingPayement;
+    private bool _awaitingpayement;
 
     public bool AwaitingPayement
     {
-        get => _awaitingPayement;
-        set => SetProperty(ref _awaitingPayement, value);
+        get => _awaitingpayement;
+        set => SetProperty(ref _awaitingpayement, value);
+    }
+
+    private string _houseNumberextension;
+
+    public string HouseNumberExtension
+    {
+        get => _houseNumberextension;
+        set => SetProperty(ref _houseNumberextension, value);
     }
 
     public string TableFilter()
@@ -83,26 +107,22 @@ public class Student : ViewModel, ICopyable<Student>
 
     public Student Copy()
     {
-        throw new NotImplementedException();
         return new Student
         {
-            AwaitingPayement = this.AwaitingPayement,
+            FirstName = this.FirstName,
+            Insertion = this.Insertion,
+            LastName = this.LastName,
+            Email = this.Email,
+            PhoneNumber = this.PhoneNumber,
+            PostCode = this.PostCode,
+            Country = this.Country,
+            City = this.City,
+            StreetName = this.StreetName,
             HouseNumber = this.HouseNumber,
-            HouseNumberExtension = this.HouseNumberExtension,
-            Courses = this.Courses,
-
         };
     }
 
-    public string City { get; set; }
     public DateTime DateCreated { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DateDeleted { get; set; }
-
-    private ObservableCollection<Course> _courses = new ObservableCollection<Course>();
-    public ObservableCollection<Course> Courses
-    {
-        get => _courses;
-        set => SetProperty(ref _courses, value);
-    }
 }

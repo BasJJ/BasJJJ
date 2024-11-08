@@ -87,6 +87,7 @@ public partial class App : Application
     private void RegisterDialogs()
     {
         DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
+        DialogService.RegisterDialog<OkDialogViewModel, OkDialogWindow, OkDialogResultType>((initial) => new OkDialogViewModel(initial));
         DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel());
 
     }
@@ -117,8 +118,10 @@ public partial class App : Application
         (student) => new EditStudentViewModel(
             ServiceProvider.GetRequiredService<IStudentRepository>(),
             ServiceProvider.GetRequiredService<ICourseRepository>(),
+            ServiceProvider.GetRequiredService<IRegistrationRepository>(),
+            DialogService,
             student)
-         );
+        );
     }
 
     /// <summary>

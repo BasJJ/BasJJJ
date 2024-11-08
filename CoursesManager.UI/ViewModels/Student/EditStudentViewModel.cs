@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
-using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
-using static CoursesManager.UI.ViewModels.StudentManagerViewModel;
-using System.Windows;
+using CoursesManager.UI.Models.Repositories.RegistrationRepository;
+using System.Net.Mail;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -18,65 +16,115 @@ namespace CoursesManager.UI.ViewModels
     {
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
-
-        public event EventHandler CloseRequested;
+        private readonly IRegistrationRepository _registrationRepository;
+        private readonly IDialogService _dialogService;
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
         public Student Student { get; }
+        public Student StudentCopy { get; }
+        public ObservableCollection<SelectableCourse> SelectableCourses { get; }
 
-        public ObservableCollection<Course> AllCourses { get; }
-        public ObservableCollection<Course> SelectedCourses { get; }
-
-        public EditStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, Student? student)
-        : base(student)
+        public EditStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository, IDialogService dialogService, Student? student)
+            : base(student)
         {
-            _studentRepository = studentRepository;
-            _courseRepository = courseRepository;
+            _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
+            _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
+            _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
-            Student = student != null ? CreateStudentCopy(student) : new Student();
+            Student = student;
+            StudentCopy = student.Copy();
 
-            AllCourses = new ObservableCollection<Course>(_courseRepository.GetAll());
+            SelectableCourses = InitializeSelectableCourses();
 
-            if (Student.Courses == null)
-            {
-                Student.Courses = new ObservableCollection<Course>();
-            }
-
-            SelectedCourses = new ObservableCollection<Course>(Student.Courses);
-
-            SaveCommand = new RelayCommand(OnSave);
+            SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommand = new RelayCommand(OnCancel);
         }
 
-        private void ShowSuccessDialog(DialogResult<Student> dialogResult)
+        private ObservableCollection<SelectableCourse> InitializeSelectableCourses()
         {
-            MessageBox.Show(dialogResult.OutcomeMessage, "Succes", MessageBoxButton.OK, MessageBoxImage.Information);
+            var registeredCourseIds = _registrationRepository.GetAll()
+                .Where(r => r.StudentID == Student.Id)
+                .Select(r => r.CourseID)
+                .ToHashSet();
+
+            var selectableCourses = _courseRepository.GetAll()
+                .Select(course => new SelectableCourse
+                {
+                    CourseID = course.ID,
+                    CourseName = course.CourseName,
+                    IsSelected = registeredCourseIds.Contains(course.ID)
+                })
+                .ToList();
+
+            return new ObservableCollection<SelectableCourse>(selectableCourses);
         }
 
-        private void OnSave()
+        protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
         {
-            if (ValidateFields())
+            ResponseCallback?.Invoke(dialogResult);
+        }
+
+
+        private void UpdateStudentDetails()
+        {
+            Student.FirstName = StudentCopy.FirstName;
+            Student.Insertion = StudentCopy.Insertion;
+            Student.LastName = StudentCopy.LastName;
+            Student.Email = StudentCopy.Email;
+            Student.PhoneNumber = StudentCopy.PhoneNumber;
+            Student.PostCode = StudentCopy.PostCode;
+            Student.Country = StudentCopy.Country;
+            Student.City = StudentCopy.City;
+            Student.StreetName = StudentCopy.StreetName;
+            Student.HouseNumber = StudentCopy.HouseNumber;
+
+            _studentRepository.Update(Student);
+        }
+
+        private void UpdateRegistrations()
+        {
+            var existingRegistrations = _registrationRepository.GetAll()
+                .Where(r => r.StudentID == Student.Id)
+                .ToList();
+
+            foreach (var registration in existingRegistrations)
             {
-                Student.Courses.Clear();
-                foreach (var course in SelectedCourses)
+                if (!SelectableCourses.Any(c => c.CourseID == registration.CourseID && c.IsSelected))
                 {
-                    Student.Courses.Add(course);
+                    _registrationRepository.Delete(registration.ID);
                 }
-
-                _studentRepository.Update(Student);
-
-                var dialogResult = DialogResult<Student>.Builder()
-                    .SetSuccess(Student, "Student succesvol opgeslagen.")
-                    .Build();
-
-                ShowSuccessDialog(dialogResult);
-
-                InvokeResponseCallback(dialogResult);
             }
-            else
-            {
 
+            foreach (var course in SelectableCourses.Where(c => c.IsSelected))
+            {
+                if (!existingRegistrations.Any(r => r.CourseID == course.CourseID))
+                {
+                    _registrationRepository.Add(new Registration
+                    {
+                        StudentID = Student.Id,
+                        CourseID = course.CourseID,
+                        RegistrationDate = DateTime.Now,
+                        IsActive = true
+                    });
+                }
+            }
+        }
+
+       public async Task OnSaveAsync()
+        {
+            if (await ValidateFieldsAsync())
+            {
+                bool confirmSave = await ShowYesNoDialogAsync("Wilt u de wijzigingen opslaan?");
+
+                if (confirmSave)
+                {
+                    UpdateStudentDetails();
+                    UpdateRegistrations();
+
+                    await ShowOkDialogAsync("Cursist succesvol opgeslagen.");
+                }
             }
         }
 
@@ -84,48 +132,115 @@ namespace CoursesManager.UI.ViewModels
         private void OnCancel()
         {
             var dialogResult = DialogResult<Student>.Builder()
-                .SetSuccess(Student, "Wijziging is geannuleerd door de gebruiker.")
+                .SetCanceled("Changes were canceled by the user.")
                 .Build();
 
             InvokeResponseCallback(dialogResult);
-            return;
         }
 
-
-        private bool ValidateFields()
+        private async Task<bool> ValidateFieldsAsync()
         {
-            if (string.IsNullOrWhiteSpace(Student.FirstName) ||
-                string.IsNullOrWhiteSpace(Student.LastName) ||
-                string.IsNullOrWhiteSpace(Student.Email) ||
-                string.IsNullOrWhiteSpace(Student.PostCode) ||
-                Student.HouseNumber <= 0 ||
-                string.IsNullOrWhiteSpace(Student.City))
+            if (string.IsNullOrWhiteSpace(StudentCopy.FirstName))
             {
+                await ShowOkDialogAsync("Voornaam is verplicht.");
                 return false;
             }
 
-            if (!IsUniqueEmail(Student.Email))
+            if (string.IsNullOrWhiteSpace(StudentCopy.LastName))
             {
+                await ShowOkDialogAsync("Achternaam is verplicht.");
+                return false;
+            }
 
+            if (!IsValidEmail(StudentCopy.Email))
+            {
+                await ShowOkDialogAsync("Het opgegeven e-mailadres is ongeldig.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(StudentCopy.PhoneNumber))
+            {
+                await ShowOkDialogAsync("Telefoonnummer is verplicht");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(StudentCopy.PostCode))
+            {
+                await ShowOkDialogAsync("Postcode is verplicht.");
+                return false;
+            }
+
+            if (StudentCopy.HouseNumber <= 0)
+            {
+                await ShowOkDialogAsync("Huisnummer is ongeldig. Voer een positief getal in.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(StudentCopy.City))
+            {
+                await ShowOkDialogAsync("Stad is verplicht.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(StudentCopy.StreetName))
+            {
+                await ShowOkDialogAsync("Straatnaam is verplicht.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(StudentCopy.Country))
+            {
+                await ShowOkDialogAsync("Land is verplicht.");
+                return false;
+            }
+
+            if (!IsUniqueEmail(StudentCopy.Email))
+            {
+                await ShowOkDialogAsync("Dit e-mailadres wordt al gebruikt. Gebruik een ander e-mailadres.");
                 return false;
             }
 
             return true;
         }
 
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var emailAddress = new MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private bool IsUniqueEmail(string email)
         {
-            return !_studentRepository.EmailExists(email) || email == Student.Email;
+            return !_studentRepository.EmailExists(email) || email == StudentCopy.Email;
         }
 
-        private void ShowWarningDialog(DialogResult<Student> dialogResult)
+        private async Task ShowOkDialogAsync(string message)
         {
-            MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+            await _dialogService.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(new OkDialogResultType
+            {
+                DialogTitle = "Informatie",
+                DialogText = message
+            });
         }
 
-        protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
+
+        private async Task<bool> ShowYesNoDialogAsync(string message)
         {
-            ResponseCallback?.Invoke(dialogResult);
+            var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
+                new YesNoDialogResultType
+                {
+                    DialogTitle = "Bevestiging",
+                    DialogText = message
+                });
+
+            return result?.Data?.Result ?? false;
         }
     }
 }

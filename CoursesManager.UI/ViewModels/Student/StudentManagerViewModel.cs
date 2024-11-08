@@ -116,7 +116,6 @@ namespace CoursesManager.UI.ViewModels
         {
             if (student == null) return;
 
-            // Directly pass the selected student to the EditStudentViewModel
             var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
