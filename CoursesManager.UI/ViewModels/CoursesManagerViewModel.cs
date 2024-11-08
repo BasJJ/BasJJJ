@@ -2,12 +2,14 @@
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class CoursesManagerViewModel : ViewModel
+    public class CoursesManagerViewModel : NavigatableViewModel
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
@@ -36,14 +38,15 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Contructor
-        public CoursesManagerViewModel(ICourseRepository pRepo)
+        public CoursesManagerViewModel(ICourseRepository pRepo, NavigationService navigationService) : base(navigationService)
         {
             ViewTitle = "Cursus beheer";
             _courseRepository = pRepo;
 
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
-            
+            CourseOptionCommand = new RelayCommand(OpenCourseOptions);
+
             Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
             FilteredCourses = new ObservableCollection<Course>(Courses);
         }
@@ -72,6 +75,11 @@ namespace CoursesManager.UI.ViewModels
         {
             FilteredCourses.Clear();
             foreach (var course in filteredCourses) FilteredCourses.Add(course);
+        }
+        private void OpenCourseOptions()
+        {
+            Console.WriteLine("dit is vet kut");
+            _navigationService.NavigateTo<CourseOverViewViewModel>();
         }
     }
 }

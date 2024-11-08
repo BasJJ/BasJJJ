@@ -14,10 +14,8 @@ using System.Windows.Shapes;
 
 namespace CoursesManager.UI.Views.Courses
 {
-    /// <summary>
-    /// Interaction logic for CourseOverView.xaml
-    /// </summary>
-    public partial class CourseOverView : Window
+
+    public partial class CourseOverView : UserControl
     {
         public CourseOverView()
         {
