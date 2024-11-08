@@ -112,7 +112,7 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-       public async Task OnSaveAsync()
+       private async Task OnSaveAsync()
         {
             if (await ValidateFieldsAsync())
             {
@@ -172,7 +172,7 @@ namespace CoursesManager.UI.ViewModels
 
             if (StudentCopy.HouseNumber <= 0)
             {
-                await ShowOkDialogAsync("Huisnummer is ongeldig. Voer een positief getal in.");
+                await ShowOkDialogAsync("Huisnummer is ongeldig.");
                 return false;
             }
 
@@ -196,7 +196,7 @@ namespace CoursesManager.UI.ViewModels
 
             if (!IsUniqueEmail(StudentCopy.Email))
             {
-                await ShowOkDialogAsync("Dit e-mailadres wordt al gebruikt. Gebruik een ander e-mailadres.");
+                await ShowOkDialogAsync("Dit e-mailadres wordt al gebruikt.");
                 return false;
             }
 
