@@ -130,8 +130,8 @@
                     </Grid.RowDefinitions>
                     <TextBlock  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Text="Beschrijving:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Grid.ColumnSpan="3" />
                     <Border Style="{DynamicResource BorderStyle1}" Grid.Row="2" Grid.ColumnSpan="2" Padding="10 5 10 5">
-                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" DataContext="{Binding CurrentCourse}">
-                            <TextBlock Text="{Binding Description}"/>
+                        <ScrollViewer Style="{DynamicResource ScrollViewerStyle1}" Grid.Row="2" VerticalScrollBarVisibility="Disabled" DataContext="{Binding CurrentCourse}">
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </Border>
                 </Grid>
