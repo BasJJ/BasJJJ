@@ -45,7 +45,7 @@ namespace CoursesManager.UI.ViewModels
 
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
-            CourseOptionCommand = new RelayCommand(OpenCourseOptions);
+            CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);
 
             Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
             FilteredCourses = new ObservableCollection<Course>(Courses);
@@ -76,10 +76,17 @@ namespace CoursesManager.UI.ViewModels
             FilteredCourses.Clear();
             foreach (var course in filteredCourses) FilteredCourses.Add(course);
         }
-        private void OpenCourseOptions()
+        private void OpenCourseOptions(object parameter)
         {
-            Console.WriteLine("dit is vet kut");
-            _navigationService.NavigateTo<CourseOverViewViewModel>();
+            if (parameter is Course course)
+            {
+                GlobalCache.Instance.Put("Opened Course", course);
+                _navigationService.NavigateTo<CourseOverViewViewModel>();
+            }
+            else
+            {
+                Console.WriteLine("Invalid parameter type");
+            }
         }
     }
 }

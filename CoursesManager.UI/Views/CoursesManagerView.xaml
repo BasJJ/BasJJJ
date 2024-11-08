@@ -154,7 +154,7 @@
                                 </StackPanel>
 
                                 <!-- Bottom Section (More Options) -->
-                                <Button Grid.Row="3" Command="{Binding DataContext.CourseOptionCommand, 
+                                <Button Grid.Row="3" CommandParameter="{Binding}" Command="{Binding DataContext.CourseOptionCommand, 
                           RelativeSource={RelativeSource AncestorType=ItemsControl}}" HorizontalAlignment="Right" Width="24" Height="24" Margin="10,0,10,0" Background="Transparent" BorderThickness="0">
                                     <materialDesign:PackIcon Kind="DotsHorizontalCircle" Height="20" Width="20" VerticalAlignment="Center" Foreground="#02008C"/>
                                 </Button>
