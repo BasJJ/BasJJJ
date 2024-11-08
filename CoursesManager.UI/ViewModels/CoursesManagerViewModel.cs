@@ -40,7 +40,7 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Contructor
-        public CoursesManagerViewModel(ICourseRepository pRepo, NavigationService navigationService) : base(navigationService)
+        public CoursesManagerViewModel(ICourseRepository CourseRepository, NavigationService navigationService) : base(navigationService)
         {
             ViewTitle = "Cursus beheer";
 
