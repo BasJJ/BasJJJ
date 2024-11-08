@@ -4,6 +4,7 @@ using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -36,16 +37,17 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Contructor
-        public CoursesManagerViewModel(ICourseRepository pRepo)
+        public CoursesManagerViewModel(ICourseRepository CourseRepository, IRegistrationRepository registrationRepository)
         {
             ViewTitle = "Cursus beheer";
-            _courseRepository = pRepo;
 
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             
-            Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
+            Courses = new ObservableCollection<Course>(CourseRepository.GetAll());
             FilteredCourses = new ObservableCollection<Course>(Courses);
+
+            FilterRecordsAsync();
         }
 
         // Methods
@@ -63,7 +65,9 @@ namespace CoursesManager.UI.ViewModels
                     (string.IsNullOrEmpty(searchTerm) 
                     || course.GenerateFilterString().ToLower().Contains(searchTerm))
                     && course.IsActive == IsToggled
-                ).ToList());
+                ).OrderBy(course => course.IsPayed)
+                .ThenBy(course => course.StartDate)
+                .ToList());
 
             UpdateFilteredCourses(filtered);
         }
