@@ -16,11 +16,13 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand ChangeCourseCommand { get; set; }
 
         public ICommand DeleteCourseCommand { get; set; }
+        public Course CurrentCourse { get; set; }
 
         public CourseOverViewViewModel()
         {
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
+            CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
 
         }
 

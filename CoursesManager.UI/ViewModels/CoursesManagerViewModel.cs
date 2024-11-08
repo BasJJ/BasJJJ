@@ -79,9 +79,17 @@ namespace CoursesManager.UI.ViewModels
             FilteredCourses.Clear();
             foreach (var course in filteredCourses) FilteredCourses.Add(course);
         }
-        private void OpenCourseOptions()
+        private void OpenCourseOptions(object parameter)
         {
-            _navigationService.NavigateTo<CourseOverViewViewModel>();
+            if (parameter is Course course)
+            {
+                GlobalCache.Instance.Put("Opened Course", course);
+                _navigationService.NavigateTo<CourseOverViewViewModel>();
+            }
+            else
+            {
+                Console.WriteLine("Invalid parameter type");
+            }
         }
     }
 }
