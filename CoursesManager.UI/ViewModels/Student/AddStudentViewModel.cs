@@ -132,6 +132,8 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         CloseDialogWithResult(dialogResult);
     }
 
+
+
     private bool IsValidEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
