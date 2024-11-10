@@ -53,8 +53,8 @@ namespace CoursesManager.UI.ViewModels
             var selectableCourses = _courseRepository.GetAll()
                 .Select(course => new SelectableCourse
                 {
-                    CourseID = course.ID,
-                    CourseName = course.CourseName,
+                    ID = course.ID,
+                    Name = course.Name,
                     IsSelected = registeredCourseIds.Contains(course.ID)
                 })
                 .ToList();
@@ -92,7 +92,7 @@ namespace CoursesManager.UI.ViewModels
 
             foreach (var registration in existingRegistrations)
             {
-                if (!SelectableCourses.Any(c => c.CourseID == registration.CourseID && c.IsSelected))
+                if (!SelectableCourses.Any(c => c.ID == registration.CourseID && c.IsSelected))
                 {
                     _registrationRepository.Delete(registration.ID);
                 }
@@ -100,12 +100,12 @@ namespace CoursesManager.UI.ViewModels
 
             foreach (var course in SelectableCourses.Where(c => c.IsSelected))
             {
-                if (!existingRegistrations.Any(r => r.CourseID == course.CourseID))
+                if (!existingRegistrations.Any(r => r.CourseID == course.ID))
                 {
                     _registrationRepository.Add(new Registration
                     {
                         StudentID = Student.Id,
-                        CourseID = course.CourseID,
+                        CourseID = course.ID,
                         RegistrationDate = DateTime.Now,
                         IsActive = true
                     });

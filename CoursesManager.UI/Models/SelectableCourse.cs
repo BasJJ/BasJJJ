@@ -10,8 +10,8 @@ namespace CoursesManager.UI.Models
     // Tijdelijk komt een verbetering.
     public class SelectableCourse : ViewModel
     {
-        public int CourseID { get; set; }
-        public string CourseName { get; set; }
+        public int ID { get; set; }
+        public string Name { get; set; }
         private bool _isSelected;
 
         public bool IsSelected

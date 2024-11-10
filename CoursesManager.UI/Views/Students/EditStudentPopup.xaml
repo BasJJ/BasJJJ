@@ -86,7 +86,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox Style="{DynamicResource CheckBoxStyle1}" Content="{Binding CourseName}"
+                                    <CheckBox Style="{DynamicResource CheckBoxStyle1}" Content="{Binding Name}"
                                       IsChecked="{Binding IsSelected, Mode=TwoWay}" />
                                 </StackPanel>
                             </DataTemplate>
