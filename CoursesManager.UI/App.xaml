@@ -11,6 +11,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/DataGridStyling.xaml" />
+                <ResourceDictionary Source="Resources/ScrollBarStyling.xaml" />
+                <ResourceDictionary Source="Resources/CheckBoxStyling.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Directly defined resources (such as DataTemplates) -->

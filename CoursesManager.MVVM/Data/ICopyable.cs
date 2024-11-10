@@ -1,6 +1,13 @@
-﻿namespace CoursesManager.MVVM.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-internal interface ICopyable<out T>
+namespace CoursesManager.MVVM.Data
 {
-    T Copy();
+    public interface ICopyable<out T>
+    {
+        T Copy();
+    }
 }
