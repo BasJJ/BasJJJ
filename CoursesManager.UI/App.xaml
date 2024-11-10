@@ -17,7 +17,6 @@
                 <ResourceDictionary Source="Resources/CourseDescriptionBoxStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ScrollBarStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
             <!-- Directly defined resources (such as DataTemplates) -->
             <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">
                 <views:CoursesManagerView />

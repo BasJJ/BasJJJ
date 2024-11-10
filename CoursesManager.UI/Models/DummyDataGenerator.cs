@@ -37,7 +37,7 @@ namespace CoursesManager.UI.Models
                         PostCode = GenerateRandomPostCode(),
                         HouseNumber = _random.Next(1, 300),
                         HouseNumberExtension = GenerateRandomHouseNumberExtension(),
-                        AwaitingPayement = _random.Next(0, 2) == 1, // Randomly true or false
+                        AwaitingPayement = _random.Next(0, 2) == 1,
                         DateCreated = DateTime.Now
                     };
 
