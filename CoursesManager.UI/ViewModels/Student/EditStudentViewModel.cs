@@ -42,6 +42,7 @@ namespace CoursesManager.UI.ViewModels
             CancelCommand = new RelayCommand(OnCancel);
         }
 
+        // Tijdelijk komt een verbetering.
         private ObservableCollection<SelectableCourse> InitializeSelectableCourses()
         {
             var registeredCourseIds = _registrationRepository.GetAll()

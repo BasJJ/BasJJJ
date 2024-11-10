@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.UI.Models
 {
+    // Tijdelijk komt een verbetering.
     public class SelectableCourse : ViewModel
     {
         public int CourseID { get; set; }
