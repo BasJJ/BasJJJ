@@ -76,6 +76,7 @@ public partial class App : Application
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<CoursesManagerViewModel>();
 
         MainWindow mw = new()
         {
@@ -113,6 +114,7 @@ public partial class App : Application
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
+        INavigationService.RegisterViewModelFactory(() => new CoursesManagerViewModel());
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
         (student) => new EditStudentViewModel(
