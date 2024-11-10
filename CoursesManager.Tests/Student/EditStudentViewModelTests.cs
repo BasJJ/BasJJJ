@@ -64,7 +64,7 @@ public class EditStudentViewModelTests
         await task;
 
         _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(It.IsAny<OkDialogResultType>()), Times.Once);
+        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Once);
     }
 
     [Test]
@@ -81,9 +81,9 @@ public class EditStudentViewModelTests
         _viewModel.StudentCopy.Country = "Country";
 
         _mockDialogService
-            .Setup(service => service.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(It.IsAny<OkDialogResultType>()))
-            .ReturnsAsync(DialogResult<OkDialogResultType>.Builder()
-                .SetSuccess(new OkDialogResultType { Result = true })
+            .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
+            .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
+                .SetSuccess(new ConfirmationDialogResultType { Result = true })
                 .Build());
 
         var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -91,8 +91,8 @@ public class EditStudentViewModelTests
         await task;
 
         _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(
-            It.Is<OkDialogResultType>(r => r.DialogText == "Voornaam is verplicht.")), Times.Once);
+        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+            It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Voornaam is verplicht.")), Times.Once);
     }
 
     [Test]
@@ -109,9 +109,9 @@ public class EditStudentViewModelTests
         _viewModel.StudentCopy.Country = "Country";
 
         _mockDialogService
-            .Setup(service => service.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(It.IsAny<OkDialogResultType>()))
-            .ReturnsAsync(DialogResult<OkDialogResultType>.Builder()
-                .SetSuccess(new OkDialogResultType { Result = true })
+            .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
+            .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
+                .SetSuccess(new ConfirmationDialogResultType { Result = true })
                 .Build());
 
         var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -119,7 +119,7 @@ public class EditStudentViewModelTests
         await task;
 
         _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(
-            It.Is<OkDialogResultType>(r => r.DialogText == "Het opgegeven e-mailadres is ongeldig.")), Times.Once);
+        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+            It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Het opgegeven e-mailadres is ongeldig.")), Times.Once);
     }
 }

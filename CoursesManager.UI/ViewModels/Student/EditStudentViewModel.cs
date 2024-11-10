@@ -123,11 +123,10 @@ namespace CoursesManager.UI.ViewModels
                     UpdateStudentDetails();
                     UpdateRegistrations();
 
-                    await ShowOkDialogAsync("Cursist succesvol opgeslagen.");
+                    await ShowConfirmationDialogAsync("Cursist succesvol opgeslagen.");
                 }
             }
         }
-
 
         private void OnCancel()
         {
@@ -142,61 +141,61 @@ namespace CoursesManager.UI.ViewModels
         {
             if (string.IsNullOrWhiteSpace(StudentCopy.FirstName))
             {
-                await ShowOkDialogAsync("Voornaam is verplicht.");
+                await ShowConfirmationDialogAsync("Voornaam is verplicht.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.LastName))
             {
-                await ShowOkDialogAsync("Achternaam is verplicht.");
+                await ShowConfirmationDialogAsync("Achternaam is verplicht.");
                 return false;
             }
 
             if (!IsValidEmail(StudentCopy.Email))
             {
-                await ShowOkDialogAsync("Het opgegeven e-mailadres is ongeldig.");
+                await ShowConfirmationDialogAsync("Het opgegeven e-mailadres is ongeldig.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.PhoneNumber))
             {
-                await ShowOkDialogAsync("Telefoonnummer is verplicht");
+                await ShowConfirmationDialogAsync("Telefoonnummer is verplicht");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.PostCode))
             {
-                await ShowOkDialogAsync("Postcode is verplicht.");
+                await ShowConfirmationDialogAsync("Postcode is verplicht.");
                 return false;
             }
 
             if (StudentCopy.HouseNumber <= 0)
             {
-                await ShowOkDialogAsync("Huisnummer is ongeldig.");
+                await ShowConfirmationDialogAsync("Huisnummer is ongeldig.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.City))
             {
-                await ShowOkDialogAsync("Stad is verplicht.");
+                await ShowConfirmationDialogAsync("Stad is verplicht.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.StreetName))
             {
-                await ShowOkDialogAsync("Straatnaam is verplicht.");
+                await ShowConfirmationDialogAsync("Straatnaam is verplicht.");
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(StudentCopy.Country))
             {
-                await ShowOkDialogAsync("Land is verplicht.");
+                await ShowConfirmationDialogAsync("Land is verplicht.");
                 return false;
             }
 
             if (!IsUniqueEmail(StudentCopy.Email))
             {
-                await ShowOkDialogAsync("Dit e-mailadres wordt al gebruikt.");
+                await ShowConfirmationDialogAsync("Dit e-mailadres wordt al gebruikt.");
                 return false;
             }
 
@@ -221,15 +220,14 @@ namespace CoursesManager.UI.ViewModels
             return !_studentRepository.EmailExists(email) || email == StudentCopy.Email;
         }
 
-        private async Task ShowOkDialogAsync(string message)
+        private async Task ShowConfirmationDialogAsync(string message)
         {
-            await _dialogService.ShowDialogAsync<OkDialogViewModel, OkDialogResultType>(new OkDialogResultType
+            await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
             {
                 DialogTitle = "Informatie",
                 DialogText = message
             });
         }
-
 
         private async Task<bool> ShowYesNoDialogAsync(string message)
         {

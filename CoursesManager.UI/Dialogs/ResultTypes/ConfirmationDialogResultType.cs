@@ -2,7 +2,7 @@
 
 namespace CoursesManager.UI.Dialogs.ResultTypes;
 
-public class OkDialogResultType : ViewModel
+public class ConfirmationDialogResultType : ViewModel
 {
     public bool Result { get; set; }
     public string DialogText { get; set; }

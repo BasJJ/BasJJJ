@@ -124,10 +124,6 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-
-
-
-
         private void OnStudentAdded(object sender, Student e)
         {
             LoadStudents();
