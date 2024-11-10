@@ -21,7 +21,7 @@
     <Window.Resources>
         <Style TargetType="Border" x:Key="WindowBorder">
             <Setter Property="CornerRadius" Value="15" />
-            <Setter Property="Background" Value="{StaticResource SecondaryGradiant}" />
+            <Setter Property="Background" Value="{StaticResource SecondaryGradient}" />
             <Setter Property="BorderBrush" Value="Gray" />
             <Setter Property="BorderThickness" Value="1" />
 

@@ -25,7 +25,7 @@ public interface IDialogService
     /// <typeparam name="TDialogResultType">The type of the dialog result data.</typeparam>
     /// <returns>A task representing the asynchronous operation, containing the result of the dialog.</returns>
     /// <exception cref="InvalidOperationException">Thrown when there is no mapping registered for the specified view model type.</exception>
-    Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(bool v)
+    Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>()
         where TDialogViewModel : DialogViewModel<TDialogResultType>;
 
     /// <summary>

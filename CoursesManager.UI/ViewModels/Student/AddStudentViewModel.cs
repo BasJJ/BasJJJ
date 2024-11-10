@@ -38,8 +38,17 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     // Default constructor
-    public AddStudentViewModel() : this(new StudentRepository(), new CourseRepository(), new RegistrationRepository())
+    public AddStudentViewModel(bool initial, IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository) 
+        : base(initial)
     {
+        _studentRepository = studentRepository;
+        _courseRepository = courseRepository;
+        _registrationRepository = registrationRepository;
+        Student = new Student();
+        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.CourseName));
+        SaveCommand = new RelayCommand(Save);
+        CancelCommand = new RelayCommand(Cancel);
+        PropertyChanged = delegate { };
     }
 
     // Parameterized constructor for testing

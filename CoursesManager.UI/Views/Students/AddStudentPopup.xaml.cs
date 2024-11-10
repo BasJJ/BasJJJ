@@ -22,19 +22,13 @@ namespace CoursesManager.UI.Views.Students
         public AddStudentPopup()
         {
             InitializeComponent();
-            DataContext = new AddStudentViewModel();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
         }
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Add logic to save the student details
-            this.DialogResult = true;
-            this.Close();
         }
     }
 }

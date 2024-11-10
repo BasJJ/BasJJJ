@@ -76,7 +76,7 @@ public partial class App : Application
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
-        NavigationService.NavigateTo<CoursesManagerViewModel>();
+        //NavigationService.NavigateTo<CoursesManagerViewModel>();
 
         MainWindow mw = new()
         {
@@ -88,8 +88,12 @@ public partial class App : Application
     private void RegisterDialogs()
     {
         DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel());
-
+        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
+            initial,
+            studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(), 
+            courseRepository: ServiceProvider.GetRequiredService<ICourseRepository>(),
+            registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
+        ));
     }
 
     // This method is used to register all services that are used in the application.
@@ -113,7 +117,7 @@ public partial class App : Application
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
-        INavigationService.RegisterViewModelFactory(() => new CoursesManagerViewModel());
+        //INavigationService.RegisterViewModelFactory(() => new CoursesManagerViewModel());
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
     }
 
