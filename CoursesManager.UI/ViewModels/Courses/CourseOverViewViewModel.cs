@@ -6,119 +6,94 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using CoursesManager.UI.Repositories.RegistrationRepository;
-using CoursesManager.UI.Repositories.StudentRepository;
+using CoursesManager.MVVM.Messages;
+using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Messages;
+using CoursesManager.UI.Models.Repositories.CourseRepository;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
-    class CourseOverViewViewModel : ViewModel
+    internal class CourseOverViewViewModel : NavigatableViewModel
     {
+        private readonly ICourseRepository _courseRepository;
+        private readonly IDialogService _dialogService;
+        private readonly IMessageBroker _messageBroker;
+
         public ICommand ChangeCourseCommand { get; set; }
         public ICommand DeleteCourseCommand { get; set; }
-        public ICommand CheckboxChangedCommand { get; }
 
+        public Course CurrentCourse { get; set; }
+        public ObservableCollection<Student>? Students { get; set; }
+        public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
 
-        private readonly IStudentRepository _studentRepository;
-        private readonly IRegistrationRepository _registrationRepository;
-
-        private Course _currentCourse;
-        public Course CurrentCourse
+        public CourseOverViewViewModel(ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
-            get => _currentCourse;
-            private set => SetProperty(ref _currentCourse, value);
-        }
-
-        private ObservableCollection<Student> _students;
-        public ObservableCollection<Student> Students
-        {
-            get => _students;
-            private set => SetProperty(ref _students, value);
-        }
-
-        private ObservableCollection<CourseStudentPayment> _studentPayments;
-        public ObservableCollection<CourseStudentPayment> StudentPayments
-        {
-            get => _studentPayments;
-            private set => SetProperty(ref _studentPayments, value);
-        }
-
-        public CourseOverViewViewModel(
-            IStudentRepository studentRepository,
-            IRegistrationRepository registrationRepository)
-        {
-            _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
-            _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+            _courseRepository = courseRepository;
+            _dialogService = dialogService;
+            _messageBroker = messageBroker;
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
-            CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
-
-
-            LoadCourseData();
-        }
-
-        private void LoadCourseData()
-        {
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
+            Students = CurrentCourse.students;
+            ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
+            studentPayments = new ObservableCollection<CourseStudentPayment>();
 
-            if (CurrentCourse == null)
-            {
-                throw new InvalidOperationException("No course is currently opened. Ensure the course is loaded in the GlobalCache.");
-            }
-
-            Students = new ObservableCollection<Student>(
-                _studentRepository.GetAll()
-                    .Where(s => s.Courses != null && s.Courses.Any(c => c != null && c.ID == CurrentCourse.ID))
-            );
-
-            var registrations = _registrationRepository.GetAll()
-                .Where(r => r.CourseID == CurrentCourse.ID)
-                .ToList();
-
-            var payments = registrations.Select(registration =>
-            {
-                var student = _studentRepository.GetById(registration.StudentID);
-                if (student == null)
-                {
-                    Console.WriteLine($"Warning: Student with ID {registration.StudentID} not found for registration ID {registration.ID}.");
-                    return null;
+                for (int i = 0 ; i < registration.Count - 1 ; i++)  {
+                CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
+                studentPayments.Add(studentPayment);
                 }
-                return new CourseStudentPayment(student, registration);
-            }).Where(payment => payment != null);
-
-            StudentPayments = new ObservableCollection<CourseStudentPayment>(payments);
+        
+            DeleteCourseCommand = new RelayCommand(OnDelete);
         }
 
-        private void OnCheckboxChanged(CourseStudentPayment payment)
+        private async void OnDelete()
         {
-            if (payment == null || CurrentCourse == null) return;
-
-            var existingRegistration = _registrationRepository.GetAll()
-                .FirstOrDefault(r => r.CourseID == CurrentCourse.ID && r.StudentID == payment.Student?.Id);
-
-            if (existingRegistration != null)
+            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
             {
-                existingRegistration.PaymentStatus = payment.IsPaid;
-                existingRegistration.IsAchieved = payment.IsAchieved;
-                _registrationRepository.Update(existingRegistration);
-            }
-            else if (payment.IsPaid || payment.IsAchieved)
-            {
-                _registrationRepository.Add(new Registration
+                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
                 {
-                    StudentID = payment.Student?.Id ?? 0,
-                    CourseID = CurrentCourse.ID,
-                    PaymentStatus = payment.IsPaid,
-                    IsAchieved = payment.IsAchieved,
-                    RegistrationDate = DateTime.Now,
-                    IsActive = true
+                    DialogText = "Cursus heeft nog actieve registraties.",
+                    DialogTitle = "Error"
                 });
             }
-            LoadCourseData();
-        }
+            else
+            {
+                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
+                {
+                    DialogTitle = "Bevestiging",
+                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
+                });
 
-        private void ChangeCourse()
-        {
+                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
+                {
+                    try
+                    {
+                        _courseRepository.Delete(CurrentCourse.ID);
+
+                        await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                            new ConfirmationDialogResultType
+                            {
+                                DialogText = "Succesvol verwijderd",
+                                DialogTitle = "Info"
+                            });
+
+                        _messageBroker.Publish(new CoursesChangedMessage());
+                        _navigationService.GoBackAndClearForward();
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: add logging
+                        await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
+                        {
+                            DialogText = "Er is iets fout gegaan.",
+                            DialogTitle = "Error"
+                        });
+                    }
+                }
+            }
         }
 
         private void DeleteCourse()
