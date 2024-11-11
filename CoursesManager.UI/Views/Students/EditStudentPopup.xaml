@@ -7,7 +7,7 @@
         AllowsTransparency="True" 
         Background="Transparent"
         WindowStartupLocation="CenterScreen">
-    <Border CornerRadius="15" Background="{StaticResource SecondaryGradiant}" BorderBrush="Gray" BorderThickness="1">
+    <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
         <DockPanel>
             <local:PrimaryDialogHeader Style="{DynamicResource PrimaryEditStudentDialogHeaderStyle1}" 
                                    HeaderTitle="Edit Cursist" 

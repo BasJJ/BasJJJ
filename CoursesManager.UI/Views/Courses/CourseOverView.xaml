@@ -8,7 +8,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
         mc:Ignorable="d"
-        d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradiant}">
+        d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 
 
 
