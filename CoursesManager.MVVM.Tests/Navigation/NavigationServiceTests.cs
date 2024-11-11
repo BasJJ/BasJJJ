@@ -16,12 +16,10 @@ internal class ViewModelWithNavigate : NavigatableViewModel
 
 internal class ViewModelWithoutNavigate : ViewModel
 {
-
 }
 
 internal class UnregisteredViewModelWithoutNavigate : ViewModel
 {
-
 }
 
 public class NavigationServiceTests
@@ -95,7 +93,7 @@ public class NavigationServiceTests
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
     }
 
-    [Test] 
+    [Test]
     public void CanGoBack_ReturnsFalse_WhenNoForwardNavigationHasOccured()
     {
         Assert.IsFalse(_navigationService.CanGoBack());
@@ -217,6 +215,18 @@ public class NavigationServiceTests
         var afterGoBack = _navigationService.NavigationStore.CurrentViewModel;
 
         Assert.That(beforeGoBack, Is.Not.EqualTo(afterGoBack));
+    }
+
+    [Test]
+    public void GoBackAndClearForward_ClearsForwardStack()
+    {
+        _navigationService.NavigateTo<ViewModelWithoutNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithoutNavigate>();
+
+        _navigationService.GoBackAndClearForward();
+
+        Assert.IsFalse(_navigationService.CanGoForward());
     }
 
     [Test]
