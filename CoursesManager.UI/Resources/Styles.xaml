@@ -12,6 +12,16 @@
         <GradientStop Color="#7C3130" Offset="1" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="ErrorButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#CCD85653" Offset="0" />
+        <GradientStop Color="#CC7C3130" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ErrorButtonPressedGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#CC7C3130" Offset="0" />
+        <GradientStop Color="#CCD85653" Offset="1" />
+    </LinearGradientBrush>
+
     <LinearGradientBrush x:Key="SecondaryGradiant" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#51BAF7" Offset="0" />
         <GradientStop Color="#D5F0FF" Offset="1" />
@@ -247,6 +257,44 @@
         </Style.Triggers>
     </Style>
 
+    
+    <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="Background" Value="{StaticResource ErrorGradient}" />
+        <!--<Setter Property="Background" Value="{StaticResource PrimaryGradient}" />-->
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="15" Padding="20 0 20 0" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Foreground" Value="White" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ErrorButtonHoverGradient}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ErrorButtonPressedGradient}" />
+                <Setter Property="BorderBrush" Value="#FF635BDC" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="6" ShadowDepth="5" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="PrimaryDialogButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
         <Setter Property="Height" Value="40" />
         <Setter Property="FontSize" Value="16" />
@@ -261,6 +309,7 @@
         </Setter>
         <Setter Property="Padding" Value="10,5" />
     </Style>
+    
 
     <Style x:Key="ErrorDialogButton" TargetType="Button" BasedOn="{StaticResource PrimaryDialogButton}">
         <Setter Property="Background" Value="{StaticResource ErrorGradient}" />
