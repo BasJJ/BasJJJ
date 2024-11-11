@@ -7,10 +7,36 @@
         <ResourceDictionary Source="Colors/Gradients.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
-    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
-    <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
-    
+    <LinearGradientBrush x:Key="ErrorButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#CCD85653" Offset="0" />
+        <GradientStop Color="#CC7C3130" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ErrorButtonPressedGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#CC7C3130" Offset="0" />
+        <GradientStop Color="#CCD85653" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="SecondaryGradient" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#51BAF7" Offset="0" />
+        <GradientStop Color="#D5F0FF" Offset="1" />
+    </LinearGradientBrush>
+
+    <RadialGradientBrush x:Key="SphericalBlueGradient"
+                         GradientOrigin="0.3, 0.3" Center="0.5, 0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#4DA6FF" Offset="0" />
+        <GradientStop Color="#0066CC" Offset="1" />
+    </RadialGradientBrush>
+
+    <RadialGradientBrush x:Key="SphericalRedGradient"
+                         GradientOrigin="0.3, 0.3" Center="0.5, 0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#D85653" Offset="0" />
+        <GradientStop Color="#7C3130" Offset="1" />
+    </RadialGradientBrush>
+
+    <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3" />
+    <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA" />
+    <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5" />
     <Style x:Key="TextBoxEditStudentStyle1" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
         <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
@@ -36,13 +62,13 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            <Setter Property="Opacity" TargetName="border" Value="0.56" />
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -51,10 +77,10 @@
         <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
-                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                    <Condition Property="IsSelectionActive" Value="false"/>
+                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true" />
+                    <Condition Property="IsSelectionActive" Value="false" />
                 </MultiTrigger.Conditions>
-                <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
             </MultiTrigger>
         </Style.Triggers>
     </Style>
@@ -137,32 +163,32 @@
     
     <Style x:Key="ListBoxEditStudentStyle1" TargetType="{x:Type ListBox}">
         <Style.Resources>
-            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
         </Style.Resources>
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
-        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
+        <Setter Property="ScrollViewer.PanningMode" Value="Both" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
 
         <!-- Voeg ItemContainerStyle toe om marge voor elk ListBoxItem in te stellen -->
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
                     <Style.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
                     </Style.Resources>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
                 </Style>
             </Setter.Value>
         </Setter>
@@ -172,7 +198,7 @@
                 <ControlTemplate TargetType="{x:Type ListBox}">
                     <Border x:Name="Bd" Background="White" BorderBrush="Transparent" BorderThickness="0" CornerRadius="15" Padding="0 0 0 15" SnapsToDevicePixels="true">
                         <ScrollViewer Focusable="false">
-                            <ItemsPresenter SnapsToDevicePixels="True"/>
+                            <ItemsPresenter SnapsToDevicePixels="True" />
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -181,19 +207,19 @@
                             <Setter Property="BorderBrush" Value="Transparent"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="White"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Background" Value="White"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="White"/>
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
+                            <Setter Property="Background" TargetName="Bd" Value="White" />
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="Transparent" />
                         </Trigger>
                         <MultiTrigger>
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -331,14 +357,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ErrorDialogHeaderBorder" TargetType="Border">
+    <Style x:Key="ErrorDialogHeaderBorder" TargetType="Border" BasedOn="{StaticResource PrimaryDialogHeaderBorder}">
         <Setter Property="Background" Value="{StaticResource ErrorGradient}" />
-        <Setter Property="Panel.ZIndex" Value="2" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <LinearGradientBrush x:Key="ButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
@@ -394,7 +414,6 @@
         </Style.Triggers>
     </Style>
 
-    
     <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
         <Setter Property="Background" Value="{StaticResource ErrorGradient}" />
         <!--<Setter Property="Background" Value="{StaticResource PrimaryGradient}" />-->
@@ -446,7 +465,6 @@
         </Setter>
         <Setter Property="Padding" Value="10,5" />
     </Style>
-    
 
     <Style x:Key="ErrorDialogButton" TargetType="Button" BasedOn="{StaticResource PrimaryDialogButton}">
         <Setter Property="Background" Value="{StaticResource ErrorGradient}" />

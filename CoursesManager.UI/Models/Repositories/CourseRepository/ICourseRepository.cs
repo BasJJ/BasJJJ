@@ -17,5 +17,7 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
         void Update(Course course);
 
         void Delete(int id);
+
+        bool HasActiveRegistrations(Course course);
     }
 }
