@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class GlobalCache
 {
-    private readonly int _capacity;
+    private int _capacity;
+    private int _permanentItemCount;
     private readonly ConcurrentDictionary<string, LinkedListNode<CacheItem>> _cacheMap;
     private readonly LinkedList<CacheItem> _usageOrder;
     private readonly object _lock = new object();
@@ -14,6 +15,7 @@ public class GlobalCache
     private GlobalCache(int capacity)
     {
         _capacity = capacity;
+        _permanentItemCount = 0;
         _cacheMap = new ConcurrentDictionary<string, LinkedListNode<CacheItem>>();
         _usageOrder = new LinkedList<CacheItem>();
     }
@@ -38,7 +40,6 @@ public class GlobalCache
     {
         lock (_lock)
         {
-            // checks if the key already exists and overwrites the entry if it finds a match.
             if (_cacheMap.TryGetValue(key, out var existingNode))
             {
                 existingNode.Value = new CacheItem(key, value, isPermanent);
@@ -47,15 +48,32 @@ public class GlobalCache
             }
             else
             {
-                // takes out the Least Recently Used item in the event that the capacity limit has been reached.
-                if (_cacheMap.Count >= _capacity)
+                // Check if cache is full and only full of permanent items
+                if (_cacheMap.Count >= _capacity && _permanentItemCount == _capacity)
                 {
-                    EvictNonPermanentItem();
+                    IncreaseCapacity();
                 }
+
+                // Create and add the new node to the cache
                 var newNode = new LinkedListNode<CacheItem>(new CacheItem(key, value, isPermanent));
                 _usageOrder.AddFirst(newNode);
                 _cacheMap[key] = newNode;
+
+                // The permanent item count will be updated in the CacheItem class itself
             }
+        }
+    }
+
+    private void IncreaseCapacity()
+    {
+        _capacity += 5; // Increase the capacity by 5
+    }
+
+    private void DecreaseCapacity()
+    {
+        if (_capacity > 10) // Do not allow capacity to go below 10
+        {
+            _capacity--;
         }
     }
 
@@ -74,6 +92,26 @@ public class GlobalCache
         }
     }
 
+    public void RemovePermanentItem(string key)
+    {
+        lock (_lock)
+        {
+            if (_cacheMap.ContainsKey(key))
+            {
+                var node = _cacheMap[key];
+                if (node.Value.IsPermanent)
+                {
+                    _permanentItemCount--; // Decrease permanent item count
+                    _cacheMap.TryRemove(key, out _);
+                    _usageOrder.Remove(node);
+
+                    // Adjust capacity when permanent item is removed
+                    DecreaseCapacity();
+                }
+            }
+        }
+    }
+
     private class CacheItem
     {
         public string Key { get; }
@@ -85,6 +123,24 @@ public class GlobalCache
             Key = key;
             Value = value;
             IsPermanent = isPermanent;
+
+            // Automatically adjust the permanent item count
+            if (isPermanent)
+            {
+                // Update the permanent item count directly in GlobalCache
+                GlobalCache.Instance._permanentItemCount++;
+            }
+        }
+    }
+
+    public int CurrentCapacity
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _capacity;
+            }
         }
     }
 

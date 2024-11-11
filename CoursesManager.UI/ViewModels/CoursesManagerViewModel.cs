@@ -7,6 +7,7 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
+using System.Diagnostics;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -86,7 +87,20 @@ namespace CoursesManager.UI.ViewModels
 
         private void OpenCourseOptions(Course parameter)
         {
-            GlobalCache.Instance.Put("Opened Course", parameter, false);
+            var cache = GlobalCache.Instance;
+            Debug.WriteLine($"Current capacity: {cache.CurrentCapacity}");
+            GlobalCache.Instance.Put("Opened Course", parameter, true);
+            GlobalCache.Instance.Put("Opened Course2", parameter, true);
+            GlobalCache.Instance.Put("Opened Course3", parameter, true);
+            GlobalCache.Instance.Put("Opened Course4", parameter, true);
+            GlobalCache.Instance.Put("Opened Course5", parameter, true);
+            GlobalCache.Instance.Put("Opened Course6", parameter, true);
+            GlobalCache.Instance.Put("Opened Course7", parameter, true);
+            GlobalCache.Instance.Put("Opened Course8", parameter, true);
+            GlobalCache.Instance.Put("Opened Course9", parameter, true);
+            GlobalCache.Instance.Put("Opened Course10", parameter, true);
+            GlobalCache.Instance.Put("Opened Course11", parameter, true);
+            Debug.WriteLine($"Current capacity: {cache.CurrentCapacity}");
             _navigationService.NavigateTo<CourseOverViewViewModel>();
         }
     }
