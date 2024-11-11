@@ -58,7 +58,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         _courseRepository = courseRepository;
         _registrationRepository = registrationRepository;
         Student = new Student();
-        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.CourseName));
+        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
         SaveCommand = new RelayCommand(Save);
         CancelCommand = new RelayCommand(Cancel);
         PropertyChanged = delegate { };
@@ -97,7 +97,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
             return;
         }
 
-        var course = _courseRepository.GetAll().FirstOrDefault(c => c.CourseName == SelectedCourse);
+        var course = _courseRepository.GetAll().FirstOrDefault(c => c.Name == SelectedCourse);
         if (course != null)
         {
             var registration = new Registration
@@ -140,6 +140,8 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
             .Build();
         CloseDialogWithResult(dialogResult);
     }
+
+
 
     private bool IsValidEmail(string email)
     {

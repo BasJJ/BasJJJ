@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CoursesManager.UI"
              xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
+             xmlns:courseViewModels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
              xmlns:views="clr-namespace:CoursesManager.UI.Views"
+             xmlns:CourseViews="clr-namespace:CoursesManager.UI.Views.Courses"
              xmlns:converters="clr-namespace:CoursesManager.UI.Converters">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,8 +13,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/DataGridStyling.xaml" />
+                <ResourceDictionary Source="Resources/CheckBoxStyling.xaml" />
+                <ResourceDictionary Source="Resources/CourseDescriptionBoxStyle.xaml"/>
+                <ResourceDictionary Source="Resources/ScrollBarStyling.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Directly defined resources (such as DataTemplates) -->
+            <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">
+                <views:CoursesManagerView />
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
                 <views:StudentManagerView />
             </DataTemplate>
@@ -21,7 +30,12 @@
                 <views:TestView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type courseViewModels:CourseOverViewViewModel}">
+                <CourseViews:CourseOverView />
+            </DataTemplate>
+
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters:StartDateToBooleanConverter>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

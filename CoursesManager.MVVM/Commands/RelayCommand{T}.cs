@@ -41,6 +41,8 @@ namespace CoursesManager.MVVM.Commands
 
         public bool CanExecute(object? parameter)
         {
+            if (parameter is null) return false;
+
             if (parameter is T validParameter) return CanExecute(validParameter);
 
             throw new ArgumentException($"Invalid parameter type. Expected {typeof(T)}, but got {parameter?.GetType()}.", nameof(parameter));

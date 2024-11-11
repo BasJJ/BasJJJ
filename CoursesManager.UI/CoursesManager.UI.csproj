@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoursesManager.MVVM.Dialogs\CoursesManager.MVVM.Dialogs.csproj" />
+    <ProjectReference Include="..\CoursesManager.MVVM\CoursesManager.MVVM.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,7 +58,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Converters\" />
     <Folder Include="ViewModels\Design\" />
   </ItemGroup>
 

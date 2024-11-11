@@ -95,10 +95,11 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" MaxWidth="200">
 
-                                    <Button Command="{Binding DataContext.EditRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                         <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
                                     </Button>
+
 
                                     <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
