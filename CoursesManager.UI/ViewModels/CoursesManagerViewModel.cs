@@ -85,7 +85,7 @@ namespace CoursesManager.UI.ViewModels
         {
             if (parameter is Course course)
             {
-                GlobalCache.Instance.Put("Opened Course", course);
+                GlobalCache.Instance.Put("Opened Course", course,false);
                 _navigationService.NavigateTo<CourseOverViewViewModel>();
             }
             else
