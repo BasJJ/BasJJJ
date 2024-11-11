@@ -1,10 +1,12 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
-
+using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Models;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
@@ -25,8 +27,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand DeleteCourseCommand { get; set; }
 
         public Course CurrentCourse { get; set; }
-        public ObservableCollection<Student>? Students { get; set; }
-        public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
 
         public CourseOverViewViewModel(ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
@@ -35,17 +35,8 @@ namespace CoursesManager.UI.ViewModels.Courses
             _messageBroker = messageBroker;
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
-            DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
-            Students = CurrentCourse.students;
-            ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
-            studentPayments = new ObservableCollection<CourseStudentPayment>();
 
-                for (int i = 0 ; i < registration.Count - 1 ; i++)  {
-                CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
-                studentPayments.Add(studentPayment);
-                }
-        
             DeleteCourseCommand = new RelayCommand(OnDelete);
         }
 
@@ -96,7 +87,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             }
         }
 
-        private void DeleteCourse()
+        private void ChangeCourse()
         {
         }
     }

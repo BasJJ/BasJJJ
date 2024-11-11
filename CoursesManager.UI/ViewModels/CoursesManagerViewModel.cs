@@ -9,10 +9,6 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.MVVM.Dialogs;
-using CoursesManager.UI.ViewModels.Students;
-using System.Diagnostics;
-using CoursesManager.MVVM.Messages;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -20,8 +16,6 @@ namespace CoursesManager.UI.ViewModels
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
-        private readonly IDialogService _dialogService;
-        private readonly IMessageBroker _messageBroker;
 
         private string _searchText = String.Empty;
         private bool _isToggled = true;
@@ -34,21 +28,8 @@ namespace CoursesManager.UI.ViewModels
         public ICommand AddCourseCommand { get; }
         public ICommand CourseOptionCommand { get; }
 
-        private ObservableCollection<Course> _courses;
-
-        public ObservableCollection<Course> Courses
-        {
-            get => _courses;
-            private set => SetProperty(ref _courses, value);
-        }
-
-        private ObservableCollection<Course> _filteredCourses;
-
-        public ObservableCollection<Course> FilteredCourses
-        {
-            get => _filteredCourses;
-            private set => SetProperty(ref _filteredCourses, value);
-        }
+        public ObservableCollection<Course> Courses { get; private set; }
+        public ObservableCollection<Course> FilteredCourses { get; private set; }
 
         public string SearchText
         {
@@ -63,20 +44,17 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Constructor
-        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, IDialogService dialogService, INavigationService navigationService) : base(navigationService)
+        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
             _courseRepository = courseRepository;
             _messageBroker = messageBroker;
-            _dialogService = dialogService;
-            
             _messageBroker.Subscribe<CoursesChangedMessage, CoursesManagerViewModel>(OnCoursesChangedMessage, this);
 
             ViewTitle = "Cursus beheer";
-            _messageBroker = messageBroker;
+
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);
-            AddCourseCommand = new RelayCommand(OpenCourseDialog);
 
             LoadCourses();
         }
@@ -125,18 +103,8 @@ namespace CoursesManager.UI.ViewModels
 
         private void OpenCourseOptions(Course parameter)
         {
-            GlobalCache.Instance.Put("Opened Course", parameter, true);
+            GlobalCache.Instance.Put("Opened Course", parameter, false);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
-        }
-
-        private async void OpenCourseDialog()
-        {
-            var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>();
-
-            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
-            {
-                LoadCourses();
-            }
         }
     }
 }
