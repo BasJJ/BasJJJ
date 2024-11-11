@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GlobalCache
 {
     private int _capacity;
+    private int _InitialCapacity;
     private int _permanentItemCount;
     private readonly ConcurrentDictionary<string, LinkedListNode<CacheItem>> _cacheMap;
     private readonly LinkedList<CacheItem> _usageOrder;
@@ -15,6 +16,7 @@ public class GlobalCache
     private GlobalCache(int capacity)
     {
         _capacity = capacity;
+        _InitialCapacity = capacity;
         _permanentItemCount = 0;
         _cacheMap = new ConcurrentDictionary<string, LinkedListNode<CacheItem>>();
         _usageOrder = new LinkedList<CacheItem>();
@@ -66,12 +68,12 @@ public class GlobalCache
 
     private void IncreaseCapacity()
     {
-        _capacity += 5; // Increase the capacity by 5
+        _capacity += 5;
     }
 
     private void DecreaseCapacity()
     {
-        if (_capacity > 10) // Do not allow capacity to go below 10
+        if (_capacity > _InitialCapacity)
         {
             _capacity--;
         }
@@ -101,7 +103,7 @@ public class GlobalCache
                 var node = _cacheMap[key];
                 if (node.Value.IsPermanent)
                 {
-                    _permanentItemCount--; // Decrease permanent item count
+                    _permanentItemCount--;
                     _cacheMap.TryRemove(key, out _);
                     _usageOrder.Remove(node);
 
@@ -132,7 +134,7 @@ public class GlobalCache
             }
         }
     }
-
+    // For testing purposes
     public int CurrentCapacity
     {
         get
