@@ -217,6 +217,18 @@ public class NavigationServiceTests
     }
 
     [Test]
+    public void GoBackAndClearForward_ClearsForwardStack()
+    {
+        _navigationService.NavigateTo<ViewModelWithoutNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithoutNavigate>();
+
+        _navigationService.GoBackAndClearForward();
+
+        Assert.IsFalse(_navigationService.CanGoForward());
+    }
+
+    [Test]
     public void GoForward_CurrentViewModelChanges()
     {
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
