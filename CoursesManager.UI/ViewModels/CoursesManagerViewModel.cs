@@ -2,7 +2,9 @@
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
@@ -17,6 +19,7 @@ namespace CoursesManager.UI.ViewModels
 
         private string _searchText = String.Empty;
         private bool _isToggled = true;
+        private readonly IMessageBroker _messageBroker;
 
         // Getters and Setters
         public ICommand SearchCommand { get; }
@@ -25,8 +28,8 @@ namespace CoursesManager.UI.ViewModels
         public ICommand AddCourseCommand { get; }
         public ICommand CourseOptionCommand { get; }
 
-        public ObservableCollection<Course> Courses { get; }
-        public ObservableCollection<Course> FilteredCourses { get; }
+        public ObservableCollection<Course> Courses { get; private set; }
+        public ObservableCollection<Course> FilteredCourses { get; private set; }
 
         public string SearchText
         {
@@ -40,16 +43,30 @@ namespace CoursesManager.UI.ViewModels
             set { if (SetProperty(ref _isToggled, value)) _ = FilterRecordsAsync(); }
         }
 
-        // Contructor
-        public CoursesManagerViewModel(ICourseRepository CourseRepository, IRegistrationRepository registrationRepository, INavigationService navigationService) : base(navigationService)
+        // Constructor
+        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
+            _courseRepository = courseRepository;
+            _messageBroker = messageBroker;
+            _messageBroker.Subscribe<CoursesChangedMessage, CoursesManagerViewModel>(OnCoursesChangedMessage, this);
+
             ViewTitle = "Cursus beheer";
 
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);
 
-            Courses = new ObservableCollection<Course>(CourseRepository.GetAll());
+            LoadCourses();
+        }
+
+        private void OnCoursesChangedMessage(CoursesChangedMessage obj)
+        {
+            LoadCourses();
+        }
+
+        private void LoadCourses()
+        {
+            Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
             FilteredCourses = new ObservableCollection<Course>(Courses);
 
             FilterRecordsAsync();

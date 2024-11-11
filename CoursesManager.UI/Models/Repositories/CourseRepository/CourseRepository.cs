@@ -1,5 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Models.Repositories.CourseRepository
@@ -53,6 +52,11 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
             {
                 _courses.Remove(course);
             }
+        }
+
+        public bool HasActiveRegistrations(Course course)
+        {
+            return false;
         }
     }
 }

@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 namespace CoursesManager.UI.Models.Repositories.CourseRepository
 {
     public interface ICourseRepository
-    { IEnumerable<Course> GetAll();
+    {
+        IEnumerable<Course> GetAll();
+
         Course GetById(int id);
+
         void Add(Course course);
+
         void Update(Course course);
+
         void Delete(int id);
+
+        bool HasActiveRegistrations(Course course);
     }
 }

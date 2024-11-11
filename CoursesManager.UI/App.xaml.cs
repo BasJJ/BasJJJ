@@ -26,6 +26,7 @@ public partial class App : Application
     //This is a temporary static class that will hold all the data that is used in the application.
     //This is a temporary solution until we have a database.
     public static ObservableCollection<Student> Students { get; private set; }
+
     public static ObservableCollection<Course> Courses { get; private set; }
     public static ObservableCollection<Location> Locations { get; private set; }
     public static ObservableCollection<Registration> Registrations { get; private set; }
@@ -39,7 +40,6 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        
         //This is a temporary static class that will hold all the data that is used in the application.
         //This is a temporary solution until we have a database.
         Students = DummyDataGenerator.GenerateStudents(15);
@@ -78,7 +78,6 @@ public partial class App : Application
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<CoursesManagerViewModel>();
- 
 
         MainWindow mw = new()
         {
@@ -93,15 +92,16 @@ public partial class App : Application
         DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
         DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
             initial,
-            studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(), 
+            studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(),
             courseRepository: ServiceProvider.GetRequiredService<ICourseRepository>(),
             registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
         ));
+        DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, ConfirmationDialogResultType>((initial) => new ErrorDialogViewModel(initial));
     }
 
     // This method is used to register all services that are used in the application.
     // This way we can use dependency injection to inject the services where needed.
-    // This method we will use it until we make sure that it's needed for our project according to the decision of 
+    // This method we will use it until we make sure that it's needed for our project according to the decision of
     // The teacher.
     private void ConfigureServices(IServiceCollection services)
     {
@@ -117,13 +117,12 @@ public partial class App : Application
         services.AddTransient<CoursesManagerViewModel>();
         // Register other view models...
     }
-   
 
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
-        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), ServiceProvider.GetService<IRegistrationRepository>(), nav));
-        INavigationService.RegisterViewModelFactory(() => new CourseOverViewViewModel());
+        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), MessageBroker, nav));
+        INavigationService.RegisterViewModelFactory((nav) => new CourseOverViewViewModel(ServiceProvider.GetService<ICourseRepository>(), DialogService, MessageBroker, nav));
 
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
