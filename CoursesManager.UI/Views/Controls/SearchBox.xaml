@@ -6,7 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="80" d:DesignWidth="800">
+             d:DesignHeight="50" d:DesignWidth="360">
     <UserControl.Resources>
         <Style TargetType="{x:Type rs:PlaceholderTextBox}">
             <Setter Property="Template">
@@ -24,7 +24,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Border CornerRadius="40" Background="White">
+    <Border CornerRadius="15" Background="White" Padding="0 15 0 15">
         <Border.Effect>
             <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="8" Opacity="0.3" />
         </Border.Effect>
@@ -32,7 +32,7 @@
             <rs:PlaceholderTextBox Style="{DynamicResource PlaceholderTextBoxStyle1}" x:Name="SearchTextBox"
                                    Placeholder="Zoeken..."
                                    VerticalContentAlignment="Center"
-                                   FontSize="36"
+                                   FontSize="16"
                                    Padding="20,0,60,0"
                                    Background="Transparent"
                                    Text="{Binding Text, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -47,7 +47,7 @@
                 Margin="0,0,25,0"
                 Style="{StaticResource IconButtonWithShadowStyle}"
                 Command="{Binding SearchCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                <materialDesign:PackIcon Kind="Search" Width="48" Height="48" Foreground="Gray"
+                <materialDesign:PackIcon Kind="Search" Width="24" Height="24" Foreground="Gray"
                                          />
             </Button>
         </Grid>

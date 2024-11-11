@@ -36,7 +36,7 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
             var existingCourse = GetById(course.ID);
             if (existingCourse != null)
             {
-                existingCourse.CourseName = course.CourseName;
+                existingCourse.Name = course.Name;
                 existingCourse.Description = course.Description;
                 existingCourse.IsActive = course.IsActive;
                 existingCourse.Category = course.Category;

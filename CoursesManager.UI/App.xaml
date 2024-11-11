@@ -16,6 +16,10 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Directly defined resources (such as DataTemplates) -->
+            <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">
+                <views:CoursesManagerView />
+            </DataTemplate>
+            
             <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
                 <views:StudentManagerView />
             </DataTemplate>
@@ -25,6 +29,7 @@
             </DataTemplate>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters:StartDateToBooleanConverter>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -107,12 +107,14 @@ public partial class App : Application
         services.AddTransient<MainWindow>();
         services.AddTransient<StudentManagerViewModel>();
         services.AddTransient<AddStudentViewModel>();
+        services.AddTransient<CoursesManagerViewModel>();
         // Register other view models...
     }
 
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
+        INavigationService.RegisterViewModelFactory(() => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), ServiceProvider.GetService<IRegistrationRepository>()));
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
         (student) => new EditStudentViewModel(
