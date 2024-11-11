@@ -119,6 +119,8 @@ public partial class App : Application
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
         INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), ServiceProvider.GetService<IRegistrationRepository>(), nav));
+        INavigationService.RegisterViewModelFactory(() => new CourseOverViewViewModel());
+
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
         (student) => new EditStudentViewModel(
