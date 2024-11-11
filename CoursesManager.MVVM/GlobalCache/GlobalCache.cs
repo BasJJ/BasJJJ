@@ -85,4 +85,18 @@ public class GlobalCache
             IsPermanent = isPermanent;
         }
     }
+
+#if DEBUG
+    /// <summary>
+    /// Clears the cache for unit testing purposes.
+    /// </summary>
+    public void Clear()
+    {
+        lock (_lock)
+        {
+            _cacheMap.Clear();
+            _usageOrder.Clear();
+        }
+    }
+#endif
 }
