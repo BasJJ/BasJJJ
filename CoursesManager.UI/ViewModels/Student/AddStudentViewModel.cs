@@ -17,6 +17,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     private readonly IStudentRepository _studentRepository;
     private readonly ICourseRepository _courseRepository;
     private readonly IRegistrationRepository _registrationRepository;
+
     public event EventHandler<Student> StudentAdded;
 
     public Student Student
@@ -38,14 +39,14 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     public event PropertyChangedEventHandler PropertyChanged;
 
     // Default constructor
-    public AddStudentViewModel(bool initial, IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository) 
+    public AddStudentViewModel(bool initial, IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository)
         : base(initial)
     {
         _studentRepository = studentRepository;
         _courseRepository = courseRepository;
         _registrationRepository = registrationRepository;
         Student = new Student();
-        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.CourseName));
+        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
         SaveCommand = new RelayCommand(Save);
         CancelCommand = new RelayCommand(Cancel);
         PropertyChanged = delegate { };
@@ -141,8 +142,6 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         CloseDialogWithResult(dialogResult);
     }
 
-
-
     private bool IsValidEmail(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
@@ -178,6 +177,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         ResponseCallback?.Invoke(dialogResult);
     }
+
     protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
     {
         MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
