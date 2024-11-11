@@ -38,6 +38,7 @@ public class GlobalCache
     {
         lock (_lock)
         {
+            // checks if the key already exists and overwrites the entry if it finds a match.
             if (_cacheMap.TryGetValue(key, out var existingNode))
             {
                 existingNode.Value = new CacheItem(key, value, isPermanent);
@@ -46,6 +47,7 @@ public class GlobalCache
             }
             else
             {
+                // takes out the Least Recently Used item in the event that the capacity limit has been reached.
                 if (_cacheMap.Count >= _capacity)
                 {
                     EvictNonPermanentItem();
@@ -97,6 +99,21 @@ public class GlobalCache
             _cacheMap.Clear();
             _usageOrder.Clear();
         }
+    }
+
+    // This allows you to create a custom cache instance for testing purposes in DEBUG builds
+    private static int _testCapacity = 10;
+
+    // A method for unit tests to set the custom capacity
+    public static void SetTestCapacity(int capacity)
+    {
+        _testCapacity = capacity;
+    }
+
+    // Factory method for creating a cache with custom capacity in debug mode
+    public static GlobalCache CreateForTesting()
+    {
+        return new GlobalCache(_testCapacity);
     }
 #endif
 }

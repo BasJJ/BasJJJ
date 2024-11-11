@@ -77,9 +77,21 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="5"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
                             <Grid Grid.Row="0" HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalAlignment="Right" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
+                                <TextBlock Grid.Column="2" Text="{Binding Name}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                            </Grid>
+
+                            <Grid Grid.Row="2" HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="10"/>
@@ -89,7 +101,7 @@
                                 <TextBlock Grid.Column="2" Text="{Binding Code}" FontWeight="Bold" FontSize="22" Foreground="Black" />
                             </Grid>
 
-                            <Grid Grid.Row="2" HorizontalAlignment="Left">
+                            <Grid Grid.Row="4" HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="10"/>
@@ -105,7 +117,7 @@
                                 <TextBlock HorizontalAlignment="Left" Grid.Column="6" Grid.Row="2" Text="{Binding EndDate, StringFormat={}{0:dd/MM/yyyy}}" FontWeight="Bold" FontSize="22" Foreground="Black" />
                             </Grid>
 
-                            <Grid  Grid.Row="4" HorizontalAlignment="Left">
+                            <Grid  Grid.Row="6" HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="10"/>

@@ -20,8 +20,8 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         public CourseOverViewViewModel()
         {
-
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
+            DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
 
         }
@@ -32,5 +32,9 @@ namespace CoursesManager.UI.ViewModels.Courses
             
         }
 
+        private void DeleteCourse()
+        {
+
+        }
     }
 }
