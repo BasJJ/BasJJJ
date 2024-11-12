@@ -18,6 +18,8 @@ using CoursesManager.UI.ViewModels;
 using CoursesManager.MVVM.Messages;
 using System.Windows.Media.Animation;
 
+namespace CoursesManager.UI.ViewModels.Students;
+
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
     private Student _student;
