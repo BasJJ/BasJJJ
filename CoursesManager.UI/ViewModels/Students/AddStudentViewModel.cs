@@ -11,6 +11,8 @@ using System.Windows;
 using System.Windows.Input;
 using CoursesManager.UI.Views.Students;
 
+namespace CoursesManager.UI.ViewModels.Students;
+
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
     private Student _student;

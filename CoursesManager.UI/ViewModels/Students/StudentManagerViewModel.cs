@@ -13,7 +13,7 @@ using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 
-namespace CoursesManager.UI.ViewModels
+namespace CoursesManager.UI.ViewModels.Students
 {
     public class StudentManagerViewModel : ViewModel
     {
