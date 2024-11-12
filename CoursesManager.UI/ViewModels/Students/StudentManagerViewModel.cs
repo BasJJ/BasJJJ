@@ -1,31 +1,29 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Printing;
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
-using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
-using CoursesManager.UI.Dialogs.ResultTypes;
-using CoursesManager.UI.Dialogs.ViewModels;
-using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Repositories.CourseRepository;
-using CoursesManager.UI.Repositories.RegistrationRepository;
-using CoursesManager.UI.Repositories.StudentRepository;
+using CoursesManager.UI.Models.Repositories;
+using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Models.Repositories.StudentRepository;
+using CoursesManager.UI.Views.Students;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
-    public class StudentManagerViewModel : ViewModelWithNavigation
+    public class StudentManagerViewModel : ViewModel
     {
-        private readonly IDialogService _dialogService;
-        private readonly IMessageBroker _messageBroker;
-        private readonly IStudentRepository _studentRepository;
-        private readonly ICourseRepository _courseRepository;
-        private readonly IRegistrationRepository _registrationRepository;
-        public ObservableCollection<Student> Students { get; set; }
-        public ObservableCollection<Student> FilteredStudentRecords { get; set; }
+        #region View fields
 
+        public ObservableCollection<Student> students;
         private string _searchText;
+        private readonly IDialogService _dialogService;
+        private readonly StudentRepository _studentRepository;
+        private readonly ICourseRepository _courseRepository;
 
         public string SearchText
         {
@@ -33,235 +31,108 @@ namespace CoursesManager.UI.ViewModels.Students
             set => SetProperty(ref _searchText, value);
         }
 
-        private Student _selectedStudent;
+        private ObservableCollection<Student> _filteredStudentRecords;
 
-        public Student SelectedStudent
+        public ObservableCollection<Student> FilteredStudentRecords
         {
-            get => _selectedStudent;
-            set
-            {
-                if (SetProperty(ref _selectedStudent, value))
-                {
-                    UpdateStudentCourses();
-                }
-            }
+            get => _filteredStudentRecords;
+            set => SetProperty(ref _filteredStudentRecords, value);
         }
 
-        private bool _isDialogOpen;
+        #endregion View fields
 
-        public bool IsDialogOpen
+        public StudentManagerViewModel(IDialogService dialogService)
         {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
+            ViewTitle = "Cursisten beheer";
+
+            _dialogService = dialogService;
+
+            _studentRepository = new StudentRepository();
+            LoadStudents();
+            AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
+            EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, (s) => true);
+            SearchCommand = new RelayCommand(OnSearchCommand);
         }
 
-        private ObservableCollection<CourseStudentPayment> _coursePaymentList;
-
-        public ObservableCollection<CourseStudentPayment> CoursePaymentList
+        private void LoadStudents()
         {
-            get => _coursePaymentList;
-            set => SetProperty(ref _coursePaymentList, value);
+            students = new ObservableCollection<Student>(_studentRepository.GetAll());
+            FilteredStudentRecords = new ObservableCollection<Student>(students);
         }
 
         #region Commands
 
-        public ICommand AddStudentCommand { get; }
-        public ICommand EditStudentCommand { get; }
-        public ICommand DeleteStudentCommand { get; }
-        public ICommand SearchCommand { get; }
-        public ICommand StudentDetailCommand { get; }
-        public ICommand CheckboxChangedCommand { get; }
+        public ICommand DataImportCommand { get; private set; }
+        public ICommand DataExportCommand { get; private set; }
+        public ICommand OpenRecordCommand { get; private set; }
+        public ICommand DeleteRecordCommand { get; private set; }
+        public ICommand EditStudentCommand { get; private set; }
+        public ICommand AddStudentCommand { get; private set; }
+        public ICommand SearchCommand { get; private set; }
 
+        #region SearchCommand
+
+        private void OnSearchCommand()
+        {
+            FilterStudentRecordsAsync();
+        }
+
+        #endregion SearchCommand
 
         #endregion Commands
 
-        public StudentManagerViewModel(
-            IDialogService dialogService,
-            IStudentRepository studentRepository,
-            ICourseRepository courseRepository,
-            IRegistrationRepository registrationRepository,
-            IMessageBroker messageBroker,
-            INavigationService navigationService) : base(navigationService)
-        {
-            _messageBroker = messageBroker;
-            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
-            _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
-            _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
-            _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
-            _navigationService = navigationService;
-            CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
-
-            // Initialize students
-            LoadStudents();
-
-            // Commands
-            AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
-            EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
-            DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
-            SearchCommand = new RelayCommand(FilterStudentRecords);
-            StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
-            CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
-            ViewTitle = "Cursisten beheer";
-        }
-
-        public void LoadStudents()
-        {
-            Students = new ObservableCollection<Student>(_studentRepository.GetAll());
-            FilteredStudentRecords = new ObservableCollection<Student>(Students);
-        }
-
-        private void FilterStudentRecords()
+        private async Task FilterStudentRecordsAsync()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                FilteredStudentRecords = new ObservableCollection<Student>(Students);
+                FilteredStudentRecords = new ObservableCollection<Student>(students);
             }
             else
             {
-                var searchTerm = SearchText.Trim().ToLower();
-                var filtered = Students.Where(s => s.TableFilter().ToLower().Contains(searchTerm)).ToList();
+                string searchTerm = SearchText.Trim().Replace(" ", "").ToLower();
+
+                var filtered = await Task.Run(() =>
+                {
+                    return students.Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+                });
+
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
             }
+
             OnPropertyChanged(nameof(FilteredStudentRecords));
         }
-        private void OnCheckboxChanged(CourseStudentPayment payment)
-        {
-            if (payment == null || SelectedStudent == null) return;
-
-            var existingRegistration = _registrationRepository.GetAll()
-                .FirstOrDefault(r => r.CourseID == payment.Course?.ID && r.StudentID == SelectedStudent.Id);
-
-            if (existingRegistration != null)
-            {
-                existingRegistration.PaymentStatus = payment.IsPaid;
-                existingRegistration.IsAchieved = payment.IsAchieved;
-                _registrationRepository.Update(existingRegistration);
-            }
-            else if (payment.IsPaid || payment.IsAchieved)
-            {
-                _registrationRepository.Add(new Registration
-                {
-                    StudentID = SelectedStudent.Id,
-                    CourseID = payment.Course?.ID ?? 0,
-                    PaymentStatus = payment.IsPaid,
-                    IsAchieved = payment.IsAchieved,
-                    RegistrationDate = DateTime.Now,
-                    IsActive = true
-                });
-            }
-            UpdateStudentCourses();
-        }
-
-        private void UpdateStudentCourses()
-        {
-            if (SelectedStudent == null) return;
-
-            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == SelectedStudent.Id);
-            CoursePaymentList.Clear();
-
-            foreach (var registration in registrations)
-            {
-                if (registration.Course != null)
-                {
-                    CoursePaymentList.Add(new CourseStudentPayment(registration.Course, registration));
-                }
-            }
-            OnPropertyChanged(nameof(CoursePaymentList));
-        }
-
 
         private async void OpenAddStudentPopup()
         {
-            await ExecuteWithOverlayAsync(async () =>
-            {
-                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
-                if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
-                {
-                    LoadStudents();
-                }
-            });
+            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            {
+                LoadStudents();
+            }
         }
 
         private async void OpenEditStudentPopup(Student student)
         {
-            if (student == null)
-                await ExecuteWithOverlayAsync(async () =>
-                {
-                    {
-                        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                            new DialogResultType
-                            {
-                                DialogTitle = "Error",
-                                DialogText = "Geen student geselecteerd om te bewerken."
-                            });
-                        return;
-                    }
-                });
-
-            if (student == null) return;
-            await ExecuteWithOverlayAsync(async () =>
-            {
-                var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
-
-                if (dialogResult?.Outcome == DialogOutcome.Success)
-                {
-                    LoadStudents();
-                }
-            });
-        }
-
-        private async void OpenDeleteStudentPopup(Student student)
-        {
             if (student == null) return;
 
-            await ExecuteWithOverlayAsync(async () =>
-            {
-                var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-            new DialogResultType
-            {
-                DialogTitle = "Bevestiging",
-                DialogText = "Wilt u deze cursist verwijderen?"
-            });
+            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
-                if (confirmation?.Data?.Result == true)
-                {
-                    student.Is_deleted = true;
-                    student.date_deleted = DateTime.Now;
-                    _studentRepository.Update(student);
-                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                        new DialogResultType
-                        {
-                            DialogTitle = "Informatie",
-                            DialogText = "Cursist succesvol verwijderd."
-                        });
-
-                    LoadStudents();
-                }
-            });
+            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            {
+                LoadStudents();
+            }
         }
 
-        private void OpenStudentDetailViewModel()
+        private void OnStudentAdded(object sender, Student e)
         {
-            if (_navigationService == null)
-            {
-                throw new InvalidOperationException("Navigation service is not initialized.");
-            }
-
-            _navigationService.NavigateTo<StudentDetailViewModel>(SelectedStudent);
+            LoadStudents();
         }
 
-        private async Task ExecuteWithOverlayAsync(Func<Task> action)
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
         {
-            _messageBroker.Publish(new OverlayActivationMessage(true));
-            try
-            {
-                await action();
-            }
-            finally
-            {
-                _messageBroker.Publish(new OverlayActivationMessage(false));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
