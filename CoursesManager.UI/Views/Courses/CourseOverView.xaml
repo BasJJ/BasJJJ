@@ -272,7 +272,7 @@
                                                             </Setter>
                                                         </Style>
                                                     </Button.Style>
-                                                    <materialDesign:PackIcon Kind="DotsHorizontalCircle" Height="20" Width="20" VerticalAlignment="Center" Foreground="#02008C"/>
+                                                    <materialDesign:PackIcon Kind="CheckBox" Height="20" Width="20" VerticalAlignment="Center" Foreground="#02008C"/>
                                                 </Button>
                                             </Grid>
                                         </Border>
