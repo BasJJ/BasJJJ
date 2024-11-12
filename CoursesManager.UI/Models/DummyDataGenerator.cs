@@ -50,6 +50,8 @@ namespace CoursesManager.UI.Models
             public static ObservableCollection<Course> GenerateCourses(int count)
             {
                 ObservableCollection<Course> courses = new ObservableCollection<Course>();
+                ObservableCollection<Student> student = new ObservableCollection<Student>();
+                
 
                 for (int i = 0; i < count; i++)
                 {
@@ -66,7 +68,8 @@ namespace CoursesManager.UI.Models
                         StartDate = DateTime.Now.AddDays(_random.Next(1, 30)),
                         EndDate = DateTime.Now.AddDays(_random.Next(31, 60)),
                         LocationId = _random.Next(1, count + 1),
-                        DateCreated = DateTime.Now
+                        DateCreated = DateTime.Now,
+                        students = GenerateStudents(i)
                     };
 
                     courses.Add(course);

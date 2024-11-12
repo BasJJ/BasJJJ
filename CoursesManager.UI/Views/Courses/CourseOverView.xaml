@@ -166,13 +166,6 @@
         <Grid Grid.Row="1" Grid.Column="3">
             <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="450">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="25"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
@@ -192,10 +185,102 @@
                         </Border.Style>
                     </Border>
 
-                            
-                    <TextBlock HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" Text="Cursist" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
-                    <TextBlock HorizontalAlignment="Left" Grid.Column="3" Grid.Row="2" Text="Betalingstatus" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="25"/>
+                        </Grid.ColumnDefinitions>
+                    
+                    <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Cursist" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
+                    <TextBlock HorizontalAlignment="Left" Grid.Column="3" Text="Betalingstatus" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
+                    </Grid>
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="25"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="25"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Scrollable Card Grid -->
+                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
+                        <ItemsControl ItemsSource="{Binding Students}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border>
+                                        <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+
+                                                    <!-- TextBlock for Insertion with DataTrigger to change margin when empty -->
+                                                    <TextBlock Grid.Column="1" FontWeight="Bold" FontSize="18" Foreground="#02008C">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Style.Triggers>
+                                                                    <!-- When Insertion is empty, set the margin to 0 -->
+                                                                    <DataTrigger Binding="{Binding Insertion}" Value="{x:Null}">
+                                                                        <Setter Property="Margin" Value="0 0 0 0"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding Insertion}" Value="">
+                                                                        <Setter Property="Margin" Value="0 0 0 0"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                                <Setter Property="Margin" Value="0 0 6 0"/>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                        <TextBlock.Text>
+                                                            <Binding Path="Insertion"/>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+
+                                                    <TextBlock Grid.Column="2" Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+
+                                                <Button Grid.Column="4" HorizontalAlignment="Right" Width="24" Height="24" Background="Transparent" BorderThickness="0">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="Transparent"/>
+                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="Button">
+                                                                        <Grid>
+                                                                            <Ellipse x:Name="HoverEllipse" Fill="Transparent" />
+                                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                        </Grid>
+
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                                <Setter TargetName="HoverEllipse" Property="Fill" Value="#BCE6FD"/>
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </Button.Style>
+                                                    <materialDesign:PackIcon Kind="DotsHorizontalCircle" Height="20" Width="20" VerticalAlignment="Center" Foreground="#02008C"/>
+                                                </Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                    </ScrollViewer>
+                    </Grid>
                 </Grid>
             </Border>
         </Grid>
