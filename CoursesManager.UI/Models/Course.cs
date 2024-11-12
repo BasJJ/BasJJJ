@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Text;
 
 namespace CoursesManager.UI.Models
 {
@@ -17,6 +18,7 @@ namespace CoursesManager.UI.Models
         public int LocationId { get; set; }
         public Location? Location { get; set; }
         public DateTime DateCreated { get; set; }
+        public ObservableCollection<Student>? students { get; set; }
 
         public string GenerateFilterString()
         {
