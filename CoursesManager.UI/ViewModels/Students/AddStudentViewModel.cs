@@ -20,6 +20,8 @@ using CoursesManager.UI.Repositories.CourseRepository;
 
 namespace CoursesManager.UI.ViewModels.Students;
 
+namespace CoursesManager.UI.ViewModels.Students;
+
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
     private readonly IStudentRepository _studentRepository;
