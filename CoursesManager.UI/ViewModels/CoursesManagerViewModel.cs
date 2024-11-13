@@ -7,6 +7,7 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
+using System.Diagnostics;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -86,7 +87,7 @@ namespace CoursesManager.UI.ViewModels
 
         private void OpenCourseOptions(Course parameter)
         {
-            GlobalCache.Instance.Put("Opened Course", parameter, false);
+            GlobalCache.Instance.Put("Opened Course", parameter, true);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
         }
     }

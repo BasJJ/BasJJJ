@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class GlobalCache
 {
-    private readonly int _capacity;
+    private int _capacity;
+    private int _InitialCapacity;
+    private int _permanentItemCount;
     private readonly ConcurrentDictionary<string, LinkedListNode<CacheItem>> _cacheMap;
     private readonly LinkedList<CacheItem> _usageOrder;
     private readonly object _lock = new object();
@@ -14,6 +16,8 @@ public class GlobalCache
     private GlobalCache(int capacity)
     {
         _capacity = capacity;
+        _InitialCapacity = capacity;
+        _permanentItemCount = 0;
         _cacheMap = new ConcurrentDictionary<string, LinkedListNode<CacheItem>>();
         _usageOrder = new LinkedList<CacheItem>();
     }
@@ -46,14 +50,32 @@ public class GlobalCache
             }
             else
             {
-                if (_cacheMap.Count >= _capacity)
+                // Check if cache is full and only full of permanent items
+                if (_cacheMap.Count >= _capacity && _permanentItemCount == _capacity)
                 {
-                    EvictNonPermanentItem();
+                    IncreaseCapacity();
                 }
+
+                // Create and add the new node to the cache
                 var newNode = new LinkedListNode<CacheItem>(new CacheItem(key, value, isPermanent));
                 _usageOrder.AddFirst(newNode);
                 _cacheMap[key] = newNode;
+
+                // The permanent item count will be updated in the CacheItem class itself
             }
+        }
+    }
+
+    private void IncreaseCapacity()
+    {
+        _capacity += 5;
+    }
+
+    private void DecreaseCapacity()
+    {
+        if (_capacity > _InitialCapacity)
+        {
+            _capacity--;
         }
     }
 
@@ -72,6 +94,26 @@ public class GlobalCache
         }
     }
 
+    public void RemovePermanentItem(string key)
+    {
+        lock (_lock)
+        {
+            if (_cacheMap.ContainsKey(key))
+            {
+                var node = _cacheMap[key];
+                if (node.Value.IsPermanent)
+                {
+                    _permanentItemCount--;
+                    _cacheMap.TryRemove(key, out _);
+                    _usageOrder.Remove(node);
+
+                    // Adjust capacity when permanent item is removed
+                    DecreaseCapacity();
+                }
+            }
+        }
+    }
+
     private class CacheItem
     {
         public string Key { get; }
@@ -83,6 +125,53 @@ public class GlobalCache
             Key = key;
             Value = value;
             IsPermanent = isPermanent;
+
+            // Automatically adjust the permanent item count
+            if (isPermanent)
+            {
+                // Update the permanent item count directly in GlobalCache
+                GlobalCache.Instance._permanentItemCount++;
+            }
         }
     }
+    // For testing purposes
+    public int CurrentCapacity
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _capacity;
+            }
+        }
+    }
+
+#if DEBUG
+    /// <summary>
+    /// Clears the cache for unit testing purposes.
+    /// </summary>
+    public void Clear()
+    {
+        lock (_lock)
+        {
+            _cacheMap.Clear();
+            _usageOrder.Clear();
+        }
+    }
+
+    // This allows you to create a custom cache instance for testing purposes in DEBUG builds
+    private static int _testCapacity = 10;
+
+    // A method for unit tests to set the custom capacity
+    public static void SetTestCapacity(int capacity)
+    {
+        _testCapacity = capacity;
+    }
+
+    // Factory method for creating a cache with custom capacity in debug mode
+    public static GlobalCache CreateForTesting()
+    {
+        return new GlobalCache(_testCapacity);
+    }
+#endif
 }
