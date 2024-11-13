@@ -23,12 +23,12 @@ namespace CoursesManager.UI.Views.Students
         {
             InitializeComponent();
         }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-        }
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
+            if (DataContext is AddStudentViewModel viewModel)
+            {
+                viewModel.ParentWindow = this;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 
@@ -24,6 +25,7 @@ namespace CoursesManager.UI.ViewModels
         private readonly IDialogService _dialogService;
         private readonly StudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly IRegistrationRepository _registrationRepository;
 
         public string SearchText
         {
@@ -116,19 +118,13 @@ namespace CoursesManager.UI.ViewModels
         {
             if (student == null) return;
 
-            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
+            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel,bool>(true);;
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
             {
                 LoadStudents();
             }
         }
-
-        private void OnStudentAdded(object sender, Student e)
-        {
-            LoadStudents();
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {

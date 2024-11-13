@@ -157,6 +157,46 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ComboBoxStyle" TargetType="{x:Type ComboBox}">
+    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Padding" Value="8"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="MinHeight" Value="30"/>
+    <Setter Property="MaxWidth" Value="300"/>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="{x:Type ComboBox}">
+                <Grid>
+                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter x:Name="ContentSite" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" />
+                            <ToggleButton Grid.Column="1" Focusable="false" IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Width="30">
+                                <Path x:Name="Arrow" Data="M 0 0 L 4 4 L 8 0 Z" Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+                    <Popup x:Name="PART_Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                        <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200">
+                            <Border x:Name="DropDownBorder" Background="{StaticResource {x:Static SystemColors.WindowBrushKey}}"  BorderThickness="1" CornerRadius="15"/>
+                            <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                            </ScrollViewer>
+                        </Grid>
+                    </Popup>
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+
     <Style x:Key="PrimaryHeaderBorder" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
         <Setter Property="CornerRadius" Value="15,15,15,15" />

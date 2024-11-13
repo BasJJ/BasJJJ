@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Models.Repositories.RegistrationRepository
 {

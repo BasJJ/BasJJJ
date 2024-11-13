@@ -95,7 +95,8 @@ public partial class App : Application
             initial,
             studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(), 
             courseRepository: ServiceProvider.GetRequiredService<ICourseRepository>(),
-            registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
+            registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>(),
+            DialogService
         ));
     }
 

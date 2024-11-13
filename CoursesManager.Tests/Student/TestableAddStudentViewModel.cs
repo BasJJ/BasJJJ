@@ -9,8 +9,11 @@ public class TestableAddStudentViewModel : AddStudentViewModel
     public bool ShowSuccessDialogCalled { get; private set; }
 
 
-    public TestableAddStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository)
-        : base(studentRepository, courseRepository, registrationRepository)
+    public TestableAddStudentViewModel(bool initial, IStudentRepository studentRepository,
+        ICourseRepository courseRepository, IRegistrationRepository registrationRepository,
+        IDialogService dialogService
+    )
+        : base(initial, studentRepository, courseRepository, registrationRepository, dialogService)
     {
     }
     protected override void ShowWarningDialog(DialogResult<bool> dialogResult)

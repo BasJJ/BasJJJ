@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         Title="ConfirmationDialogWindow"
-        Height="150"
+        MinHeight="150"
         Width="400"
         WindowStartupLocation="CenterScreen">
 
