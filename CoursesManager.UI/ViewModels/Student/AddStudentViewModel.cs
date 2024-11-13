@@ -47,13 +47,13 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
         Student = new Student();
         Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
-        SaveCommand = new RelayCommand(Save);
+        SaveCommand = new RelayCommand(async () => await Save());
         CancelCommand = new RelayCommand(Cancel);
         PropertyChanged = delegate { };
     }
 
 
-    private async void Save()
+    private async Task Save()
     {
         if (!await ValidateFields())
         {

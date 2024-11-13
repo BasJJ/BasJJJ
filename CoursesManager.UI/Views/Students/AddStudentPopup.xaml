@@ -7,7 +7,8 @@
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
         Title="AddStudentPopup" Height="650" Width="400" Background="#333"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="20" >
         <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
             <StackPanel>
