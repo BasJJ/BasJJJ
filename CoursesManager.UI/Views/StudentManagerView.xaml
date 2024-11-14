@@ -54,7 +54,6 @@
                     <Grid Grid.IsSharedSizeScope="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="15" />
                         </Grid.RowDefinitions>
@@ -87,72 +86,55 @@
                                 </Style>
                             </Border.Style>
                         </Border>
+                        
+                        
 
                             <!-- Scrollable Card Grid -->
-                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
-                            <ItemsControl ItemsSource="{Binding FilteredStudentRecords}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Grid.ColumnSpan="9" BorderBrush="Transparent" BorderThickness="1">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="Transparent">
-                                                    </Setter>
-                                                        <Style.Triggers>
-                                                        <!-- MouseOver Trigger for the entire row -->
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource HoverOverGradient}"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="15"/>
-                                                    <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
-                                                    <ColumnDefinition Width="15"/>
-                                                    <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2"/>
-                                                    <ColumnDefinition Width="15"/>
-                                                    <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3"/>
-                                                    <ColumnDefinition Width="15"/>
-                                                    <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
-                                                    <ColumnDefinition Width="15"/>
-                                                    <ColumnDefinition Width="*" SharedSizeGroup="Column5"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                                <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                                <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                                <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                        <ListBox Grid.Row="1" Background="White" ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}" 
+                                 Style="{DynamicResource ListBoxStyle1}" ItemsSource="{Binding FilteredStudentRecords}" 
+                                 SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="15"/>
+                                            <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
+                                            <ColumnDefinition Width="15"/>
+                                            <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2"/>
+                                            <ColumnDefinition Width="15"/>
+                                            <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3"/>
+                                            <ColumnDefinition Width="15"/>
+                                            <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="*" SharedSizeGroup="Column5"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                        <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                        <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                        <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
 
-                                                <StackPanel Orientation="Horizontal" MaxWidth="200" Grid.Column="9">
+                                        <StackPanel Orientation="Horizontal" MaxWidth="200" Grid.Column="9" HorizontalAlignment="Right">
 
-                                                    <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                        <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
-                                                    </Button>
+                                                <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
+                                            </Button>
 
 
-                                                    <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                        <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
-                                                    </Button>
+                                                <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
+                                            </Button>
 
-                                                    <Button Command="{Binding DataContext.OpenRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            <Button Command="{Binding DataContext.OpenRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}" ToolTip="Open" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                        <materialDesign:PackIcon Kind="ArrowTopRight" Height="24" Width="24" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
+                                                <materialDesign:PackIcon Kind="ArrowTopRight" Height="24" Width="24" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </Grid>
                 </Border>
             </Grid>
