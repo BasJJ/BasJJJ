@@ -12,6 +12,7 @@ using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 
@@ -26,6 +27,7 @@ namespace CoursesManager.UI.ViewModels
         private readonly IDialogService _dialogService;
         private readonly StudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
+        private readonly IRegistrationRepository _registrationRepository;
 
         public string SearchText
         {
@@ -131,6 +133,7 @@ namespace CoursesManager.UI.ViewModels
                 LoadStudents();
             }
         }
+
         private async void OpenDeleteStudentPopup(Student student)
         {
             if (student == null) return;
@@ -164,7 +167,6 @@ namespace CoursesManager.UI.ViewModels
         {
             LoadStudents();
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
