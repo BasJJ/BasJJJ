@@ -8,6 +8,13 @@ namespace CoursesManager.UI.Dialogs.ViewModels;
 public class ConfirmationDialogViewModel : DialogViewModel<ConfirmationDialogResultType>
 {
     private string _title = null!;
+    private bool _IsDialogOpen;
+
+    public bool IsDialogOpen
+    {
+        get => _IsDialogOpen;
+        set => SetProperty(ref _IsDialogOpen, value);
+    }
     public string Title
     {
         get => _title;

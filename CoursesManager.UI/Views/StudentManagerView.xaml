@@ -10,162 +10,173 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=dvm:DesignStudentManagerViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
-
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="50" />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="3*" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="50" />
-            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
 
-            <rs:SearchBox Grid.Column="1" SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded" />
+                <rs:SearchBox Grid.Column="1" SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Loaded="SearchBox_Loaded" />
 
-            <Button Grid.Column="3" Style="{StaticResource PrimaryButton}" Command="{Binding DataImportCommand}">Data importeren</Button>
-            <Button Grid.Column="5" Style="{StaticResource PrimaryButton}" Command="{Binding DataExportCommand}">Data exporteren</Button>
-        </Grid>
-
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="400" />
-                <ColumnDefinition Width="50" />
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="1"  >
-                <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
-                    </Border.Effect>
-                    <Grid Grid.IsSharedSizeScope="True">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="15" />
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Headerbar with title -->
-                        <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="55" CornerRadius="15 15 0 0">
-                            <Border.Effect>
-                                <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
-                            </Border.Effect>
-                            <Grid Grid.IsSharedSizeScope="True">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="50" SharedSizeGroup="Column2"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
-                                </Grid.ColumnDefinitions>
-                            
-                            <TextBlock Text="Voornaam" Grid.Column="1" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                <TextBlock Text="Tussenvoegsel" Grid.Column="3" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                <TextBlock Text="Achternaam" Grid.Column="5" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                <TextBlock Text="Email" Grid.Column="7" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                            </Grid>
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
-                                </Style>
-                            </Border.Style>
-                        </Border>
-                        
-                        
-
-                            <!-- Scrollable Card Grid -->
-                        <ListBox Grid.Row="1" Background="White" ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}" 
-                                 Style="{DynamicResource ListBoxStyle1}" ItemsSource="{Binding FilteredStudentRecords}" 
-                                 SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="15"/>
-                                            <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
-                                            <ColumnDefinition Width="15"/>
-                                            <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2"/>
-                                            <ColumnDefinition Width="15"/>
-                                            <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3"/>
-                                            <ColumnDefinition Width="15"/>
-                                            <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="*" SharedSizeGroup="Column5"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                        <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                        <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                        <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-
-                                        <StackPanel Orientation="Horizontal" MaxWidth="200" Grid.Column="9" HorizontalAlignment="Right">
-
-                                            <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
-                                            </Button>
-
-
-                                            <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
-                                            </Button>
-
-                                            <Button Command="{Binding DataContext.OpenRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}" ToolTip="Open" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
-                                                <materialDesign:PackIcon Kind="ArrowTopRight" Height="24" Width="24" />
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
-                </Border>
+                <Button Grid.Column="3" Style="{StaticResource PrimaryButton}" Command="{Binding DataImportCommand}">Data importeren</Button>
+                <Button Grid.Column="5" Style="{StaticResource PrimaryButton}" Command="{Binding DataExportCommand}">Data exporteren</Button>
             </Grid>
 
-            <Button
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="400" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1"  >
+                    <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                        </Border.Effect>
+                        <Grid Grid.IsSharedSizeScope="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="15" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Headerbar with title -->
+                            <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="55" CornerRadius="15 15 0 0">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                                </Border.Effect>
+                                <Grid Grid.IsSharedSizeScope="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="50" SharedSizeGroup="Column2"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Voornaam" Grid.Column="1" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Tussenvoegsel" Grid.Column="3" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Achternaam" Grid.Column="5" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Email" Grid.Column="7" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+
+
+
+                            <!-- Scrollable Card Grid -->
+                            <ListBox Grid.Row="1" Background="White" ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}" 
+                                 Style="{DynamicResource ListBoxStyle1}" ItemsSource="{Binding FilteredStudentRecords}" 
+                                 SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15"/>
+                                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
+                                                <ColumnDefinition Width="15"/>
+                                                <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2"/>
+                                                <ColumnDefinition Width="15"/>
+                                                <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3"/>
+                                                <ColumnDefinition Width="15"/>
+                                                <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
+                                                <ColumnDefinition Width="120"/>
+                                                <ColumnDefinition Width="*" SharedSizeGroup="Column5"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                            <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+
+                                            <StackPanel Orientation="Horizontal" MaxWidth="200" Grid.Column="9" HorizontalAlignment="Right">
+
+                                                <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
+                                                    <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
+                                                </Button>
+
+
+                                                <Button Command="{Binding DataContext.DeleteStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
+                                                    <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
+                                                </Button>
+
+                                                <Button Command="{Binding DataContext.OpenRecordCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}" ToolTip="Open" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
+                                                    <materialDesign:PackIcon Kind="ArrowTopRight" Height="24" Width="24" />
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Button
                 Style="{StaticResource IconButtonWithShadowStyle}"
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Grid.Column="1"
                 Margin="0,4,65,0"
                 Command="{Binding AddStudentCommand}">
-                <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}" />
-            </Button>
+                    <materialDesign:PackIcon Kind="PlusCircleOutline" Width="45" Height="45" Foreground="white" Style="{StaticResource IconWithShadowStyle}" />
+                </Button>
 
-            <DataGrid
+                <DataGrid
                 RowStyle="{DynamicResource DataGridRowStyle1}"
                 CellStyle="{DynamicResource DataGridCellStyle1}"
                 ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
                 Style="{DynamicResource DataGridStyle1}"
                 Grid.Column="3"
                 IsReadOnly="True">
-                <DataGrid.Columns>
+                    <DataGrid.Columns>
 
-                    <DataGridTemplateColumn Header="Cursussen" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding FirstName}" VerticalAlignment="Center" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGridTemplateColumn Header="Cursussen" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FirstName}" VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Grid>
+
+        <Grid
+            x:Name="Overlay"
+            Background="#80000000"
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="{Binding IsDialogOpen}">
+        </Grid>
+
     </Grid>
 </UserControl>

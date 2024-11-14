@@ -77,7 +77,7 @@ public partial class App : Application
         NavigationService.NavigateTo<StudentManagerViewModel>();
         NavigationService.NavigateTo<TestViewModel>();
         NavigationService.NavigateTo<StudentManagerViewModel>();
-        NavigationService.NavigateTo<CoursesManagerViewModel>();
+        //NavigationService.NavigateTo<CoursesManagerViewModel>();
  
 
         MainWindow mw = new()

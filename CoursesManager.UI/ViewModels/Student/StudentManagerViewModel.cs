@@ -28,6 +28,12 @@ namespace CoursesManager.UI.ViewModels
         private readonly StudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
+        private bool _isDialogOpen;
+        public bool IsDialogOpen 
+        {
+            get => _isDialogOpen;
+            set => SetProperty(ref _isDialogOpen, value); 
+        }
 
         public string SearchText
         {
@@ -114,36 +120,41 @@ namespace CoursesManager.UI.ViewModels
 
         private async void OpenAddStudentPopup()
         {
+            IsDialogOpen = true;
             var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
             {
                 LoadStudents();
             }
+            IsDialogOpen = false;
         }
 
         private async void OpenEditStudentPopup(Student student)
         {
             if (student == null) return;
-
+            IsDialogOpen = true;
             var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
             {
                 LoadStudents();
             }
+            IsDialogOpen = false;
         }
 
         private async void OpenDeleteStudentPopup(Student student)
         {
             if (student == null) return;
-
+            //temp
+            IsDialogOpen = true;
             var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
                 new YesNoDialogResultType
                 {
                     DialogTitle = "Bevestiging",
                     DialogText = "Wilt u deze cursist verwijderen?"
                 });
+            IsDialogOpen = false;
 
             if (result?.Data?.Result == true)
             {
@@ -157,7 +168,8 @@ namespace CoursesManager.UI.ViewModels
                         DialogTitle = "Informatie",
                         DialogText = "Cursist succesvol verwijderd."
                     });
-
+                //temp
+                
                 LoadStudents();
             }
         }
