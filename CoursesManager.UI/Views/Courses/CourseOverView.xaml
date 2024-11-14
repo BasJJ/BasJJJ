@@ -26,6 +26,9 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="1" Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="Auto">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+            </Border.Effect>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="25"/>
@@ -45,6 +48,9 @@
 
                 <!-- Headerbar with title -->
                 <Border Grid.ColumnSpan="3" Grid.Row="0" x:Name="CardHeader" Width="Auto" Height="40" CornerRadius="15 15 0 0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                    </Border.Effect>
                     <TextBlock Text="Course name" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Border.Style>
                         <Style TargetType="Border">
@@ -163,6 +169,9 @@
         </Border>
         <Grid Grid.Row="1" Grid.Column="3">
             <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="450">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                </Border.Effect>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -175,6 +184,9 @@
 
                     <!-- Headerbar with title -->
                     <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="40" CornerRadius="15 15 0 0">
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                        </Border.Effect>
                         <TextBlock Text="Cursisten" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Border.Style>
                             <Style TargetType="Border">
@@ -203,7 +215,7 @@
                         </Grid.ColumnDefinitions>
                         <!-- Scrollable Card Grid -->
                     <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
-                        <ItemsControl ItemsSource="{Binding Students}">
+                            <ItemsControl ItemsSource="{Binding studentPayments}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" />
@@ -220,36 +232,11 @@
                                             <Grid Grid.Column="0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-
-                                                <!-- TextBlock for Insertion with DataTrigger to change margin when empty -->
-                                                <TextBlock Grid.Column="1" FontWeight="Bold" FontSize="18" Foreground="#02008C">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <!-- When Insertion is empty, set the margin to 0 -->
-                                                                <DataTrigger Binding="{Binding Insertion}" Value="{x:Null}">
-                                                                    <Setter Property="Margin" Value="0 0 0 0"/>
-                                                                </DataTrigger>
-                                                                <DataTrigger Binding="{Binding Insertion}" Value="">
-                                                                    <Setter Property="Margin" Value="0 0 0 0"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                            <Setter Property="Margin" Value="0 0 6 0"/>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Insertion"/>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-
-                                                <TextBlock Grid.Column="2" Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                                <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
                                             </Grid>
 
-                                            <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPayed, Mode=TwoWay}" />
+                                            <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
 
                                         </Grid>
                                     </DataTemplate>

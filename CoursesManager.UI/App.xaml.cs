@@ -111,6 +111,7 @@ public partial class App : Application
         services.AddTransient<StudentManagerViewModel>();
         services.AddTransient<AddStudentViewModel>();
         services.AddTransient<CoursesManagerViewModel>();
+        services.AddTransient<YesNoDialogViewModel>();
         // Register other view models...
     }
    
