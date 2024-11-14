@@ -12,9 +12,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         Title="YesNoDialogWindow"
-        Height="150"
-        Width="400"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
     <Window.Resources>
         <!-- Spherical blue gradient -->

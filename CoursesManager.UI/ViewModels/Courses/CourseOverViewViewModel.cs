@@ -1,7 +1,9 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Utils;
 using CoursesManager.UI.Models;
+using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +23,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand DeleteCourseCommand { get; set; }
         public Course CurrentCourse { get; set; }
         public ObservableCollection<Student>? Students { get; set; }
+        public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
 
         public CourseOverViewViewModel()
         {
@@ -28,7 +31,13 @@ namespace CoursesManager.UI.ViewModels.Courses
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
             Students = CurrentCourse.students;
+            ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
+            studentPayments = new ObservableCollection<CourseStudentPayment>();
 
+                for (int i = 0 ; i < registration.Count - 1 ; i++)  {
+                CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
+                studentPayments.Add(studentPayment);
+                }
         }
 
 
