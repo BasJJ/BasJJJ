@@ -100,6 +100,15 @@ public class Student : ViewModel, ICopyable<Student>
         set => SetProperty(ref _houseNumberextension, value);
     }
 
+    private ObservableCollection<Course>? _courses;
+
+    public ObservableCollection<Course>? Courses
+    {
+        get => _courses;
+        set => SetProperty(ref _courses, value);
+    }
+
+
     public string TableFilter()
     {
         return $"{FirstName}{Insertion}{LastName}{Email}".Replace(" ", "");
@@ -119,6 +128,7 @@ public class Student : ViewModel, ICopyable<Student>
             City = this.City,
             StreetName = this.StreetName,
             HouseNumber = this.HouseNumber,
+            Courses = this.Courses
         };
     }
 

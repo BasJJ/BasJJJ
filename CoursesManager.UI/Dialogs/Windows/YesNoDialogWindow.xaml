@@ -7,12 +7,14 @@
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        Height="180"
+        Width="450"
         WindowStyle="None"
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="Transparent"
         Title="YesNoDialogWindow"
-        WindowStartupLocation="CenterScreen" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <!-- Spherical blue gradient -->
