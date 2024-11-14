@@ -126,13 +126,14 @@ namespace CoursesManager.UI.ViewModels
         {
             if (student == null) return;
 
-            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel,bool>(true);;
+            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
             if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
             {
                 LoadStudents();
             }
         }
+
         private async void OpenDeleteStudentPopup(Student student)
         {
             if (student == null) return;
