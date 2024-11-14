@@ -101,7 +101,7 @@
                                     </Button>
 
 
-                                    <Button Command="{Binding DataContext.DeleteRecordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    <Button Command="{Binding DataContext.DeleteStudentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                         <materialDesign:PackIcon Kind="TrashCanOutline" Height="24" Width="24" />
                                     </Button>

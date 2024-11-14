@@ -12,114 +12,117 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using System.Reflection;
 
-[TestFixture]
-public class EditStudentViewModelTests
+namespace CoursesManager.Tests
 {
-    private Mock<IStudentRepository> _mockStudentRepository;
-    private Mock<ICourseRepository> _mockCourseRepository;
-    private Mock<IRegistrationRepository> _mockRegistrationRepository;
-    private Mock<IDialogService> _mockDialogService;
-    private EditStudentViewModel _viewModel;
-
-    [SetUp]
-    public void SetUp()
+    [TestFixture]
+    public class EditStudentViewModelTests
     {
-        _mockStudentRepository = new Mock<IStudentRepository>();
-        _mockCourseRepository = new Mock<ICourseRepository>();
-        _mockRegistrationRepository = new Mock<IRegistrationRepository>();
-        _mockDialogService = new Mock<IDialogService>();
+        private Mock<IStudentRepository> _mockStudentRepository;
+        private Mock<ICourseRepository> _mockCourseRepository;
+        private Mock<IRegistrationRepository> _mockRegistrationRepository;
+        private Mock<IDialogService> _mockDialogService;
+        private EditStudentViewModel _viewModel;
 
-        var student = new Student { FirstName = "Test", LastName = "Student" };
+        [SetUp]
+        public void SetUp()
+        {
+            _mockStudentRepository = new Mock<IStudentRepository>();
+            _mockCourseRepository = new Mock<ICourseRepository>();
+            _mockRegistrationRepository = new Mock<IRegistrationRepository>();
+            _mockDialogService = new Mock<IDialogService>();
 
-        _viewModel = new EditStudentViewModel(
-            _mockStudentRepository.Object,
-            _mockCourseRepository.Object,
-            _mockRegistrationRepository.Object,
-            _mockDialogService.Object,
-            student
-        );
-    }
+            var student = new Student { FirstName = "Test", LastName = "Student" };
 
-    [Test]
-    public async Task OnSaveAsync_ValidData_ShowsConfirmationDialog()
-    {
-        _viewModel.StudentCopy.FirstName = "John";
-        _viewModel.StudentCopy.LastName = "Doe";
-        _viewModel.StudentCopy.Email = "john.doe@example.com";
-        _viewModel.StudentCopy.PhoneNumber = "123456789";
-        _viewModel.StudentCopy.PostCode = "12345";
-        _viewModel.StudentCopy.City = "City";
-        _viewModel.StudentCopy.StreetName = "Main Street";
-        _viewModel.StudentCopy.HouseNumber = 10;
-        _viewModel.StudentCopy.Country = "Country";
+            _viewModel = new EditStudentViewModel(
+                _mockStudentRepository.Object,
+                _mockCourseRepository.Object,
+                _mockRegistrationRepository.Object,
+                _mockDialogService.Object,
+                student
+            );
+        }
 
-        _mockDialogService
-            .Setup(service => service.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()))
-            .ReturnsAsync(DialogResult<YesNoDialogResultType>.Builder()
-                .SetSuccess(new YesNoDialogResultType { Result = true })
-                .Build());
+        [Test]
+        public async Task OnSaveAsync_ValidData_ShowsConfirmationDialog()
+        {
+            _viewModel.StudentCopy.FirstName = "John";
+            _viewModel.StudentCopy.LastName = "Doe";
+            _viewModel.StudentCopy.Email = "john.doe@example.com";
+            _viewModel.StudentCopy.PhoneNumber = "123456789";
+            _viewModel.StudentCopy.PostCode = "12345";
+            _viewModel.StudentCopy.City = "City";
+            _viewModel.StudentCopy.StreetName = "Main Street";
+            _viewModel.StudentCopy.HouseNumber = 10;
+            _viewModel.StudentCopy.Country = "Country";
 
-        var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-        var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
-        await task;
+            _mockDialogService
+                .Setup(service => service.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()))
+                .ReturnsAsync(DialogResult<YesNoDialogResultType>.Builder()
+                    .SetSuccess(new YesNoDialogResultType { Result = true })
+                    .Build());
 
-        _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Once);
-    }
+            var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+            var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
+            await task;
 
-    [Test]
-    public async Task OnSaveAsync_MissingFirstName_ShowsOkDialogWithValidationMessage()
-    {
-        _viewModel.StudentCopy.FirstName = "";
-        _viewModel.StudentCopy.LastName = "Doe";
-        _viewModel.StudentCopy.Email = "john.doe@example.com";
-        _viewModel.StudentCopy.PhoneNumber = "123456789";
-        _viewModel.StudentCopy.PostCode = "12345";
-        _viewModel.StudentCopy.City = "City";
-        _viewModel.StudentCopy.StreetName = "Main Street";
-        _viewModel.StudentCopy.HouseNumber = 10;
-        _viewModel.StudentCopy.Country = "Country";
+            _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
+            _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Once);
+        }
 
-        _mockDialogService
-            .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
-            .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
-                .SetSuccess(new ConfirmationDialogResultType { Result = true })
-                .Build());
+        [Test]
+        public async Task OnSaveAsync_MissingFirstName_ShowsOkDialogWithValidationMessage()
+        {
+            _viewModel.StudentCopy.FirstName = "";
+            _viewModel.StudentCopy.LastName = "Doe";
+            _viewModel.StudentCopy.Email = "john.doe@example.com";
+            _viewModel.StudentCopy.PhoneNumber = "123456789";
+            _viewModel.StudentCopy.PostCode = "12345";
+            _viewModel.StudentCopy.City = "City";
+            _viewModel.StudentCopy.StreetName = "Main Street";
+            _viewModel.StudentCopy.HouseNumber = 10;
+            _viewModel.StudentCopy.Country = "Country";
 
-        var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-        var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
-        await task;
+            _mockDialogService
+                .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
+                .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
+                    .SetSuccess(new ConfirmationDialogResultType { Result = true })
+                    .Build());
 
-        _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-            It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Voornaam is verplicht.")), Times.Once);
-    }
+            var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+            var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
+            await task;
 
-    [Test]
-    public async Task OnSaveAsync_InvalidEmail_ShowsOkDialogWithValidationMessage()
-    {
-        _viewModel.StudentCopy.FirstName = "John";
-        _viewModel.StudentCopy.LastName = "Doe";
-        _viewModel.StudentCopy.Email = "invalid-email";
-        _viewModel.StudentCopy.PhoneNumber = "123456789";
-        _viewModel.StudentCopy.PostCode = "12345";
-        _viewModel.StudentCopy.City = "City";
-        _viewModel.StudentCopy.StreetName = "Main Street";
-        _viewModel.StudentCopy.HouseNumber = 10;
-        _viewModel.StudentCopy.Country = "Country";
+            _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
+            _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Voornaam is verplicht.")), Times.Once);
+        }
 
-        _mockDialogService
-            .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
-            .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
-                .SetSuccess(new ConfirmationDialogResultType { Result = true })
-                .Build());
+        [Test]
+        public async Task OnSaveAsync_InvalidEmail_ShowsOkDialogWithValidationMessage()
+        {
+            _viewModel.StudentCopy.FirstName = "John";
+            _viewModel.StudentCopy.LastName = "Doe";
+            _viewModel.StudentCopy.Email = "invalid-email";
+            _viewModel.StudentCopy.PhoneNumber = "123456789";
+            _viewModel.StudentCopy.PostCode = "12345";
+            _viewModel.StudentCopy.City = "City";
+            _viewModel.StudentCopy.StreetName = "Main Street";
+            _viewModel.StudentCopy.HouseNumber = 10;
+            _viewModel.StudentCopy.Country = "Country";
 
-        var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
-        var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
-        await task;
+            _mockDialogService
+                .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
+                .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
+                    .SetSuccess(new ConfirmationDialogResultType { Result = true })
+                    .Build());
 
-        _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
-        _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-            It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Het opgegeven e-mailadres is ongeldig.")), Times.Once);
+            var onSaveAsyncMethod = typeof(EditStudentViewModel).GetMethod("OnSaveAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+            var task = (Task)onSaveAsyncMethod.Invoke(_viewModel, null);
+            await task;
+
+            _mockStudentRepository.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
+            _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                It.Is<ConfirmationDialogResultType>(r => r.DialogText == "Het opgegeven e-mailadres is ongeldig.")), Times.Once);
+        }
     }
 }
