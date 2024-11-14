@@ -7,6 +7,8 @@ using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
@@ -53,12 +55,13 @@ namespace CoursesManager.UI.ViewModels
             LoadStudents();
             AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, (s) => true);
+            DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, (s) => s != null);
             SearchCommand = new RelayCommand(OnSearchCommand);
         }
 
         private void LoadStudents()
         {
-            students = new ObservableCollection<Student>(_studentRepository.GetAll());
+            students = new ObservableCollection<Student>(_studentRepository.GetAll().Where(s => !s.Is_deleted));
             FilteredStudentRecords = new ObservableCollection<Student>(students);
         }
 
@@ -67,7 +70,7 @@ namespace CoursesManager.UI.ViewModels
         public ICommand DataImportCommand { get; private set; }
         public ICommand DataExportCommand { get; private set; }
         public ICommand OpenRecordCommand { get; private set; }
-        public ICommand DeleteRecordCommand { get; private set; }
+        public ICommand DeleteStudentCommand { get; private set; }
         public ICommand EditStudentCommand { get; private set; }
         public ICommand AddStudentCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
@@ -87,7 +90,8 @@ namespace CoursesManager.UI.ViewModels
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                FilteredStudentRecords = new ObservableCollection<Student>(students);
+                // Filter to include only active students
+                FilteredStudentRecords = new ObservableCollection<Student>(students.Where(s => !s.Is_deleted));
             }
             else
             {
@@ -95,7 +99,10 @@ namespace CoursesManager.UI.ViewModels
 
                 var filtered = await Task.Run(() =>
                 {
-                    return students.Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+                    return students
+                        .Where(s => !s.Is_deleted) // Only include non-deleted students
+                        .Where(student => student.TableFilter().ToLower().Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
                 });
 
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
@@ -103,6 +110,7 @@ namespace CoursesManager.UI.ViewModels
 
             OnPropertyChanged(nameof(FilteredStudentRecords));
         }
+
 
         private async void OpenAddStudentPopup()
         {
@@ -124,6 +132,39 @@ namespace CoursesManager.UI.ViewModels
             {
                 LoadStudents();
             }
+        }
+        private async void OpenDeleteStudentPopup(Student student)
+        {
+            if (student == null) return;
+
+            var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
+                new YesNoDialogResultType
+                {
+                    DialogTitle = "Bevestiging",
+                    DialogText = "Wilt u deze cursist verwijderen?"
+                });
+
+            if (result?.Data?.Result == true)
+            {
+                student.Is_deleted = true;
+                student.date_deleted = DateTime.Now;
+                _studentRepository.Update(student);
+
+                await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                    new ConfirmationDialogResultType
+                    {
+                        DialogTitle = "Informatie",
+                        DialogText = "Cursist succesvol verwijderd."
+                    });
+
+                LoadStudents();
+            }
+        }
+
+
+        private void OnStudentAdded(object sender, Student e)
+        {
+            LoadStudents();
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
