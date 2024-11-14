@@ -577,6 +577,89 @@
     </Style>
 
 
+    <!-- Checkbox style 10-->
+
+    <Style x:Key="CheckBoxStyle10" TargetType="CheckBox">
+        <Setter Property="SnapsToDevicePixels" Value="False" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="#02008C" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Ellipse x:Name="HighlightCircle"
+                                 Width="32" Height="32"
+                                 Fill="White"
+                                 Opacity="0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center" />
+
+                        <BulletDecorator Background="Transparent"
+                                         VerticalAlignment="Center"
+                                         Margin="6,0,0,0">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="Border"
+                                        Width="20"
+                                        Height="20"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="3"
+                                        Background="White"
+                                        ClipToBounds="True">
+                                    <Path x:Name="CheckMark"
+                                          Width="13"
+                                          Height="13"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Stretch="Fill"
+                                          Stroke="White"
+                                          StrokeEndLineCap="Round"
+                                          StrokeStartLineCap="Round"
+                                          StrokeThickness="2"
+                                          Data="M 0 5 L 3 8 L 8 0"
+                                          Visibility="Collapsed"/>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="4,0,0,0"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                        </BulletDecorator>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Neutrale staat (unchecked) -->
+                        <Trigger Property="IsChecked" Value="false">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="#02008C" />
+                            <Setter TargetName="Border" Property="Background" Value="White" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#02008C" />
+                        </Trigger>
+
+                        <!-- Geselecteerde staat (checked) -->
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Border" Property="Background" Value="#02008C" />
+                            <Setter TargetName="CheckMark" Property="Stroke" Value="White" />
+                        </Trigger>
+
+                        <!-- Hover staat voor zowel checked als unchecked -->
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="HighlightCircle" Property="Opacity" Value="0.5" />
+                            <Setter TargetName="HighlightCircle" Property="Fill" Value="#BCE6FD" />
+                        </Trigger>
+
+                        <!-- Ingedrukte staat voor zowel checked als unchecked -->
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="HighlightCircle" Property="Opacity" Value="1" />
+                            <Setter TargetName="HighlightCircle" Property="Fill" Value="#83CEFA" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="Button" x:Key="SmallIconButtonWithShadowStyle" BasedOn="{StaticResource IconButtonWithShadowStyle}">
         <!-- Override the Foreground to make the icon blue -->
         <Setter Property="Foreground" Value="#02008C" />
