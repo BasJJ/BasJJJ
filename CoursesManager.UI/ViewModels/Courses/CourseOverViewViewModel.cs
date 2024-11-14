@@ -1,7 +1,7 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
-using CoursesManager.MVVM.Utils;
+using CoursesManager.UI.Utils;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using System;

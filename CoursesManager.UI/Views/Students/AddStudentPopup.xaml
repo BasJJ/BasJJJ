@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
-        Title="AddStudentPopup" Height="650" Width="400" 
+        Title="AddStudentPopup" Height="650" Width="550" 
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent"
@@ -105,25 +105,25 @@
                              Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
 
                     <!-- Land -->
-                    <TextBlock Text="Land*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5"/>
+                    <TextBlock Text="Land*" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5"/>
                     <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.Country, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Land"
-                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" />
 
                     <!-- Stad -->
-                    <TextBlock Text="Stad*" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5"/>
+                    <TextBlock Text="Stad*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5"/>
                     <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.City, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Stad"
-                             Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
 
                     <!-- RegisterdTo (ComboBox) -->
-                    <TextBlock Text="Registereerd cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="0"/>
+                    <TextBlock Text="Cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="0"/>
                     <ComboBox x:Name="cmbCourses" ItemsSource="{Binding Courses}"
-                              Style="{DynamicResource ComboBox}" 
+                              Style="{DynamicResource ComboBoxStyle}" 
                               SelectedItem="{Binding SelectedCourse}"
                               ItemContainerStyle="{Binding ComboBoxItem}"
                               local:ValidationProperties.IsRequired="True"

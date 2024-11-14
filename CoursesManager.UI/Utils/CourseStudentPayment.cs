@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CoursesManager.UI.Models;
 
-namespace CoursesManager.MVVM.Utils
+namespace CoursesManager.UI.Utils
 {
-    internal class CourseStudentPayment
+    public class CourseStudentPayment
     {
         public Student? Student { get; set; }
         public Course? Course { get; set; }
@@ -24,6 +24,7 @@ namespace CoursesManager.MVVM.Utils
 
         public CourseStudentPayment(Course course, Registration registration)
         {
+            FullName = course.Name;
             Course = course;
             IsPaid = registration.PaymentStatus;
         }

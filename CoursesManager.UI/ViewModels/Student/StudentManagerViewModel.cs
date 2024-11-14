@@ -15,6 +15,10 @@ using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
+using CoursesManager.UI.Utils;
+using CoursesManager.UI.Models.CoursesManager.UI.Models;
+using System;
+
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -28,11 +32,37 @@ namespace CoursesManager.UI.ViewModels
         private readonly StudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
+
+        private Student _selectedStudent;
+        public Student SelectedStudent
+        {
+            get => _selectedStudent;
+            set
+            {
+                if (_selectedStudent != value)
+                {
+                    _selectedStudent = value;
+                    OnPropertyChanged(nameof(SelectedStudent));
+
+                    // When the student changes, update the courses
+                    UpdateStudentCourses();
+                }
+            }
+        }
+
+
+        private ObservableCollection<CourseStudentPayment> _coursePaymentList;
+        public ObservableCollection<CourseStudentPayment> CoursePaymentList
+        {
+            get => _coursePaymentList;
+            set => SetProperty(ref _coursePaymentList, value);
+        }
+
         private bool _isDialogOpen;
-        public bool IsDialogOpen 
+        public bool IsDialogOpen
         {
             get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value); 
+            set => SetProperty(ref _isDialogOpen, value);
         }
 
         public string SearchText
@@ -49,6 +79,8 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _filteredStudentRecords, value);
         }
 
+        public ObservableCollection<Course> Courses { get; set; }
+
         #endregion View fields
 
         public StudentManagerViewModel(IDialogService dialogService)
@@ -63,7 +95,50 @@ namespace CoursesManager.UI.ViewModels
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, (s) => true);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, (s) => s != null);
             SearchCommand = new RelayCommand(OnSearchCommand);
+
+            if (SelectedStudent != null && SelectedStudent.Courses != null)
+            {
+                Courses = SelectedStudent.Courses;
+                ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Courses.Count, 1);
+                CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
+
+                for (int i = 0; i < Courses.Count - 1; i++)
+                {
+                    CourseStudentPayment coursePayment = new CourseStudentPayment(Courses[i], registration[i]);
+                    CoursePaymentList.Add(coursePayment);
+                }
+
+            }
+
+
+
         }
+
+        public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; set; }
+
+        private void UpdateStudentCourses()
+        {
+            if (SelectedStudent != null && SelectedStudent.Courses != null)
+            {
+                Courses = SelectedStudent.Courses;
+                ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Courses.Count, 1);
+                CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
+
+                for (int i = 0; i < Courses.Count - 1; i++)
+                {
+                    CourseStudentPayment coursePayment = new CourseStudentPayment(Courses[i], registration[i]);
+                    CoursePaymentList.Add(coursePayment);
+                }
+
+                DisplayedCourses = new ObservableCollection<CourseStudentPayment>(CoursePaymentList);
+
+            }else
+            {
+                DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
+            }
+            OnPropertyChanged(nameof(DisplayedCourses));
+        }
+
 
         private void LoadStudents()
         {
@@ -130,6 +205,7 @@ namespace CoursesManager.UI.ViewModels
             IsDialogOpen = false;
         }
 
+
         private async void OpenEditStudentPopup(Student student)
         {
             if (student == null) return;
@@ -142,6 +218,7 @@ namespace CoursesManager.UI.ViewModels
             }
             IsDialogOpen = false;
         }
+
 
         private async void OpenDeleteStudentPopup(Student student)
         {
@@ -169,7 +246,7 @@ namespace CoursesManager.UI.ViewModels
                         DialogText = "Cursist succesvol verwijderd."
                     });
                 //temp
-                
+
                 LoadStudents();
             }
         }
@@ -186,3 +263,7 @@ namespace CoursesManager.UI.ViewModels
         }
     }
 }
+
+
+
+

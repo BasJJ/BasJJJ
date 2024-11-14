@@ -68,12 +68,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
-                        <Ellipse x:Name="HighlightCircle"
-                                 Width="25" Height="25"
-                                 Fill="White"
-                                 Opacity="0"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center" />
                         <Border x:Name="Border"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -127,20 +121,6 @@
                         </Popup>
                     </Grid>
 
-                    <!-- Trigger for ComboBox when it is open -->
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="HighlightCircle" Property="Opacity" Value="0.5" />
-                            <Setter TargetName="HighlightCircle" Property="Fill" Value="#BCE6FD" />
-                        </Trigger>
-
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="Transparent"/>
-                        </Trigger>
-                        <Trigger Property="IsDropDownOpen" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="transparent"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -156,6 +136,11 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxWidth" Value="300"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -166,7 +151,7 @@
                                  Opacity="0"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Center" />
-                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15" SnapsToDevicePixels="True">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" SnapsToDevicePixels="True">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -251,50 +236,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-
-    <Style TargetType="ComboBox">
-        <Style.Resources>
-            <!-- Style the ScrollViewer inside ComboBox's popup -->
-            <Style TargetType="ScrollViewer" x:Key="ComboBoxScrollViewer">
-                <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
-                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                <Setter Property="Background" Value="LightGray" />
-                <Setter Property="Margin" Value="0,0,0,0"/>
-                <Setter Property="Padding" Value="5"/>
-            </Style>
-
-            <!-- Style for the ComboBox dropdown -->
-            <Style TargetType="ComboBox" x:Key="ComboBoxWithStyledScrollViewer">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ComboBox">
-                            <Grid>
-                                <ToggleButton x:Name="DropDownButton" 
-                                                  Content="{TemplateBinding SelectionBoxItem}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" 
-                                                  ClickMode="Press"/>
-                                <Popup x:Name="DropDown"
-                                           IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                           Placement="Bottom"
-                                           Focusable="False"
-                                           AllowsTransparency="True"
-                                           Margin="0,0,0,0">
-                                    <Border BorderBrush="DarkGray" BorderThickness="1" Background="White">
-                                        <ScrollViewer Style="{StaticResource ComboBoxScrollViewer}">
-                                            <StackPanel>
-                                                <ItemsPresenter />
-                                            </StackPanel>
-                                        </ScrollViewer>
-                                    </Border>
-                                </Popup>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </Style.Resources>
     </Style>
 
 </ResourceDictionary>
