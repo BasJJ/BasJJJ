@@ -7,7 +7,9 @@
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
         Title="AddStudentPopup" Height="650" Width="400" 
-        Background="#333"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="20" >
