@@ -17,12 +17,12 @@ namespace CoursesManager.UI.Models.Repositories.StudentRepository
 
         public IEnumerable<Student> GetAll()
         {
-            return _students.Where(s => !s.IsDeleted).ToList();
+            return _students.Where(s => !s.Is_deleted).ToList();
         }
 
         public Student GetById(int id)
         {
-            return _students.FirstOrDefault(s => s.Id == id && !s.IsDeleted);
+            return _students.FirstOrDefault(s => s.Id == id && !s.Is_deleted);
         }
 
         public void Add(Student student)
@@ -52,14 +52,14 @@ namespace CoursesManager.UI.Models.Repositories.StudentRepository
             var student = GetById(id);
             if (student != null)
             {
-                student.IsDeleted = true;
-                student.DateDeleted = DateTime.Now;
+                student.Is_deleted = true;
+                student.date_deleted = DateTime.Now;
             }
         }
 
         public bool EmailExists(string email)
         {
-            return _students.Any(s => s.Email == email && !s.IsDeleted);
+            return _students.Any(s => s.Email == email && !s.Is_deleted);
         }
     }
 }

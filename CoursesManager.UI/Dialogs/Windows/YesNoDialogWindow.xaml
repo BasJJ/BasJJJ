@@ -22,31 +22,30 @@
             <GradientStop Color="#0066CC" Offset="1" />
         </RadialGradientBrush>
     </Window.Resources>
-    
-    <Grid Height="150" Width="400">
-        <!-- Move the background to the Border so it respects the CornerRadius -->
-        <Border CornerRadius="15" Background="{StaticResource SecondaryGradiant}" BorderBrush="Gray" BorderThickness="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="10" />
-                </Grid.RowDefinitions>
 
-                <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
+    <!-- Move the background to the Border so it respects the CornerRadius -->
+    <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
-                    </Grid.ColumnDefinitions>
+            <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
 
-                    <Border Grid.Column="1"
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="1"
                         Width="50" Height="50"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -54,30 +53,29 @@
                         BorderBrush="Transparent"
                         Background="{StaticResource SphericalBlueGradient}">
 
-                        <materialDesign:PackIcon Kind="ExclamationBold"
+                    <materialDesign:PackIcon Kind="ExclamationBold"
                                              Height="48" Width="48"
                                              VerticalAlignment="Center"
                                              HorizontalAlignment="Center"
                                              Foreground="White" />
-                    </Border>
+                </Border>
 
-                    <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" />
-                </Grid>
-
-                <Grid Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="10" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Grid.Column="2" Content="Ja" Style="{StaticResource PrimaryDialogButton}" Command="{Binding YesCommand}" />
-                    <Button Grid.Column="4" Content="Nee" Style="{StaticResource ErrorDialogButton}" Command="{Binding NoCommand}" />
-                </Grid>
+                <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" />
             </Grid>
-        </Border>
-    </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="10" />
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="2" Content="Ja" Style="{StaticResource PrimaryDialogButton}" Command="{Binding YesCommand}" />
+                <Button Grid.Column="4" Content="Nee" Style="{StaticResource ErrorDialogButton}" Command="{Binding NoCommand}" />
+            </Grid>
+        </Grid>
+    </Border>
 </Window>

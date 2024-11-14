@@ -12,12 +12,13 @@
         AllowsTransparency="True"
         Background="Transparent"
         Title="ConfirmationDialogWindow"
-        Height="150"
+        MinHeight="150"
+        MaxHeight= "400"
+        MinWidth="300"
         Width="400"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <!-- Spherical blue gradient -->
         <RadialGradientBrush x:Key="SphericalBlueGradient"
                              GradientOrigin="0.3, 0.3" Center="0.5, 0.5" RadiusX="0.5" RadiusY="0.5">
             <GradientStop Color="#4DA6FF" Offset="0" />
@@ -25,15 +26,14 @@
         </RadialGradientBrush>
     </Window.Resources>
 
-    <!-- Move the background to the Border so it respects the CornerRadius -->
-    <Border CornerRadius="15" Background="{StaticResource SecondaryGradiant}" BorderBrush="Gray" BorderThickness="1">
+    <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10"/>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
             <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
@@ -62,7 +62,7 @@
                                              Foreground="White" />
                 </Border>
 
-                <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" />
+                <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" TextWrapping="Wrap" />
             </Grid>
 
             <Grid Grid.Row="3">
@@ -75,7 +75,7 @@
                     <ColumnDefinition Width="10" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="4" Content="Bevestigen" Style="{StaticResource PrimaryDialogButton}" Command="{Binding ConfirmationCommand}" />
+                <Button Grid.Column="4" Content="Ok" Style="{StaticResource PrimaryDialogButton}" Command="{Binding ConfirmationCommand}" />
             </Grid>
         </Grid>
     </Border>

@@ -91,8 +91,13 @@ public partial class App : Application
     {
         DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
         DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel());
-
+        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
+            initial,
+            studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(), 
+            courseRepository: ServiceProvider.GetRequiredService<ICourseRepository>(),
+            registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>(),
+            DialogService
+        ));
     }
 
     // This method is used to register all services that are used in the application.
