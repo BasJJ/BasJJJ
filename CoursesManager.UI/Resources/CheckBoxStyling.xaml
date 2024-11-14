@@ -52,7 +52,7 @@
                     <ControlTemplate.Triggers>
                         <!-- Neutrale staat (unchecked) -->
                         <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="#02008C" />
                             <Setter TargetName="Border" Property="Background" Value="White" />
                             <Setter TargetName="Border" Property="BorderBrush" Value="#02008C" />
@@ -135,7 +135,7 @@
                     <ControlTemplate.Triggers>
                         <!-- Neutrale staat (unchecked) -->
                         <Trigger Property="IsChecked" Value="false">
-                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Hidden" />
                             <Setter TargetName="CheckMark" Property="Stroke" Value="#02008C" />
                             <Setter TargetName="Border" Property="Background" Value="White" />
                             <Setter TargetName="Border" Property="BorderBrush" Value="#02008C" />

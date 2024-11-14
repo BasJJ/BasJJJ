@@ -149,7 +149,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
@@ -173,6 +173,123 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ListBoxItemStyle1"
+       TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels"
+           Value="True" />
+        <Setter Property="Padding"
+           Value="4,1" />
+        <Setter Property="HorizontalContentAlignment"
+           Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="VerticalContentAlignment"
+           Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background"
+           Value="Transparent" />
+        <Setter Property="BorderBrush"
+           Value="Transparent" />
+        <Setter Property="BorderThickness"
+           Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd"
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                                Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                          Value="{StaticResource HoverOverGradient}" />
+                            <Setter Property="BorderBrush"
+                          Value="#E2DBFE" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                                Value="False" />
+                                <Condition Property="IsSelected"
+                                Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                          Value="{StaticResource SelectorGradient}" />
+                            <Setter Property="BorderBrush"
+                          Value="#DAD2FD" />
+                        </MultiTrigger>
+  
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ListBoxItemStyle"
+   TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels"
+       Value="True" />
+        <Setter Property="Padding"
+       Value="4,1" />
+        <Setter Property="HorizontalContentAlignment"
+       Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="VerticalContentAlignment"
+       Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background"
+       Value="Transparent" />
+        <Setter Property="BorderBrush"
+       Value="Transparent" />
+        <Setter Property="BorderThickness"
+       Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd"
+                Background="{TemplateBinding Background}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                Padding="{TemplateBinding Padding}"
+                SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                      Value="Transparent" />
+                            <Setter Property="BorderBrush"
+                      Value="Transparent" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                            Value="False" />
+                                <Condition Property="IsSelected"
+                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                      Value="Transparent" />
+                            <Setter Property="BorderBrush"
+                      Value="Transparent" />
+                        </MultiTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="PrimaryHeaderBorder" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
@@ -451,10 +568,10 @@
         <Setter Property="Visibility" Value="Hidden" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsMouseOver}" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsMouseOver}" Value="True">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=IsSelected}" Value="True">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
         </Style.Triggers>

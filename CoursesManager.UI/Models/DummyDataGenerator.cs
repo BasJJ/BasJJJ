@@ -124,7 +124,7 @@ namespace CoursesManager.UI.Models
             private static string GetRandomFirstName()
             {
                 string[] firstNames =
-                    { "John", "Jane", "Michael", "Emily", "Chris", "Anna", "David", "Sarah", "Robert", "Emma" };
+                    { "John", "Jane", "Michael", "Emily", "Chris", "Anna", "David", "Sarah", "Robert", "Emma", };
                 return firstNames[_random.Next(firstNames.Length)];
             }
 

@@ -83,7 +83,7 @@
                 <TextBlock Text="Cursussen" Grid.Row="11" Grid.ColumnSpan="2" Margin="0,10,0,5"/>
                 <Border Grid.Row="12" Grid.ColumnSpan="2" Height="150" CornerRadius="15" Background="White">
                 <ScrollViewer Style="{DynamicResource ScrollViewerStyle2}" VerticalScrollBarVisibility="Auto" Margin="0 12 0 10">
-                    <ListBox Style="{DynamicResource ListBoxEditStudentStyle1}" ItemsSource="{Binding SelectableCourses}" >
+                        <ListBox ScrollViewer.CanContentScroll="True" Style="{DynamicResource ListBoxEditStudentStyle1}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" ItemsSource="{Binding SelectableCourses}" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
