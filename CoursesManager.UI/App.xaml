@@ -14,22 +14,18 @@
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/DataGridStyling.xaml" />
                 <ResourceDictionary Source="Resources/CheckBoxStyling.xaml" />
-                <ResourceDictionary Source="Resources/CourseDescriptionBoxStyle.xaml"/>
-                <ResourceDictionary Source="Resources/ScrollBarStyling.xaml"/>
-                <ResourceDictionary Source="Resources/ListBoxStyles.xaml"/>
-                <ResourceDictionary Source="Resources/ComboBoxStyling.xaml"/>
+                <ResourceDictionary Source="Resources/CourseDescriptionBoxStyle.xaml" />
+                <ResourceDictionary Source="Resources/ScrollBarStyling.xaml" />
+                <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
+                <ResourceDictionary Source="Resources/ComboBoxStyling.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- Directly defined resources (such as DataTemplates) -->
             <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">
                 <views:CoursesManagerView />
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
                 <views:StudentManagerView />
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type viewModels:TestViewModel}">
-                <views:TestView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type courseViewModels:CourseOverViewViewModel}">
