@@ -3,19 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="Transparent"
         Title="ConfirmationDialogWindow"
-        MinHeight="150"
-        MaxHeight= "400"
-        MinWidth="300"
+        MaxHeight="400"
         Width="400"
+        SizeToContent="Height"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -29,41 +26,24 @@
     <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
             </Grid.RowDefinitions>
 
             <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
 
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="1"
-                        Width="50" Height="50"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        CornerRadius="25"
-                        BorderBrush="Transparent"
-                        Background="{StaticResource SphericalBlueGradient}">
-
-                    <materialDesign:PackIcon Kind="ExclamationBold"
-                                             Height="48" Width="48"
-                                             VerticalAlignment="Center"
-                                             HorizontalAlignment="Center"
-                                             Foreground="White" />
-                </Border>
-
-                <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" TextWrapping="Wrap" />
-            </Grid>
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          MaxHeight="300">
+                <TextBlock Text="{Binding Message, FallbackValue=Message}"
+                           FontSize="16"
+                           TextWrapping="Wrap"
+                           Margin="10" />
+            </ScrollViewer>
 
             <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>

@@ -48,51 +48,51 @@ namespace CoursesManager.Tests
                 ParentWindow = new Window()
             };
 
-     /*       var grid = new Grid();
-            var firstNameTextBox = new TextBox { Tag = "Voornaam" };
-            ValidationProperties.SetIsRequired(firstNameTextBox, true);
-            grid.Children.Add(firstNameTextBox);
+            /*       var grid = new Grid();
+                   var firstNameTextBox = new TextBox { Tag = "Voornaam" };
+                   ValidationProperties.SetIsRequired(firstNameTextBox, true);
+                   grid.Children.Add(firstNameTextBox);
 
-            var tussenvoegselTextBox = new TextBox { Tag = "`Tussenvoegsel" };
-            ValidationProperties.SetIsRequired(tussenvoegselTextBox, false);
-            grid.Children.Add(tussenvoegselTextBox);
+                   var tussenvoegselTextBox = new TextBox { Tag = "`Tussenvoegsel" };
+                   ValidationProperties.SetIsRequired(tussenvoegselTextBox, false);
+                   grid.Children.Add(tussenvoegselTextBox);
 
-            var lastNameTextBox = new TextBox { Tag = "Achternaam" };
-            ValidationProperties.SetIsRequired(lastNameTextBox, true);
-            grid.Children.Add(lastNameTextBox);
+                   var lastNameTextBox = new TextBox { Tag = "Achternaam" };
+                   ValidationProperties.SetIsRequired(lastNameTextBox, true);
+                   grid.Children.Add(lastNameTextBox);
 
-            var emailTextBox = new TextBox { Tag = "Email" };
-            ValidationProperties.SetIsRequired(emailTextBox, true);
-            ValidationProperties.SetIsEmail(emailTextBox, true);
-            grid.Children.Add(emailTextBox);
+                   var emailTextBox = new TextBox { Tag = "Email" };
+                   ValidationProperties.SetIsRequired(emailTextBox, true);
+                   ValidationProperties.SetIsEmail(emailTextBox, true);
+                   grid.Children.Add(emailTextBox);
 
-            var phoneNumberTextBox = new TextBox { Tag = "Telefoonnummer" };
-            ValidationProperties.SetIsRequired(phoneNumberTextBox, true);
-            ValidationProperties.SetIsPhoneNumber(phoneNumberTextBox, true);
-            grid.Children.Add(phoneNumberTextBox);
+                   var phoneNumberTextBox = new TextBox { Tag = "Telefoonnummer" };
+                   ValidationProperties.SetIsRequired(phoneNumberTextBox, true);
+                   ValidationProperties.SetIsPhoneNumber(phoneNumberTextBox, true);
+                   grid.Children.Add(phoneNumberTextBox);
 
-            var postCodeTextBox = new TextBox { Tag = "Postcode" };
-            ValidationProperties.SetIsRequired(postCodeTextBox, true);
-            grid.Children.Add(postCodeTextBox);
+                   var postCodeTextBox = new TextBox { Tag = "Postcode" };
+                   ValidationProperties.SetIsRequired(postCodeTextBox, true);
+                   grid.Children.Add(postCodeTextBox);
 
-            var houseNumberTextBox = new TextBox { Tag = "Huisnummer" };
-            ValidationProperties.SetIsRequired(houseNumberTextBox, true);
-            grid.Children.Add(houseNumberTextBox);
+                   var houseNumberTextBox = new TextBox { Tag = "Huisnummer" };
+                   ValidationProperties.SetIsRequired(houseNumberTextBox, true);
+                   grid.Children.Add(houseNumberTextBox);
 
-            var streetNameTextBox = new TextBox { Tag = "Straatnaam" };
-            ValidationProperties.SetIsRequired(streetNameTextBox, true);
-            grid.Children.Add(streetNameTextBox);
+                   var streetNameTextBox = new TextBox { Tag = "Straatnaam" };
+                   ValidationProperties.SetIsRequired(streetNameTextBox, true);
+                   grid.Children.Add(streetNameTextBox);
 
-            var countryTextBox = new TextBox { Tag = "Land" };
-            ValidationProperties.SetIsRequired(countryTextBox, true);
-            grid.Children.Add(postCodeTextBox);
+                   var countryTextBox = new TextBox { Tag = "Land" };
+                   ValidationProperties.SetIsRequired(countryTextBox, true);
+                   grid.Children.Add(postCodeTextBox);
 
-            var cityTextBox = new TextBox { Tag = "Stand" };
-            ValidationProperties.SetIsRequired(cityTextBox, true);
-            grid.Children.Add(cityTextBox);
+                   var cityTextBox = new TextBox { Tag = "Stand" };
+                   ValidationProperties.SetIsRequired(cityTextBox, true);
+                   grid.Children.Add(cityTextBox);
 
-            _viewModel.ParentWindow.Content = null;
-            _viewModel.ParentWindow.Content = grid;*/
+                   _viewModel.ParentWindow.Content = null;
+                   _viewModel.ParentWindow.Content = grid;*/
         }
 
         [Test]
@@ -135,7 +135,7 @@ namespace CoursesManager.Tests
         }
 
         [Test]
-        public async Task  Save_EmptyLastName_ShowsConfirmationDialog()
+        public async Task Save_EmptyLastName_ShowsConfirmationDialog()
         {
             // Arrange
             _viewModel.Student.FirstName = "Doe";
@@ -230,9 +230,9 @@ namespace CoursesManager.Tests
             _viewModel.SelectedCourse = "Course1";
 
             _mockDialogService
-                .Setup(service => service.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()))
-                .ReturnsAsync(DialogResult<YesNoDialogResultType>.Builder()
-                    .SetSuccess(new YesNoDialogResultType { Result = true })
+                .Setup(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
+                .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
+                    .SetSuccess(new ConfirmationDialogResultType { Result = true })
                     .Build());
 
             // Act
@@ -249,7 +249,7 @@ namespace CoursesManager.Tests
             // Assert
             _mockStudentRepository.Verify(repo => repo.Add(It.IsAny<Student>()), Times.Once);
             _mockRegistrationRepository.Verify(repo => repo.Add(It.IsAny<Registration>()), Times.Once);
-            _mockDialogService.Verify(ds => ds.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()), Times.Once);
+            _mockDialogService.Verify(service => service.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Once);
         }
     }
 }

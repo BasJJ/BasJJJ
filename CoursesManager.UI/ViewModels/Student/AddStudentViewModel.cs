@@ -6,6 +6,7 @@ using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using CoursesManager.UI.Dialogs.ResultTypes;
@@ -21,6 +22,14 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     private readonly IRegistrationRepository _registrationRepository;
     private readonly IDialogService _dialogService;
 
+    private bool _isDialogOpen;
+
+    public bool IsDialogOpen
+    {
+        get => _isDialogOpen;
+        set => SetProperty(ref _isDialogOpen, value);
+    }
+
     public Student Student { get; set; }
     public ObservableCollection<string> Courses { get; set; }
     public string SelectedCourse { get; set; } = string.Empty;
@@ -28,9 +37,8 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     public ICommand CancelCommand { get; }
 
     public event EventHandler<Student>? StudentAdded;
-    public Window ParentWindow { get; set; }
 
-    public new event PropertyChangedEventHandler? PropertyChanged;
+    public Window ParentWindow { get; set; }
 
     public AddStudentViewModel
         (bool initial,
@@ -49,9 +57,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
         SaveCommand = new RelayCommand(async () => await Save());
         CancelCommand = new RelayCommand(Cancel);
-        PropertyChanged = delegate { };
     }
-
 
     private async Task Save()
     {
@@ -120,24 +126,46 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
     private async Task<bool> ShowDialogAsync(DialogType dialogType, string message)
     {
+        void SetIsDialogOpen(bool value)
+        {
+            if (Application.Current?.Dispatcher?.CheckAccess() == true)
+            {
+                IsDialogOpen = value;
+            }
+            else
+            {
+                Application.Current?.Dispatcher?.Invoke(() => IsDialogOpen = value);
+            }
+        }
+
         switch (dialogType)
         {
             case DialogType.Error:
+                SetIsDialogOpen(true);
+
                 await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
                     new ConfirmationDialogResultType
                     {
                         DialogTitle = "Foutmelding",
                         DialogText = message
                     });
+
+                SetIsDialogOpen(false);
                 return true;
+
             case DialogType.Confirmation:
-                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
-                    new YesNoDialogResultType
+                SetIsDialogOpen(true);
+
+                var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                    new ConfirmationDialogResultType
                     {
                         DialogTitle = "Bevestiging",
                         DialogText = message
                     });
+
+                SetIsDialogOpen(false);
                 return result?.Data?.Result ?? false;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(dialogType), dialogType, null);
         }
@@ -150,7 +178,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
             .Build();
         CloseDialogWithResult(dialogResult);
     }
-    
+
     protected override void InvokeResponseCallback(DialogResult<bool> dialogResult)
     {
         ResponseCallback?.Invoke(dialogResult);
