@@ -125,6 +125,7 @@ public partial class App : Application
             registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
         ));
         DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, ConfirmationDialogResultType>((initial) => new ErrorDialogViewModel(initial));
+        DialogService.RegisterDialog<CourseDialogViewModel,CourseDialogWindow, Course >((Initial) => new CourseDialogViewModel(Initial));
         DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
         DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
     }
