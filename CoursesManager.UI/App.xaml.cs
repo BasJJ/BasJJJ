@@ -18,6 +18,7 @@ using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Courses;
 using Microsoft.Extensions.DependencyInjection;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI;
 
@@ -97,6 +98,7 @@ public partial class App : Application
             registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
         ));
         DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, ConfirmationDialogResultType>((initial) => new ErrorDialogViewModel(initial));
+        DialogService.RegisterDialog<CourseDialogViewModel,CourseDialogWindow, Course >((Initial) => new CourseDialogViewModel(Initial));
     }
 
     // This method is used to register all services that are used in the application.
@@ -121,7 +123,7 @@ public partial class App : Application
     private void RegisterViewModels()
     {
         INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
-        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), MessageBroker, nav));
+        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(ServiceProvider.GetService<ICourseRepository>(), MessageBroker, DialogService, nav));
         INavigationService.RegisterViewModelFactory((nav) => new CourseOverViewViewModel(ServiceProvider.GetService<ICourseRepository>(), DialogService, MessageBroker, nav));
 
         INavigationService.RegisterViewModelFactory(() => new TestViewModel());

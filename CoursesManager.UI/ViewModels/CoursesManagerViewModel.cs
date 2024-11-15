@@ -9,6 +9,8 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
+using CoursesManager.MVVM.Dialogs;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -16,6 +18,7 @@ namespace CoursesManager.UI.ViewModels
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
+        private readonly IDialogService _dialogService;
 
         private string _searchText = String.Empty;
         private bool _isToggled = true;
@@ -44,10 +47,12 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Constructor
-        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
+        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, IDialogService dialogService, INavigationService navigationService) : base(navigationService)
         {
             _courseRepository = courseRepository;
             _messageBroker = messageBroker;
+            _dialogService = dialogService;
+            
             _messageBroker.Subscribe<CoursesChangedMessage, CoursesManagerViewModel>(OnCoursesChangedMessage, this);
 
             ViewTitle = "Cursus beheer";
@@ -55,6 +60,7 @@ namespace CoursesManager.UI.ViewModels
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);
+            AddCourseCommand = new RelayCommand(OpenCourseDialog);
 
             LoadCourses();
         }
@@ -105,6 +111,16 @@ namespace CoursesManager.UI.ViewModels
         {
             GlobalCache.Instance.Put("Opened Course", parameter, false);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
+        }
+
+        private async void OpenCourseDialog()
+        {
+            var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>();
+
+            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            {
+                LoadCourses();
+            }
         }
     }
 }
