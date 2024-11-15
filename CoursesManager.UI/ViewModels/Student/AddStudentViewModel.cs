@@ -126,10 +126,22 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
     private async Task<bool> ShowDialogAsync(DialogType dialogType, string message)
     {
+        void SetIsDialogOpen(bool value)
+        {
+            if (Application.Current?.Dispatcher?.CheckAccess() == true)
+            {
+                IsDialogOpen = value;
+            }
+            else
+            {
+                Application.Current?.Dispatcher?.Invoke(() => IsDialogOpen = value);
+            }
+        }
+
         switch (dialogType)
         {
             case DialogType.Error:
-                Application.Current.Dispatcher.Invoke(() => IsDialogOpen = true);
+                SetIsDialogOpen(true);
 
                 await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
                     new ConfirmationDialogResultType
@@ -138,12 +150,11 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
                         DialogText = message
                     });
 
-                Application.Current.Dispatcher.Invoke(() => IsDialogOpen = false);
-
+                SetIsDialogOpen(false);
                 return true;
 
             case DialogType.Confirmation:
-                Application.Current.Dispatcher.Invoke(() => IsDialogOpen = true);
+                SetIsDialogOpen(true);
 
                 var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
                     new ConfirmationDialogResultType
@@ -152,8 +163,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
                         DialogText = message
                     });
 
-                Application.Current.Dispatcher.Invoke(() => IsDialogOpen = false);
-
+                SetIsDialogOpen(false);
                 return result?.Data?.Result ?? false;
 
             default:
