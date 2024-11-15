@@ -28,14 +28,6 @@ public sealed class DialogService : IDialogService
         return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(initialData);
     }
 
-    public Task<DialogResult<TDialogResultType>> ShowDialogAsync<TDialogViewModel, TDialogResultType>(bool someFlag)
-        where TDialogViewModel : DialogViewModel<TDialogResultType>
-    {
-        // Implement the method logic based on the flag
-        // For now, let's assume it behaves similarly to the other ShowDialogAsync methods
-        return ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>();
-    }
-
     private Task<DialogResult<TDialogResultType>> ShowDialogInternalAsync<TDialogViewModel, TDialogResultType>(TDialogResultType? initialData = default)
         where TDialogViewModel : DialogViewModel<TDialogResultType>
     {

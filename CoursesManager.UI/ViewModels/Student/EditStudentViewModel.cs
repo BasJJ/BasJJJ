@@ -19,6 +19,14 @@ namespace CoursesManager.UI.ViewModels
         private readonly IRegistrationRepository _registrationRepository;
         private readonly IDialogService _dialogService;
 
+        private bool _isDialogOpen;
+
+        public bool IsDialogOpen
+        {
+            get => _isDialogOpen;
+            set => SetProperty(ref _isDialogOpen, value);
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
         public Student Student { get; }
@@ -66,7 +74,6 @@ namespace CoursesManager.UI.ViewModels
             ResponseCallback?.Invoke(dialogResult);
         }
 
-
         private void UpdateStudentDetails()
         {
             Student.FirstName = StudentCopy.FirstName;
@@ -112,7 +119,7 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-       private async Task OnSaveAsync()
+        private async Task OnSaveAsync()
         {
             if (await ValidateFieldsAsync())
             {
@@ -222,21 +229,29 @@ namespace CoursesManager.UI.ViewModels
 
         private async Task ShowConfirmationDialogAsync(string message)
         {
+            IsDialogOpen = true;
+
             await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
             {
                 DialogTitle = "Informatie",
                 DialogText = message
             });
+
+            IsDialogOpen = false;
         }
 
         private async Task<bool> ShowYesNoDialogAsync(string message)
         {
+            IsDialogOpen = true;
+
             var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
                 new YesNoDialogResultType
                 {
                     DialogTitle = "Bevestiging",
                     DialogText = message
                 });
+
+            IsDialogOpen = false;
 
             return result?.Data?.Result ?? false;
         }

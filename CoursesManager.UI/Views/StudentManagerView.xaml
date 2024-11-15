@@ -46,10 +46,10 @@
                     <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="1"  >
+                <Grid Grid.Column="1">
                     <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto">
                         <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                         </Border.Effect>
                         <Grid Grid.IsSharedSizeScope="True">
                             <Grid.RowDefinitions>
@@ -61,24 +61,24 @@
                             <!-- Headerbar with title -->
                             <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="55" CornerRadius="15 15 0 0">
                                 <Border.Effect>
-                                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                                 </Border.Effect>
                                 <Grid Grid.IsSharedSizeScope="True">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="Auto" MinWidth="50" SharedSizeGroup="Column2"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="Auto" MinWidth="50" SharedSizeGroup="Column2" />
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="*" SharedSizeGroup="Column4" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Voornaam" Grid.Column="1" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Tussenvoegsel" Grid.Column="3" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Achternaam" Grid.Column="5" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Email" Grid.Column="7" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Voornaam" Grid.Column="1" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Tussenvoegsel" Grid.Column="3" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Achternaam" Grid.Column="5" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Email" Grid.Column="7" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
                                 </Grid>
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -87,31 +87,29 @@
                                 </Border.Style>
                             </Border>
 
-
-
                             <!-- Scrollable Card Grid -->
-                            <ListBox Grid.Row="1" Background="White" ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}" 
-                                 Style="{DynamicResource ListBoxStyle1}" ItemsSource="{Binding FilteredStudentRecords}" 
+                            <ListBox Grid.Row="1" Background="White" ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
+                                 Style="{DynamicResource ListBoxStyle1}" ItemsSource="{Binding FilteredStudentRecords}"
                                  SelectedItem="{Binding SelectedStudent, Mode=TwoWay}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="15"/>
-                                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1"/>
-                                                <ColumnDefinition Width="15"/>
-                                                <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2"/>
-                                                <ColumnDefinition Width="15"/>
-                                                <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3"/>
-                                                <ColumnDefinition Width="15"/>
-                                                <ColumnDefinition Width="*" SharedSizeGroup="Column4"/>
-                                                <ColumnDefinition Width="120"/>
-                                                <ColumnDefinition Width="*" SharedSizeGroup="Column5"/>
+                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1" />
+                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="Auto" MinWidth="135" SharedSizeGroup="Column2" />
+                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3" />
+                                                <ColumnDefinition Width="15" />
+                                                <ColumnDefinition Width="*" SharedSizeGroup="Column4" />
+                                                <ColumnDefinition Width="120" />
+                                                <ColumnDefinition Width="*" SharedSizeGroup="Column5" />
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                            <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                            <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                            <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="3"  Text="{Binding Insertion}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                            <TextBlock HorizontalAlignment="Left" Grid.Column="5"  Text="{Binding LastName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                            <TextBlock  HorizontalAlignment="Left" Grid.Column="7"  Text="{Binding Email}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
 
                                             <StackPanel Orientation="Horizontal" MaxWidth="200" Grid.Column="9" HorizontalAlignment="Right">
 
@@ -119,7 +117,6 @@
                                             CommandParameter="{Binding}" ToolTip="Edit" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
                                                     <materialDesign:PackIcon Kind="PencilOutline" Height="24" Width="24" />
                                                 </Button>
-
 
                                                 <Button Command="{Binding DataContext.DeleteStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}" ToolTip="Delete" Style="{StaticResource GridSmallIconButtonWithShadowStyle}">
@@ -151,7 +148,7 @@
                 <Grid Grid.Column="3" MinWidth="350">
                     <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="Auto">
                         <Border.Effect>
-                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                         </Border.Effect>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -163,86 +160,86 @@
                             <!-- Headerbar with title -->
                             <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="55" CornerRadius="15 15 0 0">
                                 <Border.Effect>
-                                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
+                                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                                 </Border.Effect>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="50" />
                                     </Grid.ColumnDefinitions>
                                     <Grid  Grid.Column="1">
-                                        <TextBlock Text="Cursussen" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Cursussen" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     </Grid>
                                 </Grid>
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
-                            </Style>
-                        </Border.Style>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="25" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="25" />
+                                </Grid.ColumnDefinitions>
+                                <!-- Scrollable Card Grid -->
+                                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
+                                    <ItemsControl ItemsSource="{Binding CoursePaymentList}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Vertical" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="{StaticResource HoverOverGradient}" />
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="100" MinWidth="90" />
+                                                        <ColumnDefinition Width="Auto" MinWidth="90" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Grid.Column="1">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                                    </Grid>
+
+                                                    <CheckBox Grid.Column="2" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
                     </Border>
-
-                    <Grid Grid.Row="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="25"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="25"/>
-                        </Grid.ColumnDefinitions>
-                        <!-- Scrollable Card Grid -->
-                        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
-                            <ItemsControl ItemsSource="{Binding CoursePaymentList}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.Style>
-                                                <Style TargetType="Grid">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource HoverOverGradient}"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Style>
-                                            <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="100" MinWidth="90"/>
-                                                        <ColumnDefinition Width="Auto" MinWidth="90"/>
-                                                        <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid Grid.Column="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                            </Grid>
-
-                                            <CheckBox Grid.Column="2" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
                 </Grid>
-                </Border>
             </Grid>
         </Grid>
-    </Grid>
 
-    <Grid
-            x:Name="Overlay"
+        <Border
+            x:Name="OverlayBorder"
             Background="#80000000"
+            CornerRadius="0,0,15,15"
             Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             IsHitTestVisible="{Binding IsDialogOpen}">
-    </Grid>
-
+            <Grid />
+        </Border>
     </Grid>
 </UserControl>
