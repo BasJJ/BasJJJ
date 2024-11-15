@@ -131,6 +131,8 @@ namespace CoursesManager.UI.ViewModels
                     UpdateRegistrations();
 
                     await ShowConfirmationDialogAsync("Cursist succesvol opgeslagen.");
+
+                    InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
                 }
             }
         }

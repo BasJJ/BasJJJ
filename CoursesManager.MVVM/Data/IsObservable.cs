@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace CoursesManager.MVVM.Data
 {
@@ -19,19 +16,8 @@ namespace CoursesManager.MVVM.Data
             return true;
         }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (Application.Current?.Dispatcher?.CheckAccess() == true)
-            {
-                PropertyChanged?.Invoke(this, e);
-            }
-            else
-            {
-                Application.Current?.Dispatcher.Invoke(() => PropertyChanged?.Invoke(this, e));
-            }
-        }
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
     }
 }
