@@ -17,9 +17,9 @@ namespace CoursesManager.UI.Dialogs.Windows
     /// <summary>
     /// Interaction logic for CourseDialogViewModel.xaml
     /// </summary>
-    public partial class CourseDialogViewModel : Window
+    public partial class CourseDialogWindow : Window
     {
-        public CourseDialogViewModel(MVVM.Dialogs.IDialogService dialogService)
+        public CourseDialogWindow()
         {
             InitializeComponent();
         }
