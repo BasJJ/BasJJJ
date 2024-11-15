@@ -1,5 +1,4 @@
-﻿
-namespace CoursesManager.UI.Dialogs.Enums
+﻿namespace CoursesManager.UI.Dialogs.Enums
 {
     public enum DialogType
     {
