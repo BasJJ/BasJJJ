@@ -18,9 +18,15 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -38,36 +44,48 @@
                              Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" />
 
                     <!-- Cursuscode -->
-                    <TextBlock Text="Cursusnaam*" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"/>
+                    <TextBlock Text="Cursuscode*" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"/>
                     <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursusnaam"
+                             Tag="Cursuscode"
                              Grid.Row="2" Grid.Column="1" Margin="0,0,10,10" />
 
-                    <!-- Locatie (dit wordt een dropdown box) -->
-                    <TextBlock Text="Locatie*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"/>
-                    <ComboBox Width="200" Height="21" Grid.Row="6" Grid.Column="0" Margin="0,0,180,10">
-                        <ComboBoxItem> Zwolle </ComboBoxItem>
-                        <ComboBoxItem> Almere </ComboBoxItem>
-                    </ComboBox>
-                   
 
                     <!-- Startdate (dit wordt een datum kiezer) -->
-                    <TextBlock Text="Cursusnaam*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursusnaam"
+                    <TextBlock Text="IsActive*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"/>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle10}" 
+                             Tag="IsActive"
                              Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
 
                     <!-- isactive (dit wordt een checkbox) -->
-                    <TextBlock Text="Cursusnaam*" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursusnaam"
-                             Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" />
+                    <TextBlock Text="Image*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"/>
+                    <!-- Knop om een afbeelding te uploaden -->
+                    <Button Grid.Row="6" Grid.Column="1"
+                                Content="Upload Afbeelding"
+                                Width="250"
+                                Height="35"
+                                Style="{StaticResource PrimaryButton}"
+                                Margin="0,0,0,10"
+                                HorizontalAlignment="Center"
+                                 />
+
+                    <!-- Locatie (dit wordt een dropdown box) -->
+                    <TextBlock Text="Locatie*" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
+                    <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" Width="180" Height="30" Grid.Row="4" Grid.Column="0" Margin="0,0,190,10">
+                        <ComboBoxItem>Zwolle</ComboBoxItem>
+                        <ComboBoxItem>Almere</ComboBoxItem>
+                    </ComboBox>
 
                     <!-- image (dit wordt een documenten uploader) -->
-                    <TextBlock Text="Cursusnaam*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"/>
+                    <TextBlock Text="End_date*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"/>
+                    <DatePicker Style="{StaticResource RoundedDatePickerStyle}"
+                                SelectedDate="{Binding GeselecteerdeDatum}"
+                                Tag="DatePicker"
+                                Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
+
+                    <TextBlock Text="Description*" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5"/>
                     <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursusnaam"
-                             Grid.Row="6" Grid.Column="1" Margin="0,0,10,10" />
+                             Tag="Description"
+                             Grid.Row="9" Grid.Column="0" Margin="0,0,10,10" />
                 </Grid>
             </StackPanel>
         </Border>
