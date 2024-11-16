@@ -22,6 +22,8 @@ namespace CoursesManager.UI.Views.Students
         public AddStudentPopup()
         {
             InitializeComponent();
+
+
         }
         //can be better but for now it is ok
         private void Window_Loaded(object sender, RoutedEventArgs e)

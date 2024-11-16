@@ -8,6 +8,7 @@ using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Dialogs.Windows;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Factory;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.AddressRepository;
@@ -30,11 +31,11 @@ public partial class App : Application
     public static ObservableCollection<Location> Locations { get; private set; }
     public static ObservableCollection<Registration> Registrations { get; private set; }
 
-    public static ICourseRepository CourseRepository { get; private set; } = new CourseRepository();
-    public static ILocationRepository LocationRepository { get; private set; } = new LocationRepository();
-    public static IRegistrationRepository RegistrationRepository { get; private set; } = new RegistrationRepository();
-    public static IStudentRepository StudentRepository { get; private set; } = new StudentRepository();
-    public static IAddressRepository AddressRepository { get; private set; } = new AddressRepository();
+    public static ICourseRepository CourseRepository { get; private set; }
+    public static ILocationRepository LocationRepository { get; private set; }
+    public static IRegistrationRepository RegistrationRepository { get; private set; }
+    public static IStudentRepository StudentRepository { get; private set; }
+    public static IAddressRepository AddressRepository { get; private set; }
 
     public static INavigationService NavigationService { get; set; } = new NavigationService();
     public static IMessageBroker MessageBroker { get; set; } = new MessageBroker();
@@ -44,21 +45,52 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
+        // Initialize Dummy Data
         SetupDummyDataTemporary();
+        InitializeRepositories();
 
-        RegisterViewModels();
+        // Create the ViewModelFactory
+        var viewModelFactory = new ViewModelFactory(
+            CourseRepository,
+            LocationRepository,
+            RegistrationRepository,
+            StudentRepository,
+            AddressRepository,
+            NavigationService,
+            MessageBroker,
+            DialogService);
+
+        // Register ViewModel
+
+        RegisterViewModels(viewModelFactory);
+
+
+        // Register Dialogs
         RegisterDialogs();
 
+        // Subscribe to Application Close Messages
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
+        // Navigate to the Initial ViewModel
         NavigationService.NavigateTo<StudentManagerViewModel>();
 
+        // Set MainWindow's DataContext
         MainWindow mw = new()
         {
             DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
         };
         mw.Show();
     }
+
+    private void InitializeRepositories()
+    {
+        CourseRepository = new CourseRepository(Courses);
+        StudentRepository = new StudentRepository(Students);
+        RegistrationRepository = new RegistrationRepository(Registrations);
+        AddressRepository = new AddressRepository();
+        LocationRepository = new LocationRepository(); 
+    }
+
 
     private static void SetupDummyDataTemporary()
     {
@@ -79,37 +111,37 @@ public partial class App : Application
         {
             course.Location = Locations.FirstOrDefault(s => s.Id == course.LocationId);
         }
+
     }
 
     private void RegisterDialogs()
     {
         DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
         DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
-            initial,
-            StudentRepository,
-            CourseRepository,
-            RegistrationRepository,
-            DialogService
-        ));
     }
 
-    private void RegisterViewModels()
+    private void RegisterViewModels(ViewModelFactory viewModelFactory)
     {
-        INavigationService.RegisterViewModelFactory(() => new StudentManagerViewModel(DialogService));
-        INavigationService.RegisterViewModelFactory((nav) => new CoursesManagerViewModel(
-            CourseRepository,
-            RegistrationRepository,
-            nav));
-        INavigationService.RegisterViewModelFactory(() => new CourseOverViewViewModel());
+        // Register StudentManagerViewModel
+        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<StudentManagerViewModel>());
+
+        // Register CoursesManagerViewModel
+        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CoursesManagerViewModel>());
+
+        // Register CourseOverViewViewModel
+        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CourseOverViewViewModel>());
+
+        // Register Dialogs using the factory
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
-        (student) => new EditStudentViewModel(
-            StudentRepository,
-            CourseRepository,
-            RegistrationRepository,
-            DialogService,
-            student)
-        );
+            student => new EditStudentViewModel(
+                StudentRepository,
+                CourseRepository,
+                RegistrationRepository,
+                DialogService,
+                student));
+
+        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>(
+            initial => viewModelFactory.CreateViewModel<AddStudentViewModel>());
     }
 
     /// <summary>

@@ -1,18 +1,18 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
+using System.Linq;
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Models.Repositories.StudentRepository
 {
     public class StudentRepository : IStudentRepository
     {
-        //private readonly List<Student> _students = new List<Student>();
-        private ObservableCollection<Student> _students;
-        
-        public StudentRepository()
+        private readonly ObservableCollection<Student> _students;
+
+        public StudentRepository(ObservableCollection<Student> students)
         {
-            _students = App.Students;
+            _students = students ?? throw new ArgumentNullException(nameof(students), "Students collection cannot be null.");
         }
 
         public IEnumerable<Student> GetAll()
@@ -27,39 +27,43 @@ namespace CoursesManager.UI.Models.Repositories.StudentRepository
 
         public void Add(Student student)
         {
+            if (student == null) throw new ArgumentNullException(nameof(student), "Student cannot be null.");
+
             student.DateCreated = DateTime.Now;
-            student.Id = _students.Count + 1;
+            student.Id = _students.Any() ? _students.Max(s => s.Id) + 1 : 1;
             _students.Add(student);
         }
 
         public void Update(Student student)
         {
+            if (student == null) throw new ArgumentNullException(nameof(student), "Student cannot be null.");
+
             var existingStudent = GetById(student.Id);
-            if (existingStudent != null)
-            {
-                existingStudent.FirstName = student.FirstName;
-                existingStudent.LastName = student.LastName;
-                existingStudent.Email = student.Email;
-                existingStudent.PhoneNumber = student.PhoneNumber;
-                existingStudent.PostCode = student.PostCode;
-                existingStudent.HouseNumber = student.HouseNumber;
-                existingStudent.HouseNumberExtension = student.HouseNumberExtension;
-            }
+            if (existingStudent == null) throw new InvalidOperationException($"Student with ID {student.Id} does not exist.");
+
+            existingStudent.FirstName = student.FirstName;
+            existingStudent.LastName = student.LastName;
+            existingStudent.Email = student.Email;
+            existingStudent.PhoneNumber = student.PhoneNumber;
+            existingStudent.PostCode = student.PostCode;
+            existingStudent.HouseNumber = student.HouseNumber;
+            existingStudent.HouseNumberExtension = student.HouseNumberExtension;
         }
 
         public void Delete(int id)
         {
             var student = GetById(id);
-            if (student != null)
-            {
-                student.Is_deleted = true;
-                student.date_deleted = DateTime.Now;
-            }
+            if (student == null) throw new InvalidOperationException($"Student with ID {id} does not exist.");
+
+            student.Is_deleted = true;
+            student.date_deleted = DateTime.Now;
         }
 
         public bool EmailExists(string email)
         {
-            return _students.Any(s => s.Email == email && !s.Is_deleted);
+            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+
+            return _students.Any(s => s.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && !s.Is_deleted);
         }
     }
 }

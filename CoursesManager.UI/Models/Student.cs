@@ -135,4 +135,5 @@ public class Student : ViewModel, ICopyable<Student>
     public DateTime DateCreated { get; set; }
     public bool Is_deleted { get; set; }
     public DateTime? date_deleted { get; set; }
+    public DateTime DateOfBirth { get; set; }
 }

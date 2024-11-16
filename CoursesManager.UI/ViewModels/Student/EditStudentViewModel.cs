@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Dialogs;
@@ -6,7 +9,6 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using System.Net.Mail;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 
@@ -18,7 +20,6 @@ namespace CoursesManager.UI.ViewModels
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
         private readonly IDialogService _dialogService;
-
         private bool _isDialogOpen;
 
         public bool IsDialogOpen
@@ -29,11 +30,14 @@ namespace CoursesManager.UI.ViewModels
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
-        public Student Student { get; }
-        public Student StudentCopy { get; }
-        public ObservableCollection<SelectableCourse> SelectableCourses { get; }
+  
 
-        public EditStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository, IDialogService dialogService, Student? student)
+        public EditStudentViewModel(
+            IStudentRepository studentRepository,
+            ICourseRepository courseRepository,
+            IRegistrationRepository registrationRepository,
+            IDialogService dialogService,
+            Student? student)
             : base(student)
         {
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
@@ -41,7 +45,7 @@ namespace CoursesManager.UI.ViewModels
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
-            Student = student;
+            Student = student ?? throw new ArgumentNullException(nameof(student));
             StudentCopy = student.Copy();
 
             SelectableCourses = InitializeSelectableCourses();
@@ -49,6 +53,9 @@ namespace CoursesManager.UI.ViewModels
             SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommand = new RelayCommand(OnCancel);
         }
+        public Student Student { get; }
+        public Student StudentCopy { get; private set; }
+        public ObservableCollection<SelectableCourse> SelectableCourses { get; private set; }
 
         private ObservableCollection<SelectableCourse> InitializeSelectableCourses()
         {
@@ -57,7 +64,7 @@ namespace CoursesManager.UI.ViewModels
                 .Select(r => r.CourseID)
                 .ToHashSet();
 
-            var selectableCourses = _courseRepository.GetAll()
+            var courses = _courseRepository.GetAll()
                 .Select(course => new SelectableCourse
                 {
                     ID = course.ID,
@@ -66,12 +73,22 @@ namespace CoursesManager.UI.ViewModels
                 })
                 .ToList();
 
-            return new ObservableCollection<SelectableCourse>(selectableCourses);
+            return new ObservableCollection<SelectableCourse>(courses);
         }
 
-        protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
+        private async Task OnSaveAsync()
         {
-            ResponseCallback?.Invoke(dialogResult);
+            if (await ValidateFieldsAsync())
+            {
+                if (await ShowYesNoDialogAsync("Wilt u de wijzigingen opslaan?"))
+                {
+                    UpdateStudentDetails();
+                    UpdateRegistrations();
+
+                    await ShowConfirmationDialogAsync("Cursist succesvol opgeslagen.");
+                    InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
+                }
+            }
         }
 
         private void UpdateStudentDetails()
@@ -96,6 +113,7 @@ namespace CoursesManager.UI.ViewModels
                 .Where(r => r.StudentID == Student.Id)
                 .ToList();
 
+            // Delete unselected registrations
             foreach (var registration in existingRegistrations)
             {
                 if (!SelectableCourses.Any(c => c.ID == registration.CourseID && c.IsSelected))
@@ -104,6 +122,7 @@ namespace CoursesManager.UI.ViewModels
                 }
             }
 
+            // Add new registrations
             foreach (var course in SelectableCourses.Where(c => c.IsSelected))
             {
                 if (!existingRegistrations.Any(r => r.CourseID == course.ID))
@@ -119,24 +138,6 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-        private async Task OnSaveAsync()
-        {
-            if (await ValidateFieldsAsync())
-            {
-                bool confirmSave = await ShowYesNoDialogAsync("Wilt u de wijzigingen opslaan?");
-
-                if (confirmSave)
-                {
-                    UpdateStudentDetails();
-                    UpdateRegistrations();
-
-                    await ShowConfirmationDialogAsync("Cursist succesvol opgeslagen.");
-
-                    InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
-                }
-            }
-        }
-
         private void OnCancel()
         {
             var dialogResult = DialogResult<Student>.Builder()
@@ -148,63 +149,35 @@ namespace CoursesManager.UI.ViewModels
 
         private async Task<bool> ValidateFieldsAsync()
         {
+            var errors = new List<string>();
+
             if (string.IsNullOrWhiteSpace(StudentCopy.FirstName))
-            {
-                await ShowConfirmationDialogAsync("Voornaam is verplicht.");
-                return false;
-            }
-
+                errors.Add("Voornaam is verplicht.");
             if (string.IsNullOrWhiteSpace(StudentCopy.LastName))
-            {
-                await ShowConfirmationDialogAsync("Achternaam is verplicht.");
-                return false;
-            }
-
+                errors.Add("Achternaam is verplicht.");
             if (!IsValidEmail(StudentCopy.Email))
-            {
-                await ShowConfirmationDialogAsync("Het opgegeven e-mailadres is ongeldig.");
-                return false;
-            }
-
+                errors.Add("Het opgegeven e-mailadres is ongeldig.");
             if (string.IsNullOrWhiteSpace(StudentCopy.PhoneNumber))
-            {
-                await ShowConfirmationDialogAsync("Telefoonnummer is verplicht");
-                return false;
-            }
-
+                errors.Add("Telefoonnummer is verplicht.");
             if (string.IsNullOrWhiteSpace(StudentCopy.PostCode))
-            {
-                await ShowConfirmationDialogAsync("Postcode is verplicht.");
-                return false;
-            }
-
+                errors.Add("Postcode is verplicht.");
             if (StudentCopy.HouseNumber <= 0)
-            {
-                await ShowConfirmationDialogAsync("Huisnummer is ongeldig.");
-                return false;
-            }
-
+                errors.Add("Huisnummer is ongeldig.");
             if (string.IsNullOrWhiteSpace(StudentCopy.City))
-            {
-                await ShowConfirmationDialogAsync("Stad is verplicht.");
-                return false;
-            }
-
+                errors.Add("Stad is verplicht.");
             if (string.IsNullOrWhiteSpace(StudentCopy.StreetName))
-            {
-                await ShowConfirmationDialogAsync("Straatnaam is verplicht.");
-                return false;
-            }
-
+                errors.Add("Straatnaam is verplicht.");
             if (string.IsNullOrWhiteSpace(StudentCopy.Country))
-            {
-                await ShowConfirmationDialogAsync("Land is verplicht.");
-                return false;
-            }
-
+                errors.Add("Land is verplicht.");
             if (!IsUniqueEmail(StudentCopy.Email))
+                errors.Add("Dit e-mailadres wordt al gebruikt.");
+
+            if (errors.Any())
             {
-                await ShowConfirmationDialogAsync("Dit e-mailadres wordt al gebruikt.");
+                foreach (var error in errors)
+                {
+                    await ShowConfirmationDialogAsync(error);
+                }
                 return false;
             }
 
@@ -226,26 +199,21 @@ namespace CoursesManager.UI.ViewModels
 
         private bool IsUniqueEmail(string email)
         {
-            return !_studentRepository.EmailExists(email) || email == StudentCopy.Email;
+            return !_studentRepository.EmailExists(email) || email == Student.Email;
         }
 
         private async Task ShowConfirmationDialogAsync(string message)
         {
-            IsDialogOpen = true;
-
-            await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-            {
-                DialogTitle = "Informatie",
-                DialogText = message
-            });
-
-            IsDialogOpen = false;
+            await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                new ConfirmationDialogResultType
+                {
+                    DialogTitle = "Informatie",
+                    DialogText = message
+                });
         }
 
         private async Task<bool> ShowYesNoDialogAsync(string message)
         {
-            IsDialogOpen = true;
-
             var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
                 new YesNoDialogResultType
                 {
@@ -253,9 +221,11 @@ namespace CoursesManager.UI.ViewModels
                     DialogText = message
                 });
 
-            IsDialogOpen = false;
-
             return result?.Data?.Result ?? false;
+        }
+        protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
+        {
+            ResponseCallback?.Invoke(dialogResult);
         }
     }
 }
