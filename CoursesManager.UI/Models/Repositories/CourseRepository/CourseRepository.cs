@@ -16,6 +16,7 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
 
         public IEnumerable<Course> GetAll()
         {
+            _courses = App.Courses; // temp fix
             return _courses.ToList();
         }
 

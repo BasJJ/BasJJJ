@@ -7,9 +7,11 @@
              xmlns:dvm="clr-namespace:CoursesManager.UI.ViewModels.Design"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=dvm:DesignStudentManagerViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
+
     <Grid>
         <Grid>
             <Grid.RowDefinitions>

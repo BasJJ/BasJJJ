@@ -57,6 +57,7 @@ public partial class App : Application
         {
             DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
         };
+
         mw.Show();
     }
 
