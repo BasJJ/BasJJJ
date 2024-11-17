@@ -13,7 +13,7 @@ namespace CoursesManager.MVVM.Data
         public BaseRepository(string table)
         {
             _modelTabel = table;
-            _connectionString = "Server=85.10.149.233;Port=3306;User=courses_manager;Password=C0urs3sManager;Database=courses_manager;";
+            _connectionString = "Server=host.docker.internal;Port=3307;User=root;Password=root;Database=courses_manager;";
         }
 
         protected MySqlConnection GetConnection () => new(_connectionString);
