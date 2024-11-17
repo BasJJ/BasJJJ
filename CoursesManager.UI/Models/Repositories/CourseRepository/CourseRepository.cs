@@ -1,58 +1,63 @@
 ﻿
-using System.Collections.ObjectModel;
-using CoursesManager.UI.Models;
+using CoursesManager.MVVM.Data;
+using MySql.Data.MySqlClient;
 
 namespace CoursesManager.UI.Models.Repositories.CourseRepository
 {
-    public class CourseRepository : ICourseRepository
+    public class CourseRepository: BaseRepository , ICourseRepository
     {
-        //private readonly List<Course> _courses = new List<Course>();
-        private ObservableCollection<Course> _courses;
-
-        public CourseRepository()
-        {
-            _courses = App.Courses;
-        }
+        public CourseRepository(): base("courses") {}
 
         public IEnumerable<Course> GetAll()
         {
-            return _courses.ToList();
+            return FetchAll<Course>(
+                "SELECT c.*, COUNT(r.id) AS participants, " +
+                "CASE WHEN COUNT(r.id) = COUNT(CASE WHEN r.payment_status = 1 THEN 1 END) " +
+                "THEN 'TRUE' ELSE 'FALSE' END AS isPayed " +
+                "FROM courses c " +
+                "LEFT JOIN registrations r ON r.course_id = c.id;"
+            );
         }
 
-        public Course GetById(int id)
-        {
-            // Method Syntax
-            return _courses.FirstOrDefault(c => c.ID == id);
-        }
+        public Course GetById(int id) => FetchOneByID<Course>(id);
 
         public void Add(Course course)
         {
-            course.DateCreated = DateTime.Now;
-            _courses.Add(course);
+            InsertRow(
+                new Dictionary<string, object> {
+                    { "Name", course.Name },
+                    { "Description", course.Description },
+                    { "IsActive", course.IsActive },
+                    { "Category", course.Category },
+                    { "StartDate", course.StartDate },
+                    { "EndDate", course.EndDate },
+                    { "LocationId", course.LocationId },
+                    { "DateCreated", DateTime.Now },
+                }
+            );
         }
 
         public void Update(Course course)
         {
-            var existingCourse = GetById(course.ID);
-            if (existingCourse != null)
-            {
-                existingCourse.Name = course.Name;
-                existingCourse.Description = course.Description;
-                existingCourse.IsActive = course.IsActive;
-                existingCourse.Category = course.Category;
-                existingCourse.StartDate = course.StartDate;
-                existingCourse.EndDate = course.EndDate;
-                existingCourse.LocationId = course.LocationId;
-            }
+            UpdateRow(
+                new Dictionary<string, object> {
+                    { "Name", course.Name },
+                    { "Description", course.Description },
+                    { "IsActive", course.IsActive },
+                    { "Category", course.Category },
+                    { "StartDate", course.StartDate },
+                    { "EndDate", course.EndDate },
+                    { "LocationId", course.LocationId },
+                    { "DateUpdated", DateTime.Now },
+                },
+                "ID = @ID",
+                [new MySqlParameter("@ID", course.ID)]
+            );
         }
 
         public void Delete(int id)
         {
-            var course = GetById(id);
-            if (course != null)
-            {
-                _courses.Remove(course);
-            }
+            DeleteRow("ID = @ID", [new MySqlParameter("@ID", id)]);
         }
     }
 }
