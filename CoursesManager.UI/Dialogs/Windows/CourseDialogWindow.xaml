@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
+        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
         mc:Ignorable="d"
         Title="Toevoegen cursus" Height="600" Width="800"
         WindowStyle="None"
@@ -21,6 +21,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -82,10 +86,47 @@
                                 Tag="DatePicker"
                                 Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
 
-                    <TextBlock Text="Description*" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Description"
-                             Grid.Row="9" Grid.Column="0" Margin="0,0,10,10" />
+                    <TextBlock Text="Description*" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" />
+
+                    <!-- Knop die de popup opent -->
+                    <Button Content="Klik om te typen"
+                            Grid.Row="9" Grid.Column="0" Margin="0,0,10,10"
+                            Style="{StaticResource PrimaryButton}" 
+                            Width="300"
+                            Height="35"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpenDescriptionPopupCommand}" />
+
+                    <Button Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" Width="300" Height="35" HorizontalAlignment="Left" Style="{DynamicResource ErrorDialogButton}" Content="Annuleren" Command="{Binding CancelCommandd}" MinWidth="90"></Button>
+
+                    <!-- Popup gebonden aan een ViewModel-property -->
+                    <Popup IsOpen="{Binding PopupIsOpen}" 
+                           Placement="Mouse">
+                        <Border Background="White" 
+                                BorderBrush="Gray" 
+                                BorderThickness="1" 
+                                CornerRadius="10" 
+                                Width="500" 
+                                Height="300">
+                                <StackPanel>
+                                <TextBlock Text="Voer een uitgebreide beschrijving in:" Margin="10,5" />
+                                <TextBox AcceptsReturn="True" 
+                                         TextWrapping="Wrap" 
+                                         VerticalScrollBarVisibility="Visible" 
+                                         HorizontalScrollBarVisibility="Visible"
+                                         MaxLength="1000"
+                                         Margin="10"
+                                         Text="{Binding Description}" />
+                                <Button Content="Opslaan"
+                                        HorizontalAlignment="Right"
+                                        Width="100"
+                                        Margin="10"
+                                        Command="{Binding SaveDescriptionPopupCommand}" />
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+
+                    
                 </Grid>
             </StackPanel>
         </Border>
