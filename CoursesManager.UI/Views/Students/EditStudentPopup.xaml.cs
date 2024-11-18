@@ -17,7 +17,7 @@ namespace CoursesManager.UI.Views.Students
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is AddStudentViewModel viewModel && viewModel != null)
+            if (DataContext is EditStudentViewModel viewModel && viewModel != null)
             {
                 viewModel.ParentWindow = this; }
             else
