@@ -3,100 +3,237 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
+        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
         mc:Ignorable="d"
-        Title="Toevoegen cursus" Height="600" Width="800"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
-        WindowStartupLocation="CenterScreen">
-    <Grid Margin="20">
-        <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
-            <StackPanel>
-                <controls:PrimaryDialogHeader HeaderTitle="Cursus Toevoegen" />
-                <Grid Margin="10, 20">
+        WindowStartupLocation="CenterScreen"
+        d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
+    <Grid >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="1" Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="15"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+
+                <!-- Headerbar with title -->
+                <Border Grid.ColumnSpan="3" Grid.Row="0" x:Name="CardHeader" Width="Auto" Height="40" CornerRadius="15 15 0 0">
+                    <TextBlock Text="Cursus Toevoegen" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
+                        </Style>
+                    </Border.Style>
+                </Border>
+
+                <Grid Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Placeholder Image -->
+                    <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10" Grid.Column="0" />
+                    <Viewbox Width="140" Height="140">
+                        <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
+                    </Viewbox>
+
+                    <Button Command="{Binding UploadCommand}" Background="Transparent" BorderThickness="0"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-130,-120,0">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource IconButtonWithShadowStyle}">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <!-- Verberg plus-icoon als er een afbeelding is -->
+                                    <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ImageSource}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <materialDesign:PackIcon Kind="PlusCircleOutline" Width="60" Height="60" Foreground="#02008C" />
+                    </Button>
+
+
+
+
+                    <!-- Stackpanel with code, dates and location-->
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" DataContext="{Binding CurrentCourse}">
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" HorizontalAlignment="Left">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
+                                <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Code}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                            </Grid>
+
+                            <Grid Grid.Row="2" HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <TextBlock HorizontalAlignment="Left"  Text="Eind datum:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
+                                <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding GeselecteerdeDatum}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+
+                            </Grid>
+
+                            <Grid  Grid.Row="4" HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalAlignment="Right" Text="Locatie:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
+                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
+                                    <ComboBoxItem>Zwolle</ComboBoxItem>
+                                    <ComboBoxItem>Almere</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid Grid.Row="6" HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock HorizontalAlignment="Center"  Grid.Column="0" Text="Cursus Activeren?" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
+                                <CheckBox Style="{DynamicResource CheckBoxStyle10}" Tag="IsActive"  Grid.Column="2" Margin="0,0,10,0" Grid.ColumnSpan="3">
+                                    <CheckBox.ToolTip>
+                                        Wilt u de cursus direct op actief zetten? Vink de box aan indien van toepassing.
+                                    </CheckBox.ToolTip>
+                                </CheckBox>
+
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+
+                    <Grid Grid.Column="0">
+                        <!-- Border met afgeronde hoeken voor de afbeelding -->
+                        
+
+                        <!-- Placeholder (zichtbaar als er geen afbeelding is) -->
+                        <Grid>
+                            <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10">
+                                <Rectangle.Style>
+                                    <Style TargetType="Rectangle">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <!-- Verberg placeholder als afbeelding geladen is -->
+                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
+
+                            <Viewbox Width="140" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" Foreground="DarkGray" />
+                            </Viewbox>
+                            <Border Width="150" Height="150" CornerRadius="10" ClipToBounds="True">
+                                <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+
+                </Grid>
+                <Grid Grid.Column="1" Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="15"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-
-                    <!-- Cursusnaam -->
-                    <TextBlock Text="Cursusnaam*" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" Tag="Cursusnaam" Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" />
-
-                    <!-- Cursuscode -->
-                    <TextBlock Text="Cursuscode*" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" Tag="Cursuscode" Grid.Row="2" Grid.Column="1" Margin="0,0,10,10" />
-
-
-                    <!-- IsActive een checkbox -->
-                    <TextBlock Text="IsActive*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"/>
-                    <CheckBox Style="{DynamicResource CheckBoxStyle10}" Tag="IsActive" Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
-
-                    <!-- Image hier komt een upload van de afbeelding -->
-                    <TextBlock Text="Image*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"/>
-                    
-                    <!-- Knop om een afbeelding te uploaden -->
-                    <Button Grid.Row="6" Grid.Column="1" Content="Upload Afbeelding" Command="{Binding UploadCommand}" Width="250"  Height="35" Style="{StaticResource PrimaryButton}" Margin="0,0,0,10" HorizontalAlignment="Center"/>
-                    
-                    <!--image show-->
-                    <Image x:Name="imagePicture" Grid.Row="9" Grid.Column="1" Width="250" Height="190" Source="{Binding ImageSource}" Margin="0,0,0,10"></Image>
-                    
-                    <!-- Locatie (dit wordt een dropdown box) -->
-                    <TextBlock Text="Locatie*" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
-                    <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" Width="180" Height="30" Grid.Row="4" Grid.Column="0" Margin="0,0,190,10">
-                        <ComboBoxItem>Zwolle</ComboBoxItem>
-                        <ComboBoxItem>Almere</ComboBoxItem>
-                    </ComboBox>
-
-                    <!-- end_date wordt een datepicker -->
-                    <TextBlock Text="End_date*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"/>
-                    <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding GeselecteerdeDatum}" Tag="DatePicker"  Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
-
-                    <TextBlock Text="Description*" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" />
-
-                    <!-- Knop die de popup opent -->
-                    <Button Content="Klik om te typen" Grid.Row="9" Grid.Column="0" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}"  Width="300" Height="35" HorizontalAlignment="Left"  Command="{Binding OpenDescriptionPopupCommand}" />
-
-                    <!--annuleren knop-->
-                    <Button Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" Width="300" Height="35" HorizontalAlignment="Left" Style="{DynamicResource ErrorDialogButton}" Content="Annuleren" Command="{Binding CancelCommandd}" MinWidth="90"></Button>
-
-                    <!-- Popup gebonden aan een ViewModel-property -->
-                    <Popup IsOpen="{Binding PopupIsOpen}" Placement="Mouse">
-                        <Border Background="White" BorderBrush="Gray"  BorderThickness="1"  CornerRadius="10"  Width="500" Height="300">
-                            <StackPanel>
-                                <TextBlock Text="Voer een uitgebreide beschrijving in:" Margin="10,5" />
-                                <TextBox AcceptsReturn="True" TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" MaxLength="1000" Margin="10" Text="{Binding Description}" />
-                                <Button Content="Opslaan" HorizontalAlignment="Right" Width="100" Margin="10" Command="{Binding SaveDescriptionPopupCommand}" />
-                            </StackPanel>
-                        </Border>
-                    </Popup>
-
-                    
+                    <TextBlock  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Text="Beschrijving:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Grid.ColumnSpan="3" />
+                    <Border Style="{DynamicResource BorderStyle1}" Grid.Row="2" Grid.ColumnSpan="2" Padding="10 5 10 5">
+                        <ScrollViewer Style="{DynamicResource ScrollViewerStyle1}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
+                            <TextBox AcceptsReturn="True" TextWrapping="Wrap" 
+                                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" 
+                                 MaxLength="5000" Text="{Binding Description}" 
+                                 Style="{DynamicResource TextBoxEditStudentStyle1}" />
+                        </ScrollViewer>
+                    </Border>
                 </Grid>
-            </StackPanel>
+                <Grid  Grid.Row="6" Grid.Column="1" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" />
+                    <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommandd}" />
+                </Grid>
+                
+                
+                
+
+            </Grid>
         </Border>
-        
+
     </Grid>
 </Window>
