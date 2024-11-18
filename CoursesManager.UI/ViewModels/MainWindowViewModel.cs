@@ -52,6 +52,13 @@ public class MainWindowViewModel : NavigatableViewModel
         set => SetProperty(ref _isMouseOverBorder, value);
     }
 
+    private bool _isDialogOpen;
+    public bool IsDialogOpen
+    {
+        get => _isDialogOpen;
+        set => SetProperty(ref _isDialogOpen, value);
+    }
+
     public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
     {
         NavigationService = navigationService;

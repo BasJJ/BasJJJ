@@ -6,13 +6,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
-        Title="AddStudentPopup" Height="650" Width="550"
+        Title="AddStudentPopup"
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent"
         Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen">
-    <Grid>
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight"
+        Width="550" Height="650">
+
+    <Window.Resources>
+        <Storyboard x:Key="MainStory">
+            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Duration="0:0:0.05" To="1"/>
+            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Duration="0:0:0.05" To="1"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid Name="SizingGrid" Width="550" Height="650" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5, 0.5">
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="0" ScaleY="0"/>
+        </Grid.RenderTransform>
         <Grid>
             <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
                 <StackPanel>

@@ -232,16 +232,5 @@
                 </Grid>
             </Grid>
         </Grid>
-
-        <Border
-            x:Name="OverlayBorder"
-            Background="#80000000"
-            CornerRadius="0,0,15,15"
-            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            IsHitTestVisible="{Binding IsDialogOpen}">
-            <Grid />
-        </Border>
     </Grid>
 </UserControl>

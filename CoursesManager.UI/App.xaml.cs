@@ -51,14 +51,16 @@ public partial class App : Application
 
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
-        NavigationService.NavigateTo<StudentManagerViewModel>();
 
         MainWindow mw = new()
         {
             DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
+            
         };
-
+        GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
         mw.Show();
+
+        NavigationService.NavigateTo<StudentManagerViewModel>();
     }
 
     private static void SetupDummyDataTemporary()

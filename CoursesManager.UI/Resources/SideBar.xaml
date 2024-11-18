@@ -3,7 +3,7 @@
 
     <Style x:Key="SidebarBorder" TargetType="Border">
         <Setter Property="Background" Value="#1E0F74" />
-
+        <Setter Property="Height" Value="0"/>
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
@@ -87,5 +87,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="DarkOverlay" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="#80000000"/>
+        <Setter Property="Opacity" Value="0"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsSidebarHidden}" Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     From="0" To="1" Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                     From="1" To="0" Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+
+        </Style.Triggers>
+
+
+    </Style>
+
 
 </ResourceDictionary>
