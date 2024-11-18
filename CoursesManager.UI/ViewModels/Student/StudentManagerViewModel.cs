@@ -21,8 +21,9 @@ namespace CoursesManager.UI.ViewModels
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
 
-        public ObservableCollection<Student> Students { get; private set; }
-        public ObservableCollection<Student> FilteredStudentRecords { get; private set; }
+
+        public ObservableCollection<Student> Students { get;  set; }
+        public ObservableCollection<Student> FilteredStudentRecords { get; set; }
         public ObservableCollection<CourseStudentPayment> CoursePaymentList { get; private set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
 
@@ -83,7 +84,7 @@ namespace CoursesManager.UI.ViewModels
             SearchCommand = new RelayCommand(FilterStudentRecords);
         }
 
-        private void LoadStudents()
+        public void LoadStudents()
         {
             Students = new ObservableCollection<Student>(_studentRepository.GetAll());
             FilteredStudentRecords = new ObservableCollection<Student>(Students);
@@ -141,8 +142,8 @@ namespace CoursesManager.UI.ViewModels
         {
             if (student == null)
             {
-                await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                    new ConfirmationDialogResultType
+                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                    new DialogResultType
                     {
                         DialogTitle = "Error",
                         DialogText = "Geen student geselecteerd om te bewerken."
@@ -165,8 +166,8 @@ namespace CoursesManager.UI.ViewModels
             if (student == null) return;
 
             IsDialogOpen = true;
-            var confirmation = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
-                new YesNoDialogResultType
+            var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                new DialogResultType
                 {
                     DialogTitle = "Bevestiging",
                     DialogText = "Wilt u deze cursist verwijderen?"
@@ -175,8 +176,8 @@ namespace CoursesManager.UI.ViewModels
             if (confirmation?.Data?.Result == true)
             {
                 _studentRepository.Delete(student.Id);
-                await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                    new ConfirmationDialogResultType
+                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                    new DialogResultType
                     {
                         DialogTitle = "Informatie",
                         DialogText = "Cursist succesvol verwijderd."

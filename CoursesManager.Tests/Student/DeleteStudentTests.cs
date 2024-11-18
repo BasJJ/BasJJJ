@@ -1,23 +1,29 @@
-﻿/*using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using NUnit.Framework;
+using Moq;
+using CoursesManager.UI.ViewModels;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
-using CoursesManager.UI.ViewModels;
+using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Models.Repositories.RegistrationRepository;
+using CoursesManager.UI.Services;
+using CoursesManager.UI.Dialogs.Enums;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using CoursesManager.MVVM.Dialogs;
-using Moq;
-using NUnit.Framework;
 using CoursesManager.UI.Dialogs.ResultTypes;
+using System.Windows;
+using System.Linq;
 using CoursesManager.UI.Dialogs.ViewModels;
-using CoursesManager.UI;
-using System.Reflection;
 
 namespace CoursesManager.Tests
 {
     [TestFixture]
+    [Apartment(System.Threading.ApartmentState.STA)]
     public class DeleteStudentTests
     {
+        private Mock<IStudentRepository> _mockStudentRepository;
+        private Mock<ICourseRepository> _mockCourseRepository;
+        private Mock<IRegistrationRepository> _mockRegistrationRepository;
         private Mock<IDialogService> _mockDialogService;
         private StudentManagerViewModel _viewModel;
         private Student _testStudent;
@@ -25,9 +31,9 @@ namespace CoursesManager.Tests
         [SetUp]
         public void SetUp()
         {
-            var studentsProperty = typeof(App).GetProperty("Students", BindingFlags.Static | BindingFlags.Public);
-            studentsProperty.SetValue(null, new ObservableCollection<Student>());
-
+            _mockStudentRepository = new Mock<IStudentRepository>();
+            _mockCourseRepository = new Mock<ICourseRepository>();
+            _mockRegistrationRepository = new Mock<IRegistrationRepository>();
             _mockDialogService = new Mock<IDialogService>();
 
             _testStudent = new Student
@@ -39,53 +45,72 @@ namespace CoursesManager.Tests
                 Is_deleted = false
             };
 
-            App.Students.Add(_testStudent);
+            _mockStudentRepository.Setup(repo => repo.GetAll()).Returns(new List<Student> { _testStudent });
 
-            _viewModel = new StudentManagerViewModel(_mockDialogService.Object);
+            _viewModel = new StudentManagerViewModel(
+                _mockDialogService.Object,
+                _mockStudentRepository.Object,
+                _mockCourseRepository.Object,
+                _mockRegistrationRepository.Object);
 
-            _viewModel.students = App.Students;
-            _viewModel.FilteredStudentRecords = new ObservableCollection<Student>(App.Students);
+            _viewModel.LoadStudents();
         }
 
         [Test]
         public async Task DeleteStudent_SoftDeletesStudent_WhenConfirmed()
         {
+            // Arrange
             _mockDialogService
-                .Setup(d => d.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()))
-                .ReturnsAsync(DialogResult<YesNoDialogResultType>.Builder()
-                    .SetSuccess(new YesNoDialogResultType { Result = true })
+                .Setup(d => d.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()))
+                .ReturnsAsync(DialogResult<DialogResultType>.Builder()
+                    .SetSuccess(new DialogResultType { Result = true })
                     .Build());
 
             _mockDialogService
-                .Setup(d => d.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()))
-                .ReturnsAsync(DialogResult<ConfirmationDialogResultType>.Builder()
-                    .SetSuccess(new ConfirmationDialogResultType())
+                .Setup(d => d.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()))
+                .ReturnsAsync(DialogResult<DialogResultType>.Builder()
+                    .SetSuccess(new DialogResultType())
                     .Build());
 
-            _viewModel.DeleteStudentCommand.Execute(_testStudent);
+            // Act
+            await Task.Run(() => _viewModel.DeleteStudentCommand.Execute(_testStudent));
 
-            Assert.That(_testStudent.Is_deleted, Is.True, "Student should be marked as deleted.");
-            Assert.That(_testStudent.date_deleted?.Date, Is.EqualTo(DateTime.Now.Date), "The deletion date should be set to today's date.");
+            // Assert
+            _mockStudentRepository.Verify(repo => repo.Delete(_testStudent.Id), Times.Once);
+            _mockDialogService.Verify(d =>
+                d.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                    It.Is<DialogResultType>(r => r.DialogText == "Wilt u deze cursist verwijderen?")),
+                Times.Once);
 
-            _mockDialogService.Verify(d => d.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Once);
+            _mockDialogService.Verify(d =>
+                d.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                    It.Is<DialogResultType>(r => r.DialogText == "Cursist succesvol verwijderd.")),
+                Times.Once);
         }
 
         [Test]
         public async Task DeleteStudent_DoesNotDelete_WhenCancelled()
         {
+            // Arrange
             _mockDialogService
-                .Setup(d => d.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(It.IsAny<YesNoDialogResultType>()))
-                .ReturnsAsync(DialogResult<YesNoDialogResultType>.Builder()
-                    .SetSuccess(new YesNoDialogResultType { Result = false })
+                .Setup(d => d.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()))
+                .ReturnsAsync(DialogResult<DialogResultType>.Builder()
+                    .SetSuccess(new DialogResultType { Result = false })
                     .Build());
 
-            _viewModel.DeleteStudentCommand.Execute(_testStudent);
+            // Act
+            await Task.Run(() => _viewModel.DeleteStudentCommand.Execute(_testStudent));
 
-            Assert.That(_testStudent.Is_deleted, Is.False, "Student should initially not be marked as deleted.");
-            Assert.That(_testStudent.date_deleted, Is.Null, "Student's deletion date should initially be null.");
+            // Assert
+            _mockStudentRepository.Verify(repo => repo.Delete(It.IsAny<int>()), Times.Never);
+            _mockDialogService.Verify(d =>
+                d.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                    It.Is<DialogResultType>(r => r.DialogText == "Wilt u deze cursist verwijderen?")),
+                Times.Once);
 
-            _mockDialogService.Verify(d => d.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(It.IsAny<ConfirmationDialogResultType>()), Times.Never);
+            _mockDialogService.Verify(d =>
+                d.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()),
+                Times.Never);
         }
     }
 }
-*/

@@ -1,5 +1,6 @@
 ﻿using CoursesManager.UI.ViewModels;
 using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace CoursesManager.UI.Views.Students
@@ -12,6 +13,17 @@ namespace CoursesManager.UI.Views.Students
         public EditStudentPopup()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is AddStudentViewModel viewModel && viewModel != null)
+            {
+                viewModel.ParentWindow = this; }
+            else
+            {
+                Debug.WriteLine("DataContext is either null or not of type AddStudentViewModel.");
+            }
         }
     }
 }

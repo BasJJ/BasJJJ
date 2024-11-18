@@ -35,8 +35,7 @@ namespace CoursesManager.UI.Models
                         Email = $"{GetRandomFirstName()}.{GetRandomLastName()}@example.com".ToLower(),
                         PhoneNumber = GenerateRandomPhoneNumber(),
                         PostCode = GenerateRandomPostCode(),
-                        HouseNumber = _random.Next(1, 300),
-                        HouseNumberExtension = GenerateRandomHouseNumberExtension(),
+                        HouseNumber = _random.Next(1, 300).ToString(),
                         AwaitingPayement = _random.Next(0, 2) == 1,
                         DateCreated = DateTime.Now,
                         Courses = GenerateCourses(GenerateRandomSizeNumber())

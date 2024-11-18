@@ -76,9 +76,9 @@ public class Student : ViewModel, ICopyable<Student>
         set => SetProperty(ref _streetname, value);
     }
 
-    private int _houseNumber;
+    private string _houseNumber;
 
-    public int HouseNumber
+    public string HouseNumber
     {
         get => _houseNumber;
         set => SetProperty(ref _houseNumber, value);

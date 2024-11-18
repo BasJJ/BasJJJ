@@ -116,8 +116,8 @@ public partial class App : Application
 
     private void RegisterDialogs()
     {
-        DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
-        DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
+        DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
+        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow,DialogResultType>((initial) => new NotifyDialogViewModel(initial));
     }
 
     private void RegisterViewModels(ViewModelFactory viewModelFactory)
@@ -150,7 +150,7 @@ public partial class App : Application
     /// <param name="obj"></param>
     private static async void ApplicationCloseRequestedHandler(ApplicationCloseRequestedMessage obj)
     {
-        var result = await DialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
+        var result = await DialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(new DialogResultType
         {
             DialogTitle = "CoursesManager",
             DialogText = "Wil je de app afsluiten?"

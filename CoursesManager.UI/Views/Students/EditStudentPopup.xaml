@@ -7,6 +7,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
+        Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
@@ -80,8 +81,8 @@
                     <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                          Text="{Binding Student.Email, UpdateSourceTrigger=PropertyChanged}"
                          helpers:ValidationProperties.IsRequired="True"
-                         helpers:ValidationProperties.IsEmail="True"
                          Tag="Email"
+                         IsReadOnly="True"
                          Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
 
                     <!-- Telefoonnummer -->
