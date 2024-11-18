@@ -98,7 +98,12 @@ public partial class App : Application
             registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
         ));
         DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, ConfirmationDialogResultType>((initial) => new ErrorDialogViewModel(initial));
-        DialogService.RegisterDialog<CourseDialogViewModel,CourseDialogWindow, Course >((Initial) => new CourseDialogViewModel(Initial));
+        DialogService.RegisterDialog<CourseDialogViewModel, CourseDialogWindow, Course>((Initial) => new CourseDialogViewModel(
+        ServiceProvider.GetRequiredService<ICourseRepository>(),
+        DialogService,
+        ServiceProvider.GetRequiredService<ILocationRepository>(),
+        Initial
+        ));
     }
 
     // This method is used to register all services that are used in the application.
@@ -135,6 +140,8 @@ public partial class App : Application
             DialogService,
             student)
         );
+
+
     }
 
     /// <summary>
