@@ -20,8 +20,6 @@ namespace CoursesManager.UI.ViewModels
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
-
-
         public ObservableCollection<Student> Students { get;  set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
         public ObservableCollection<CourseStudentPayment> CoursePaymentList { get; private set; }
