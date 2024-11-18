@@ -5,12 +5,17 @@ using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.LocationRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
@@ -21,10 +26,22 @@ namespace CoursesManager.UI.ViewModels.Students
         private readonly IRegistrationRepository _registrationRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
+        private BitmapImage _imageSource;
+        public BitmapImage ImageSource
+        {
+            get => _imageSource;
+            set
+            {
+                _imageSource = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand SaveCommand {  get;  }
         public ICommand CancelCommandd { get; }
         public Course Course { get; set; }
+
+        public ICommand UploadCommand { get; }
 
 
         public CourseDialogViewModel(ICourseRepository courseRepository,  IDialogService dialogService, ILocationRepository locationRepository, Course? course) : base(course)
@@ -36,9 +53,11 @@ namespace CoursesManager.UI.ViewModels.Students
             Course = course;
             SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommandd = new RelayCommand( OnCancel);
+            UploadCommand = new RelayCommand(UploadImage);
 
            
         }
+
 
         public CourseDialogViewModel(Course? dialogResultType) : base(dialogResultType)
         {
@@ -56,15 +75,30 @@ namespace CoursesManager.UI.ViewModels.Students
 
         public void OnCancel()
         {
-            var dialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(false, "Operation Cancelled")
+            var dialogResult = DialogResult<Course>.Builder()
+                .SetCanceled("Changes were canceled by the user.")
                 .Build();
-            CloseDialogWithResult(dialogResult);
+
+            InvokeResponseCallback(dialogResult);
         }
 
         private void CloseDialogWithResult(DialogResult<bool> dialogResult)
         {
             throw new NotImplementedException();
+        }
+
+        private void UploadImage()
+        {
+            var openDialog = new OpenFileDialog
+            {
+                Filter = "Image Files|*.bmp;*.jpg;*.png",
+                FilterIndex = 1
+            };
+
+            if (openDialog.ShowDialog() == true)
+            {
+                ImageSource = new BitmapImage(new Uri(openDialog.FileName));
+            }
         }
     }
 }
