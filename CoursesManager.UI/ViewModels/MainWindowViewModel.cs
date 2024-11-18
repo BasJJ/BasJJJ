@@ -31,9 +31,7 @@ public class MainWindowViewModel : NavigatableViewModel
     public ICommand GoToCourseManagementView { get; private set; }
 
 
-
     private bool _isSidebarHidden;
-
     public bool IsSidebarHidden
     {
         get => _isSidebarHidden;
@@ -41,7 +39,6 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private bool _isMouseOverButton;
-
     public bool IsMouseOverButton
     {
         get => _isMouseOverButton;
@@ -49,7 +46,6 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private bool _isMouseOverBorder;
-
     public bool IsMouseOverBorder
     {
         get => _isMouseOverBorder;
@@ -113,8 +109,9 @@ public class MainWindowViewModel : NavigatableViewModel
         });
     }
 
-    private void UpdateSidebarVisibility()
+    private async void UpdateSidebarVisibility()
     {
+        await Task.Delay(300);
         if (IsMouseOverButton || IsMouseOverBorder)
         {
             IsSidebarHidden = true;

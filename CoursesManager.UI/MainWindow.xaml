@@ -44,8 +44,8 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-
-    <Border Style="{StaticResource WindowBorder}">
+    <Grid>
+        <Border Style="{StaticResource WindowBorder}" Panel.ZIndex="1">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
@@ -63,7 +63,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource PrimaryHeaderBorder}" MouseDown="Header_MouseDown" Height="Auto">
+                    <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource PrimaryHeaderBorder}" MouseDown="Header_MouseDown" Height="Auto" Panel.ZIndex="1">
                     <Grid Grid.IsSharedSizeScope="True" VerticalAlignment="Center">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -86,47 +86,47 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                        
-                        <Button
+
+                            <Button
                             Grid.Row="1"
                             Grid.Column="0"
                             Style="{StaticResource IconButtonWithShadowStyle}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="MouseEnter">
-                                    <i:InvokeCommandAction Command="{Binding MouseEnterButtonCommand}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseLeave">
-                                    <i:InvokeCommandAction Command="{Binding MouseLeaveButtonCommand}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <materialDesign:PackIcon Kind="Menu"
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseEnter">
+                                        <i:InvokeCommandAction Command="{Binding MouseEnterButtonCommand}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="MouseLeave">
+                                        <i:InvokeCommandAction Command="{Binding MouseLeaveButtonCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <materialDesign:PackIcon Kind="Menu"
                              Height="70" Width="52"
                              VerticalAlignment="Center"
                              Foreground="White"
                              Style="{StaticResource IconWithShadowStyle}" />
-                        </Button>
+                            </Button>
 
-                        <Button
+                            <Button
                             Grid.Row="1"
                             Grid.Column="1"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding GoBackCommand}">
-                            <materialDesign:PackIcon Kind="ArrowLeft"
+                                <materialDesign:PackIcon Kind="ArrowLeft"
                                                      Height="48" Width="48"
                                                      VerticalAlignment="Center"
                                                      Style="{StaticResource IconWithShadowStyle}" />
-                        </Button>
+                            </Button>
 
-                        <Button
+                            <Button
                             Grid.Row="1"
                             Grid.Column="2"
                             Style="{StaticResource IconButtonWithShadowStyle}"
                             Command="{Binding GoForwardCommand}">
-                            <materialDesign:PackIcon Kind="ArrowRight"
+                                <materialDesign:PackIcon Kind="ArrowRight"
                                                      Height="48" Width="48"
                                                      VerticalAlignment="Center"
                                                      Style="{StaticResource IconWithShadowStyle}" />
-                        </Button>
+                            </Button>
                         </Grid>
                         <TextBlock
                             Grid.Row="1"
@@ -135,7 +135,7 @@
                             Text="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle, FallbackValue=Title}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="28" Foreground="White" />
+                            FontSize="36" Foreground="White" FontWeight="Bold"/>
 
                         <Button
                             Grid.Row="1"
@@ -165,40 +165,255 @@
                         </Button>
                     </Grid>
                 </Border>
+                <Grid Grid.Column="0" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="15"/>
+                    </Grid.RowDefinitions>
 
-                <Border Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" x:Name="Sidebar" Style="{StaticResource SidebarBorder}"
-        Panel.ZIndex="1" Visibility="{Binding IsSidebarHidden, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseEnter">
-                            <i:InvokeCommandAction Command="{Binding MouseEnterBorderCommand}" />
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="MouseLeave">
-                            <i:InvokeCommandAction Command="{Binding MouseLeaveBorderCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="15"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+                        <Border CornerRadius="0 0 15 0" Grid.Row="0" x:Name="Sidebar" Style="{StaticResource SidebarBorder}"
+                         Panel.ZIndex="1" VerticalAlignment="Top">
 
-                        <StackPanel Grid.Row="1" Grid.Column="1">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <i:InvokeCommandAction Command="{Binding MouseEnterBorderCommand}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseLeave">
+                                <i:InvokeCommandAction Command="{Binding MouseLeaveBorderCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="75" />
+                            </Grid.RowDefinitions>
+                            <Border Panel.ZIndex="2" Grid.Row="1" Grid.Column="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                                            <i:InvokeCommandAction Command="{Binding GoToStudentManagementView}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Grid Grid.Row="1" Grid.Column="0">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Background" Value="#1E0F74"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursisten beheer">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="15"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Kind="People" Grid.Column="1" Grid.Row="1"
+                             Height="28" Width="28"
+                             VerticalAlignment="Center"
+                             Foreground="White"
+                             Panel.ZIndex="1"/>
+                                    <TextBlock Grid.Row="1" Panel.ZIndex="1" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="26" FontWeight="Bold">Cursisten beheer</TextBlock>
+                                </Grid>
+                            </Border>
 
-                            <Button Style="{DynamicResource ButtonStyle1}" Command="{Binding GoToStudentManagementView}" HorizontalAlignment="Left">Cursisten beheer</Button>
-                            <Button Style="{DynamicResource ButtonStyle1}" Command="{Binding GoToCourseManagementView}" HorizontalAlignment="Left">Cursus beheer</Button>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                            <Border Panel.ZIndex="2" Grid.Row="2" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Background" Value="#1E0F74"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus beheer">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="15"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Kind="University" Grid.Column="1" Grid.Row="1"
+                                     Height="28" Width="28"
+                                     VerticalAlignment="Center"
+                                     Foreground="White"
+                                     Panel.ZIndex="1"/>
+                                    <TextBlock Panel.ZIndex="1" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="26" FontWeight="Bold">Cursus beheer</TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <Border Panel.ZIndex="2" Grid.Row="3" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Background" Value="#1E0F74"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus planning">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="15"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Kind="Calendar" Grid.Column="1" Grid.Row="1"
+         Height="28" Width="28"
+         VerticalAlignment="Center"
+         Foreground="White"
+         Panel.ZIndex="1"/>
+                                    <TextBlock Panel.ZIndex="1" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="26" FontWeight="Bold">Cursus planning</TextBlock>
+                                </Grid>
+                            </Border>
+
+                            <Border Panel.ZIndex="2" Grid.Row="4" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Background" Value="#1E0F74"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Emails">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="15"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Kind="Email" Grid.Column="1" Grid.Row="1"
+         Height="28" Width="28"
+         VerticalAlignment="Center"
+         Foreground="White"
+         Panel.ZIndex="1" HorizontalAlignment="Center"/>
+                                    <TextBlock Panel.ZIndex="1" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="26" FontWeight="Bold" Grid.ColumnSpan="2">Emails</TextBlock>
+                                </Grid>
+                            </Border>
+
+
+                            <Border Panel.ZIndex="2" Grid.Row="5" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonDown">
+                                        <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Background" Value="#1E0F74"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Instellingen">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                        <Setter Property="Background" Value="#2B15AA"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="15"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="15"/>
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:PackIcon Kind="Gear" Grid.Column="1" Grid.Row="1"
+                                     Height="28" Width="28"
+                                     VerticalAlignment="Center"
+                                     Foreground="White"
+                                     Panel.ZIndex="1" HorizontalAlignment="Center"/>
+                                    <TextBlock Panel.ZIndex="1" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="26" FontWeight="Bold" Grid.ColumnSpan="2">Instellingen</TextBlock>
+                                </Grid>
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
 
             <Grid Grid.Row="1">
-                <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" />
-            </Grid>
+                    <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" Panel.ZIndex="0" />
+
+                </Grid>
         </Grid>
     </Border>
+
+    </Grid>
 </Window>
