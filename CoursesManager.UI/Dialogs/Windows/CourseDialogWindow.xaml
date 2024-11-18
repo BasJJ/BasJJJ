@@ -43,35 +43,26 @@
 
                     <!-- Cursusnaam -->
                     <TextBlock Text="Cursusnaam*" Grid.Row="1" Grid.Column="0" Margin="0,0,0,10"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursusnaam"
-                             Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" />
+                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" Tag="Cursusnaam" Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" />
 
                     <!-- Cursuscode -->
                     <TextBlock Text="Cursuscode*" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5"/>
-                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" 
-                             Tag="Cursuscode"
-                             Grid.Row="2" Grid.Column="1" Margin="0,0,10,10" />
+                    <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}" Tag="Cursuscode" Grid.Row="2" Grid.Column="1" Margin="0,0,10,10" />
 
 
-                    <!-- Startdate (dit wordt een datum kiezer) -->
+                    <!-- IsActive een checkbox -->
                     <TextBlock Text="IsActive*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5"/>
-                    <CheckBox Style="{DynamicResource CheckBoxStyle10}" 
-                             Tag="IsActive"
-                             Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
+                    <CheckBox Style="{DynamicResource CheckBoxStyle10}" Tag="IsActive" Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
 
-                    <!-- isactive (dit wordt een checkbox) -->
+                    <!-- Image hier komt een upload van de afbeelding -->
                     <TextBlock Text="Image*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5"/>
+                    
                     <!-- Knop om een afbeelding te uploaden -->
-                    <Button Grid.Row="6" Grid.Column="1"
-                                Content="Upload Afbeelding"
-                                Width="250"
-                                Height="35"
-                                Style="{StaticResource PrimaryButton}"
-                                Margin="0,0,0,10"
-                                HorizontalAlignment="Center"
-                                 />
-
+                    <Button Grid.Row="6" Grid.Column="1" Content="Upload Afbeelding" Command="{Binding UploadCommand}" Width="250"  Height="35" Style="{StaticResource PrimaryButton}" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                    
+                    <!--image show-->
+                    <Image x:Name="imagePicture" Grid.Row="9" Grid.Column="1" Width="250" Height="190" Source="{Binding ImageSource}" Margin="0,0,0,10"></Image>
+                    
                     <!-- Locatie (dit wordt een dropdown box) -->
                     <TextBlock Text="Locatie*" Grid.Row="3" Grid.Column="0" Margin="0,0,0,5"/>
                     <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" Width="180" Height="30" Grid.Row="4" Grid.Column="0" Margin="0,0,190,10">
@@ -79,49 +70,25 @@
                         <ComboBoxItem>Almere</ComboBoxItem>
                     </ComboBox>
 
-                    <!-- image (dit wordt een documenten uploader) -->
+                    <!-- end_date wordt een datepicker -->
                     <TextBlock Text="End_date*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5"/>
-                    <DatePicker Style="{StaticResource RoundedDatePickerStyle}"
-                                SelectedDate="{Binding GeselecteerdeDatum}"
-                                Tag="DatePicker"
-                                Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
+                    <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding GeselecteerdeDatum}" Tag="DatePicker"  Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
 
                     <TextBlock Text="Description*" Grid.Row="8" Grid.Column="0" Margin="0,0,0,5" />
 
                     <!-- Knop die de popup opent -->
-                    <Button Content="Klik om te typen"
-                            Grid.Row="9" Grid.Column="0" Margin="0,0,10,10"
-                            Style="{StaticResource PrimaryButton}" 
-                            Width="300"
-                            Height="35"
-                            HorizontalAlignment="Left"
-                            Command="{Binding OpenDescriptionPopupCommand}" />
+                    <Button Content="Klik om te typen" Grid.Row="9" Grid.Column="0" Margin="0,0,10,10" Style="{StaticResource PrimaryButton}"  Width="300" Height="35" HorizontalAlignment="Left"  Command="{Binding OpenDescriptionPopupCommand}" />
 
+                    <!--annuleren knop-->
                     <Button Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" Width="300" Height="35" HorizontalAlignment="Left" Style="{DynamicResource ErrorDialogButton}" Content="Annuleren" Command="{Binding CancelCommandd}" MinWidth="90"></Button>
 
                     <!-- Popup gebonden aan een ViewModel-property -->
-                    <Popup IsOpen="{Binding PopupIsOpen}" 
-                           Placement="Mouse">
-                        <Border Background="White" 
-                                BorderBrush="Gray" 
-                                BorderThickness="1" 
-                                CornerRadius="10" 
-                                Width="500" 
-                                Height="300">
-                                <StackPanel>
+                    <Popup IsOpen="{Binding PopupIsOpen}" Placement="Mouse">
+                        <Border Background="White" BorderBrush="Gray"  BorderThickness="1"  CornerRadius="10"  Width="500" Height="300">
+                            <StackPanel>
                                 <TextBlock Text="Voer een uitgebreide beschrijving in:" Margin="10,5" />
-                                <TextBox AcceptsReturn="True" 
-                                         TextWrapping="Wrap" 
-                                         VerticalScrollBarVisibility="Visible" 
-                                         HorizontalScrollBarVisibility="Visible"
-                                         MaxLength="1000"
-                                         Margin="10"
-                                         Text="{Binding Description}" />
-                                <Button Content="Opslaan"
-                                        HorizontalAlignment="Right"
-                                        Width="100"
-                                        Margin="10"
-                                        Command="{Binding SaveDescriptionPopupCommand}" />
+                                <TextBox AcceptsReturn="True" TextWrapping="Wrap"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" MaxLength="1000" Margin="10" Text="{Binding Description}" />
+                                <Button Content="Opslaan" HorizontalAlignment="Right" Width="100" Margin="10" Command="{Binding SaveDescriptionPopupCommand}" />
                             </StackPanel>
                         </Border>
                     </Popup>
