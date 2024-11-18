@@ -74,3 +74,4 @@ ScaffoldingReadMe.txt
 
 # JetBrains Rider IDE
 .idea/
+.env

@@ -10,18 +10,19 @@ namespace CoursesManager.MVVM.Data
         private readonly string _connectionString;
         private readonly string _modelTabel;
 
-        public BaseRepository(string table)
+        public BaseRepository(string table, string connectionString)
         {
             _modelTabel = table;
-            _connectionString = "Server=host.docker.internal;Port=3307;User=root;Password=root;Database=courses_manager;";
+            _connectionString = connectionString;
         }
 
-        protected MySqlConnection GetConnection () => new(_connectionString);
+        protected MySqlConnection GetConnection() => new(_connectionString);
 
         protected List<T> FetchAll<T>() where T : new()
         {
             return FetchAll<T>($"SELECT * FROM `{_modelTabel}`;");
         }
+
         protected List<T> FetchAll<T>(string query, params MySqlParameter[] parameters) where T : new()
         {
             List<T> result = new List<T>();
@@ -139,6 +140,7 @@ namespace CoursesManager.MVVM.Data
                 throw new DataException("An error occurred while executing the database command.", ex);
             }
         }
+
         private void ExecuteNonQuery(string query, Dictionary<string, object> data)
         {
             MySqlParameter[] parameters = data.Select(kvp => new MySqlParameter($"@{kvp.Key}", kvp.Value ?? DBNull.Value)).ToArray();

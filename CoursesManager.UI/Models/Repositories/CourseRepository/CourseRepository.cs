@@ -1,12 +1,14 @@
-﻿
-using CoursesManager.MVVM.Data;
+﻿using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Env;
 using MySql.Data.MySqlClient;
 
 namespace CoursesManager.UI.Models.Repositories.CourseRepository
 {
-    public class CourseRepository: BaseRepository , ICourseRepository
+    public class CourseRepository : BaseRepository, ICourseRepository
     {
-        public CourseRepository(): base("courses") {}
+        public CourseRepository() : base("courses", EnvManager<EnvModel>.Values.ConnectionString)
+        {
+        }
 
         public IEnumerable<Course> GetAll()
         {
