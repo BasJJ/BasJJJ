@@ -3,7 +3,7 @@
 
     <Style x:Key="SidebarBorder" TargetType="Border">
         <Setter Property="Background" Value="#1E0F74" />
-        <Setter Property="Height" Value="0"/>
+
         <Setter Property="Effect">
             <Setter.Value>
                 <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
@@ -20,7 +20,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetProperty="Height"
-                                                     From="0" To="450" Duration="0:0:0.3"/>
+                                                     From="0" To="410" Duration="0:0:0.3"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
@@ -28,7 +28,7 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetProperty="Height"
-                                                     From="450" To="0" Duration="0:0:0.3"/>
+                                                     From="410" To="0" Duration="0:0:0.3"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.ExitActions>

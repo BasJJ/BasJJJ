@@ -184,37 +184,75 @@
                         </i:Interaction.Triggers>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="15"/>
+                                </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="25" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="75" />
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="15" />
+                                    <RowDefinition Height="Auto" />
+                                <RowDefinition Height="50" />
                             </Grid.RowDefinitions>
-                            <Border Panel.ZIndex="2" Grid.Row="1" Grid.Column="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+                                <Border Panel.ZIndex="2" Grid.Row="1" Grid.Column="1"  BorderBrush="Transparent" BorderThickness="0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E0F74"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursisten beheer">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                    <Setter Property="Background" Value="#2BFFFFFF"/>
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </DataTrigger>
+
+                                                    <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursisten beheer" />
+                                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                        </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
                                             <i:InvokeCommandAction Command="{Binding GoToStudentManagementView}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                     <Grid Grid.Row="1" Grid.Column="0">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Background" Value="#1E0F74"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursisten beheer">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
                                         <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -223,9 +261,9 @@
                                         <ColumnDefinition Width="15"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <materialDesign:PackIcon Kind="People" Grid.Column="1" Grid.Row="1"
                              Height="28" Width="28"
@@ -236,26 +274,56 @@
                                 </Grid>
                             </Border>
 
-                            <Border Panel.ZIndex="2" Grid.Row="2" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                <i:Interaction.Triggers>
+                                <Border Panel.ZIndex="2" Grid.Row="3" Grid.Column="1"  BorderBrush="Transparent" BorderThickness="0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E0F74"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus beheer">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                    <Setter Property="Background" Value="#2BFFFFFF"/>
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </DataTrigger>
+
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus beheer" />
+                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseLeftButtonDown">
                                         <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <Grid Grid.Row="1" Grid.Column="1">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Background" Value="#1E0F74"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus beheer">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
+                                    <Grid Grid.Row="1" Grid.Column="1">
                                         <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15"/>
                                         <ColumnDefinition Width="Auto"/>
@@ -264,9 +332,9 @@
                                         <ColumnDefinition Width="15"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <materialDesign:PackIcon Kind="University" Grid.Column="1" Grid.Row="1"
                                      Height="28" Width="28"
@@ -277,27 +345,57 @@
                                 </Grid>
                             </Border>
 
-                            <Border Panel.ZIndex="2" Grid.Row="3" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                <i:Interaction.Triggers>
+                                <Border Panel.ZIndex="2" Grid.Row="5" Grid.Column="1"  BorderBrush="Transparent" BorderThickness="0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E0F74"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus planning">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                    <Setter Property="Background" Value="#2BFFFFFF"/>
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </DataTrigger>
+
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus planning" />
+                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseLeftButtonDown">
                                         <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <Grid Grid.Row="1" Grid.Column="1">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Background" Value="#1E0F74"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Cursus planning">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-                                    <Grid.ColumnDefinitions>
+                                    <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
@@ -305,9 +403,9 @@
                                         <ColumnDefinition Width="15"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <materialDesign:PackIcon Kind="Calendar" Grid.Column="1" Grid.Row="1"
          Height="28" Width="28"
@@ -318,27 +416,57 @@
                                 </Grid>
                             </Border>
 
-                            <Border Panel.ZIndex="2" Grid.Row="4" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                <i:Interaction.Triggers>
+                                <Border Panel.ZIndex="2" Grid.Row="7" Grid.Column="1"  BorderBrush="Transparent" BorderThickness="0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E0F74"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Emails">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                    <Setter Property="Background" Value="#2BFFFFFF"/>
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </DataTrigger>
+
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Emails" />
+                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseLeftButtonDown">
                                         <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <Grid Grid.Row="1" Grid.Column="1">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Background" Value="#1E0F74"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Emails">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-                                    <Grid.ColumnDefinitions>
+                                    <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
@@ -347,9 +475,9 @@
                                         <ColumnDefinition Width="15"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <materialDesign:PackIcon Kind="Email" Grid.Column="1" Grid.Row="1"
          Height="28" Width="28"
@@ -361,27 +489,57 @@
                             </Border>
 
 
-                            <Border Panel.ZIndex="2" Grid.Row="5" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                <i:Interaction.Triggers>
+                                <Border Panel.ZIndex="2" Grid.Row="9" Grid.Column="1"  BorderBrush="Transparent" BorderThickness="0">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#1E0F74"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Instellingen">
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+                                                    <Setter Property="Background" Value="#2BFFFFFF"/>
+                                                    <Setter Property="CornerRadius" Value="10"/>
+                                                </DataTrigger>
+
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Instellingen" />
+                                                        <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                                    </MultiDataTrigger.Conditions>
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                                <GradientStop Color="White" Offset="0" />
+                                                                <GradientStop Color="White" Offset="0.02" />
+                                                                <GradientStop Color="#20FFFFFF" Offset="0.03" />
+                                                                <GradientStop Color="#10FFFFFF" Offset="0.7" />
+                                                                <GradientStop Color="Transparent" Offset="1" />
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Setter Property="CornerRadius" Value="0"/>
+                                                </MultiDataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseLeftButtonDown">
                                         <i:InvokeCommandAction Command="{Binding GoToCourseManagementView}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <Grid Grid.Row="1" Grid.Column="1">
-                                        <Grid.Style>
-                                            <Style TargetType="Grid">
-                                                <Setter Property="Background" Value="#1E0F74"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding NavigationService.NavigationStore.CurrentViewModel.ViewTitle}" Value="Instellingen">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
-                                                        <Setter Property="Background" Value="#2B15AA"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Style>
-                                    <Grid.ColumnDefinitions>
+                                    <Grid Grid.Row="1" Grid.Column="1">
+                                        <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="15"/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
@@ -390,9 +548,9 @@
                                         <ColumnDefinition Width="15"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="15"/>
+                                        <RowDefinition Height="5"/>
                                     </Grid.RowDefinitions>
                                     <materialDesign:PackIcon Kind="Gear" Grid.Column="1" Grid.Row="1"
                                      Height="28" Width="28"
