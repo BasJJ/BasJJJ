@@ -65,6 +65,23 @@
                                 <Border.Effect>
                                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                                 </Border.Effect>
+                                <Grid Grid.IsSharedSizeScope="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column1" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="Auto" MinWidth="50" SharedSizeGroup="Column2" />
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="*" SharedSizeGroup="Column4" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="Voornaam" Grid.Column="1" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Tussenvoegsel" Grid.Column="3" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Achternaam" Grid.Column="5" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Text="Email" Grid.Column="7" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                </Grid>
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
