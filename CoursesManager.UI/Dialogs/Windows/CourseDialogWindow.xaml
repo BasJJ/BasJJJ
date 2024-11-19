@@ -86,7 +86,7 @@
 
 
                     <!-- Stackpanel with code, dates and location-->
-                    <StackPanel Grid.Column="2" VerticalAlignment="Center" DataContext="{Binding CurrentCourse}">
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
                         <Grid>
 
                             <Grid.RowDefinitions>
@@ -99,7 +99,7 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Row="0" HorizontalAlignment="Left">
+                            <Grid Grid.Row="0" HorizontalAlignment="Left" Height="69" Grid.RowSpan="2" VerticalAlignment="Top">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -107,11 +107,13 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
                                 <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Code}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                                <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black"/>
+                                <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding Course.Code, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                                
                             </Grid>
 
                             <Grid Grid.Row="2" HorizontalAlignment="Left">
@@ -127,7 +129,7 @@
 
 
                                 <TextBlock HorizontalAlignment="Left"  Text="Eind datum:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding GeselecteerdeDatum}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                                <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding Course.EndDate, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
 
                             </Grid>
 
@@ -138,7 +140,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Text="Locatie:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
+                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
                                     <ComboBoxItem>Zwolle</ComboBoxItem>
                                     <ComboBoxItem>Almere</ComboBoxItem>
                                 </ComboBox>
@@ -151,7 +153,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Center"  Grid.Column="0" Text="Cursus Activeren?" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
-                                <CheckBox Style="{DynamicResource CheckBoxStyle10}" Tag="IsActive"  Grid.Column="2" Margin="0,0,10,0" Grid.ColumnSpan="3">
+                                <CheckBox Style="{DynamicResource CheckBoxStyle10}" IsChecked="{Binding Course.IsActive, UpdateSourceTrigger=PropertyChanged}" Tag="IsActive"  Grid.Column="2" Margin="0,0,10,0" Grid.ColumnSpan="3">
                                     <CheckBox.ToolTip>
                                         Wilt u de cursus direct op actief zetten? Vink de box aan indien van toepassing.
                                     </CheckBox.ToolTip>
@@ -210,8 +212,9 @@
                         <ScrollViewer Style="{DynamicResource ScrollViewerStyle1}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled">
                             <TextBox AcceptsReturn="True" TextWrapping="Wrap" 
                                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" 
-                                 MaxLength="5000" Text="{Binding Description}" 
-                                 Style="{DynamicResource TextBoxEditStudentStyle1}" />
+                                 MaxLength="5000" Text="{Binding Course.Description, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource TextBoxEditStudentStyle1}" 
+                                     />
                         </ScrollViewer>
                     </Border>
                 </Grid>
