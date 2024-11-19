@@ -12,13 +12,12 @@
         Background="Transparent"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
-        SizeToContent="WidthAndHeight"
-        Width="550" Height="650">
+        Width="550" Height="600">
 
     <Window.Resources>
         <Storyboard x:Key="MainStory">
-            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Duration="0:0:0.05" To="1"/>
-            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Duration="0:0:0.05" To="1"/>
+            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Duration="0:0:0.1" To="1"/>
+            <DoubleAnimation Storyboard.TargetName="WindowScaleTransform" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Duration="0:0:0.1" To="1"/>
         </Storyboard>
     </Window.Resources>
 
@@ -28,7 +27,7 @@
         </EventTrigger>
     </Window.Triggers>
 
-    <Grid Name="SizingGrid" Width="550" Height="650" VerticalAlignment="Center" HorizontalAlignment="Center" RenderTransformOrigin="0.5, 0.5">
+    <Grid Name="SizingGrid" RenderTransformOrigin="0.5, 0.5">
         <Grid.RenderTransform>
             <ScaleTransform x:Name="WindowScaleTransform" ScaleX="0" ScaleY="0"/>
         </Grid.RenderTransform>
