@@ -51,6 +51,7 @@ namespace CoursesManager.UI.ViewModels
 
             SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommand = new RelayCommand(OnCancel);
+            ParentWindow = null;
         }
         public Student Student { get; }
         public Student StudentCopy { get; private set; }
@@ -83,12 +84,15 @@ namespace CoursesManager.UI.ViewModels
                 return;
             }
 
-            await ShowDialogAsync(DialogType.Confirmation, "Wilt u de wijzigingen opslaan?", "Bevestiging");
-            UpdateStudentDetails();
-            UpdateRegistrations();
+            var result = await ShowDialogAsync(DialogType.Confirmation, "Wilt u de wijzigingen opslaan?", "Bevestiging");
+            if (result)
+            {
+                UpdateStudentDetails();
+                UpdateRegistrations();
+                await ShowDialogAsync(DialogType.Notify, "Cursist succesvol opgeslagen.", "Succes");
+                InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
 
-            await ShowDialogAsync(DialogType.Notify, "Cursist succesvol opgeslagen.", "Succes");
-            InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
+            }
         }
 
         private void UpdateStudentDetails()
@@ -203,7 +207,7 @@ namespace CoursesManager.UI.ViewModels
                             DialogTitle = dialogTitle,
                             DialogText = message
                         });
-
+                    
                     SetIsDialogOpen(false);
                     return result?.Data?.Result ?? false;
 
