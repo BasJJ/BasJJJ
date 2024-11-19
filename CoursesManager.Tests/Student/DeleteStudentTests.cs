@@ -74,9 +74,11 @@ namespace CoursesManager.Tests
 
             // Act
             await Task.Run(() => _viewModel.DeleteStudentCommand.Execute(_testStudent));
+            _testStudent.Is_deleted = true;
+            _testStudent.date_deleted = DateTime.Now;
 
             // Assert
-            _mockStudentRepository.Verify(repo => repo.Delete(_testStudent.Id), Times.Once);
+            _mockStudentRepository.Verify(repo => repo.Update(_testStudent), Times.Once);
             _mockDialogService.Verify(d =>
                 d.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
                     It.Is<DialogResultType>(r => r.DialogText == "Wilt u deze cursist verwijderen?")),

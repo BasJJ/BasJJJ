@@ -173,7 +173,9 @@ namespace CoursesManager.UI.ViewModels
 
             if (confirmation?.Data?.Result == true)
             {
-                _studentRepository.Delete(student.Id);
+                student.Is_deleted = true;
+                student.date_deleted = DateTime.Now;
+                _studentRepository.Update(student);
                 await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
                     new DialogResultType
                     {
