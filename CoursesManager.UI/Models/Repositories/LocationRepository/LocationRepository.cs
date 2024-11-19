@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +9,13 @@ namespace CoursesManager.UI.Models.Repositories.LocationRepository
 {
     public class LocationRepository : ILocationRepository
     {
-        private readonly List<Location> _locations = new List<Location>();
+        private readonly ObservableCollection<Location> _locations;
 
+
+        public LocationRepository()
+        {
+            _locations = App.Locations;
+        }
         public IEnumerable<Location> GetAll()
         {
             return _locations.ToList();
