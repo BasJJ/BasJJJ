@@ -1,12 +1,22 @@
-﻿using CoursesManager.UI.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CoursesManager.UI.Repositories.LocationRepository
+namespace CoursesManager.UI.Models.Repositories.LocationRepository
 {
-    public class DummyLocationRepository : ILocationRepository
+    public class LocationRepository : ILocationRepository
     {
-        private readonly List<Location> _locations = new List<Location>();
+        private readonly ObservableCollection<Location> _locations;
 
-        public List<Location> GetAll()
+
+        public LocationRepository()
+        {
+            _locations = App.Locations;
+        }
+        public IEnumerable<Location> GetAll()
         {
             return _locations.ToList();
         }
@@ -33,11 +43,6 @@ namespace CoursesManager.UI.Repositories.LocationRepository
             }
         }
 
-        public void Delete(Location data)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Delete(int id)
         {
             var location = GetById(id);
@@ -45,11 +50,6 @@ namespace CoursesManager.UI.Repositories.LocationRepository
             {
                 _locations.Remove(location);
             }
-        }
-
-        public void AddIfNew(Location courseLocation)
-        {
-            throw new NotImplementedException();
         }
     }
 }

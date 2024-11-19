@@ -63,27 +63,9 @@
                         <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
                     </Viewbox>
 
-                    <Button Command="{Binding UploadCommand}" Background="Transparent" BorderThickness="0"
-                            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-130,-120,0">
-                        <Button.Style>
-                            <Style TargetType="Button" BasedOn="{StaticResource IconButtonWithShadowStyle}">
-                                <Setter Property="Visibility" Value="Visible" />
-                                <Style.Triggers>
-                                    <!-- Verberg plus-icoon als er een afbeelding is -->
-                                    <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ImageSource}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                    <Button Style="{StaticResource IconButtonWithShadowStyle}" Command="{Binding UploadCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-130,-120,0">
                         <materialDesign:PackIcon Kind="PlusCircleOutline" Width="60" Height="60" Foreground="#02008C" />
                     </Button>
-
-
-
 
                     <!-- Stackpanel with code, dates and location-->
                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
@@ -113,7 +95,7 @@
                                 <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
                                 <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black"/>
                                 <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding Course.Code, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
-                                
+
                             </Grid>
 
                             <Grid Grid.Row="2" HorizontalAlignment="Left">
@@ -140,9 +122,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Text="Locatie:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
-                                    <ComboBoxItem>Zwolle</ComboBoxItem>
-                                    <ComboBoxItem>Almere</ComboBoxItem>
+                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" ItemsSource="{Binding Locations}" DisplayMemberPath="Name" SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
+
                                 </ComboBox>
                             </Grid>
 
@@ -164,37 +145,33 @@
                     </StackPanel>
 
                     <Grid Grid.Column="0">
-                        <!-- Border met afgeronde hoeken voor de afbeelding -->
-                        
-
                         <!-- Placeholder (zichtbaar als er geen afbeelding is) -->
-                        <Grid>
-                            <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10">
-                                <Rectangle.Style>
-                                    <Style TargetType="Rectangle">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Style.Triggers>
-                                            <!-- Verberg placeholder als afbeelding geladen is -->
-                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Rectangle.Style>
-                            </Rectangle>
+                        <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <!-- Verberg placeholder als afbeelding geladen is -->
+                                        <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
 
-                            <Viewbox Width="140" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" Foreground="DarkGray" />
-                            </Viewbox>
-                            <Border Width="150" Height="150" CornerRadius="10" ClipToBounds="True">
-                                <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
-                            </Border>
-                        </Grid>
+                        <Viewbox Width="140" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" Foreground="DarkGray" />
+                        </Viewbox>
+
+                        <!-- Border met afgeronde hoeken voor de afbeelding -->
+                        <Border Width="150" Height="150" CornerRadius="10" ClipToBounds="True" Panel.ZIndex="1">
+                            <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                        </Border>
                     </Grid>
-
 
                 </Grid>
                 <Grid Grid.Column="1" Grid.Row="4">
@@ -231,12 +208,8 @@
                     <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" />
                     <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommandd}" />
                 </Grid>
-                
-                
-                
 
             </Grid>
         </Border>
-
     </Grid>
 </Window>

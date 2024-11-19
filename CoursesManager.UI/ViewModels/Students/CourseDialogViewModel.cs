@@ -40,7 +40,7 @@ namespace CoursesManager.UI.ViewModels.Students
             set
             {
                 _imageSource = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ImageSource));
             }
         }
 
@@ -66,6 +66,8 @@ namespace CoursesManager.UI.ViewModels.Students
             get; set;
         }
 
+        public ObservableCollection<Location> Locations { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -82,8 +84,11 @@ namespace CoursesManager.UI.ViewModels.Students
                 Description = string.Empty,
                 Location = null,
                 IsActive = false,
-                EndDate = DateTime.MinValue
+                EndDate = DateTime.MaxValue,
             };
+
+            Locations = new ObservableCollection<Location>(locationRepository.GetAll());
+
             Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
             SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommandd = new RelayCommand( OnCancel);
@@ -91,6 +96,7 @@ namespace CoursesManager.UI.ViewModels.Students
             PropertyChanged = delegate { };
 
         }
+
 
 
         public CourseDialogViewModel(Course? dialogResultType) : base(dialogResultType)
@@ -126,17 +132,16 @@ namespace CoursesManager.UI.ViewModels.Students
             // Voeg de cursus toe
             _courseRepository.Add(Course);
 
-            var successDialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(true, "Cursus succesvol toegevoegd")
+            var successDialogResult = DialogResult<Course>.Builder()
+                .SetSuccess(Course, "Cursus succesvol toegevoegd")
                 .Build();
 
-            ShowSuccessDialog(successDialogResult);
+            ShowSuccessDialog(successDialogResult.OutcomeMessage);
 
-            // Notify dat de cursus is toegevoegd (optioneel)
-            CourseAdded?.Invoke(this, Course);
-
-            CloseDialogWithResult(successDialogResult);
+            InvokeResponseCallback(successDialogResult);
         }
+
+
         private bool FieldsValidations()
         {
             if (string.IsNullOrEmpty(Course.Name?.Trim()))
@@ -193,9 +198,9 @@ namespace CoursesManager.UI.ViewModels.Students
 
         
 
-        protected virtual void ShowSuccessDialog(DialogResult<bool> dialogResult)
+        protected virtual void ShowSuccessDialog(string succesMessage)
         {
-            MessageBox.Show(dialogResult.OutcomeMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(succesMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
@@ -210,11 +215,6 @@ namespace CoursesManager.UI.ViewModels.Students
                 .Build();
 
             InvokeResponseCallback(dialogResult);
-        }
-
-        private void CloseDialogWithResult(DialogResult<bool> dialogResult)
-        {
-            throw new NotImplementedException();
         }
 
         private void UploadImage()
