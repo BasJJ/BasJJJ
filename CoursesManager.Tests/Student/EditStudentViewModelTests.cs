@@ -76,12 +76,18 @@ namespace CoursesManager.Tests
             _viewModel.ParentWindow = new Mock<Window>().Object; // Ensure ParentWindow is set
             _viewModel.SelectableCourses.First(c => c.ID == 2).IsSelected = true; // Select "Science" course
     
-            _dialogServiceMock
-                .Setup(ds => ds.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-                    It.Is<DialogResultType>(result => result.DialogText == "Wilt u de wijzigingen opslaan?")));
+            var confirmationResult = DialogResult<DialogResultType>.Builder()
+                .SetSuccess(new DialogResultType { Result = true }, "Confirmed")
+                .Build();
 
             _dialogServiceMock
-                .Setup(ds => ds.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()));
+                .Setup(ds => ds.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                    It.Is<DialogResultType>(result => result.DialogText == "Wilt u de wijzigingen opslaan?")))
+                .ReturnsAsync(confirmationResult);
+
+            _dialogServiceMock
+                .Setup(ds => ds.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(It.IsAny<DialogResultType>()))
+                .ReturnsAsync(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType(), "Notification").Build());
 
             // Act
             await _viewModel.OnSaveAsync();
