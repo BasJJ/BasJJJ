@@ -5,16 +5,10 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 
 namespace CoursesManager.UI.Dialogs.ViewModels;
 
-public class ConfirmationDialogViewModel : DialogViewModel<ConfirmationDialogResultType>
+public class ConfirmationDialogViewModel : DialogViewModel<DialogResultType>
 {
     private string _title = null!;
-    private bool _IsDialogOpen;
 
-    public bool IsDialogOpen
-    {
-        get => _IsDialogOpen;
-        set => SetProperty(ref _IsDialogOpen, value);
-    }
     public string Title
     {
         get => _title;
@@ -22,15 +16,18 @@ public class ConfirmationDialogViewModel : DialogViewModel<ConfirmationDialogRes
     }
 
     private string _message = null!;
+
     public string Message
     {
         get => _message;
         set => SetProperty(ref _message, value);
     }
 
-    public ICommand ConfirmationCommand { get; private set; }
+    public ICommand YesCommand { get; private set; }
 
-    public ConfirmationDialogViewModel(ConfirmationDialogResultType? initialData) : base(initialData)
+    public ICommand NoCommand { get; private set; }
+
+    public ConfirmationDialogViewModel(DialogResultType? initialData) : base(initialData)
     {
         if (initialData is not null)
         {
@@ -38,18 +35,25 @@ public class ConfirmationDialogViewModel : DialogViewModel<ConfirmationDialogRes
             Title = initialData.DialogTitle;
         }
 
-        ConfirmationCommand = new RelayCommand(() =>
+        YesCommand = new RelayCommand(() =>
         {
-            InvokeResponseCallback(DialogResult<ConfirmationDialogResultType>.Builder()
-                .SetSuccess(new ConfirmationDialogResultType
-                {
-                    Result = false
-                }).Build());
+            InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
+            {
+                Result = true
+            }).Build());
+        });
+
+        NoCommand = new RelayCommand(() =>
+        {
+            InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
+            {
+                Result = false
+            }).Build());
         });
     }
 
-    protected override void InvokeResponseCallback(DialogResult<ConfirmationDialogResultType> dialogResult)
+    protected override void InvokeResponseCallback(DialogResult<DialogResultType> dialogResult)
     {
-        ResponseCallback?.Invoke(dialogResult);
+        ResponseCallback.Invoke(dialogResult);
     }
 }

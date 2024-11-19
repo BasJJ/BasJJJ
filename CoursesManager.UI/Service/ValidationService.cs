@@ -1,4 +1,5 @@
 ﻿using CoursesManager.UI.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -38,25 +39,33 @@ namespace CoursesManager.UI.Services
                     {
                         errors.Add($"{controlName} is verplicht.");
                     }
+                    else if (control is DatePicker datePicker)
+                    {
+                        if (ValidationProperties.GetIsDate(control) && !IsValidDate(datePicker.SelectedDate))
+                        {
+                            errors.Add($"{controlName} is geen geldige datum.");
+                        }
+                    }
                 }
             }
             return errors;
         }
 
+        private static bool IsValidDate(DateTime? date)
+        {
+            return date.HasValue && date.Value != default(DateTime);
+        }
 
         public static bool IsValidEmail(string email)
         {
             return !string.IsNullOrWhiteSpace(email) && email.Contains("@");
         }
 
-        public static bool IsNumber(string number)
-        {
-            return !string.IsNullOrWhiteSpace(number) && number.All(char.IsDigit);
-        }
         public static bool IsPhoneNumber(string number)
         {
             return !string.IsNullOrWhiteSpace(number) && number.All(c => char.IsDigit(c) || c == '-');
         }
+
         public static string ValidateUniqueEmail(string email, IEnumerable<string> existingEmails)
         {
             if (existingEmails.Contains(email))
@@ -65,6 +74,7 @@ namespace CoursesManager.UI.Services
             }
             return null;
         }
+
         public static string ValidateUniqueField<T>(T value, IEnumerable<T> existingValues, string fieldName)
         {
             if (existingValues.Contains(value))

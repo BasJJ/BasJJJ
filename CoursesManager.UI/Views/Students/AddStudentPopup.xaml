@@ -37,7 +37,6 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!-- Voornaam -->
@@ -63,47 +62,56 @@
                              Tag="Achternaam"
                              Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" />
 
+                        <!-- Geboortedatum -->
+                        <TextBlock Text="Geboortedatum*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
+                        <DatePicker Style="{DynamicResource DatePickerStyle}"
+                                    SelectedDate="{Binding Student.DateOfBirth, UpdateSourceTrigger=PropertyChanged}"
+                                    local:ValidationProperties.IsRequired="True"
+                                    local:ValidationProperties.IsDate="True"
+                                    Tag="Geboortedatum"
+                                    Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
+    
                         <!-- Email -->
-                        <TextBlock Text="Email*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Email*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.Email, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              local:ValidationProperties.IsEmail="True"
                              Tag="Email"
-                             Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Telefoonnummer -->
-                        <TextBlock Text="Telefoonnummer*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Telefoonnummer*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              local:ValidationProperties.IsPhoneNumber="True"
                              Tag="Telefoonnummer"
-                             Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="6" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- PostCode -->
-                        <TextBlock Text="Postcode*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Postcode*" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.PostCode, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Postcode"
-                             Grid.Row="6" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Huisnummer -->
-                        <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.HouseNumber, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Huisnummer"
-                             Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- Straatnaam -->
-                        <TextBlock Text="Straatnaam*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Straatnaam*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.StreetName, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Straatnaam"
-                             Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Land -->
                         <TextBlock Text="Land*" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" />
@@ -114,22 +122,22 @@
                              Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- Stad -->
-                        <TextBlock Text="Stad*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Stad*" Grid.Row="11" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.City, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Stad"
-                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="12" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- RegisterdTo (ComboBox) -->
-                        <TextBlock Text="Cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="0" />
+                        <TextBlock Text="Cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="1" />
                         <ComboBox x:Name="cmbCourses" ItemsSource="{Binding Courses}"
                               Style="{DynamicResource ComboBoxStyle}"
                               SelectedItem="{Binding SelectedCourse}"
                               ItemContainerStyle="{Binding ComboBoxItem}"
                               local:ValidationProperties.IsRequired="True"
                               Tag="cursus"
-                              Grid.Row="12" Grid.Column="0" Margin="5,0,10,-10">
+                              Grid.Row="12" Grid.Column="1" Margin="5,0,10,10">
                         </ComboBox>
                     </Grid>
 

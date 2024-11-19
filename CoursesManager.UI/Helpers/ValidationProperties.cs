@@ -16,6 +16,10 @@ namespace CoursesManager.UI.Helpers
             DependencyProperty.RegisterAttached("IsPhoneNumber", typeof(bool),
                 typeof(ValidationProperties), new PropertyMetadata(false));
 
+        public static readonly DependencyProperty IsDateProperty =
+            DependencyProperty.RegisterAttached("IsDate", typeof(bool),
+                typeof(ValidationProperties), new PropertyMetadata(false));
+
         public static bool GetIsRequired(DependencyObject obj)
         {
             return (bool)obj.GetValue(IsRequiredProperty);
@@ -44,6 +48,16 @@ namespace CoursesManager.UI.Helpers
         public static void SetIsPhoneNumber(DependencyObject obj, bool value)
         {
             obj.SetValue(IsPhoneNumberProperty, value);
+        }
+
+        public static bool GetIsDate(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsDateProperty);
+        }
+
+        public static void SetIsDate(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsDateProperty, value);
         }
     }
 }
