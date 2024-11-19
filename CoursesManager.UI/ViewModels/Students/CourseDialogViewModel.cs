@@ -8,6 +8,8 @@ using CoursesManager.UI.Models.Repositories.StudentRepository;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,10 +18,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Text.RegularExpressions;
+using CoursesManager.UI.Dialogs.Windows;
+
+
 
 namespace CoursesManager.UI.ViewModels.Students
 {
-    class CourseDialogViewModel : DialogViewModel<Course>
+    class CourseDialogViewModel : DialogViewModel<Course>, INotifyPropertyChanged
     {
 
         private readonly ICourseRepository _courseRepository;
@@ -27,6 +33,7 @@ namespace CoursesManager.UI.ViewModels.Students
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
         private BitmapImage _imageSource;
+        private Course _course;
         public BitmapImage ImageSource
         {
             get => _imageSource;
@@ -37,11 +44,29 @@ namespace CoursesManager.UI.ViewModels.Students
             }
         }
 
+        public event EventHandler<Course> CourseAdded;
+
+        public Course Course
+        {
+            get => _course;
+            set
+            {
+                _course = value;
+                OnPropertyChanged(nameof(Course));
+            }
+        }
+
         public ICommand SaveCommand {  get;  }
         public ICommand CancelCommandd { get; }
-        public Course Course { get; set; }
+        
 
         public ICommand UploadCommand { get; }
+        public ObservableCollection<string> Courses
+        {
+            get; set;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
 
         public CourseDialogViewModel(ICourseRepository courseRepository,  IDialogService dialogService, ILocationRepository locationRepository, Course? course) : base(course)
@@ -50,12 +75,21 @@ namespace CoursesManager.UI.ViewModels.Students
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
 
-            Course = course;
+            Course = course ?? new Course
+            {
+                Name = string.Empty,
+                Code = string.Empty,
+                Description = string.Empty,
+                Location = null,
+                IsActive = false,
+                EndDate = DateTime.MinValue
+            };
+            Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
             SaveCommand = new RelayCommand(async () => await OnSaveAsync());
             CancelCommandd = new RelayCommand( OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
+            PropertyChanged = delegate { };
 
-           
         }
 
 
@@ -67,10 +101,106 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             ResponseCallback.Invoke(dialogResult);
         }
-
         private async Task OnSaveAsync()
         {
 
+            if (!FieldsValidations())
+            {
+                var dialogResult = DialogResult<bool>.Builder()
+                    .SetSuccess(false, "Vereiste velden moeten correct worden ingevuld")
+                    .Build();
+                ShowWarningDialog(dialogResult);
+                return;
+            }
+
+            // Controleer of de cursus uniek is
+            if (_courseRepository.GetAll().Any(c => c.Name.Equals(Course.Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                var dialogResult = DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De cursusnaam bestaat al")
+                    .Build();
+                ShowWarningDialog(dialogResult);
+                return;
+            }
+
+            // Voeg de cursus toe
+            _courseRepository.Add(Course);
+
+            var successDialogResult = DialogResult<bool>.Builder()
+                .SetSuccess(true, "Cursus succesvol toegevoegd")
+                .Build();
+
+            ShowSuccessDialog(successDialogResult);
+
+            // Notify dat de cursus is toegevoegd (optioneel)
+            CourseAdded?.Invoke(this, Course);
+
+            CloseDialogWithResult(successDialogResult);
+        }
+        private bool FieldsValidations()
+        {
+            if (string.IsNullOrEmpty(Course.Name?.Trim()))
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De cursusnaam is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Course.Code?.Trim()))
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De cursuscode is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (Course.EndDate == DateTime.MinValue)
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De einddatum is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (Course.Location == null)
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De locatie is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Course.Description?.Trim()))
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De beschrijving is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (!Course.IsActive)
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De cursus moet actief zijn.")
+                    .Build());
+                return false;
+            }
+
+            return true;
+        }
+
+
+        
+
+        protected virtual void ShowSuccessDialog(DialogResult<bool> dialogResult)
+        {
+            MessageBox.Show(dialogResult.OutcomeMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
+        {
+            MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         public void OnCancel()
@@ -99,6 +229,11 @@ namespace CoursesManager.UI.ViewModels.Students
             {
                 ImageSource = new BitmapImage(new Uri(openDialog.FileName));
             }
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
