@@ -20,6 +20,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Text.RegularExpressions;
 using CoursesManager.UI.Dialogs.Windows;
+using CoursesManager.UI.Dialogs.Enums;
+using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Dialogs.ResultTypes;
 
 
 
@@ -36,6 +39,13 @@ namespace CoursesManager.UI.ViewModels.Students
         private readonly ILocationRepository _locationRepository;
         private BitmapImage _imageSource;
         private Course _course;
+        private bool _isDialogOpen;
+
+        public bool IsDialogOpen
+        {
+            get => IsDialogOpen;
+            set => SetProperty(ref _isDialogOpen, value);
+        }
         public BitmapImage ImageSource
         {
             get => _imageSource;
@@ -71,7 +81,7 @@ namespace CoursesManager.UI.ViewModels.Students
         public ObservableCollection<Location> Locations { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+        //public Window ParentWindow { get; set; }
 
         public CourseDialogViewModel(ICourseRepository courseRepository,  IDialogService dialogService, ILocationRepository locationRepository, Course? course) : base(course)
         {
@@ -86,7 +96,9 @@ namespace CoursesManager.UI.ViewModels.Students
                 Description = string.Empty,
                 Location = null,
                 IsActive = false,
-                EndDate = DateTime.MaxValue,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+
             };
 
             Locations = new ObservableCollection<Location>(locationRepository.GetAll());
@@ -142,6 +154,8 @@ namespace CoursesManager.UI.ViewModels.Students
 
             ShowSuccessDialog(successDialogResult.OutcomeMessage);
 
+            //await ShowSuccessDialog(DialogType.Notify, "Cursus Succesvol opgeslagen.");
+
             InvokeResponseCallback(successDialogResult);
         }
 
@@ -164,10 +178,18 @@ namespace CoursesManager.UI.ViewModels.Students
                 return false;
             }
 
-            if (Course.EndDate == DateTime.MinValue)
+            if (Course.EndDate == DateTime.Now)
             {
                 ShowWarningDialog(DialogResult<bool>.Builder()
                     .SetSuccess(false, "De einddatum is verplicht.")
+                    .Build());
+                return false;
+            }
+
+            if (Course.StartDate == DateTime.Now)
+            {
+                ShowWarningDialog(DialogResult<bool>.Builder()
+                    .SetSuccess(false, "De begindatum is verplicht.")
                     .Build());
                 return false;
             }
@@ -200,7 +222,46 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
 
-      
+        private async Task<bool> ShowDialogAsync(DialogType dialogType, string message, string dialogTitle) 
+        { 
+            void SetIsDialogOpen(bool value) 
+            { 
+                if (Application.Current?.Dispatcher?.CheckAccess() == true) 
+                { 
+                    IsDialogOpen = value; 
+                } 
+                else 
+                { 
+                    Application.Current?.Dispatcher?.Invoke(() => IsDialogOpen = value); 
+                } 
+            } 
+            switch (dialogType) 
+            { 
+                case DialogType.Notify: 
+                    SetIsDialogOpen(true); 
+                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                        new DialogResultType
+                        { 
+                            DialogTitle = dialogTitle, 
+                            DialogText = message 
+                        }); 
+                    SetIsDialogOpen(false); 
+                    return true; 
+                case DialogType.Confirmation: 
+                    SetIsDialogOpen(true);
+                    var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
+                         new ConfirmationDialogResultType
+                         {
+                             DialogTitle = dialogTitle,
+                             DialogText = message
+                         });
+
+                    SetIsDialogOpen(false); 
+                    return result?.Data?.Result ?? false; 
+                default: 
+                    throw new ArgumentOutOfRangeException(nameof(dialogType), dialogType, null); 
+            } 
+        }
 
         protected virtual void ShowSuccessDialog(string succesMessage)
         {

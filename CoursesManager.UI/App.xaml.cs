@@ -118,6 +118,8 @@ public partial class App : Application
     {
         DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
         DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
+        //DialogService.RegisterDialog<ConfirmationDialogWindow, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogWindow(initial));
+        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
         DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
             initial,
             studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(),
