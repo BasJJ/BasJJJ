@@ -53,11 +53,8 @@ public partial class App : Application
         MainWindow mw = new()
         {
             DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
-
         };
         GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
-
-
 
         // Create the ViewModelFactory
         var viewModelFactory = new ViewModelFactory(
@@ -66,14 +63,12 @@ public partial class App : Application
             RegistrationRepository,
             StudentRepository,
             AddressRepository,
-            NavigationService,
             MessageBroker,
             DialogService);
 
         // Register ViewModel
 
         RegisterViewModels(viewModelFactory);
-
 
         // Register Dialogs
         RegisterDialogs();
@@ -98,7 +93,6 @@ public partial class App : Application
         LocationRepository = new LocationRepository();
     }
 
-
     private static void SetupDummyDataTemporary()
     {
         //This is a temporary static class that will hold all the data that is used in the application.
@@ -118,7 +112,6 @@ public partial class App : Application
         {
             course.Location = Locations.FirstOrDefault(s => s.Id == course.LocationId);
         }
-
     }
 
     private void RegisterDialogs()

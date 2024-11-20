@@ -57,7 +57,7 @@ public class MainWindowViewModel : NavigatableViewModel
         set => SetProperty(ref _isMouseOverBorder, value);
     }
 
-    private bool _isDialogOpen;
+    private static bool _isDialogOpen;
     public bool IsDialogOpen
     {
         get => _isDialogOpen;
@@ -68,6 +68,7 @@ public class MainWindowViewModel : NavigatableViewModel
     {
         _navigationService = navigationService;
         _messageBroker = messageBroker;
+        _messageBroker.Subscribe<OverlayActivationMessage, MainWindowViewModel>(OverlayActivationHandler, this);
 
         CloseCommand = new RelayCommand(() =>
         {
@@ -132,5 +133,11 @@ public class MainWindowViewModel : NavigatableViewModel
         {
             IsSidebarHidden = false;
         }
+    }
+
+    private async void OverlayActivationHandler(OverlayActivationMessage obj)
+    {
+        OverlayActivationMessage overlayActivationMessage = obj as OverlayActivationMessage;
+        IsDialogOpen = overlayActivationMessage.IsVisible;
     }
 }
