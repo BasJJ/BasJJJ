@@ -23,6 +23,8 @@ using CoursesManager.UI.Dialogs.Windows;
 
 
 
+
+
 namespace CoursesManager.UI.ViewModels.Students
 {
     class CourseDialogViewModel : DialogViewModel<Course>, INotifyPropertyChanged
@@ -136,6 +138,8 @@ namespace CoursesManager.UI.ViewModels.Students
                 .SetSuccess(Course, "Cursus succesvol toegevoegd")
                 .Build();
 
+
+
             ShowSuccessDialog(successDialogResult.OutcomeMessage);
 
             InvokeResponseCallback(successDialogResult);
@@ -196,7 +200,7 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
 
-        
+      
 
         protected virtual void ShowSuccessDialog(string succesMessage)
         {
