@@ -11,7 +11,6 @@ namespace CoursesManager.UI.ViewModels;
 
 public class MainWindowViewModel : NavigatableViewModel
 {
-    public INavigationService NavigationService { get; set; }
     private readonly IMessageBroker _messageBroker;
 
 
@@ -30,6 +29,12 @@ public class MainWindowViewModel : NavigatableViewModel
     public ICommand GoToStudentManagementView { get; private set; }
     public ICommand GoToCourseManagementView { get; private set; }
 
+    private INavigationService _navigationService;
+    public INavigationService NavigationService
+    {
+        get => _navigationService;
+        set => SetProperty(ref _navigationService, value);
+    }
 
     private bool _isSidebarHidden;
     public bool IsSidebarHidden
@@ -61,7 +66,7 @@ public class MainWindowViewModel : NavigatableViewModel
 
     public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
     {
-        NavigationService = navigationService;
+        _navigationService = navigationService;
         _messageBroker = messageBroker;
 
         CloseCommand = new RelayCommand(() =>
@@ -106,12 +111,12 @@ public class MainWindowViewModel : NavigatableViewModel
         });
         GoToStudentManagementView = new RelayCommand(() =>
         {
-            _navigationService.NavigateTo<StudentManagerViewModel>();
+            NavigationService.NavigateTo<StudentManagerViewModel>();
             IsSidebarHidden = false;
         });
         GoToCourseManagementView = new RelayCommand(() =>
         {
-            _navigationService.NavigateTo<CoursesManagerViewModel>();
+            NavigationService.NavigateTo<CoursesManagerViewModel>();
             IsSidebarHidden = false;
         });
     }
