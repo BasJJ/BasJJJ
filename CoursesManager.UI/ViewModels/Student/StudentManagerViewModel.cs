@@ -22,9 +22,8 @@ namespace CoursesManager.UI.ViewModels
         private readonly IRegistrationRepository _registrationRepository;
         public ObservableCollection<Student> Students { get;  set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
-        public ObservableCollection<CourseStudentPayment> CoursePaymentList { get; private set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
-        private MainWindowViewModel vm = (MainWindowViewModel)GlobalCache.Instance.Get("MainViewModel");
+        private readonly MainWindowViewModel vm = (MainWindowViewModel)GlobalCache.Instance.Get("MainViewModel");
 
         private string _searchText;
         public string SearchText
@@ -184,15 +183,10 @@ namespace CoursesManager.UI.ViewModels
             IsDialogOpen = true;
             var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
                 new DialogResultType
-            //temp
-            vm.IsDialogOpen = true;
-            var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(
-                new YesNoDialogResultType
                 {
                     DialogTitle = "Bevestiging",
                     DialogText = "Wilt u deze cursist verwijderen?"
                 });
-            vm.IsDialogOpen = false;
 
             if (confirmation?.Data?.Result == true)
             {

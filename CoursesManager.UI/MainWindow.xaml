@@ -567,7 +567,7 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                    <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel }" Panel.ZIndex="0" />
+                    <ContentControl Content="{Binding NavigationService.NavigationStore.CurrentViewModel}" Panel.ZIndex="0" />
                     <Border Style="{DynamicResource DarkOverlay}"  Panel.ZIndex="1"
                     x:Name="OverlayBorder"
                     CornerRadius="0,0,15,15"

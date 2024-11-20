@@ -49,6 +49,14 @@ public partial class App : Application
         SetupDummyDataTemporary();
         InitializeRepositories();
 
+        // Set MainWindow's DataContext
+        MainWindow mw = new()
+        {
+            DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
+
+        };
+        GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
+
         // Create the ViewModelFactory
         var viewModelFactory = new ViewModelFactory(
             CourseRepository,
@@ -74,13 +82,6 @@ public partial class App : Application
         // Navigate to the Initial ViewModel
         NavigationService.NavigateTo<StudentManagerViewModel>();
 
-        // Set MainWindow's DataContext
-        MainWindow mw = new()
-        {
-            DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
-            
-        };
-        GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
         mw.Show();
 
         NavigationService.NavigateTo<StudentManagerViewModel>();
