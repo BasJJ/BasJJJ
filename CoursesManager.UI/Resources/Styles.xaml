@@ -59,7 +59,45 @@
         </Style.Triggers>
     </Style>
 
-
+    <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="8"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="AllowDrop" Value="true"/>
+    <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+    <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+    <Setter Property="Effect">
+        <Setter.Value>
+            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
+        </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="DatePicker">
+                <Grid>
+                    <Border x:Name="PART_TestBoxBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10" SnapsToDevicePixels="True">
+                        <TextBox x:Name="PART_TextBox"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 Foreground="{TemplateBinding Foreground}"
+                                 Padding="{TemplateBinding Padding}"
+                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                 Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">

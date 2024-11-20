@@ -17,9 +17,9 @@ namespace CoursesManager.UI.Dialogs.Windows
     /// <summary>
     /// Interaction logic for YesNoDialogWindow.xaml
     /// </summary>
-    public partial class ConfirmationDialogWindow : Window
+    public partial class YesNoDialogWindow : Window
     {
-        public ConfirmationDialogWindow()
+        public YesNoDialogWindow()
         {
             InitializeComponent();
         }
