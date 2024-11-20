@@ -6,7 +6,7 @@ using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using CoursesManager.UI.Dialogs.ResultTypes;
@@ -59,7 +59,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         CancelCommand = new RelayCommand(Cancel);
     }
 
-    private async Task Save()
+    public async Task Save()
     {
         if (!await ValidateFields())
         {
@@ -83,24 +83,30 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         _studentRepository.Add(Student);
         _registrationRepository.Add(registration);
 
-        await ShowDialogAsync(DialogType.Confirmation, "Student succesvol toegevoegd");
+        await ShowDialogAsync(DialogType.Notify, "Student succesvol toegevoegd", "Succes");
 
-        var successDialogResult = DialogResult<bool>.Builder()
-            .SetSuccess(true, "Student succesvol toegevoegd")
-            .Build();
         StudentAdded?.Invoke(this, Student);
-        CloseDialogWithResult(successDialogResult);
+        InvokeResponseCallback(DialogResult<bool>.Builder().SetSuccess(true, "Success").Build());
     }
 
-    private async Task<bool> ValidateFields()
+    public async Task<bool> ValidateFields()
     {
         if (ParentWindow == null)
         {
-            await ShowDialogAsync(DialogType.Error, "Parent window is not set.");
+            await ShowDialogAsync(DialogType.Notify, "Parent window is not set.", "Foutmelding");
             return false;
         }
 
-        var errors = ValidationService.ValidateRequiredFields(ParentWindow);
+        var parentContent = ParentWindow.Content as DependencyObject;
+        if (parentContent == null)
+        {
+            await ShowDialogAsync(DialogType.Notify, "Parent window content is invalid.", "Foutmelding");
+            return false;
+        }
+
+        // Validate required fields
+        var errors = ValidationService.ValidateRequiredFields(parentContent);
+
 
         var existingEmails = _studentRepository.GetAll().Select(s => s.Email);
         var emailError = ValidationService.ValidateUniqueField(Student.Email, existingEmails, "Het emailadres");
@@ -117,14 +123,14 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
         if (errors.Any())
         {
-            await ShowDialogAsync(DialogType.Error, string.Join("\n", errors));
+            await ShowDialogAsync(DialogType.Notify, string.Join("\n", errors), "Foutmelding");
             return false;
         }
 
         return true;
     }
 
-    private async Task<bool> ShowDialogAsync(DialogType dialogType, string message)
+    private async Task<bool> ShowDialogAsync(DialogType dialogType, string message, string dialogTitle)
     {
         void SetIsDialogOpen(bool value)
         {
@@ -140,31 +146,18 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
         switch (dialogType)
         {
-            case DialogType.Error:
+            case DialogType.Notify:
                 SetIsDialogOpen(true);
 
-                await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                    new ConfirmationDialogResultType
+                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                    new DialogResultType
                     {
-                        DialogTitle = "Foutmelding",
+                        DialogTitle = dialogTitle,
                         DialogText = message
                     });
 
                 SetIsDialogOpen(false);
                 return true;
-
-            case DialogType.Confirmation:
-                SetIsDialogOpen(true);
-
-                var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                    new ConfirmationDialogResultType
-                    {
-                        DialogTitle = "Bevestiging",
-                        DialogText = message
-                    });
-
-                SetIsDialogOpen(false);
-                return result?.Data?.Result ?? false;
 
             default:
                 throw new ArgumentOutOfRangeException(nameof(dialogType), dialogType, null);

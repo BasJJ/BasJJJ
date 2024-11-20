@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,13 +23,17 @@ namespace CoursesManager.UI.Views.Students
         public AddStudentPopup()
         {
             InitializeComponent();
+
         }
         //can be better but for now it is ok
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is AddStudentViewModel viewModel)
+            if (DataContext is AddStudentViewModel viewModel && viewModel != null)
             {
-                viewModel.ParentWindow = this;
+                viewModel.ParentWindow = this; }
+            else
+            {
+                Debug.WriteLine("DataContext is either null or not of type AddStudentViewModel.");
             }
         }
     }

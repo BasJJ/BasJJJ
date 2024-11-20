@@ -1,14 +1,13 @@
-﻿using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Env;
 using MySql.Data.MySqlClient;
+using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Models.Repositories.CourseRepository
 {
     public class CourseRepository : BaseRepository, ICourseRepository
     {
-        public CourseRepository() : base("courses", EnvManager<EnvModel>.Values.ConnectionString)
-        {
-        }
+        public CourseRepository() : base("courses", EnvManager<EnvModel>.Values.ConnectionString) {}
 
         public IEnumerable<Course> GetAll()
         {
@@ -21,8 +20,12 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
             );
         }
 
-        public Course GetById(int id) => FetchOneByID<Course>(id);
-
+        public Course GetById(int id) 
+        {
+            if (id <= 0) throw new ArgumentException("Course ID must be greater than zero.", nameof(id));
+            FetchOneByID<Course>(id);
+        }
+        
         public void Add(Course course)
         {
             InsertRow(
@@ -41,6 +44,8 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
 
         public void Update(Course course)
         {
+            if (course == null) throw new ArgumentNullException(nameof(course), "Course cannot be null.");
+            
             UpdateRow(
                 new Dictionary<string, object> {
                     { "Name", course.Name },
@@ -59,6 +64,7 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
 
         public void Delete(int id)
         {
+            if (course == null) throw new InvalidOperationException($"Course with ID {id} does not exist.");
             DeleteRow("ID = @ID", [new MySqlParameter("@ID", id)]);
         }
     }
