@@ -99,6 +99,11 @@
                             </Grid>
 
                             <Grid Grid.Row="2" HorizontalAlignment="Left">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="10"/>
@@ -109,9 +114,13 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Left"  Text="Begin datum:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
+                                <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding Course.StartDate, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
 
-                                <TextBlock HorizontalAlignment="Left"  Text="Eind datum:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <DatePicker Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding Course.EndDate, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+
+
+                                <TextBlock Grid.Row="1"  HorizontalAlignment="Left"  Text="Eind datum:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
+                                <DatePicker Grid.Row="1" Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding Course.EndDate, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
 
                             </Grid>
 
