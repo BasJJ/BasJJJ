@@ -26,7 +26,6 @@ namespace CoursesManager.UI.ViewModels
         public ObservableCollection<Student> Students { get;  set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
-        private readonly MainWindowViewModel vm = (MainWindowViewModel)GlobalCache.Instance.Get("MainViewModel");
 
         private string _searchText;
         public string SearchText
@@ -61,13 +60,6 @@ namespace CoursesManager.UI.ViewModels
             get => _coursePaymentList;
             set => SetProperty(ref _coursePaymentList, value);
         }
-
-        //private bool _isDialogOpen;
-        //public bool IsDialogOpen
-        //{
-        //    get => _isDialogOpen;
-        //    set => SetProperty(ref _isDialogOpen, value);
-        //}
 
         #region Commands
 
