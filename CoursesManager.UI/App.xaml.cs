@@ -131,7 +131,7 @@ public partial class App : Application
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<StudentManagerViewModel>());
 
         // Register CoursesManagerViewModel
-        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CoursesManagerViewModel>());
+        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
         // Register CourseOverViewViewModel
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CourseOverViewViewModel>());
