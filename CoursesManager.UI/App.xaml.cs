@@ -57,6 +57,8 @@ public partial class App : Application
         };
         GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
 
+
+
         // Create the ViewModelFactory
         var viewModelFactory = new ViewModelFactory(
             CourseRepository,
@@ -93,7 +95,7 @@ public partial class App : Application
         StudentRepository = new StudentRepository(Students);
         RegistrationRepository = new RegistrationRepository(Registrations);
         AddressRepository = new AddressRepository();
-        LocationRepository = new LocationRepository(); 
+        LocationRepository = new LocationRepository();
     }
 
 
@@ -122,7 +124,7 @@ public partial class App : Application
     private void RegisterDialogs()
     {
         DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
-        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow,DialogResultType>((initial) => new NotifyDialogViewModel(initial));
+        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
     }
 
     private void RegisterViewModels(ViewModelFactory viewModelFactory)
