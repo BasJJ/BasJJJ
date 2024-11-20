@@ -53,7 +53,6 @@ public partial class App : Application
         MainWindow mw = new()
         {
             DataContext = new MainWindowViewModel(NavigationService, MessageBroker)
-
         };
         GlobalCache.Instance.Put("MainViewModel", mw.DataContext, true);
 
@@ -64,14 +63,12 @@ public partial class App : Application
             RegistrationRepository,
             StudentRepository,
             AddressRepository,
-            NavigationService,
             MessageBroker,
             DialogService);
 
         // Register ViewModel
 
         RegisterViewModels(viewModelFactory);
-
 
         // Register Dialogs
         RegisterDialogs();
@@ -93,9 +90,8 @@ public partial class App : Application
         StudentRepository = new StudentRepository(Students);
         RegistrationRepository = new RegistrationRepository(Registrations);
         AddressRepository = new AddressRepository();
-        LocationRepository = new LocationRepository(); 
+        LocationRepository = new LocationRepository();
     }
-
 
     private static void SetupDummyDataTemporary()
     {
@@ -116,13 +112,12 @@ public partial class App : Application
         {
             course.Location = Locations.FirstOrDefault(s => s.Id == course.LocationId);
         }
-
     }
 
     private void RegisterDialogs()
     {
         DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
-        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow,DialogResultType>((initial) => new NotifyDialogViewModel(initial));
+        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
     }
 
     private void RegisterViewModels(ViewModelFactory viewModelFactory)
@@ -131,7 +126,7 @@ public partial class App : Application
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<StudentManagerViewModel>());
 
         // Register CoursesManagerViewModel
-        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CoursesManagerViewModel>());
+        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
         // Register CourseOverViewViewModel
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CourseOverViewViewModel>());
