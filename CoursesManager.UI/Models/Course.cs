@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Windows.Controls;
 
 namespace CoursesManager.UI.Models
 {
@@ -22,6 +23,8 @@ namespace CoursesManager.UI.Models
         public int LocationId { get; set; }
         public Location? Location { get; set; }
         public DateTime DateCreated { get; set; }
+
+        public Image Image { get; set; }
 
         public string GenerateFilterString()
         {
