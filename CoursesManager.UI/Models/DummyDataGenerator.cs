@@ -38,7 +38,7 @@ namespace CoursesManager.UI.Models
                         HouseNumber = _random.Next(1, 300).ToString(),
                         AwaitingPayement = _random.Next(0, 2) == 1,
                         DateCreated = DateTime.Now,
-                        Courses = GenerateCourses(GenerateRandomSizeNumber())
+                        //Courses = GenerateCourses(GenerateRandomSizeNumber())
                     };
 
                     students.Add(student);
@@ -69,7 +69,7 @@ namespace CoursesManager.UI.Models
                         EndDate = DateTime.Now.AddDays(_random.Next(31, 60)),
                         LocationId = _random.Next(1, count),
                         DateCreated = DateTime.Now,
-                        //students = GenerateStudents(i + 1) either this or the Courses in student. otherwise StackOverFlow
+                        students = GenerateStudents(i + 1) 
                     };
                     courses.Add(course);
                 }

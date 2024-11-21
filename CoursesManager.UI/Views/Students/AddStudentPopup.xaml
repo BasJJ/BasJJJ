@@ -6,13 +6,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
-        Title="AddStudentPopup" Height="650" Width="550"
+        Title="AddStudentPopup"
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent"
         Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen">
-    <Grid>
+        WindowStartupLocation="CenterScreen"
+        Width="550" Height="600">
+
+    <Window.Resources>
+        <Storyboard x:Key="MainStory">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="0" To="1" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="0" To="1" />
+        </Storyboard>
+
+        <Storyboard x:Key="ExitAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="1" To="0" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="1" To="0" />
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid Name="SizingGrid" RenderTransformOrigin="0.5, 0.5">
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="0" ScaleY="0"/>
+        </Grid.RenderTransform>
+        <Grid.Style>
+        <Style TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsStartAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+                        </DataTrigger.EnterActions>
+                </DataTrigger>
+                    <DataTrigger Binding="{Binding IsEndAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource ExitAnimation}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Style.Triggers>
+        </Style>
+        </Grid.Style>
         <Grid>
             <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
                 <StackPanel>
@@ -161,5 +198,15 @@
                 <Grid />
             </Border>
         </Grid>
+        <Border Panel.ZIndex="5"
+            x:Name="DialogOverlay"
+            Background="#80000000"
+            CornerRadius="15,15,15,15"
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="{Binding IsDialogOpen}">
+            <Grid />
+        </Border>
     </Grid>
 </Window>
