@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.UI.Messages
 {
-    class OverlayActivationMessage : BaseMessage<OverlayActivationMessage>
+    public class OverlayActivationMessage : BaseMessage<OverlayActivationMessage>
     {
         public bool IsVisible { get; set; }
 
