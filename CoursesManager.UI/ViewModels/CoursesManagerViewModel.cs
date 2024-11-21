@@ -87,7 +87,7 @@ namespace CoursesManager.UI.ViewModels
             foreach (var course in filteredCourses) FilteredCourses.Add(course);
         }
 
-        private void OpenCourseOptions(Course parameter)
+        private async void OpenCourseOptions(Course parameter)
         {
             GlobalCache.Instance.Put("Opened Course", parameter, true);
             _navigationService.NavigateTo<CourseOverViewViewModel>();

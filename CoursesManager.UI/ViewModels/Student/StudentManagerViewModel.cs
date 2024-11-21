@@ -47,13 +47,6 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-        private bool _isDialogOpen;
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
-        }
-
         private ObservableCollection<CourseStudentPayment> _coursePaymentList;
         public ObservableCollection<CourseStudentPayment> CoursePaymentList
         {

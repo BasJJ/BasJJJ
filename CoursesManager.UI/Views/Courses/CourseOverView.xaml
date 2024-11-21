@@ -10,7 +10,37 @@
         mc:Ignorable="d"
         d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 
+
+    <UserControl.Resources>
+        <Storyboard x:Key="EnterStory">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                 Duration="0:0:0.1" From="0" To="1" />
+        </Storyboard>
+
+        <Storyboard x:Key="ExitAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                 Duration="0:0:0.1" From="1" To="0" />
+        </Storyboard>
+    </UserControl.Resources>
+
     <Grid>
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Setter Property="Opacity" Value="0"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsStartAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource EnterStory}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsEndAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource ExitAnimation}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>

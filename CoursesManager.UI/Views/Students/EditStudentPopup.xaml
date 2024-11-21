@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <Storyboard x:Key="MainStory">
+        <Storyboard x:Key="EnterStory">
             <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
                              Duration="0:0:0.1" From="0" To="1" />
             <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
@@ -28,7 +28,7 @@
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Loaded">
-            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+            <BeginStoryboard Storyboard="{StaticResource EnterStory}"/>
         </EventTrigger>
     </Window.Triggers>
 
@@ -41,7 +41,7 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsStartAnimationTriggered}" Value="True">
                         <DataTrigger.EnterActions>
-                            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+                            <BeginStoryboard Storyboard="{StaticResource EnterStory}"/>
                         </DataTrigger.EnterActions>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsEndAnimationTriggered}" Value="True">
