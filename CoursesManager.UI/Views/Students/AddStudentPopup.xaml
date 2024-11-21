@@ -16,6 +16,8 @@
 
     <Window.Resources>
         <Storyboard x:Key="EnterStory">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                Duration="0:0:0.2" From="0.3" To="1" />
             <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
                              Duration="0:0:0.1" From="0" To="1" />
             <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"

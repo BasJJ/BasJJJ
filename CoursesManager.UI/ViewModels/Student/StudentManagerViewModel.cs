@@ -120,9 +120,7 @@ namespace CoursesManager.UI.ViewModels
                 .Where(r => r.StudentID == SelectedStudent.Id)
                 .ToList();
 
-            var coursePayments = registrations.Select(r => new CourseStudentPayment(
-                _courseRepository.GetById(r.CourseID), r))
-                .ToList();
+            var coursePayments = registrations.Select(r => new CourseStudentPayment(_courseRepository.GetById(r.CourseID), r)).ToList();
 
             DisplayedCourses = new ObservableCollection<CourseStudentPayment>(coursePayments);
             OnPropertyChanged(nameof(DisplayedCourses));
