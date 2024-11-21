@@ -14,7 +14,7 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid>
-            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
+            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15" Margin="61,1,-61,-1">
                 <StackPanel>
                     <controls:PrimaryDialogHeader HeaderTitle="Cursist Toevoegen" />
                     <Grid Margin="10, 20">

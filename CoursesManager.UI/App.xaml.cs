@@ -17,6 +17,7 @@ using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI;
 
@@ -102,6 +103,8 @@ public partial class App : Application
             RegistrationRepository,
             nav));
         INavigationService.RegisterViewModelFactory(() => new CourseOverViewViewModel());
+        INavigationService.RegisterViewModelFactory(() => new StudentDetailViewModel(RegistrationRepository));
+
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
         (student) => new EditStudentViewModel(
             StudentRepository,

@@ -18,6 +18,7 @@ using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.Utils;
 using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using System;
+using CoursesManager.UI.ViewModels.Students;
 
 
 namespace CoursesManager.UI.ViewModels
@@ -32,6 +33,7 @@ namespace CoursesManager.UI.ViewModels
         private readonly StudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
+        private readonly INavigationService _navigationService;
 
         private Student _selectedStudent;
         public Student SelectedStudent
@@ -94,6 +96,8 @@ namespace CoursesManager.UI.ViewModels
             AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, (s) => true);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, (s) => s != null);
+            StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
+
             SearchCommand = new RelayCommand(OnSearchCommand);
 
             if (SelectedStudent != null && SelectedStudent.Courses != null)
@@ -150,7 +154,7 @@ namespace CoursesManager.UI.ViewModels
 
         public ICommand DataImportCommand { get; private set; }
         public ICommand DataExportCommand { get; private set; }
-        public ICommand OpenRecordCommand { get; private set; }
+        public ICommand StudentDetailCommand { get; private set; }
         public ICommand DeleteStudentCommand { get; private set; }
         public ICommand EditStudentCommand { get; private set; }
         public ICommand AddStudentCommand { get; private set; }
@@ -249,6 +253,16 @@ namespace CoursesManager.UI.ViewModels
 
                 LoadStudents();
             }
+        }
+
+        private void OpenStudentDetailViewModel()
+        {
+            var studentDetailViewModel = new StudentDetailViewModel(_registrationRepository)
+            {
+                Student = SelectedStudent
+            };
+
+            _navigationService.NavigateTo<StudentDetailViewModel>();
         }
 
 
