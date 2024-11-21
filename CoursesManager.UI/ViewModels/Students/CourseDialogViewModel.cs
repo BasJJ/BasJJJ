@@ -90,9 +90,9 @@ namespace CoursesManager.UI.ViewModels.Students
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
 
-            Course = course ?? new Course
+            Course = course ?? new Course 
             {
-                Name = string.Empty,
+                Name = string.Empty, 
                 Code = string.Empty,
                 Description = string.Empty,
                 Location = null,

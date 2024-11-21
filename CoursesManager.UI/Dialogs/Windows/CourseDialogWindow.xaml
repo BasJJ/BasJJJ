@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
         mc:Ignorable="d"
-        WindowStyle="None"
         AllowsTransparency="True"
+        WindowStyle="None"
+        
         WindowStartupLocation="CenterScreen"
-        d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
-    <Grid >
+        d:DesignHeight="700" d:DesignWidth="1600">
+    <Grid Background="{StaticResource SecondaryGradient}" Margin="0" >
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
