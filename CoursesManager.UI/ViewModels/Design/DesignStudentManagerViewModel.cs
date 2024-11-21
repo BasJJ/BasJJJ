@@ -35,7 +35,7 @@ namespace CoursesManager.UI.ViewModels.Design
                     Email = $"{GetRandomFirstName()}.{GetRandomLastName()}@example.com".ToLower(),
                     PhoneNumber = GenerateRandomPhoneNumber(),
                     PostCode = GenerateRandomPostCode(),
-                    HouseNumber = random.Next(1, 300),
+                    HouseNumber = random.Next(1, 300).ToString(),
                     HouseNumberExtension = GenerateRandomHouseNumberExtension(),
                     AwaitingPayement = random.Next(0, 2) == 1 // Randomly true or false
                 };

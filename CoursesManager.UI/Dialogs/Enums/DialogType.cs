@@ -2,7 +2,7 @@
 {
     public enum DialogType
     {
-        Error = 0,
+        Notify = 0,
         Confirmation = 1
     }
 }

@@ -18,6 +18,10 @@
                 <ResourceDictionary Source="Resources/ScrollBarStyling.xaml" />
                 <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/ComboBoxStyling.xaml" />
+                <ResourceDictionary Source="Resources/SideBar.xaml"/>
+                <ResourceDictionary Source="Resources/HeaderStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Colors/Gradients.xaml"/>
+                <ResourceDictionary Source="Resources/StartupAnimations.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Directly defined resources (such as DataTemplates) -->
             <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">

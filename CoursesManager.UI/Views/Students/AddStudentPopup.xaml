@@ -6,13 +6,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         mc:Ignorable="d"
-        Title="AddStudentPopup" Height="650" Width="550"
+        Title="AddStudentPopup"
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent"
         Loaded="Window_Loaded"
-        WindowStartupLocation="CenterScreen">
-    <Grid>
+        WindowStartupLocation="CenterScreen"
+        Width="550" Height="600">
+
+    <Window.Resources>
+        <Storyboard x:Key="MainStory">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="0" To="1" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="0" To="1" />
+        </Storyboard>
+
+        <Storyboard x:Key="ExitAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="1" To="0" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="1" To="0" />
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid Name="SizingGrid" RenderTransformOrigin="0.5, 0.5">
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="0" ScaleY="0"/>
+        </Grid.RenderTransform>
+        <Grid.Style>
+        <Style TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsStartAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+                        </DataTrigger.EnterActions>
+                </DataTrigger>
+                    <DataTrigger Binding="{Binding IsEndAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource ExitAnimation}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Style.Triggers>
+        </Style>
+        </Grid.Style>
         <Grid>
             <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15" Margin="61,1,-61,-1">
                 <StackPanel>
@@ -23,7 +60,6 @@
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -63,47 +99,56 @@
                              Tag="Achternaam"
                              Grid.Row="4" Grid.Column="0" Margin="0,0,10,10" />
 
+                        <!-- Geboortedatum -->
+                        <TextBlock Text="Geboortedatum*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
+                        <DatePicker Style="{DynamicResource DatePickerStyle}"
+                                    SelectedDate="{Binding Student.DateOfBirth, UpdateSourceTrigger=PropertyChanged}"
+                                    local:ValidationProperties.IsRequired="True"
+                                    local:ValidationProperties.IsDate="True"
+                                    Tag="Geboortedatum"
+                                    Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
+    
                         <!-- Email -->
-                        <TextBlock Text="Email*" Grid.Row="3" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Email*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.Email, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              local:ValidationProperties.IsEmail="True"
                              Tag="Email"
-                             Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Telefoonnummer -->
-                        <TextBlock Text="Telefoonnummer*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Telefoonnummer*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              local:ValidationProperties.IsPhoneNumber="True"
                              Tag="Telefoonnummer"
-                             Grid.Row="6" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="6" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- PostCode -->
-                        <TextBlock Text="Postcode*" Grid.Row="5" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Postcode*" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.PostCode, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Postcode"
-                             Grid.Row="6" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Huisnummer -->
-                        <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.HouseNumber, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Huisnummer"
-                             Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- Straatnaam -->
-                        <TextBlock Text="Straatnaam*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
+                        <TextBlock Text="Straatnaam*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.StreetName, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Straatnaam"
-                             Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
+                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Land -->
                         <TextBlock Text="Land*" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" />
@@ -114,22 +159,22 @@
                              Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" />
 
                         <!-- Stad -->
-                        <TextBlock Text="Stad*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" />
+                        <TextBlock Text="Stad*" Grid.Row="11" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
                              Text="{Binding Student.City, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Stad"
-                             Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
+                             Grid.Row="12" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- RegisterdTo (ComboBox) -->
-                        <TextBlock Text="Cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="0" />
+                        <TextBlock Text="Cursus*"  Margin="0,0,5,5" Grid.Row="11" Grid.Column="1" />
                         <ComboBox x:Name="cmbCourses" ItemsSource="{Binding Courses}"
                               Style="{DynamicResource ComboBoxStyle}"
                               SelectedItem="{Binding SelectedCourse}"
                               ItemContainerStyle="{Binding ComboBoxItem}"
                               local:ValidationProperties.IsRequired="True"
                               Tag="cursus"
-                              Grid.Row="12" Grid.Column="0" Margin="5,0,10,-10">
+                              Grid.Row="12" Grid.Column="1" Margin="5,0,10,10">
                         </ComboBox>
                     </Grid>
 
@@ -153,5 +198,15 @@
                 <Grid />
             </Border>
         </Grid>
+        <Border Panel.ZIndex="5"
+            x:Name="DialogOverlay"
+            Background="#80000000"
+            CornerRadius="15,15,15,15"
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="{Binding IsDialogOpen}">
+            <Grid />
+        </Border>
     </Grid>
 </Window>

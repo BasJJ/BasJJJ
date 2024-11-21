@@ -8,6 +8,7 @@ using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using System.Diagnostics;
+using CoursesManager.MVVM.Messages;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -15,6 +16,7 @@ namespace CoursesManager.UI.ViewModels
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
+        private readonly IMessageBroker _messageBroker;
 
         private string _searchText = String.Empty;
         private bool _isToggled = true;
@@ -42,10 +44,10 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Contructor
-        public CoursesManagerViewModel(ICourseRepository CourseRepository, IRegistrationRepository registrationRepository, INavigationService navigationService) : base(navigationService)
+        public CoursesManagerViewModel(ICourseRepository CourseRepository, IRegistrationRepository registrationRepository, INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
         {
             ViewTitle = "Cursus beheer";
-
+            _messageBroker = messageBroker;
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);

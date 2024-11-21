@@ -2,41 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:local="clr-namespace:CoursesManager.UI.Views.Controls">
-    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FF391DDA" Offset="0" />
-        <GradientStop Color="#FF1E0F74" Offset="1" />
-    </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="ErrorGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#D85653" Offset="0" />
-        <GradientStop Color="#7C3130" Offset="1" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="ErrorButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#CCD85653" Offset="0" />
-        <GradientStop Color="#CC7C3130" Offset="1" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="ErrorButtonPressedGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#CC7C3130" Offset="0" />
-        <GradientStop Color="#CCD85653" Offset="1" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="SecondaryGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#51BAF7" Offset="0" />
-        <GradientStop Color="#D5F0FF" Offset="1" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="SelectorGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FFFFFF" Offset="0" />
-        <GradientStop Color="#C8BCFF" Offset="1" />
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="HoverOverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FFFFFF" Offset="0" />
-        <GradientStop Color="#E9E4FF" Offset="1" />
-    </LinearGradientBrush>
-
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors/Gradients.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
     <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
@@ -90,7 +59,45 @@
         </Style.Triggers>
     </Style>
 
-
+    <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="8"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="AllowDrop" Value="true"/>
+    <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+    <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+    <Setter Property="Effect">
+        <Setter.Value>
+            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
+        </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="DatePicker">
+                <Grid>
+                    <Border x:Name="PART_TestBoxBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10" SnapsToDevicePixels="True">
+                        <TextBox x:Name="PART_TextBox"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 Foreground="{TemplateBinding Foreground}"
+                                 Padding="{TemplateBinding Padding}"
+                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                 Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
 
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -384,31 +391,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PrimaryHeaderBorder" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
-        <Setter Property="CornerRadius" Value="15,15,15,15" />
-        <Setter Property="Panel.ZIndex" Value="2" />
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                <Setter Property="CornerRadius" Value="0,0,15,15" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="SidebarBorder" TargetType="Border">
-        <Setter Property="Background" Value="#808080" />
-        <Setter Property="CornerRadius" Value="15,0,0,15" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                <Setter Property="CornerRadius" Value="0" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
 
     <Style x:Key="PrimaryDialogHeaderBorder" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
