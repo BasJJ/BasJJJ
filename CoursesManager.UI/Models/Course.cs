@@ -26,7 +26,7 @@ namespace CoursesManager.UI.Models
         public DateTime DateCreated { get; set; }
         public ObservableCollection<Student>? students { get; set; }
 
-        public Image Image { get; set; }
+        public Image? Image { get; set; }
 
         public string GenerateFilterString()
         {
