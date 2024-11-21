@@ -23,6 +23,7 @@ using CoursesManager.UI.Dialogs.Windows;
 using CoursesManager.UI.Dialogs.Enums;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Dialogs.ResultTypes;
+using System.IO;
 
 
 
@@ -98,6 +99,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 IsActive = false,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
+                Image = null,
 
             };
 
