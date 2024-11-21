@@ -89,6 +89,7 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         private void ChangeCourse()
         {
+
         }
     }
 }

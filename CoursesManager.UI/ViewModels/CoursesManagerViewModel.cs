@@ -31,8 +31,21 @@ namespace CoursesManager.UI.ViewModels
         public ICommand AddCourseCommand { get; }
         public ICommand CourseOptionCommand { get; }
 
-        public ObservableCollection<Course> Courses { get; private set; }
-        public ObservableCollection<Course> FilteredCourses { get; private set; }
+        private ObservableCollection<Course> _courses;
+
+        public ObservableCollection<Course> Courses
+        {
+            get => _courses;
+            private set => SetProperty(ref _courses, value);
+        }
+
+        private ObservableCollection<Course> _filteredCourses;
+
+        public ObservableCollection<Course> FilteredCourses
+        {
+            get => _filteredCourses;
+            private set => SetProperty(ref _filteredCourses, value);
+        }
 
         public string SearchText
         {
