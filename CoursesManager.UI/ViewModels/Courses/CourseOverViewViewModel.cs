@@ -29,10 +29,12 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         public CourseOverViewViewModel(IMessageBroker MessageBroker)
         {
+
             _messageBroker = MessageBroker;
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
+            ViewTitle = CurrentCourse.Name;
             Students = CurrentCourse.students;
             ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
             studentPayments = new ObservableCollection<CourseStudentPayment>();
