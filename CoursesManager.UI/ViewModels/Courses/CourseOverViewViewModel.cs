@@ -48,88 +48,19 @@ namespace CoursesManager.UI.ViewModels.Courses
             ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
             studentPayments = new ObservableCollection<CourseStudentPayment>();
 
-                for (int i = 0 ; i < registration.Count - 1 ; i++)  {
+            for (int i = 0; i < registration.Count - 1; i++)
+            {
                 CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
                 studentPayments.Add(studentPayment);
-                }
-        
-            DeleteCourseCommand = new RelayCommand(OnDelete);
-        }
-            DeleteCourseCommand = new RelayCommand(OnDelete);
-        }
-
-        private async void OnDelete()
-        {
-            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
-            {
-                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-                {
-                    DialogText = "Cursus heeft nog actieve registraties.",
-                    DialogTitle = "Error"
-                });
             }
-            else
-            {
-                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
-                {
-                    DialogTitle = "Bevestiging",
-                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
-                });
 
-                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
-                {
-                    try
-                    {
-                        _courseRepository.Delete(CurrentCourse.ID);
 
-        private async void OnDelete()
-        {
-            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
-            {
-                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-                {
-                    DialogText = "Cursus heeft nog actieve registraties.",
-                    DialogTitle = "Error"
-                });
-            }
-            else
-            {
-                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
-                {
-                    DialogTitle = "Bevestiging",
-                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
-                });
-
-                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
-                {
-                    try
-                    {
-                        _courseRepository.Delete(CurrentCourse.ID);
-
-                        await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                            new ConfirmationDialogResultType
-                            {
-                                DialogText = "Succesvol verwijderd",
-                                DialogTitle = "Info"
-                            });
-
-                        _messageBroker.Publish(new CoursesChangedMessage());
-                        _navigationService.GoBackAndClearForward();
-                    }
-                    catch (Exception ex)
-                    {
-                        //TODO: add logging
-                        await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-                        {
-                            DialogText = "Er is iets fout gegaan.",
-                            DialogTitle = "Error"
-                        });
-                    }
-                }
-            }
         }
-
         private void DeleteCourse()
+        {
+
+        }
+        private void ChangeCourse()
         {
 
         }
