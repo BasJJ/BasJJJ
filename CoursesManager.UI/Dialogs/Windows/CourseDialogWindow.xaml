@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
         mc:Ignorable="d"
         AllowsTransparency="True"
-        WindowStyle="None"
+        WindowStyle="None" Background="Transparent"
         
         WindowStartupLocation="CenterScreen"
         d:DesignHeight="700" d:DesignWidth="1600">
-    <Grid Background="{StaticResource SecondaryGradient}" Margin="0" >
-
-        <Grid.ColumnDefinitions>
+    <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
+    
+        <Grid  Margin="0" >
+            <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="50"/>
@@ -22,8 +23,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-
-        <Border Grid.Row="1" Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="Auto">
+            <controls:PrimaryDialogHeader HeaderTitle="Cursus Toevoegen" Grid.ColumnSpan="3" />
+            <Border Grid.Row="1" Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="25"/>
@@ -41,15 +42,7 @@
                     <RowDefinition Height="25"/>
                 </Grid.RowDefinitions>
 
-                <!-- Headerbar with title -->
-                <Border Grid.ColumnSpan="3" Grid.Row="0" x:Name="CardHeader" Width="Auto" Height="40" CornerRadius="15 15 0 0">
-                    <TextBlock Text="Cursus Toevoegen" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
-                        </Style>
-                    </Border.Style>
-                </Border>
+                
 
                 <Grid Grid.Column="1" Grid.Row="2" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
@@ -132,7 +125,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Text="Locatie:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <ComboBox Style="{DynamicResource ComboBoxEditCourseStyle2}" ItemsSource="{Binding Locations}" DisplayMemberPath="Name" SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
+                                <ComboBox Style="{DynamicResource ComboBoxStyle}" ItemsSource="{Binding Locations}" DisplayMemberPath="Name" SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged}" Width="180" Height="30"  Grid.Column="2" Margin="0,0,0,0">
 
                                 </ComboBox>
                             </Grid>
@@ -222,4 +215,5 @@
             </Grid>
         </Border>
     </Grid>
+        </Border>
 </Window>
