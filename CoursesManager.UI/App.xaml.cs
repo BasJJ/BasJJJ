@@ -86,7 +86,7 @@ public partial class App : Application
 
     private void InitializeRepositories()
     {
-        CourseRepository = new CourseRepository(Courses);
+        CourseRepository = new CourseRepository();
         StudentRepository = new StudentRepository(Students);
         RegistrationRepository = new RegistrationRepository(Registrations);
         AddressRepository = new AddressRepository();
