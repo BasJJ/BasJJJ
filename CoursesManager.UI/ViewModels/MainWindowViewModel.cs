@@ -6,6 +6,7 @@ using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.ViewModels.Courses;
 using System.Windows.Navigation;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.ViewModels;
 

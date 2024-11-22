@@ -59,5 +59,10 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
 
             _courses.Remove(course);
         }
+
+        public bool HasActiveRegistrations(Course course)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

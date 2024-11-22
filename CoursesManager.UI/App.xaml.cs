@@ -18,6 +18,7 @@ using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI;
 
@@ -116,26 +117,12 @@ public partial class App : Application
 
     private void RegisterDialogs()
     {
-        DialogService.RegisterDialog<YesNoDialogViewModel, YesNoDialogWindow, YesNoDialogResultType>((initial) => new YesNoDialogViewModel(initial));
-        DialogService.RegisterDialog<ConfirmationDialogViewModel, ConfirmationDialogWindow, ConfirmationDialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
-        //DialogService.RegisterDialog<ConfirmationDialogWindow, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogWindow(initial));
-        DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>((initial) => new AddStudentViewModel(
-            initial,
-            studentRepository: ServiceProvider.GetRequiredService<IStudentRepository>(),
-            courseRepository: ServiceProvider.GetRequiredService<ICourseRepository>(),
-            registrationRepository: ServiceProvider.GetRequiredService<IRegistrationRepository>()
-        ));
-        DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, ConfirmationDialogResultType>((initial) => new ErrorDialogViewModel(initial));
-        DialogService.RegisterDialog<CourseDialogViewModel, CourseDialogWindow, Course>((Initial) => new CourseDialogViewModel(
-        ServiceProvider.GetRequiredService<ICourseRepository>(),
-        DialogService,
-        ServiceProvider.GetRequiredService<ILocationRepository>(),
-        Initial
-        ));
-        DialogService.RegisterDialog<CourseDialogViewModel,CourseDialogWindow, Course >((Initial) => new CourseDialogViewModel(Initial));
         DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
         DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
+
+        
+        DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, DialogResultType>((initial) => new ErrorDialogViewModel(initial));
+        DialogService.RegisterDialog<CourseDialogViewModel, CourseDialogWindow, Course>((initial) => new CourseDialogViewModel(CourseRepository, DialogService, LocationRepository, initial));
     }
 
     private void RegisterViewModels(ViewModelFactory viewModelFactory)
@@ -147,7 +134,7 @@ public partial class App : Application
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
         // Register CourseOverViewViewModel
-        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CourseOverViewViewModel>());
+        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CourseOverViewViewModel>(nav));
 
         // Register Dialogs using the factory
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(

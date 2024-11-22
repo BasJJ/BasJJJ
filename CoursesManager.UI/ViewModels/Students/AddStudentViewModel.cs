@@ -6,12 +6,12 @@ using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using CoursesManager.UI.Views.Students;
-
-namespace CoursesManager.UI.ViewModels.Students;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Services;
+using CoursesManager.UI.Dialogs.Enums;
 
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
@@ -21,16 +21,21 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     private readonly IRegistrationRepository _registrationRepository;
     private readonly IDialogService _dialogService;
 
-    public event EventHandler<Student> StudentAdded;
+    private bool _isDialogOpen;
 
-    public Student Student
+    public bool IsDialogOpen
     {
-        get => _student;
-        set
-        {
-            _student = value;
-            OnPropertyChanged(nameof(Student));
-        }
+        get => _isDialogOpen;
+        set => SetProperty(ref _isDialogOpen, value);
+    }
+
+    private bool _isEndAnimationTriggered;
+
+    public bool IsEndAnimationTriggered
+    {
+        get => _isEndAnimationTriggered;
+        set => SetProperty(ref _isEndAnimationTriggered, value);
+    }
 
     private bool _isStartAnimationTriggered;
 
@@ -40,8 +45,12 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         set => SetProperty(ref _isStartAnimationTriggered, value);
     }
 
-    public ObservableCollection<string> Courses { get; set; }
-    public string SelectedCourse { get; set; }
+    private bool _isReadyToClose;
+    public bool IsReadyToClose
+    {
+        get => _isReadyToClose;
+        set => SetProperty(ref _isReadyToClose, value);
+    }
 
     public Student Student { get; set; }
     public ObservableCollection<string> Courses { get; set; }
@@ -49,86 +58,53 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event EventHandler<Student>? StudentAdded;
 
-    // Default constructor
-    public AddStudentViewModel(bool initial, IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository)
+    public Window ParentWindow { get; set; }
+
+    public AddStudentViewModel
+        (bool initial,
+            IStudentRepository studentRepository,
+            ICourseRepository courseRepository,
+            IRegistrationRepository registrationRepository,
+            IDialogService dialogService)
         : base(initial)
     {
         IsStartAnimationTriggered = true;
         _studentRepository = studentRepository;
         _courseRepository = courseRepository;
         _registrationRepository = registrationRepository;
+        _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+
         Student = new Student();
         Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
-        SaveCommand = new RelayCommand(Save);
+        SaveCommand = new RelayCommand(async () => await Save());
         CancelCommand = new RelayCommand(Cancel);
-        PropertyChanged = delegate { };
     }
 
-    // Parameterized constructor for testing
-    public AddStudentViewModel(IStudentRepository studentRepository, ICourseRepository courseRepository, IRegistrationRepository registrationRepository) : base(false)
+    public async Task Save()
     {
-        _studentRepository = studentRepository;
-        _courseRepository = courseRepository;
-        _registrationRepository = registrationRepository;
-        Student = new Student();
-        Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
-        SaveCommand = new RelayCommand(Save);
-        CancelCommand = new RelayCommand(Cancel);
-        PropertyChanged = delegate { };
-    }
-
-    private bool FieldsValidations()
-    {
-        return !string.IsNullOrEmpty(Student.FirstName) &&
-               !string.IsNullOrEmpty(Student.LastName) &&
-               !string.IsNullOrEmpty(Student.Email) &&
-               !string.IsNullOrEmpty(Student.PhoneNumber) &&
-               !string.IsNullOrEmpty(Student.PostCode) &&
-               !string.IsNullOrEmpty(Student.PostCode) &&
-               !string.IsNullOrEmpty(SelectedCourse) &&
-               IsValidEmail(Student.Email) &&
-               IsNumber(Student.PhoneNumber);
-    }
-
-    private void Save()
-    {
-        if (!IsUniqueEmail(Student.Email))
+        if (!await ValidateFields())
         {
-            var dialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(false, "Het emailadres bestaat al")
-                .Build();
-            ShowWarningDialog(dialogResult);
-            return;
-        }
-
-        if (!FieldsValidations())
-        {
-            var dialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(false, "Vereiste velden moeten correct worden ingevuld")
-                .Build();
-            ShowWarningDialog(dialogResult);
             return;
         }
 
         var course = _courseRepository.GetAll().FirstOrDefault(c => c.Name == SelectedCourse);
-        if (course != null)
-        {
-            var registration = new Registration
-            {
-                StudentID = Student.Id,
-                Student = Student,
-                CourseID = course.ID,
-                Course = course,
-                RegistrationDate = DateTime.Now,
-                PaymentStatus = false,
-                IsActive = true,
-                DateCreated = DateTime.Now
-            };
 
-            _studentRepository.Add(Student);
-            _registrationRepository.Add(registration);
+        var registration = new Registration
+        {
+            StudentID = Student.Id,
+            Student = Student,
+            CourseID = course!.ID,
+            Course = course,
+            RegistrationDate = DateTime.Now,
+            PaymentStatus = false,
+            IsActive = true,
+            DateCreated = DateTime.Now
+        };
+
+        _studentRepository.Add(Student);
+        _registrationRepository.Add(registration);
 
         await ShowDialogAsync(DialogType.Notify, "Student succesvol toegevoegd", "Succes");
 
@@ -145,66 +121,83 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
             await ShowDialogAsync(DialogType.Notify, "Parent window is not set.", "Foutmelding");
             return false;
         }
-        else
+
+        var parentContent = ParentWindow.Content as DependencyObject;
+        if (parentContent == null)
         {
-            var dialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(false, "Geselecteerde cursus niet gevonden")
-                .Build();
-            ShowWarningDialog(dialogResult);
-            return;
+            await ShowDialogAsync(DialogType.Notify, "Parent window content is invalid.", "Foutmelding");
+            return false;
         }
 
-        var successDialogResult = DialogResult<bool>.Builder()
-            .SetSuccess(true, "Student succesvol toegevoegd")
-            .Build();
+        // Validate required fields
+        var errors = ValidationService.ValidateRequiredFields(parentContent);
 
-        ShowSuccessDialog(successDialogResult);
 
-        StudentAdded?.Invoke(this, Student);
-        CloseDialogWithResult(successDialogResult);
-    }
+        var existingEmails = _studentRepository.GetAll().Select(s => s.Email);
+        var emailError = ValidationService.ValidateUniqueField(Student.Email, existingEmails, "Het emailadres");
+        if (emailError != null)
+        {
+            errors.Add(emailError);
+        }
 
-    private void Cancel()
-    {
-        var dialogResult = DialogResult<bool>.Builder()
-            .SetSuccess(false, "Operation cancelled")
-            .Build();
-        CloseDialogWithResult(dialogResult);
-    }
+        var course = _courseRepository.GetAll().FirstOrDefault(c => c.Name == SelectedCourse);
+        if (course == null)
+        {
+            errors.Add("Geselecteerde cursus niet gevonden");
+        }
 
-    private bool IsValidEmail(string email)
-    {
-        if (string.IsNullOrWhiteSpace(email))
+        if (errors.Any())
+        {
+            await ShowDialogAsync(DialogType.Notify, string.Join("\n", errors), "Foutmelding");
             return false;
         }
 
         return true;
     }
 
-        try
+    private async Task<bool> ShowDialogAsync(DialogType dialogType, string message, string dialogTitle)
+    {
+        void SetIsDialogOpen(bool value)
         {
-            var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == email;
+            if (Application.Current?.Dispatcher?.CheckAccess() == true)
+            {
+                IsDialogOpen = value;
+            }
+            else
+            {
+                Application.Current?.Dispatcher?.Invoke(() => IsDialogOpen = value);
+            }
         }
-        catch
+
+        switch (dialogType)
         {
-            return false;
+            case DialogType.Notify:
+                SetIsDialogOpen(true);
+
+                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                    new DialogResultType
+                    {
+                        DialogTitle = dialogTitle,
+                        DialogText = message
+                    });
+
+                SetIsDialogOpen(false);
+                return true;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dialogType), dialogType, null);
         }
     }
 
-    private bool IsNumber(string phoneNumber)
+    private async void Cancel()
     {
-        return Regex.IsMatch(phoneNumber, @"^\d+$");
-    }
 
-    private bool IsUniqueEmail(string email)
-    {
-        return !_studentRepository.EmailExists(email);
-    }
-
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        IsEndAnimationTriggered = true;
+        await Task.Delay(150);
+        var dialogResult = DialogResult<bool>.Builder()
+            .SetSuccess(false, "Operation cancelled")
+            .Build();
+        CloseDialogWithResult(dialogResult);
     }
 
     protected override void InvokeResponseCallback(DialogResult<bool> dialogResult)
@@ -212,13 +205,4 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         ResponseCallback?.Invoke(dialogResult);
     }
 
-    protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
-    {
-        MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
-    }
-
-    protected virtual void ShowSuccessDialog(DialogResult<bool> dialogResult)
-    {
-        MessageBox.Show(dialogResult.OutcomeMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
 }

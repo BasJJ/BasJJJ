@@ -1,4 +1,5 @@
-﻿using CoursesManager.MVVM.Data;
+﻿using System.CodeDom;
+using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
@@ -10,6 +11,7 @@ using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.ViewModels;
 using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.Factory
 {
@@ -48,8 +50,6 @@ namespace CoursesManager.UI.Factory
                 Type vmType when vmType == typeof(StudentManagerViewModel) =>
                     new StudentManagerViewModel(_dialogService, _studentRepository, _courseRepository,
                         _registrationRepository, _messageBroker) as T,
-                Type vmType when vmType == typeof(CourseOverViewViewModel) =>
-                    new CourseOverViewViewModel() as T,
                 Type vmType when vmType == typeof(EditStudentViewModel) =>
                     new EditStudentViewModel(
                         _studentRepository,
@@ -70,7 +70,9 @@ namespace CoursesManager.UI.Factory
             return typeof(T) switch
             {
                 Type vmType when vmType == typeof(CoursesManagerViewModel) =>
-                    new CoursesManagerViewModel(_courseRepository, _registrationRepository, navigationService, _messageBroker) as T,
+                    new CoursesManagerViewModel(_courseRepository, _messageBroker, _dialogService, navigationService) as T,
+                Type vmType when vmType == typeof(CourseOverViewViewModel) =>
+                    new CourseOverViewViewModel(_courseRepository, _dialogService, _messageBroker, navigationService) as T,
                 _ => throw new ArgumentException($"Unknown viewmodel type: {typeof(T)}")
             };
         }

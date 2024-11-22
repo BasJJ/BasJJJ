@@ -21,16 +21,12 @@ namespace CoursesManager.UI.ViewModels.Students
 {
     public class StudentManagerViewModel : ViewModel
     {
-        #region View fields
-
-        public ObservableCollection<Student> students;
-        private string _searchText;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
-        public ObservableCollection<Student> Students { get;  set; }
+        public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
 
@@ -50,7 +46,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 if (SetProperty(ref _selectedStudent, value))
                 {
                     UpdateStudentCourses();
-        }
+                }
             }
         }
 
@@ -124,7 +120,7 @@ namespace CoursesManager.UI.ViewModels.Students
         private void UpdateStudentCourses()
         {
             if (SelectedStudent == null)
-                {
+            {
                 DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
                 OnPropertyChanged(nameof(DisplayedCourses));
                 return;
@@ -147,12 +143,12 @@ namespace CoursesManager.UI.ViewModels.Students
             await ExecuteWithOverlayAsync(async () =>
             {
 
-            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
                 if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
-            {
-                LoadStudents();
-            }
+                {
+                    LoadStudents();
+                }
             });
         }
 
@@ -175,13 +171,13 @@ namespace CoursesManager.UI.ViewModels.Students
             if (student == null) return;
             await ExecuteWithOverlayAsync(async () =>
             {
-            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
+                var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
                 if (dialogResult?.Outcome == DialogOutcome.Success)
-            {
+                {
                     // Refresh the list or perform other actions
-                LoadStudents();
-            }
+                    LoadStudents();
+                }
             });
         }
 
@@ -193,11 +189,11 @@ namespace CoursesManager.UI.ViewModels.Students
             await ExecuteWithOverlayAsync(async () =>
             {
                 var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-            new DialogResultType
-            {
-                DialogTitle = "Bevestiging",
-                DialogText = "Wilt u deze cursist verwijderen?"
-            });
+                    new DialogResultType
+                    {
+                        DialogTitle = "Bevestiging",
+                        DialogText = "Wilt u deze cursist verwijderen?"
+                    });
 
                 if (confirmation?.Data?.Result == true)
                 {
@@ -206,13 +202,13 @@ namespace CoursesManager.UI.ViewModels.Students
                     _studentRepository.Update(student);
                     await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
                         new DialogResultType
-        {
+                        {
                             DialogTitle = "Informatie",
                             DialogText = "Cursist succesvol verwijderd."
                         });
 
-            LoadStudents();
-        }
+                    LoadStudents();
+                }
             });
         }
 
@@ -224,7 +220,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 await action();
             }
             finally
-        {
+            {
                 _messageBroker.Publish(new OverlayActivationMessage(false));
             }
         }

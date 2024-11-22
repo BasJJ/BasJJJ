@@ -7,6 +7,6 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 
 namespace CoursesManager.UI.Dialogs.ViewModels
 {
-    public class ErrorDialogViewModel(ConfirmationDialogResultType? initialData)
+    public class ErrorDialogViewModel(DialogResultType? initialData)
         : ConfirmationDialogViewModel(initialData);
 }
