@@ -1,10 +1,15 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.UI.Utils;
 using CoursesManager.UI.Models;
+using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -27,6 +32,8 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand DeleteCourseCommand { get; set; }
 
         public Course CurrentCourse { get; set; }
+        public ObservableCollection<Student>? Students { get; set; }
+        public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
 
         public CourseOverViewViewModel(ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
@@ -35,58 +42,24 @@ namespace CoursesManager.UI.ViewModels.Courses
             _messageBroker = messageBroker;
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
+            DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
+            Students = CurrentCourse.students;
+            ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
+            studentPayments = new ObservableCollection<CourseStudentPayment>();
 
-            DeleteCourseCommand = new RelayCommand(OnDelete);
+            for (int i = 0; i < registration.Count - 1; i++)
+            {
+                CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
+                studentPayments.Add(studentPayment);
+            }
+
+
         }
-
-        private async void OnDelete()
+        private void DeleteCourse()
         {
-            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
-            {
-                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-                {
-                    DialogText = "Cursus heeft nog actieve registraties.",
-                    DialogTitle = "Error"
-                });
-            }
-            else
-            {
-                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
-                {
-                    DialogTitle = "Bevestiging",
-                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
-                });
 
-                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
-                {
-                    try
-                    {
-                        _courseRepository.Delete(CurrentCourse.ID);
-
-                        await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, ConfirmationDialogResultType>(
-                            new ConfirmationDialogResultType
-                            {
-                                DialogText = "Succesvol verwijderd",
-                                DialogTitle = "Info"
-                            });
-
-                        _messageBroker.Publish(new CoursesChangedMessage());
-                        _navigationService.GoBackAndClearForward();
-                    }
-                    catch (Exception ex)
-                    {
-                        //TODO: add logging
-                        await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
-                        {
-                            DialogText = "Er is iets fout gegaan.",
-                            DialogTitle = "Error"
-                        });
-                    }
-                }
-            }
         }
-
         private void ChangeCourse()
         {
 

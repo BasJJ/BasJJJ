@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CoursesManager.MVVM.Data;
 
-namespace CoursesManager.UI.Dialogs.ResultTypes
+namespace CoursesManager.UI.Dialogs.ResultTypes;
+
+public class DialogResultType : ViewModel
 {
-    internal class DialogResultType
-    {
-        public bool? Result { get; set; }
-        public string DialogText { get; set; }
-        public string DialogTitle { get; set; }
-    }
+    public bool Result { get; set; }
+    public string DialogText { get; set; }
+    public string DialogTitle { get; set; }
 }
+
