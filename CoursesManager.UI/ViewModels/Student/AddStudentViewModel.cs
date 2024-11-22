@@ -13,6 +13,10 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Services;
 using CoursesManager.UI.Dialogs.Enums;
+using CoursesManager.UI.Messages;
+using CoursesManager.UI.ViewModels;
+using CoursesManager.MVVM.Messages;
+using System.Windows.Media.Animation;
 
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
@@ -28,6 +32,29 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         get => _isDialogOpen;
         set => SetProperty(ref _isDialogOpen, value);
+    }
+
+    private bool _isEndAnimationTriggered;
+
+    public bool IsEndAnimationTriggered
+    {
+        get => _isEndAnimationTriggered;
+        set => SetProperty(ref _isEndAnimationTriggered, value);
+    }
+
+    private bool _isStartAnimationTriggered;
+
+    public bool IsStartAnimationTriggered
+    {
+        get => _isStartAnimationTriggered;
+        set => SetProperty(ref _isStartAnimationTriggered, value);
+    }
+
+    private bool _isReadyToClose;
+    public bool IsReadyToClose
+    {
+        get => _isReadyToClose;
+        set => SetProperty(ref _isReadyToClose, value);
     }
 
     public Student Student { get; set; }
@@ -48,6 +75,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
             IDialogService dialogService)
         : base(initial)
     {
+        IsStartAnimationTriggered = true;
         _studentRepository = studentRepository;
         _courseRepository = courseRepository;
         _registrationRepository = registrationRepository;
@@ -86,6 +114,8 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         await ShowDialogAsync(DialogType.Notify, "Student succesvol toegevoegd", "Succes");
 
         StudentAdded?.Invoke(this, Student);
+        IsEndAnimationTriggered = true;
+        await Task.Delay(150);
         InvokeResponseCallback(DialogResult<bool>.Builder().SetSuccess(true, "Success").Build());
     }
 
@@ -164,8 +194,11 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         }
     }
 
-    private void Cancel()
+    private async void Cancel()   
     {
+
+        IsEndAnimationTriggered = true;
+        await Task.Delay(150);
         var dialogResult = DialogResult<bool>.Builder()
             .SetSuccess(false, "Operation cancelled")
             .Build();
@@ -176,4 +209,5 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         ResponseCallback?.Invoke(dialogResult);
     }
+
 }

@@ -28,6 +28,22 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _isDialogOpen, value);
         }
 
+        private bool _isEndAnimationTriggered;
+
+        public bool IsEndAnimationTriggered
+        {
+            get => _isEndAnimationTriggered;
+            set => SetProperty(ref _isEndAnimationTriggered, value);
+        }
+
+        private bool _isStartAnimationTriggered;
+
+        public bool IsStartAnimationTriggered
+        {
+            get => _isStartAnimationTriggered;
+            set => SetProperty(ref _isStartAnimationTriggered, value);
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
@@ -39,6 +55,7 @@ namespace CoursesManager.UI.ViewModels
             Student? student)
             : base(student)
         {
+            IsStartAnimationTriggered = true;
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
@@ -90,6 +107,10 @@ namespace CoursesManager.UI.ViewModels
                 UpdateStudentDetails();
                 UpdateRegistrations();
                 await ShowDialogAsync(DialogType.Notify, "Cursist succesvol opgeslagen.", "Succes");
+
+                IsEndAnimationTriggered = true;
+                await Task.Delay(150);
+
                 InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
 
             }
@@ -142,8 +163,10 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-        private void OnCancel()
+        private async void OnCancel()
         {
+            IsEndAnimationTriggered = true;
+            await Task.Delay(150);
             var dialogResult = DialogResult<Student>.Builder()
                 .SetCanceled("Wijzigingen zijn geannuleerd door de gebruiker.")
                 .Build();

@@ -3,8 +3,10 @@ using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Messages;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
@@ -17,12 +19,12 @@ namespace CoursesManager.UI.ViewModels
     {
 
         private readonly IDialogService _dialogService;
+        private readonly IMessageBroker _messageBroker;
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
         public ObservableCollection<Student> Students { get;  set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
-        public ObservableCollection<CourseStudentPayment> CoursePaymentList { get; private set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
 
         private string _searchText;
@@ -52,6 +54,13 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _isDialogOpen, value);
         }
 
+        private ObservableCollection<CourseStudentPayment> _coursePaymentList;
+        public ObservableCollection<CourseStudentPayment> CoursePaymentList
+        {
+            get => _coursePaymentList;
+            set => SetProperty(ref _coursePaymentList, value);
+        }
+
         #region Commands
 
         public ICommand AddStudentCommand { get; }
@@ -65,8 +74,9 @@ namespace CoursesManager.UI.ViewModels
             IDialogService dialogService,
             IStudentRepository studentRepository,
             ICourseRepository courseRepository,
-            IRegistrationRepository registrationRepository)
+            IRegistrationRepository registrationRepository, IMessageBroker messageBroker)
         {
+            _messageBroker = messageBroker;
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
@@ -80,6 +90,7 @@ namespace CoursesManager.UI.ViewModels
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
             SearchCommand = new RelayCommand(FilterStudentRecords);
+            ViewTitle = "Cursisten beheer";
         }
 
         public void LoadStudents()
@@ -126,36 +137,45 @@ namespace CoursesManager.UI.ViewModels
 
         private async void OpenAddStudentPopup()
         {
-            IsDialogOpen = true;
-            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
-
-            if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
+            await ExecuteWithOverlayAsync(async () =>
             {
-                LoadStudents();
-            }
-            IsDialogOpen = false;
+
+                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+
+                if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
+                {
+                    LoadStudents();
+                }
+            });
         }
 
         private async void OpenEditStudentPopup(Student student)
         {
             if (student == null)
-            {
-                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                    new DialogResultType
+                await ExecuteWithOverlayAsync(async () =>
+                {
                     {
-                        DialogTitle = "Error",
-                        DialogText = "Geen student geselecteerd om te bewerken."
-                    });
-                return;
-            }
+                        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                            new DialogResultType
+                            {
+                                DialogTitle = "Error",
+                                DialogText = "Geen student geselecteerd om te bewerken."
+                            });
+                        return;
+                    }
+                });
 
-            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
-
-            if (dialogResult?.Outcome == DialogOutcome.Success)
+            if (student == null) return;
+            await ExecuteWithOverlayAsync(async () =>
             {
-                // Refresh the list or perform other actions
-                LoadStudents();
-            }
+                var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
+
+                if (dialogResult?.Outcome == DialogOutcome.Success)
+                {
+                    // Refresh the list or perform other actions
+                    LoadStudents();
+                }
+            });
         }
 
 
@@ -163,29 +183,43 @@ namespace CoursesManager.UI.ViewModels
         {
             if (student == null) return;
 
-            IsDialogOpen = true;
-            var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-                new DialogResultType
-                {
-                    DialogTitle = "Bevestiging",
-                    DialogText = "Wilt u deze cursist verwijderen?"
-                });
-
-            if (confirmation?.Data?.Result == true)
+            await ExecuteWithOverlayAsync(async () =>
             {
-                student.Is_deleted = true;
-                student.date_deleted = DateTime.Now;
-                _studentRepository.Update(student);
-                await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                    new DialogResultType
-                    {
-                        DialogTitle = "Informatie",
-                        DialogText = "Cursist succesvol verwijderd."
-                    });
+                var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+            new DialogResultType
+            {
+                DialogTitle = "Bevestiging",
+                DialogText = "Wilt u deze cursist verwijderen?"
+            });
 
-                LoadStudents();
+                if (confirmation?.Data?.Result == true)
+                {
+                    student.Is_deleted = true;
+                    student.date_deleted = DateTime.Now;
+                    _studentRepository.Update(student);
+                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                        new DialogResultType
+                        {
+                            DialogTitle = "Informatie",
+                            DialogText = "Cursist succesvol verwijderd."
+                        });
+
+                    LoadStudents();
+                }
+            });
+        }
+
+        private async Task ExecuteWithOverlayAsync(Func<Task> action)
+        {
+            _messageBroker.Publish(new OverlayActivationMessage(true));
+            try
+            {
+                await action();
             }
-            IsDialogOpen = false;
+            finally
+            {
+                _messageBroker.Publish(new OverlayActivationMessage(false));
+            }
         }
     }
 }

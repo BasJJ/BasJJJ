@@ -4,13 +4,15 @@ using CoursesManager.MVVM.Navigation;
 using System.Windows.Input;
 using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Messages;
+using CoursesManager.UI.ViewModels.Courses;
+using System.Windows.Navigation;
 
 namespace CoursesManager.UI.ViewModels;
 
-public class MainWindowViewModel : ViewModel
+public class MainWindowViewModel : NavigatableViewModel
 {
-    public INavigationService NavigationService { get; set; }
     private readonly IMessageBroker _messageBroker;
+
 
     public ICommand CloseCommand { get; private set; }
 
@@ -20,18 +22,53 @@ public class MainWindowViewModel : ViewModel
 
     public ICommand GoBackCommand { get; private set; }
 
-    private bool _isSidebarHidden;
+    public ICommand MouseEnterButtonCommand { get; private set; }
+    public ICommand MouseEnterBorderCommand { get; private set; }
+    public ICommand MouseLeaveButtonCommand { get; private set; }
+    public ICommand MouseLeaveBorderCommand { get; private set; }
+    public ICommand GoToStudentManagementView { get; private set; }
+    public ICommand GoToCourseManagementView { get; private set; }
 
+    private INavigationService _navigationService;
+    public INavigationService NavigationService
+    {
+        get => _navigationService;
+        set => SetProperty(ref _navigationService, value);
+    }
+
+    private bool _isSidebarHidden;
     public bool IsSidebarHidden
     {
         get => _isSidebarHidden;
         set => SetProperty(ref _isSidebarHidden, value);
     }
 
-    public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker)
+    private bool _isMouseOverButton;
+    public bool IsMouseOverButton
     {
-        NavigationService = navigationService;
+        get => _isMouseOverButton;
+        set => SetProperty(ref _isMouseOverButton, value);
+    }
+
+    private bool _isMouseOverBorder;
+    public bool IsMouseOverBorder
+    {
+        get => _isMouseOverBorder;
+        set => SetProperty(ref _isMouseOverBorder, value);
+    }
+
+    private static bool _isDialogOpen;
+    public bool IsDialogOpen
+    {
+        get => _isDialogOpen;
+        set => SetProperty(ref _isDialogOpen, value);
+    }
+
+    public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
+    {
+        _navigationService = navigationService;
         _messageBroker = messageBroker;
+        _messageBroker.Subscribe<OverlayActivationMessage, MainWindowViewModel>(OverlayActivationHandler, this);
 
         CloseCommand = new RelayCommand(() =>
         {
@@ -52,5 +89,55 @@ public class MainWindowViewModel : ViewModel
         {
             NavigationService.GoBack();
         }, NavigationService.CanGoBack);
+
+        MouseEnterButtonCommand = new RelayCommand(() =>
+        {
+            IsMouseOverButton = true;
+            UpdateSidebarVisibility();
+        });
+        MouseEnterBorderCommand = new RelayCommand(() =>
+        {
+            IsMouseOverBorder = true;
+            UpdateSidebarVisibility();
+        });
+        MouseLeaveBorderCommand = new RelayCommand(() =>
+        {
+            IsMouseOverBorder = false;
+            UpdateSidebarVisibility();
+        });
+        MouseLeaveButtonCommand = new RelayCommand(() =>
+        {
+            IsMouseOverButton = false;
+            UpdateSidebarVisibility();
+        });
+        GoToStudentManagementView = new RelayCommand(() =>
+        {
+            NavigationService.NavigateTo<StudentManagerViewModel>();
+            IsSidebarHidden = false;
+        });
+        GoToCourseManagementView = new RelayCommand(() =>
+        {
+            NavigationService.NavigateTo<CoursesManagerViewModel>();
+            IsSidebarHidden = false;
+        });
+    }
+
+    private async void UpdateSidebarVisibility()
+    {
+        await Task.Delay(300);
+        if (IsMouseOverButton || IsMouseOverBorder)
+        {
+            IsSidebarHidden = true;
+        }
+        else
+        {
+            IsSidebarHidden = false;
+        }
+    }
+
+    private async void OverlayActivationHandler(OverlayActivationMessage obj)
+    {
+        OverlayActivationMessage overlayActivationMessage = obj as OverlayActivationMessage;
+        IsDialogOpen = overlayActivationMessage.IsVisible;
     }
 }

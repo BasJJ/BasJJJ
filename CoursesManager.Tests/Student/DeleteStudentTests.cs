@@ -14,6 +14,7 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using System.Windows;
 using System.Linq;
 using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.MVVM.Messages;
 
 namespace CoursesManager.Tests
 {
@@ -25,6 +26,7 @@ namespace CoursesManager.Tests
         private Mock<ICourseRepository> _mockCourseRepository;
         private Mock<IRegistrationRepository> _mockRegistrationRepository;
         private Mock<IDialogService> _mockDialogService;
+        private Mock<IMessageBroker> _mockMessageBroker;
         private StudentManagerViewModel _viewModel;
         private Student _testStudent;
 
@@ -35,6 +37,7 @@ namespace CoursesManager.Tests
             _mockCourseRepository = new Mock<ICourseRepository>();
             _mockRegistrationRepository = new Mock<IRegistrationRepository>();
             _mockDialogService = new Mock<IDialogService>();
+            _mockMessageBroker = new Mock<IMessageBroker>();
 
             _testStudent = new Student
             {
@@ -51,7 +54,8 @@ namespace CoursesManager.Tests
                 _mockDialogService.Object,
                 _mockStudentRepository.Object,
                 _mockCourseRepository.Object,
-                _mockRegistrationRepository.Object);
+                _mockRegistrationRepository.Object,
+                _mockMessageBroker.Object);
 
             _viewModel.LoadStudents();
         }
