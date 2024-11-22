@@ -28,6 +28,8 @@ namespace CoursesManager.UI.Models
 
         public Image? Image { get; set; }
 
+        public Image? Image { get; set; }
+
         public string GenerateFilterString()
         {
             var sb = new StringBuilder();

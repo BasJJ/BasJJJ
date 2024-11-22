@@ -55,6 +55,32 @@ namespace CoursesManager.UI.ViewModels.Courses
         
             DeleteCourseCommand = new RelayCommand(OnDelete);
         }
+            DeleteCourseCommand = new RelayCommand(OnDelete);
+        }
+
+        private async void OnDelete()
+        {
+            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
+            {
+                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, ConfirmationDialogResultType>(new ConfirmationDialogResultType
+                {
+                    DialogText = "Cursus heeft nog actieve registraties.",
+                    DialogTitle = "Error"
+                });
+            }
+            else
+            {
+                var result = await _dialogService.ShowDialogAsync<YesNoDialogViewModel, YesNoDialogResultType>(new YesNoDialogResultType
+                {
+                    DialogTitle = "Bevestiging",
+                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
+                });
+
+                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
+                {
+                    try
+                    {
+                        _courseRepository.Delete(CurrentCourse.ID);
 
         private async void OnDelete()
         {

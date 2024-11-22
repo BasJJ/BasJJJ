@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Printing;
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -8,6 +11,7 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
+using CoursesManager.UI.Models.Repositories;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
@@ -17,7 +21,10 @@ namespace CoursesManager.UI.ViewModels.Students
 {
     public class StudentManagerViewModel : ViewModel
     {
+        #region View fields
 
+        public ObservableCollection<Student> students;
+        private string _searchText;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
         private readonly IStudentRepository _studentRepository;
@@ -43,7 +50,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 if (SetProperty(ref _selectedStudent, value))
                 {
                     UpdateStudentCourses();
-                }
+        }
             }
         }
 
@@ -117,7 +124,7 @@ namespace CoursesManager.UI.ViewModels.Students
         private void UpdateStudentCourses()
         {
             if (SelectedStudent == null)
-            {
+                {
                 DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
                 OnPropertyChanged(nameof(DisplayedCourses));
                 return;
@@ -140,12 +147,12 @@ namespace CoursesManager.UI.ViewModels.Students
             await ExecuteWithOverlayAsync(async () =>
             {
 
-                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+            var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
                 if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
-                {
-                    LoadStudents();
-                }
+            {
+                LoadStudents();
+            }
             });
         }
 
@@ -168,13 +175,13 @@ namespace CoursesManager.UI.ViewModels.Students
             if (student == null) return;
             await ExecuteWithOverlayAsync(async () =>
             {
-                var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
+            var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
                 if (dialogResult?.Outcome == DialogOutcome.Success)
-                {
+            {
                     // Refresh the list or perform other actions
-                    LoadStudents();
-                }
+                LoadStudents();
+            }
             });
         }
 
@@ -199,13 +206,13 @@ namespace CoursesManager.UI.ViewModels.Students
                     _studentRepository.Update(student);
                     await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
                         new DialogResultType
-                        {
+        {
                             DialogTitle = "Informatie",
                             DialogText = "Cursist succesvol verwijderd."
                         });
 
-                    LoadStudents();
-                }
+            LoadStudents();
+        }
             });
         }
 
@@ -217,7 +224,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 await action();
             }
             finally
-            {
+        {
                 _messageBroker.Publish(new OverlayActivationMessage(false));
             }
         }
