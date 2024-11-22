@@ -22,7 +22,6 @@ namespace CoursesManager.UI.ViewModels
 
         private string _searchText = String.Empty;
         private bool _isToggled = true;
-        private readonly IMessageBroker _messageBroker;
 
         // Getters and Setters
         public ICommand SearchCommand { get; }

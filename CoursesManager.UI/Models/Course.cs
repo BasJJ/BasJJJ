@@ -24,8 +24,6 @@ namespace CoursesManager.UI.Models
         public Location? Location { get; set; }
         public DateTime DateCreated { get; set; }
 
-        public Image? Image { get; set; }
-
         public string GenerateFilterString()
         {
             var sb = new StringBuilder();

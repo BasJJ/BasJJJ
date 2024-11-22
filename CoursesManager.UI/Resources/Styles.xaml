@@ -2,15 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:local="clr-namespace:CoursesManager.UI.Views.Controls">
-    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FF391DDA" Offset="0" />
-        <GradientStop Color="#FF1E0F74" Offset="1" />
-    </LinearGradientBrush>
 
-    <LinearGradientBrush x:Key="ErrorGradient" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#D85653" Offset="0" />
-        <GradientStop Color="#7C3130" Offset="1" />
-    </LinearGradientBrush>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors/Gradients.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <LinearGradientBrush x:Key="ErrorButtonHoverGradient" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#CCD85653" Offset="0" />
@@ -43,17 +38,22 @@
     <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA" />
     <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5" />
     <Style x:Key="TextBoxEditStudentStyle1" TargetType="{x:Type TextBox}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-        <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="8" />
-        <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="AllowDrop" Value="true" />
-        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
-        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="8"/>
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
@@ -85,6 +85,62 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="DatePickerStyle" TargetType="DatePicker">
+    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="8"/>
+    <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Setter Property="AllowDrop" Value="true"/>
+    <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+    <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+    <Setter Property="Effect">
+        <Setter.Value>
+            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="6" ShadowDepth="3" />
+        </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="DatePicker">
+                <Grid>
+                    <Border x:Name="PART_TestBoxBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10" SnapsToDevicePixels="True">
+                        <TextBox x:Name="PART_TextBox"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 Foreground="{TemplateBinding Foreground}"
+                                 Padding="{TemplateBinding Padding}"
+                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                 Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+
+    <Style x:Key="FocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#1F26A0DA"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#a826A0Da"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
+   
     <Style x:Key="PlaceholderTextBoxStyle1" TargetType="{x:Type local:PlaceholderTextBox}">
         <Setter Property="Template">
             <Setter.Value>
@@ -100,6 +156,11 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     </Style>
 
+    <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FFABADB3"/>
+    <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9"/>
+    
     <Style x:Key="ListBoxEditStudentStyle1" TargetType="{x:Type ListBox}">
         <Style.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
@@ -142,8 +203,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="White" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="White" />
@@ -166,31 +227,124 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PrimaryHeaderBorder" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
-        <Setter Property="CornerRadius" Value="15,15,15,15" />
-        <Setter Property="Panel.ZIndex" Value="2" />
-        <Setter Property="Effect">
+    <Style x:Key="ListBoxItemStyle1"
+       TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels"
+           Value="True" />
+        <Setter Property="Padding"
+           Value="4,1" />
+        <Setter Property="HorizontalContentAlignment"
+           Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="VerticalContentAlignment"
+           Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background"
+           Value="Transparent" />
+        <Setter Property="BorderBrush"
+           Value="Transparent" />
+        <Setter Property="BorderThickness"
+           Value="1" />
+        <Setter Property="Template">
             <Setter.Value>
-                <DropShadowEffect Color="Black" Opacity="0.5" BlurRadius="10" ShadowDepth="5" />
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd"
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                                Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                          Value="{StaticResource HoverOverGradient}" />
+                            <Setter Property="BorderBrush"
+                          Value="#E2DBFE" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                                Value="False" />
+                                <Condition Property="IsSelected"
+                                Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                          Value="{StaticResource SelectorGradient}" />
+                            <Setter Property="BorderBrush"
+                          Value="#DAD2FD" />
+                        </MultiTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                <Setter Property="CornerRadius" Value="0,0,15,15" />
-            </DataTrigger>
-        </Style.Triggers>
     </Style>
 
-    <Style x:Key="SidebarBorder" TargetType="Border">
-        <Setter Property="Background" Value="#808080" />
-        <Setter Property="CornerRadius" Value="15,0,0,15" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                <Setter Property="CornerRadius" Value="0" />
-            </DataTrigger>
-        </Style.Triggers>
+    <Style x:Key="ListBoxItemStyle"
+   TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels"
+       Value="True" />
+        <Setter Property="Padding"
+       Value="4,1" />
+        <Setter Property="HorizontalContentAlignment"
+       Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="VerticalContentAlignment"
+       Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+        <Setter Property="Background"
+       Value="Transparent" />
+        <Setter Property="BorderBrush"
+       Value="Transparent" />
+        <Setter Property="BorderThickness"
+       Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="Bd"
+                Background="{TemplateBinding Background}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                Padding="{TemplateBinding Padding}"
+                SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver"
+                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                      Value="Transparent" />
+                            <Setter Property="BorderBrush"
+                      Value="Transparent" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive"
+                            Value="False" />
+                                <Condition Property="IsSelected"
+                            Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background"
+                      Value="Transparent" />
+                            <Setter Property="BorderBrush"
+                      Value="Transparent" />
+                        </MultiTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
+
 
     <Style x:Key="PrimaryDialogHeaderBorder" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
@@ -421,8 +575,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
+    
     <!-- Checkbox style 10-->
 
     <Style x:Key="CheckBoxStyle10" TargetType="CheckBox">
@@ -694,12 +847,6 @@
         </Setter>
     </Style>
 
-
-
-
-
-
-
     <Style TargetType="Button" x:Key="SmallIconButtonWithShadowStyle" BasedOn="{StaticResource IconButtonWithShadowStyle}">
         <!-- Override the Foreground to make the icon blue -->
         <Setter Property="Foreground" Value="#02008C" />
@@ -713,10 +860,10 @@
         <Setter Property="Visibility" Value="Hidden" />
 
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsMouseOver}" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
         </Style.Triggers>

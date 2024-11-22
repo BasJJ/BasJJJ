@@ -58,5 +58,10 @@ namespace CoursesManager.UI.Models.Repositories.CourseRepository
         {
             return false;
         }
+
+        public bool HasActiveRegistrations(Course course)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
