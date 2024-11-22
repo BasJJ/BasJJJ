@@ -75,3 +75,4 @@ ScaffoldingReadMe.txt
 # JetBrains Rider IDE
 .idea/
 .env
+CoursesManager.UI/application.log

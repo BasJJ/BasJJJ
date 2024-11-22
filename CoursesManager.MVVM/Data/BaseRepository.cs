@@ -1,7 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 using System.Reflection;
-using System.Windows.Input;
 
 namespace CoursesManager.MVVM.Data
 {
@@ -44,9 +43,13 @@ namespace CoursesManager.MVVM.Data
                         result.Add(FillModel<T>(mySqlReader, properties));
                     }
                 }
-                catch (MySqlException ex)
+                catch (MySqlException exception)
                 {
-                    throw new DataException("An error occurred while querying the database.", ex);
+                    LogUtil.Error(exception.Message);
+                }
+                catch (InvalidCastException exception)
+                {
+                    LogUtil.Error(exception.Message);
                 }
             }
 
@@ -61,25 +64,34 @@ namespace CoursesManager.MVVM.Data
             ).FirstOrDefault();
         }
 
-        protected void InsertRow(Dictionary<string, object> data)
+        protected bool InsertRow(Dictionary<string, object> data)
         {
             if (data == null || data.Count == 0)
-                throw new ArgumentException("Data cannot be null or empty.", nameof(data));
+            {
+                LogUtil.Error(nameof(data) + " cannot be null or empty.");
+                return false;
+            }
 
             string columns = string.Join(", ", data.Keys.Select(k => $"`{k}`"));
             string parameters = string.Join(", ", data.Keys.Select(k => $"@{k}"));
             string query = $"INSERT INTO `{_modelTabel}` ({columns}) VALUES ({parameters});";
 
-            ExecuteNonQuery(query, data);
+            return ExecuteNonQuery(query, data);
         }
 
-        protected void UpdateRow(Dictionary<string, object> data, string whereClause, params MySqlParameter[] parameters)
+        protected bool UpdateRow(Dictionary<string, object> data, string whereClause, params MySqlParameter[] parameters)
         {
             if (data == null || data.Count == 0)
-                throw new ArgumentException("Data cannot be null or empty.", nameof(data));
+            {
+                LogUtil.Error(nameof(data) + " cannot be null or empty.");
+                return false;
+            }
 
             if (string.IsNullOrWhiteSpace(whereClause))
-                throw new ArgumentException("Where clause cannot be null or empty.", nameof(whereClause));
+            {
+                LogUtil.Error("Where clause cannot be null or empty.");
+                return false;
+            }
 
             string setClause = string.Join(", ", data.Keys.Select(k => $"`{k}` = @{k}"));
             string query = $"UPDATE `{_modelTabel}` SET {setClause} WHERE {whereClause};";
@@ -88,21 +100,24 @@ namespace CoursesManager.MVVM.Data
             if (parameters != null)
                 allParameters.AddRange(parameters);
 
-            ExecuteNonQuery(query, allParameters.ToArray());
+            return ExecuteNonQuery(query, allParameters.ToArray());
         }
 
-        protected void DeleteRow(string whereClause, params MySqlParameter[] parameters)
+        protected bool DeleteRow(string whereClause, params MySqlParameter[] parameters)
         {
             if (string.IsNullOrWhiteSpace(whereClause))
-                throw new ArgumentException("Where clause cannot be null or empty.", nameof(whereClause));
+            {
+                LogUtil.Error("Where clause cannot be null or empty.");
+                return false;
+            }
 
             string query = $"DELETE FROM `{_modelTabel}` WHERE {whereClause};";
-            ExecuteNonQuery(query, parameters);
+            return ExecuteNonQuery(query, parameters);
         }
 
         protected T FillModel<T>(MySqlDataReader mySqlReader, PropertyInfo[] properties) where T : new()
         {
-            T model = new T();
+            T model = new();
 
             foreach (var property in properties)
             {
@@ -113,17 +128,17 @@ namespace CoursesManager.MVVM.Data
                 {
                     property.SetValue(model, Convert.ChangeType(mySqlReader[property.Name], property.PropertyType));
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
                     throw new InvalidCastException(
-                        $"Error converting column '{property.Name}' to property '{property.Name}' of type '{property.PropertyType}'.", ex);
+                        $"Error converting column '{property.Name}' to property '{property.Name}' of type '{property.PropertyType}'.", exception);
                 }
             }
 
             return model;
         }
 
-        private void ExecuteNonQuery(string query, params MySqlParameter[] parameters)
+        private bool ExecuteNonQuery(string query, params MySqlParameter[] parameters)
         {
             using var mySqlConnection = GetConnection();
             using var mySqlCommand = new MySqlCommand(query, mySqlConnection);
@@ -135,16 +150,19 @@ namespace CoursesManager.MVVM.Data
                 mySqlConnection.Open();
                 mySqlCommand.ExecuteNonQuery();
             }
-            catch (MySqlException ex)
+            catch (MySqlException exception)
             {
-                throw new DataException("An error occurred while executing the database command.", ex);
+                LogUtil.Error(exception.Message);
+                return false;
             }
+
+            return true;
         }
 
-        private void ExecuteNonQuery(string query, Dictionary<string, object> data)
+        private bool ExecuteNonQuery(string query, Dictionary<string, object> data)
         {
             MySqlParameter[] parameters = data.Select(kvp => new MySqlParameter($"@{kvp.Key}", kvp.Value ?? DBNull.Value)).ToArray();
-            ExecuteNonQuery(query, parameters);
+            return ExecuteNonQuery(query, parameters);
         }
 
         private bool HasColumn(MySqlDataReader mySqlReader, string columnName)
