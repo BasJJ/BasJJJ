@@ -4,26 +4,15 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.LocationRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Text.RegularExpressions;
-using CoursesManager.UI.Dialogs.Windows;
 using CoursesManager.UI.Dialogs.Enums;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Dialogs.ResultTypes;
-using System.IO;
 
 
 
@@ -212,13 +201,6 @@ namespace CoursesManager.UI.ViewModels.Students
                 return false;
             }
 
-            if (!Course.IsActive)
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De cursus moet actief zijn.")
-                    .Build());
-                return false;
-            }
 
             return true;
         }
