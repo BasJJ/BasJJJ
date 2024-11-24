@@ -60,7 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Repositories\AddressRepository\" />
+    <Folder Include="Repositories\AddressRepository\" />
     <Folder Include="ViewModels\Design\" />
   </ItemGroup>
 
