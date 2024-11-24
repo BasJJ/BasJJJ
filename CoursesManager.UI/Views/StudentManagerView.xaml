@@ -7,11 +7,9 @@
              xmlns:dvm="clr-namespace:CoursesManager.UI.ViewModels.Design"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=dvm:DesignStudentManagerViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
-
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -105,7 +103,7 @@
                                                 <ColumnDefinition Width="Auto" MinWidth="115" SharedSizeGroup="Column3" />
                                                 <ColumnDefinition Width="15" />
                                                 <ColumnDefinition Width="*" SharedSizeGroup="Column4" />
-                                                <ColumnDefinition Width="120" />
+                                                <ColumnDefinition Width="50" />
                                                 <ColumnDefinition Width="*" SharedSizeGroup="Column5" />
                                             </Grid.ColumnDefinitions>
                                             <TextBlock HorizontalAlignment="Left" Grid.Column="1"  Text="{Binding FirstName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
@@ -164,15 +162,19 @@
                                 <Border.Effect>
                                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
                                 </Border.Effect>
-                                <Grid>
+                                <Grid Grid.IsSharedSizeScope="True">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="25"/>
+                                        <ColumnDefinition Width="Auto" MinWidth="200" SharedSizeGroup="Column1" />
+                                        <ColumnDefinition Width="25" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                                        <ColumnDefinition Width="25" />
+                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
+                                        <ColumnDefinition Width="25"/>
                                     </Grid.ColumnDefinitions>
-                                    <Grid  Grid.Column="1">
-                                        <TextBlock Text="Cursussen" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Grid>
+                                    <TextBlock Grid.Column="1" Text="Cursusnaam" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="Betaald" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="center" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="5" Text="Behaald" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="center" VerticalAlignment="Center" />
                                 </Grid>
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -189,7 +191,7 @@
                                 </Grid.ColumnDefinitions>
                                 <!-- Scrollable Card Grid -->
                                 <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
-                                    <ItemsControl ItemsSource="{Binding CoursePaymentList}">
+                                    <ItemsControl ItemsSource="{Binding DisplayedCourses}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel Orientation="Vertical" />
@@ -198,29 +200,16 @@
 
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid>
-                                                    <Grid.Style>
-                                                        <Style TargetType="Grid">
-                                                            <Style.Triggers>
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter Property="Background" Value="{StaticResource HoverOverGradient}" />
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Style>
+                                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="100" MinWidth="90" />
-                                                        <ColumnDefinition Width="Auto" MinWidth="90" />
-                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" MinWidth="225" SharedSizeGroup="Column1" />
+                                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                                                        <ColumnDefinition Width="25" />
+                                                        <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
                                                     </Grid.ColumnDefinitions>
-                                                    <Grid Grid.Column="1">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="Auto" />
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
-                                                    </Grid>
-
-                                                    <CheckBox Grid.Column="2" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
+                                                    <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                                    <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
+                                                    <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="center" IsChecked="{Binding IsAchieved, Mode=TwoWay}" />
                                                 </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -232,5 +221,16 @@
                 </Grid>
             </Grid>
         </Grid>
+
+        <Border
+            x:Name="OverlayBorder"
+            Background="#80000000"
+            CornerRadius="0,0,15,15"
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="{Binding IsDialogOpen}">
+            <Grid />
+        </Border>
     </Grid>
 </UserControl>

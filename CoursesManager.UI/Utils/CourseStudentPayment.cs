@@ -12,7 +12,7 @@ namespace CoursesManager.UI.Utils
         public Student? Student { get; set; }
         public Course? Course { get; set; }
         public bool IsPaid { get; set; }
-
+        public bool IsAchieved { get; set; }
         public string? FullName { get; set; }
 
         public CourseStudentPayment(Student student, Registration registration)
@@ -20,6 +20,7 @@ namespace CoursesManager.UI.Utils
             Student = student;
             IsPaid = registration.PaymentStatus;
             FullName = $"{student.FirstName} {student.Insertion} {student.LastName}";
+            IsAchieved = registration.Is_Achieved;
         }
 
         public CourseStudentPayment(Course course, Registration registration)
@@ -27,6 +28,7 @@ namespace CoursesManager.UI.Utils
             FullName = course.Name;
             Course = course;
             IsPaid = registration.PaymentStatus;
+            IsAchieved = registration.Is_Achieved;
         }
     }
 }

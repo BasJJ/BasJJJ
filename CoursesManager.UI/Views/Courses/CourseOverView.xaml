@@ -168,7 +168,7 @@
             </Grid>
         </Border>
         <Grid Grid.Row="1" Grid.Column="3">
-            <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="450">
+            <Border Grid.Column="1" CornerRadius="15 15 15 15" Background="White" Height="Auto" Width="500">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5"/>
                 </Border.Effect>
@@ -195,17 +195,20 @@
                         </Border.Style>
                     </Border>
 
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="2" Grid.IsSharedSizeScope="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="25"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="200" SharedSizeGroup="Column1" />
+                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                            <ColumnDefinition Width="25" />
+                            <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
                             <ColumnDefinition Width="25"/>
                         </Grid.ColumnDefinitions>
                     
                     <TextBlock HorizontalAlignment="Left" Grid.Column="1" Text="Cursist" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
-                    <TextBlock HorizontalAlignment="Left" Grid.Column="3" Text="Betalingstatus" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
+                    <TextBlock HorizontalAlignment="Left" Grid.Column="3" Text="Betaald" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
+                        <TextBlock HorizontalAlignment="Left" Grid.Column="5" Text="Afgerond" FontWeight="Bold" FontSize="23" Foreground="#02008C" />
                     </Grid>
                     <Grid Grid.Row="4">
                         <Grid.ColumnDefinitions>
@@ -214,8 +217,8 @@
                             <ColumnDefinition Width="25"/>
                         </Grid.ColumnDefinitions>
                         <!-- Scrollable Card Grid -->
-                    <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
-                            <ItemsControl ItemsSource="{Binding studentPayments}">
+                        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
+                            <ItemsControl ItemsSource="{Binding StudentPayments}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" />
@@ -224,29 +227,16 @@
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <Grid.Style>
-                                                <Style TargetType="Grid">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource HoverOverGradient}"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Style>
+                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" MinWidth="280"/>
-                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto" MinWidth="225" SharedSizeGroup="Column1" />
+                                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                                                <ColumnDefinition Width="25" />
+                                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
                                             </Grid.ColumnDefinitions>
-                                            <Grid Grid.Column="0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C"/>
-                                            </Grid>
-
-                                            <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
-
+                                            <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                            <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
+                                            <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="center" IsChecked="{Binding IsAchieved, Mode=TwoWay}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
