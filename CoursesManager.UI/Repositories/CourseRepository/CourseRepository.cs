@@ -6,9 +6,7 @@ namespace CoursesManager.UI.Repositories.CourseRepository
 {
     public class CourseRepository : ICourseRepository
     {
-        private static readonly string ConnectionString = EnvManager<EnvModel>.Values.ConnectionString;
-
-        private readonly CourseDataAccess _courseDataAccess = new(ConnectionString);
+        private readonly CourseDataAccess _courseDataAccess = new();
 
         public List<Course> GetAll()
         {

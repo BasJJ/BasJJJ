@@ -13,7 +13,7 @@ public class EnvManager<T>
 
         DotEnv.Fluent()
             .WithExceptions()
-            .WithEnvFiles(FindEnvFiles())
+            .WithEnvFiles(FindEnvFiles().ToArray())
             .Load();
 
         LoadValues(model);
@@ -22,11 +22,12 @@ public class EnvManager<T>
 
     public static T Values => _values.Value;
 
-    private EnvManager()
-    { }
+    private EnvManager() { }
 
     private static void LoadValues(T model)
     {
+        ArgumentNullException.ThrowIfNull(model);
+
         var envFields = model.GetType().GetFields().Where(f => f.IsPublic);
 
         foreach (var field in envFields)
@@ -35,34 +36,21 @@ public class EnvManager<T>
 
             if (!EnvReader.HasValue(envKey)) throw new Exception($"Environment value with key: {envKey} not found.");
 
-            if (field.FieldType == typeof(int) && EnvReader.GetIntValue(envKey) is var intValue)
+            object value = field.FieldType.Name switch
             {
-                field.SetValue(model, intValue);
-            }
-            else if (field.FieldType == typeof(bool) && EnvReader.GetBooleanValue(envKey) is var boolValue)
-            {
-                field.SetValue(model, boolValue);
-            }
-            else if (field.FieldType == typeof(decimal) && EnvReader.GetDecimalValue(envKey) is var decimalValue)
-            {
-                field.SetValue(model, decimalValue);
-            }
-            else if (field.FieldType == typeof(double) && EnvReader.GetDoubleValue(envKey) is var doubleValue)
-            {
-                field.SetValue(model, doubleValue);
-            }
-            else if (field.FieldType == typeof(string) && EnvReader.GetStringValue(envKey) is var stringValue)
-            {
-                field.SetValue(model, stringValue);
-            }
-            else
-            {
-                throw new Exception($"Invalid type in model: {field.FieldType}");
-            }
+                nameof(Int32) => EnvReader.GetIntValue(envKey),
+                nameof(Boolean) => EnvReader.GetBooleanValue(envKey),
+                nameof(Decimal) => EnvReader.GetDecimalValue(envKey),
+                nameof(Double) => EnvReader.GetDoubleValue(envKey),
+                nameof(String) => EnvReader.GetStringValue(envKey),
+                _ => throw new Exception($"Invalid type in model: {field.FieldType}")
+            };
+
+            field.SetValue(model, value);
         }
     }
 
-    private static string[] FindEnvFiles()
+    private static List<string> FindEnvFiles()
     {
         var envFiles = new List<string>();
         var startDirectory = Directory.GetCurrentDirectory();
@@ -78,6 +66,6 @@ public class EnvManager<T>
             Console.WriteLine($"Error while searching for .env files: {ex.Message}");
         }
 
-        return envFiles.ToArray();
+        return envFiles;
     }
 }

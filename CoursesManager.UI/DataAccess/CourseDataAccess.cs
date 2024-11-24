@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 
 namespace CoursesManager.UI.DataAccess;
 
-public class CourseDataAccess(string connectionString) : BaseDataAccess<Course>(connectionString)
+public class CourseDataAccess : BaseDataAccess<Course>
 {
     public List<Course> GetAll()
     {

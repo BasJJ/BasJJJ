@@ -1,26 +1,26 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Reflection;
+using CoursesManager.MVVM.Env;
+using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.DataAccess;
 
 public abstract class BaseDataAccess<T> where T : new()
 {
-    private readonly string _connectionString;
+    private readonly string _connectionString = EnvManager<EnvModel>.Values.ConnectionString;
     protected readonly string _modelTableName;
 
     protected MySqlConnection GetConnection() => new(_connectionString);
 
     /// <inheritdoc />
-    protected BaseDataAccess(string connectionString) : this(connectionString, typeof(T).Name.ToLower()) { }
+    protected BaseDataAccess() : this(typeof(T).Name.ToLower()) { }
 
     /// <summary>
     /// Sets up basic functionality of the Data access layer.
     /// </summary>
-    /// <param name="connectionString">Connection string for the database.</param>
     /// <param name="modelTableName">Name of the table that is represented with this data access object.</param>
-    protected BaseDataAccess(string connectionString, string modelTableName)
+    protected BaseDataAccess(string modelTableName)
     {
-        _connectionString = connectionString;
         _modelTableName = modelTableName;
     }
 

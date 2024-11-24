@@ -2,7 +2,7 @@
 
 namespace CoursesManager.UI.DataAccess;
 
-public class LocationDataAccess(string connectionString) : BaseDataAccess<Location>(connectionString)
+public class LocationDataAccess : BaseDataAccess<Location>
 {
     public void Add(Location courseLocation)
     {

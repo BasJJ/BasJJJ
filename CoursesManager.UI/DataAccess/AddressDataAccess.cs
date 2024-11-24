@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 
 namespace CoursesManager.UI.DataAccess;
 
-public class AddressDataAccess(string connectionString) : BaseDataAccess<Address>(connectionString)
+public class AddressDataAccess : BaseDataAccess<Address>
 {
     public void Add(Address address)
     {

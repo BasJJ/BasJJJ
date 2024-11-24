@@ -6,7 +6,7 @@ namespace CoursesManager.UI.Repositories.AddressRepository;
 
 public class AddressRepository : IAddressRepository
 {
-    private readonly AddressDataAccess _addressDataAccess = new(EnvManager<EnvModel>.Values.ConnectionString);
+    private readonly AddressDataAccess _addressDataAccess = new();
 
     public List<Address> GetAll()
     {
