@@ -57,8 +57,8 @@
                         <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
                     </Viewbox>
 
-                    <Button Style="{StaticResource IconButtonWithShadowStyle}" Command="{Binding UploadCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-130,-120,0">
-                        <materialDesign:PackIcon Kind="PlusCircleOutline" Width="60" Height="60" Foreground="#02008C" />
+                    <Button Style="{StaticResource IconButtonWithShadowStyle}" Command="{Binding UploadCommand}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-130,-140,0">
+                        <materialDesign:PackIcon Kind="PlusCircleOutline" Width="50" Height="50" Foreground="#02008C" />
                     </Button>
 
                     <!-- Stackpanel with code, dates and location-->
@@ -87,7 +87,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
                                 <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
-                                <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black"/>
+                                <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
                                 <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding Course.Code, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
 
                             </Grid>

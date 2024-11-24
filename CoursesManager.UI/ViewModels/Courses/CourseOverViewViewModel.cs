@@ -19,6 +19,7 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
@@ -33,6 +34,8 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         public Course CurrentCourse { get; set; }
         public ObservableCollection<Student>? Students { get; set; }
+
+        public ObservableCollection<Course>? Courses { get; set; }
         public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
 
         public CourseOverViewViewModel(ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
@@ -41,7 +44,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             _dialogService = dialogService;
             _messageBroker = messageBroker;
 
-            ChangeCourseCommand = new RelayCommand(ChangeCourse);
+            ChangeCourseCommand = new RelayCommand<Course>(ChangeCourse, c => c != null);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
             Students = CurrentCourse.students;
@@ -53,16 +56,58 @@ namespace CoursesManager.UI.ViewModels.Courses
                 CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
                 studentPayments.Add(studentPayment);
             }
-
-
         }
+
+        public void LoadCourses()
+        {
+            Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
+        }
+
+
         private void DeleteCourse()
         {
 
         }
-        private void ChangeCourse()
-        {
 
+        private async void ChangeCourse(Course course)
+        {
+            if (course == null)
+            {
+                await ExecuteWithOverlayAsync(async () =>
+                {
+                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                        new DialogResultType
+                        {
+                            DialogTitle = "Foutmelding",
+                            DialogText = "Geen cursus geselecteerd om te bewerken."
+                        });
+                });
+                return;
+            }
+
+            await ExecuteWithOverlayAsync(async () =>
+            {
+                var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>(course);
+
+                if (dialogResult?.Outcome == DialogOutcome.Success)
+                {
+                    // Herlaad de lijst of voer andere acties uit
+                    LoadCourses();
+                }
+            });
+        }
+
+        private async Task ExecuteWithOverlayAsync(Func<Task> action)
+        {
+            _messageBroker.Publish(new OverlayActivationMessage(true));
+            try
+            {
+                await action();
+            }
+            finally
+            {
+                _messageBroker.Publish(new OverlayActivationMessage(false));
+            }
         }
     }
 }
