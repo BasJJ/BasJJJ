@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using CoursesManager.MVVM.Data;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
@@ -61,8 +62,10 @@ namespace CoursesManager.UI.ViewModels.Students
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
 
-            Course = course ?? new Course
-            {
+            Course = course != null
+                   ? course.Copy()
+                    : new Course
+    {
                 Name = string.Empty,
                 Code = string.Empty,
                 Description = string.Empty,

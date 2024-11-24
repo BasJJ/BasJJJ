@@ -1,10 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Controls;
+using CoursesManager.MVVM.Data;
 
 namespace CoursesManager.UI.Models
 {
-    public class Course
+    public class Course : ICopyable<Course>
     {
         public int ID { get; set; }
         public string Name 
@@ -44,6 +45,28 @@ namespace CoursesManager.UI.Models
             }
 
             return sb.ToString().Replace(" ", string.Empty);
+        }
+
+        public Course Copy()
+        {
+            return new Course
+            {
+                ID = this.ID,
+                Name = this.Name,
+                Code = this.Code,
+                Description = this.Description,
+                Participants = this.Participants,
+                IsActive = this.IsActive,
+                IsPayed = this.IsPayed,
+                Category = this.Category,
+                StartDate = this.StartDate,
+                EndDate = this.EndDate,
+                LocationId = this.LocationId,
+                Location = this.Location, // shallow copy? 
+                DateCreated = this.DateCreated,
+                students = this.students != null ? new ObservableCollection<Student>(this.students) : null, // Diepe kopie van de collectie
+                Image = this.Image // diep of shallow copy?
+            };
         }
     }
 }
