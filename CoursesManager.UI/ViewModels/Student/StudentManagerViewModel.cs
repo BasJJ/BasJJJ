@@ -4,6 +4,7 @@ using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
@@ -12,17 +13,19 @@ using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Utils;
+using CoursesManager.UI.ViewModels.Students;
+using CoursesManager.UI.Views.Students;
 
 namespace CoursesManager.UI.ViewModels
 {
     public class StudentManagerViewModel : ViewModel
     {
-
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IRegistrationRepository _registrationRepository;
+        private readonly INavigationService _navigationService;
         public ObservableCollection<Student> Students { get;  set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
         public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
@@ -67,6 +70,7 @@ namespace CoursesManager.UI.ViewModels
         public ICommand EditStudentCommand { get; }
         public ICommand DeleteStudentCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand StudentDetailCommand { get; }
 
         #endregion
 
@@ -74,13 +78,16 @@ namespace CoursesManager.UI.ViewModels
             IDialogService dialogService,
             IStudentRepository studentRepository,
             ICourseRepository courseRepository,
-            IRegistrationRepository registrationRepository, IMessageBroker messageBroker)
+            IRegistrationRepository registrationRepository,
+            IMessageBroker messageBroker,
+            INavigationService navigationService)
         {
             _messageBroker = messageBroker;
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+            _navigationService = navigationService;
 
             // Initialize students
             LoadStudents();
@@ -90,6 +97,7 @@ namespace CoursesManager.UI.ViewModels
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
             SearchCommand = new RelayCommand(FilterStudentRecords);
+            StudentDetailCommand = new RelayCommand<Student>(OpenStudentDetailViewModel, s => s != null);
             ViewTitle = "Cursisten beheer";
         }
 
@@ -178,7 +186,6 @@ namespace CoursesManager.UI.ViewModels
             });
         }
 
-
         private async void OpenDeleteStudentPopup(Student student)
         {
             if (student == null) return;
@@ -207,6 +214,29 @@ namespace CoursesManager.UI.ViewModels
                     LoadStudents();
                 }
             });
+        }
+
+        private void OpenStudentDetailViewModel(Student student)
+        {
+
+            if (_navigationService == null)
+            {
+                // Handle the case where navigation service is not initialized
+                throw new InvalidOperationException("Navigation service is not initialized.");
+            }
+
+            var studentDetailViewModel = new StudentDetailViewModel(_dialogService,
+                _messageBroker,
+                _navigationService,
+                _registrationRepository,
+                _courseRepository,
+                _studentRepository,
+                student)
+            {
+                Student = SelectedStudent
+            };
+
+            _navigationService.NavigateTo<StudentDetailViewModel>();
         }
 
         private async Task ExecuteWithOverlayAsync(Func<Task> action)

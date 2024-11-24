@@ -15,6 +15,7 @@ using System.Windows;
 using System.Linq;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.MVVM.Navigation;
 
 namespace CoursesManager.Tests
 {
@@ -27,6 +28,7 @@ namespace CoursesManager.Tests
         private Mock<IRegistrationRepository> _mockRegistrationRepository;
         private Mock<IDialogService> _mockDialogService;
         private Mock<IMessageBroker> _mockMessageBroker;
+        private Mock<INavigationService> _mockNavigationService;
         private StudentManagerViewModel _viewModel;
         private Student _testStudent;
 
@@ -38,6 +40,7 @@ namespace CoursesManager.Tests
             _mockRegistrationRepository = new Mock<IRegistrationRepository>();
             _mockDialogService = new Mock<IDialogService>();
             _mockMessageBroker = new Mock<IMessageBroker>();
+            _mockNavigationService = new Mock<INavigationService>();
 
             _testStudent = new Student
             {
@@ -55,7 +58,8 @@ namespace CoursesManager.Tests
                 _mockStudentRepository.Object,
                 _mockCourseRepository.Object,
                 _mockRegistrationRepository.Object,
-                _mockMessageBroker.Object);
+                _mockMessageBroker.Object,
+                _mockNavigationService.Object);
 
             _viewModel.LoadStudents();
         }

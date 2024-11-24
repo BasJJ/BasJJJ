@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CoursesManager.UI.Views"
              xmlns:dvm="clr-namespace:CoursesManager.UI.ViewModels.Design"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels" 
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 

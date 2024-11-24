@@ -18,6 +18,7 @@ using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI;
 
@@ -64,7 +65,8 @@ public partial class App : Application
             StudentRepository,
             AddressRepository,
             MessageBroker,
-            DialogService);
+            DialogService,
+            NavigationService);
 
         // Register ViewModel
 
@@ -78,6 +80,8 @@ public partial class App : Application
 
         // Navigate to the Initial ViewModel
         NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<StudentDetailViewModel>();
+
 
         mw.Show();
 
@@ -124,6 +128,7 @@ public partial class App : Application
     {
         // Register StudentManagerViewModel
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<StudentManagerViewModel>());
+        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<StudentDetailViewModel>(nav));
 
         // Register CoursesManagerViewModel
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));

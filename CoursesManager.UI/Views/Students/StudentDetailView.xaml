@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students"
+             d:studentViewModel="{d:DesignInstance Type=studentViewModel:StudentDetailViewModel}"
              mc:Ignorable="d"
+             Loaded="Window_Loaded"
              d:DesignHeight="700" d:DesignWidth="1600" Background="{StaticResource SecondaryGradient}">
-    <!-- Remove this section -->
-    <!-- <UserControl.DataContext>
-        <students:StudentDetailViewModel />
-    </UserControl.DataContext> -->
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -16,65 +16,68 @@
         </Grid.ColumnDefinitions>
 
         <!-- Left: Form Section -->
-        <Grid Margin="20" Grid.Column="0">
+        <Grid Margin="20,100,20,20" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Form Fields -->
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- First Column -->
-                <StackPanel Margin="10">
+                <StackPanel Margin="10,0,20,0">
                     <TextBlock Text="Voornaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.FirstName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.FirstName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Achternaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.LastName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.LastName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Email" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Postcode" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Straatnaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    
                     <TextBlock Text="Land" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+
                 </StackPanel>
 
                 <!-- Second Column -->
-                <StackPanel Margin="10" Grid.Column="1">
+                <StackPanel Margin="20,0,10,0" Grid.Column="1">
                     <TextBlock Text="Tussenvoegsel" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.MiddleName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.Insertion}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Geboortedatum" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.BirthDate}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.DateOfBirth}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Telefoonnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Huisnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Stad" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding StudentDetail.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                 </StackPanel>
             </Grid>
 
             <!-- Wijzigen Button -->
-            <Button Content="Wijzigen" Style="{StaticResource MaterialDesignRaisedButton}"
-                    Grid.Row="1" HorizontalAlignment="Center" Margin="0,10,0,0" />
+            <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Content="Wijzigen"
+                     Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0"
+                     Style="{StaticResource PrimaryButton}" />
         </Grid>
 
         <!-- Right: Courses Grid -->
-        <Grid Grid.Column="1" Margin="20">
+        <Grid Grid.Column="1" Margin="50,100,20,150">
             <Border CornerRadius="15" Background="White">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
@@ -82,11 +85,11 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="3*" />
                     </Grid.RowDefinitions>
 
                     <!-- Header -->
-                    <Border Background="#283593" Height="55" CornerRadius="15 15 0 0">
+                    <Border Background="#283593" Height="55" CornerRadius="15,15,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -111,9 +114,9 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding Course.Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding Registration.PaymentStatus}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding Registration.IsAchieved}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding CourseName}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding PaymentStatus}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding IsAchieved}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

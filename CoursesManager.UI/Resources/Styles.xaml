@@ -260,7 +260,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+    <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle">
         <Setter Property="IsReadOnly" Value="True" />
         <Setter Property="Background" Value="#F5F5F5" />
         <Setter Property="BorderBrush" Value="#E0E0E0" />

@@ -6,7 +6,9 @@
              xmlns:courseViewModels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
              xmlns:views="clr-namespace:CoursesManager.UI.Views"
              xmlns:CourseViews="clr-namespace:CoursesManager.UI.Views.Courses"
-             xmlns:converters="clr-namespace:CoursesManager.UI.Converters">
+             xmlns:converters="clr-namespace:CoursesManager.UI.Converters"
+             xmlns:students="clr-namespace:CoursesManager.UI.Views.Students"
+             xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students">
     <Application.Resources>
         <ResourceDictionary>
             <!-- Merged Dictionaries -->
@@ -30,6 +32,9 @@
 
             <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
                 <views:StudentManagerView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type studentViewModel:StudentDetailViewModel}">
+                <students:StudentDetailView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type courseViewModels:CourseOverViewViewModel}">
