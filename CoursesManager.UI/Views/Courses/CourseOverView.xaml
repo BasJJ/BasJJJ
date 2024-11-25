@@ -161,7 +161,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Bewerken" Style="{StaticResource PrimaryButton}" Command="{Binding ChangeCourseCommand}" />
+                    <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Bewerken" Style="{StaticResource PrimaryButton}" Command="{Binding ChangeCourseCommand}" CommandParameter="{Binding CurrentCourse}" />
                     <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="verwijderen" Style="{StaticResource SecondaryButton}" Command="{Binding DeleteCourseCommand}" />
                 </Grid>
 

@@ -10,6 +10,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CoursesManager.MVVM.Data;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
+using System.Windows.Controls;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
@@ -90,112 +93,109 @@ namespace CoursesManager.UI.ViewModels.Students
             ResponseCallback.Invoke(dialogResult);
         }
 
+        private bool AreFieldsValid()
+        {
+            var isValid = !Validation.GetHasError(Application.Current.MainWindow);
+            foreach (var child in LogicalTreeHelper.GetChildren(Application.Current.MainWindow))
+            {
+                if (child is DependencyObject dependencyObject && Validation.GetHasError(dependencyObject))
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            return isValid;
+        }
+
         private async Task OnSaveAsync()
         {
-            if (!FieldsValidations())
+            
+            if (!AreFieldsValid())
             {
-                var dialogResult = DialogResult<bool>.Builder()
-                    .SetSuccess(false, "Vereiste velden moeten correct worden ingevuld")
-                    .Build();
-                ShowWarningDialog(dialogResult);
+                
                 return;
             }
 
-            // Controleer of de cursus uniek is
             if (_courseRepository.GetAll().Any(c => c.Name.Equals(Course.Name, StringComparison.OrdinalIgnoreCase)))
             {
-                var dialogResult = DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De cursusnaam bestaat al")
-                    .Build();
-                ShowWarningDialog(dialogResult);
+                
+                await ShowWarningDialog("De cursusnaam bestaat al");
                 return;
             }
 
-            // Voeg de cursus toe
+            
             _courseRepository.Add(Course);
 
+            
+            await ShowSuccessDialog("Cursus succesvol toegevoegd");
+
+            
             var successDialogResult = DialogResult<Course>.Builder()
                 .SetSuccess(Course, "Cursus succesvol toegevoegd")
                 .Build();
-
-
-
-            ShowSuccessDialog(successDialogResult.OutcomeMessage);
-
-            //await ShowSuccessDialog(DialogType.Notify, "Cursus Succesvol opgeslagen.");
 
             InvokeResponseCallback(successDialogResult);
         }
 
 
+
+
         private bool FieldsValidations()
         {
+            // Hier kun je specifieke validatieberichten toevoegen als dat nodig is
             if (string.IsNullOrEmpty(Course.Name?.Trim()))
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De cursusnaam is verplicht.")
-                    .Build());
                 return false;
-            }
 
             if (string.IsNullOrEmpty(Course.Code?.Trim()))
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De cursuscode is verplicht.")
-                    .Build());
                 return false;
-            }
 
             if (Course.EndDate == DateTime.Now)
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De einddatum is verplicht.")
-                    .Build());
                 return false;
-            }
 
             if (Course.StartDate == DateTime.Now)
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De begindatum is verplicht.")
-                    .Build());
                 return false;
-            }
 
             if (Course.Location == null)
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De locatie is verplicht.")
-                    .Build());
                 return false;
-            }
 
             if (string.IsNullOrEmpty(Course.Description?.Trim()))
-            {
-                ShowWarningDialog(DialogResult<bool>.Builder()
-                    .SetSuccess(false, "De beschrijving is verplicht.")
-                    .Build());
                 return false;
-            }
-
 
             return true;
         }
 
-        protected virtual void ShowSuccessDialog(string succesMessage)
+        private async Task ShowSuccessDialog(string message)
         {
-            MessageBox.Show(succesMessage, "Succes melding", MessageBoxButton.OK, MessageBoxImage.Information);
+            IsDialogOpen = true;
+
+            await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                new DialogResultType
+                {
+                    DialogTitle = "Succes",
+                    DialogText = message
+                });
+
+            IsDialogOpen = false;
         }
 
-        protected virtual void ShowWarningDialog(DialogResult<bool> dialogResult)
+        private async Task ShowWarningDialog(string message)
         {
-            MessageBox.Show(dialogResult.OutcomeMessage, "Waarschuwing", MessageBoxButton.OK, MessageBoxImage.Warning);
+            IsDialogOpen = true;
+
+            await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                new DialogResultType
+                {
+                    DialogTitle = "Waarschuwing",
+                    DialogText = message
+                });
+
+            IsDialogOpen = false;
         }
 
         public void OnCancel()
         {
             var dialogResult = DialogResult<Course>.Builder()
-                .SetCanceled("Changes were canceled by the user.")
+                .SetCanceled("Wijzigingen geannuleerd door de gebruiker.")
                 .Build();
 
             InvokeResponseCallback(dialogResult);
