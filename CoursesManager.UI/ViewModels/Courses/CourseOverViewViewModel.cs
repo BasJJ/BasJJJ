@@ -44,7 +44,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             _dialogService = dialogService;
             _messageBroker = messageBroker;
 
-            ChangeCourseCommand = new RelayCommand<Course>(ChangeCourse, c => c != null);
+            ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
             Students = CurrentCourse.students;
@@ -69,25 +69,12 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         }
 
-        private async void ChangeCourse(Course course)
+        private async void ChangeCourse()
         {
-            if (course == null)
-            {
-                await ExecuteWithOverlayAsync(async () =>
-                {
-                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                        new DialogResultType
-                        {
-                            DialogTitle = "Foutmelding",
-                            DialogText = "Geen cursus geselecteerd om te bewerken."
-                        });
-                });
-                return;
-            }
 
             await ExecuteWithOverlayAsync(async () =>
             {
-                var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>(course);
+                var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>(CurrentCourse);
 
                 if (dialogResult?.Outcome == DialogOutcome.Success)
                 {
