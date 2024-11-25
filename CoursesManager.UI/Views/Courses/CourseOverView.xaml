@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:CoursesManager.UI.Views.Courses"
         xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
-        mc:Ignorable="d"
+        xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels.Courses" d:DataContext="{d:DesignInstance Type=viewmodels:CourseOverViewViewModel}"
+             mc:Ignorable="d"
         d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 
     <Grid>
