@@ -88,6 +88,8 @@ namespace CoursesManager.UI.ViewModels
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
             _navigationService = navigationService;
+            CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
+
 
             // Initialize students
             LoadStudents();
@@ -97,7 +99,7 @@ namespace CoursesManager.UI.ViewModels
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
             SearchCommand = new RelayCommand(FilterStudentRecords);
-            StudentDetailCommand = new RelayCommand<Student>(OpenStudentDetailViewModel, s => s != null);
+            StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
             ViewTitle = "Cursisten beheer";
         }
 
@@ -124,23 +126,19 @@ namespace CoursesManager.UI.ViewModels
 
         private void UpdateStudentCourses()
         {
-            if (SelectedStudent == null)
+            if (SelectedStudent == null) return;
+
+            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == SelectedStudent.Id);
+            CoursePaymentList.Clear();
+
+            foreach (var registration in registrations)
             {
-                DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
-                OnPropertyChanged(nameof(DisplayedCourses));
-                return;
+                if (registration.Course != null)
+                {
+                    CoursePaymentList.Add(new CourseStudentPayment(registration.Course, registration));
+                }
             }
-
-            var registrations = _registrationRepository.GetAll()
-                .Where(r => r.StudentID == SelectedStudent.Id)
-                .ToList();
-
-            var coursePayments = registrations.Select(r => new CourseStudentPayment(
-                _courseRepository.GetById(r.CourseID), r))
-                .ToList();
-
-            DisplayedCourses = new ObservableCollection<CourseStudentPayment>(coursePayments);
-            OnPropertyChanged(nameof(DisplayedCourses));
+            OnPropertyChanged(nameof(CoursePaymentList));
         }
 
         private async void OpenAddStudentPopup()
@@ -216,27 +214,15 @@ namespace CoursesManager.UI.ViewModels
             });
         }
 
-        private void OpenStudentDetailViewModel(Student student)
+        private void OpenStudentDetailViewModel()
         {
 
             if (_navigationService == null)
             {
-                // Handle the case where navigation service is not initialized
                 throw new InvalidOperationException("Navigation service is not initialized.");
             }
 
-            var studentDetailViewModel = new StudentDetailViewModel(_dialogService,
-                _messageBroker,
-                _navigationService,
-                _registrationRepository,
-                _courseRepository,
-                _studentRepository,
-                student)
-            {
-                Student = SelectedStudent
-            };
-
-            _navigationService.NavigateTo<StudentDetailViewModel>();
+            _navigationService.NavigateTableViewModels<StudentDetailViewModel>(SelectedStudent);
         }
 
         private async Task ExecuteWithOverlayAsync(Func<Task> action)

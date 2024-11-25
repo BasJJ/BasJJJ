@@ -65,27 +65,32 @@ namespace CoursesManager.UI.Factory
                     new AddStudentViewModel(false, _studentRepository, _courseRepository, _registrationRepository,
                         _dialogService) as T,
                 Type vmType when vmType == typeof(StudentDetailViewModel) =>
-                    new StudentDetailViewModel(_dialogService,_messageBroker,_navigationService,_registrationRepository,_courseRepository, _studentRepository, parameter as Student)
-                     as T,
+                    new StudentDetailViewModel(
+                        _registrationRepository,
+                        _navigationService,
+                        parameter as Student 
+                    ) as T,
 
                 _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")
             };
         }
 
-        public T CreateViewModel<T>(INavigationService navigationService, object parameter = null)
+        public T NavigateTableViewModels<T>(INavigationService navigationService, object parameter = null)
             where T : NavigatableViewModel
         {
             return typeof(T) switch
             {
-                Type vmType when vmType == typeof(CoursesManagerViewModel) =>
-                    new CoursesManagerViewModel(_courseRepository, _registrationRepository, navigationService, _messageBroker) as T,
+                // Parameterized factory for StudentDetailViewModel
                 Type vmType when vmType == typeof(StudentDetailViewModel) =>
-                    new StudentDetailViewModel(_dialogService,_messageBroker,_navigationService,_registrationRepository,_courseRepository,_studentRepository, new Student())
-                    {
-                        Student = parameter as Student
-                    } as T,
-                _ => throw new ArgumentException($"Unknown viewmodel type: {typeof(T)}")
+                    new StudentDetailViewModel(
+                        _registrationRepository,
+                        _navigationService,
+                        parameter as Student) as T,
+
+                // Add other view model cases here...
+                _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")
             };
         }
+
     }
 }

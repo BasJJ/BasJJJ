@@ -3,10 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students"
-             d:studentViewModel="{d:DesignInstance Type=studentViewModel:StudentDetailViewModel}"
+
              mc:Ignorable="d"
-             Loaded="Window_Loaded"
              d:DesignHeight="700" d:DesignWidth="1600" Background="{StaticResource SecondaryGradient}">
 
     <Grid>
@@ -32,41 +30,41 @@
                 <!-- First Column -->
                 <StackPanel Margin="10,0,20,0">
                     <TextBlock Text="Voornaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.FirstName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.FirstName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Achternaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.LastName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.LastName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Email" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Postcode" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Straatnaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                     
                     <TextBlock Text="Land" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                 </StackPanel>
 
                 <!-- Second Column -->
                 <StackPanel Margin="20,0,10,0" Grid.Column="1">
                     <TextBlock Text="Tussenvoegsel" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.Insertion}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Insertion}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Geboortedatum" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.DateOfBirth}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.DateOfBirth}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Telefoonnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Huisnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Stad" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding StudentDetail.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                 </StackPanel>
             </Grid>
 
@@ -78,51 +76,100 @@
 
         <!-- Right: Courses Grid -->
         <Grid Grid.Column="1" Margin="50,100,20,150">
-            <Border CornerRadius="15" Background="White">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
-                </Border.Effect>
+        <Border CornerRadius="15" Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Background="#283593" Height="55" CornerRadius="15,15,0,0">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="3*" />
-                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" /> <!-- Course Name -->
+                        <ColumnDefinition Width="1*" /> <!-- IsPaid -->
+                        <ColumnDefinition Width="1*" /> <!-- IsAchieved -->
+                    </Grid.ColumnDefinitions>
 
-                    <!-- Header -->
-                    <Border Background="#283593" Height="55" CornerRadius="15,15,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                    <TextBlock Text="Cursus" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="18" 
+                               HorizontalAlignment="left" 
+                               VerticalAlignment="Center"
+                               Margin="20,0"/>
 
-                            <TextBlock Text="Cursus" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBlock Text="Betaald" Grid.Column="1" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <TextBlock Text="Behaald" Grid.Column="2" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </Grid>
-                    </Border>
+                    <TextBlock Text="Betaald" 
+                               Grid.Column="1" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="18" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" />
 
-                    <!-- Rows -->
-                    <ListBox Grid.Row="1" Background="White" ItemsSource="{Binding FilteredCourseRecords}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="{Binding CourseName}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding PaymentStatus}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding IsAchieved}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <TextBlock Text="Behaald" 
+                               Grid.Column="2" 
+                               Foreground="White" 
+                               FontWeight="Bold" 
+                               FontSize="18" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" />
                 </Grid>
             </Border>
+
+
+            <!-- Rows -->
+             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding CourseDetails}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="0.5">
+                                <Grid Height="40">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*" /> <!-- Course Name -->
+                                        <ColumnDefinition Width="1*" /> <!-- IsPaid -->
+                                        <ColumnDefinition Width="1*" /> <!-- IsAchieved -->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Course Name -->
+                                    <TextBlock Grid.Column="0"
+                                               Text="{Binding FullName}" 
+                                               HorizontalAlignment="left"
+                                               FontSize="14"
+                                               Margin="20,0"
+                                               VerticalAlignment="Center" />
+
+                                    <!-- IsPaid Checkbox -->
+                                    <CheckBox Grid.Column="1" 
+                                              IsChecked="{Binding IsPaid, Mode=TwoWay}" 
+                                              HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Style="{DynamicResource CheckBoxStyle2}"/>
+
+                                    <!-- IsAchieved Checkbox -->
+                                    <CheckBox Grid.Column="2" 
+                                              IsChecked="{Binding Course.IsAchieved, Mode=TwoWay}" 
+                                              HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" 
+                                              Style="{DynamicResource CheckBoxStyle2}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
+    </Border>
+</Grid>
     </Grid>
 </UserControl>

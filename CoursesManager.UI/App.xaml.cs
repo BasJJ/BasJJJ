@@ -71,7 +71,7 @@ public partial class App : Application
         // Register ViewModel
 
         RegisterViewModels(viewModelFactory);
-
+   
         // Register Dialogs
         RegisterDialogs();
 
@@ -80,7 +80,6 @@ public partial class App : Application
 
         // Navigate to the Initial ViewModel
         NavigationService.NavigateTo<StudentManagerViewModel>();
-        NavigationService.NavigateTo<StudentDetailViewModel>();
 
 
         mw.Show();
@@ -128,9 +127,12 @@ public partial class App : Application
     {
         // Register StudentManagerViewModel
         INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<StudentManagerViewModel>());
-        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<StudentDetailViewModel>(nav));
+        //INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel2<StudentDetailViewModel>());
+        INavigationService.RegisterViewModelFactory<StudentDetailViewModel>(
+            parameter => viewModelFactory.CreateViewModel<StudentDetailViewModel>(parameter as Student)
+        );
 
-        // Register CoursesManagerViewModel
+
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
         // Register CourseOverViewViewModel

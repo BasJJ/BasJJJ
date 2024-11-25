@@ -12,7 +12,6 @@ namespace CoursesManager.UI.Utils
         public Student? Student { get; set; }
         public Course? Course { get; set; }
         public bool IsPaid { get; set; }
-
         public string? FullName { get; set; }
 
         public CourseStudentPayment(Student student, Registration registration)
@@ -24,6 +23,10 @@ namespace CoursesManager.UI.Utils
 
         public CourseStudentPayment(Course course, Registration registration)
         {
+            if (course == null)
+            {
+                throw new ArgumentNullException(nameof(course), "Course cannot be null");
+            }
             FullName = course.Name;
             Course = course;
             IsPaid = registration.PaymentStatus;
