@@ -25,7 +25,6 @@ namespace CoursesManager.UI.ViewModels
         private readonly IRegistrationRepository _registrationRepository;
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
-        public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
 
         private string _searchText;
         public string SearchText
@@ -69,7 +68,6 @@ namespace CoursesManager.UI.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand LoadPaymentsCommand { get; }
 
-
         #endregion
 
         public StudentManagerViewModel(
@@ -83,11 +81,11 @@ namespace CoursesManager.UI.ViewModels
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+            CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
 
 
             // Initialize students
             LoadStudents();
-            LoadCoursePayments();
 
             // Commands
             AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
@@ -120,26 +118,19 @@ namespace CoursesManager.UI.ViewModels
 
         private void UpdateStudentCourses()
         {
-            if (SelectedStudent == null)
+            if (SelectedStudent == null) return;
+
+            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == SelectedStudent.Id);
+            CoursePaymentList.Clear();
+
+            foreach (var registration in registrations)
             {
-                DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
-                OnPropertyChanged(nameof(DisplayedCourses));
-                return;
+                if (registration.Course != null)
+                {
+                    CoursePaymentList.Add(new CourseStudentPayment(registration.Course, registration));
+                }
             }
-
-            var registrations = new ObservableCollection<Registration>(
-                _registrationRepository.GetAll()
-                    .Where(r => r != null && r.StudentID == SelectedStudent.Id)
-            );
-
-            var coursePayments = registrations.Select(r =>
-            {
-                var course = _courseRepository.GetById(r.CourseID);
-                return new CourseStudentPayment(course, r);
-            }).Where(cp => cp != null).ToList();
-
-            DisplayedCourses = new ObservableCollection<CourseStudentPayment>(coursePayments);
-            OnPropertyChanged(nameof(DisplayedCourses));
+            OnPropertyChanged(nameof(CoursePaymentList));
         }
 
 
@@ -228,29 +219,5 @@ namespace CoursesManager.UI.ViewModels
                 _messageBroker.Publish(new OverlayActivationMessage(false));
             }
         }
-        public void LoadCoursePayments()
-        {
-            CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
-
-            var registrations = _registrationRepository.GetAll();
-
-            foreach (var registration in registrations)
-            {
-                var student = _studentRepository.GetById(registration.StudentID);
-                var course = _courseRepository.GetById(registration.CourseID);
-
-                if (student != null)
-                {
-                    CoursePaymentList.Add(new CourseStudentPayment(student, registration));
-                }
-                else if (course != null)
-                {
-                    CoursePaymentList.Add(new CourseStudentPayment(course, registration));
-                }
-            }
-
-            OnPropertyChanged(nameof(CoursePaymentList));
-        }
-
     }
 }

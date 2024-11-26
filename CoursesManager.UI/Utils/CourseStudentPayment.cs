@@ -25,6 +25,10 @@ namespace CoursesManager.UI.Utils
 
         public CourseStudentPayment(Course course, Registration registration)
         {
+            if (course == null)
+            {
+                throw new ArgumentNullException(nameof(course), "Course cannot be null");
+            }
             FullName = course.Name;
             Course = course;
             IsPaid = registration.PaymentStatus;
