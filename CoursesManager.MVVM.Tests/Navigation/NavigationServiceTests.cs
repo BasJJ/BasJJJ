@@ -70,9 +70,7 @@ public class NavigationServiceTests
     {
         Assert.Throws<ArgumentNullException>(() =>
         {
-            Func<INavigationService, ViewModelWithNavigate> factory = null;
-
-            INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((object nav) => factory((INavigationService)nav));
+            INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((Func<object, ViewModelWithNavigate>)(Func<INavigationService, ViewModelWithNavigate>)null);
         });
     }
 
