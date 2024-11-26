@@ -76,6 +76,11 @@ namespace CoursesManager.UI.ViewModels.Students
             }
 
             var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == Student.Id);
+            if (registrations == null)
+            {
+                Debug.WriteLine("Registrations are null in LoadStudentDetails.");
+                return;
+            }
             CourseDetails.Clear();
 
             foreach (var registration in registrations)

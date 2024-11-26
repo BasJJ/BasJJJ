@@ -157,7 +157,8 @@
                                     <CheckBox Grid.Column="1" 
                                               IsChecked="{Binding IsPaid, Mode=TwoWay}" 
                                               HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              IsEnabled="False"
                                               Style="{DynamicResource CheckBoxStyle2}"/>
 
                                     <!-- IsAchieved Checkbox -->
@@ -165,6 +166,7 @@
                                               IsChecked="{Binding Course.IsAchieved, Mode=TwoWay}" 
                                               HorizontalAlignment="Center" 
                                               VerticalAlignment="Center" 
+                                              IsEnabled="False"
                                               Style="{DynamicResource CheckBoxStyle2}" />
                                 </Grid>
                             </Border>
