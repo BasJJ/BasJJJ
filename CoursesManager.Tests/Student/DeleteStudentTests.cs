@@ -12,6 +12,7 @@ using System.Windows;
 using System.Linq;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Repositories.CourseRepository;

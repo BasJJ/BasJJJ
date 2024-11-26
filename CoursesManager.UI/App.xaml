@@ -5,10 +5,11 @@
              xmlns:viewModels="clr-namespace:CoursesManager.UI.ViewModels"
              xmlns:courseViewModels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
              xmlns:views="clr-namespace:CoursesManager.UI.Views"
-             xmlns:CourseViews="clr-namespace:CoursesManager.UI.Views.Courses"
+             xmlns:courseViews="clr-namespace:CoursesManager.UI.Views.Courses"
              xmlns:converters="clr-namespace:CoursesManager.UI.Converters"
              xmlns:students="clr-namespace:CoursesManager.UI.Views.Students"
-             xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students">
+             xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students"
+             xmlns:converters1="clr-namespace:CoursesManager.UI.Helpers.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <!-- Merged Dictionaries -->
@@ -41,8 +42,8 @@
                 <courseViews:CourseOverView />
             </DataTemplate>
 
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
-            <converters:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters:StartDateToBooleanConverter>
+            <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters1:BoolToVisibilityConverter>
+            <converters1:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters1:StartDateToBooleanConverter>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
