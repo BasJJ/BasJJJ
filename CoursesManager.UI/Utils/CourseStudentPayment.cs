@@ -32,7 +32,7 @@ namespace CoursesManager.UI.Utils
             Student = student;
             IsPaid = registration.PaymentStatus;
             FullName = $"{student.FirstName} {student.Insertion} {student.LastName}";
-            IsAchieved = registration.Is_Achieved;
+            IsAchieved = registration.IsAchieved;
         }
 
         public CourseStudentPayment(Course course, Registration registration)
@@ -44,7 +44,7 @@ namespace CoursesManager.UI.Utils
             FullName = course.Name;
             Course = course;
             IsPaid = registration.PaymentStatus;
-            IsAchieved = registration.Is_Achieved;
+            IsAchieved = registration.IsAchieved;
         }
     }
 }

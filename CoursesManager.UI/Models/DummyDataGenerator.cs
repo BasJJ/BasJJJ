@@ -125,7 +125,7 @@ namespace CoursesManager.UI.Models
                         RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
                         PaymentStatus = _random.Next(0, 2) == 1,
                         IsActive = _random.Next(0, 2) == 1,
-                        Is_Achieved = _random.Next(0, 2) == 1,
+                        IsAchieved = _random.Next(0, 2) == 1,
                         DateCreated = DateTime.Now
                     };
 
