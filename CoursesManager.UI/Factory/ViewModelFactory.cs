@@ -66,6 +66,8 @@ namespace CoursesManager.UI.Factory
                         _dialogService) as T,
                 Type vmType when vmType == typeof(StudentDetailViewModel) =>
                     new StudentDetailViewModel(
+                        _dialogService,
+                        _messageBroker,
                         _registrationRepository,
                         _navigationService,
                         parameter as Student 
@@ -83,6 +85,8 @@ namespace CoursesManager.UI.Factory
                 // Parameterized factory for StudentDetailViewModel
                 Type vmType when vmType == typeof(StudentDetailViewModel) =>
                     new StudentDetailViewModel(
+                        _dialogService,
+                        _messageBroker,
                         _registrationRepository,
                         _navigationService,
                         parameter as Student) as T,

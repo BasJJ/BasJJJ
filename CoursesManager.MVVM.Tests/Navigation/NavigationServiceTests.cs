@@ -33,7 +33,7 @@ public class NavigationServiceTests
     {
         INavigationService.ViewModelFactories.Clear();
         INavigationService.RegisterViewModelFactory(() => new ViewModelWithoutNavigate());
-        INavigationService.RegisterViewModelFactory((nav) => new ViewModelWithNavigate(nav));
+        INavigationService.RegisterViewModelFactory((object nav) => new ViewModelWithNavigate((INavigationService)nav));
         _navigationService = new NavigationService();
     }
 
@@ -70,9 +70,9 @@ public class NavigationServiceTests
     {
         Assert.Throws<ArgumentNullException>(() =>
         {
-            Func<NavigationService, ViewModelWithNavigate> factory = null;
+            Func<INavigationService, ViewModelWithNavigate> factory = null;
 
-            INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>(factory);
+            INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((object nav) => factory((INavigationService)nav));
         });
     }
 
@@ -80,7 +80,8 @@ public class NavigationServiceTests
     public void RegisterViewModelFactoryWithNaviagtionService_RegistrationAdded()
     {
         INavigationService.ViewModelFactories.Clear();
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate(navigationService));
+
+        INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtLeast(1));
     }
@@ -89,13 +90,13 @@ public class NavigationServiceTests
     public void RegisterViewModelFactoryWithNaviagtionService_OnlyAddedOnce()
     {
         INavigationService.ViewModelFactories.Clear();
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate(navigationService));
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate(navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
     }
 
-    [Test] 
+    [Test]
     public void CanGoBack_ReturnsFalse_WhenNoForwardNavigationHasOccured()
     {
         Assert.IsFalse(_navigationService.CanGoBack());

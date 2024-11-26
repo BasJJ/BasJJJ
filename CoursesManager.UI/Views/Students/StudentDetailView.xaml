@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-
+             xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1600" Background="{StaticResource SecondaryGradient}">
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
@@ -69,13 +68,18 @@
             </Grid>
 
             <!-- Wijzigen Button -->
-            <Button Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" Content="Wijzigen"
-                     Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0"
+            <Button Command="{Binding EditStudent }" 
+                    CommandParameter="{Binding Student}"  
+                    Content="Wijzigen"
+                     Grid.Row="1" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Margin="20"
                      Style="{StaticResource PrimaryButton}" />
         </Grid>
 
         <!-- Right: Courses Grid -->
-        <Grid Grid.Column="1" Margin="50,100,20,150">
+        <Grid Grid.Column="1" Margin="50,100,20,200">
         <Border CornerRadius="15" Background="White">
         <Border.Effect>
             <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
