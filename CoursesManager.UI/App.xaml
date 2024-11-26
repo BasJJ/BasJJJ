@@ -38,7 +38,7 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type courseViewModels:CourseOverViewViewModel}">
-                <CourseViews:CourseOverView />
+                <courseViews:CourseOverView />
             </DataTemplate>
 
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
