@@ -18,6 +18,7 @@ using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI;
 
