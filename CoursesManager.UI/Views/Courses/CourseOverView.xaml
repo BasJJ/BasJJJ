@@ -236,7 +236,7 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
                                             <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center" IsChecked="{Binding IsPaid, Mode=TwoWay}" />
-                                            <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="center" IsChecked="{Binding IsAchieved, Mode=TwoWay}" IsEnabled="{Binding IsPaid} />
+                                            <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="center" IsChecked="{Binding IsAchieved, Mode=TwoWay}" IsEnabled="{Binding IsPaid}" />
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
