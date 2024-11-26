@@ -260,6 +260,78 @@
         </Setter>
     </Style>
 
+    <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle">
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="Background" Value="#F5F5F5" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Cursor" Value="Arrow" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- DataGrid Style -->
+    <Style x:Key="CustomDataGridStyle" TargetType="DataGrid">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="GridLinesVisibility" Value="None" />
+        <Setter Property="ColumnHeaderHeight" Value="50" />
+        <Setter Property="RowHeight" Value="40" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2" Opacity="0.2" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- DataGridColumnHeader Style -->
+    <Style x:Key="CustomDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#283593" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="2" Opacity="0.3" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- DataGridRow Style -->
+    <Style x:Key="CustomDataGridRowStyle" TargetType="DataGridRow">
+        <Setter Property="Background" Value="White" /> 
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="1" Opacity="0.1" />
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+         
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#E3F2FD" /> 
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ListBoxItemStyle"
    TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels"
