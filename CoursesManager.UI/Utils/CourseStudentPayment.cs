@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Utils
 {
-    public class CourseStudentPayment
+    public class CourseStudentPayment : IsObservable
     {
+        private bool _isPaid;
+        private bool _isAchieved;
         public Student? Student { get; set; }
         public Course? Course { get; set; }
-        public bool IsPaid { get; set; }
-        public bool IsAchieved { get; set; }
+        public bool IsPaid
+        {
+            get => _isPaid;
+            set => SetProperty(ref _isPaid, value);
+        }
+
+        public bool IsAchieved
+        {
+            get => _isAchieved;
+            set => SetProperty(ref _isAchieved, value);
+        }
         public string? FullName { get; set; }
 
         public CourseStudentPayment(Student student, Registration registration)

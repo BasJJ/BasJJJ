@@ -4,7 +4,6 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Utils;
 using CoursesManager.UI.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -16,14 +15,31 @@ namespace CoursesManager.UI.ViewModels.Courses
     class CourseOverViewViewModel : ViewModel
     {
         public ICommand ChangeCourseCommand { get; set; }
-
         public ICommand DeleteCourseCommand { get; set; }
+
         private readonly IStudentRepository _studentRepository;
         private readonly IRegistrationRepository _registrationRepository;
 
-        public Course CurrentCourse { get; private set; }
-        public ObservableCollection<Student> Students { get; private set; }
-        public ObservableCollection<CourseStudentPayment> StudentPayments { get; private set; }
+        private Course _currentCourse;
+        public Course CurrentCourse
+        {
+            get => _currentCourse;
+            private set => SetProperty(ref _currentCourse, value);
+        }
+
+        private ObservableCollection<Student> _students;
+        public ObservableCollection<Student> Students
+        {
+            get => _students;
+            private set => SetProperty(ref _students, value);
+        }
+
+        private ObservableCollection<CourseStudentPayment> _studentPayments;
+        public ObservableCollection<CourseStudentPayment> StudentPayments
+        {
+            get => _studentPayments;
+            private set => SetProperty(ref _studentPayments, value);
+        }
 
         public CourseOverViewViewModel(
             IStudentRepository studentRepository,
@@ -31,6 +47,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         {
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
 
@@ -55,33 +72,26 @@ namespace CoursesManager.UI.ViewModels.Courses
                 .Where(r => r.CourseID == CurrentCourse.ID)
                 .ToList();
 
-            StudentPayments = new ObservableCollection<CourseStudentPayment>();
-
-            foreach (var registration in registrations)
+            var payments = registrations.Select(registration =>
             {
                 var student = _studentRepository.GetById(registration.StudentID);
-                if (student != null)
-                {
-                    var studentPayment = new CourseStudentPayment(student, registration);
-                    StudentPayments.Add(studentPayment);
-                }
-                else
+                if (student == null)
                 {
                     Console.WriteLine($"Warning: Student with ID {registration.StudentID} not found for registration ID {registration.ID}.");
+                    return null;
                 }
-            }
+                return new CourseStudentPayment(student, registration);
+            }).Where(payment => payment != null);
 
-            OnPropertyChanged(nameof(Students));
-            OnPropertyChanged(nameof(StudentPayments));
+            StudentPayments = new ObservableCollection<CourseStudentPayment>(payments);
         }
+
         private void ChangeCourse()
         {
-
         }
 
         private void DeleteCourse()
         {
-
         }
     }
 }
