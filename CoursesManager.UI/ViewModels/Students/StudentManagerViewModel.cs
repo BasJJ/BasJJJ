@@ -71,6 +71,8 @@ namespace CoursesManager.UI.ViewModels.Students
         public ICommand DeleteStudentCommand { get; }
         public ICommand SearchCommand { get; }
         public ICommand StudentDetailCommand { get; }
+        public ICommand CheckboxChangedCommand { get; }
+
 
         #endregion Commands
 
@@ -99,6 +101,7 @@ namespace CoursesManager.UI.ViewModels.Students
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
             SearchCommand = new RelayCommand(FilterStudentRecords);
             StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
+            CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
             ViewTitle = "Cursisten beheer";
         }
 
@@ -121,6 +124,33 @@ namespace CoursesManager.UI.ViewModels.Students
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
             }
             OnPropertyChanged(nameof(FilteredStudentRecords));
+        }
+        private void OnCheckboxChanged(CourseStudentPayment payment)
+        {
+            if (payment == null || SelectedStudent == null) return;
+
+            var existingRegistration = _registrationRepository.GetAll()
+                .FirstOrDefault(r => r.CourseID == payment.Course?.ID && r.StudentID == SelectedStudent.Id);
+
+            if (existingRegistration != null)
+            {
+                existingRegistration.PaymentStatus = payment.IsPaid;
+                existingRegistration.IsAchieved = payment.IsAchieved;
+                _registrationRepository.Update(existingRegistration);
+            }
+            else if (payment.IsPaid || payment.IsAchieved)
+            {
+                _registrationRepository.Add(new Registration
+                {
+                    StudentID = SelectedStudent.Id,
+                    CourseID = payment.Course?.ID ?? 0,
+                    PaymentStatus = payment.IsPaid,
+                    IsAchieved = payment.IsAchieved,
+                    RegistrationDate = DateTime.Now,
+                    IsActive = true
+                });
+            }
+            UpdateStudentCourses();
         }
 
         private void UpdateStudentCourses()

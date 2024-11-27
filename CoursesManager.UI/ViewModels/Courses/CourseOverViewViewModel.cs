@@ -16,6 +16,8 @@ namespace CoursesManager.UI.ViewModels.Courses
     {
         public ICommand ChangeCourseCommand { get; set; }
         public ICommand DeleteCourseCommand { get; set; }
+        public ICommand CheckboxChangedCommand { get; }
+
 
         private readonly IStudentRepository _studentRepository;
         private readonly IRegistrationRepository _registrationRepository;
@@ -50,6 +52,8 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
+            CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
+
 
             LoadCourseData();
         }
@@ -84,6 +88,34 @@ namespace CoursesManager.UI.ViewModels.Courses
             }).Where(payment => payment != null);
 
             StudentPayments = new ObservableCollection<CourseStudentPayment>(payments);
+        }
+
+        private void OnCheckboxChanged(CourseStudentPayment payment)
+        {
+            if (payment == null || CurrentCourse == null) return;
+
+            var existingRegistration = _registrationRepository.GetAll()
+                .FirstOrDefault(r => r.CourseID == CurrentCourse.ID && r.StudentID == payment.Student?.Id);
+
+            if (existingRegistration != null)
+            {
+                existingRegistration.PaymentStatus = payment.IsPaid;
+                existingRegistration.IsAchieved = payment.IsAchieved;
+                _registrationRepository.Update(existingRegistration);
+            }
+            else if (payment.IsPaid || payment.IsAchieved)
+            {
+                _registrationRepository.Add(new Registration
+                {
+                    StudentID = payment.Student?.Id ?? 0,
+                    CourseID = CurrentCourse.ID,
+                    PaymentStatus = payment.IsPaid,
+                    IsAchieved = payment.IsAchieved,
+                    RegistrationDate = DateTime.Now,
+                    IsActive = true
+                });
+            }
+            LoadCourseData();
         }
 
         private void ChangeCourse()
