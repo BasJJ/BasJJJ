@@ -6,10 +6,9 @@
              xmlns:courseViewModels="clr-namespace:CoursesManager.UI.ViewModels.Courses"
              xmlns:views="clr-namespace:CoursesManager.UI.Views"
              xmlns:courseViews="clr-namespace:CoursesManager.UI.Views.Courses"
-             xmlns:converters="clr-namespace:CoursesManager.UI.Converters"
              xmlns:students="clr-namespace:CoursesManager.UI.Views.Students"
              xmlns:studentViewModel="clr-namespace:CoursesManager.UI.ViewModels.Students"
-             xmlns:converters1="clr-namespace:CoursesManager.UI.Helpers.Converters">
+             xmlns:converters="clr-namespace:CoursesManager.UI.Helpers.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <!-- Merged Dictionaries -->
@@ -21,17 +20,17 @@
                 <ResourceDictionary Source="Resources/ScrollBarStyling.xaml" />
                 <ResourceDictionary Source="Resources/ListBoxStyles.xaml" />
                 <ResourceDictionary Source="Resources/ComboBoxStyling.xaml" />
-                <ResourceDictionary Source="Resources/SideBar.xaml"/>
-                <ResourceDictionary Source="Resources/HeaderStyle.xaml"/>
-                <ResourceDictionary Source="Resources/Colors/Gradients.xaml"/>
-                <ResourceDictionary Source="Resources/StartupAnimations.xaml"/>
+                <ResourceDictionary Source="Resources/SideBar.xaml" />
+                <ResourceDictionary Source="Resources/HeaderStyle.xaml" />
+                <ResourceDictionary Source="Resources/Colors/Gradients.xaml" />
+                <ResourceDictionary Source="Resources/StartupAnimations.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- Directly defined resources (such as DataTemplates) -->
             <DataTemplate DataType="{x:Type viewModels:CoursesManagerViewModel}">
                 <views:CoursesManagerView />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModels:StudentManagerViewModel}">
+            <DataTemplate DataType="{x:Type studentViewModel:StudentManagerViewModel}">
                 <views:StudentManagerView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type studentViewModel:StudentDetailViewModel}">
@@ -42,8 +41,8 @@
                 <courseViews:CourseOverView />
             </DataTemplate>
 
-            <converters1:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters1:BoolToVisibilityConverter>
-            <converters1:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters1:StartDateToBooleanConverter>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
+            <converters:StartDateToBooleanConverter x:Key="StartDateToBooleanConverter"></converters:StartDateToBooleanConverter>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

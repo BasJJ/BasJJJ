@@ -1,7 +1,6 @@
-﻿using CoursesManager.UI.ViewModels;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.Views.Students
 {
@@ -19,7 +18,8 @@ namespace CoursesManager.UI.Views.Students
         {
             if (DataContext is EditStudentViewModel viewModel && viewModel != null)
             {
-                viewModel.ParentWindow = this; }
+                viewModel.ParentWindow = this;
+            }
             else
             {
                 Debug.WriteLine("DataContext is either null or not of type AddStudentViewModel.");

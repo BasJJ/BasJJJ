@@ -18,14 +18,16 @@ using CoursesManager.UI.Utils;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
-    public class StudentDetailViewModel : NavigatableViewModel
+    public class StudentDetailViewModel : ViewModelWithNavigation
     {
         private readonly IRegistrationRepository _registrationRepository;
         private readonly INavigationService _navigation;
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         private Student _student;
         private ObservableCollection<CourseStudentPayment> _courseDetails = new ObservableCollection<CourseStudentPayment>();
         public ICommand EditStudent { get; set; }
@@ -39,17 +41,18 @@ namespace CoursesManager.UI.ViewModels.Students
                 OnPropertyChanged(nameof(CourseDetails));
             }
         }
+
         public StudentDetailViewModel(
             IDialogService dialogService,
             IMessageBroker messageBroker,
             IRegistrationRepository registrationRepository,
             INavigationService navigationService,
-            Student student) : base(navigationService)
+            Student? student) : base(navigationService)
         {
             _dialogService = dialogService;
             _messageBroker = messageBroker;
             _registrationRepository = registrationRepository;
-            Student = student;
+            Student = student ?? new Student();
             EditStudent = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
             LoadStudentDetails();
         }
@@ -125,6 +128,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 }
             });
         }
+
         private async Task ExecuteWithOverlayAsync(Func<Task> action)
         {
             _messageBroker.Publish(new OverlayActivationMessage(true));
@@ -142,7 +146,5 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
-
 }

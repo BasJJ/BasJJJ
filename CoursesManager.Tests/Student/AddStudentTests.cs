@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.Tests
 {
@@ -30,7 +31,6 @@ namespace CoursesManager.Tests
         [SetUp]
         public void SetUp()
         {
-
             _mockStudentRepository = new Mock<IStudentRepository>();
             _mockCourseRepository = new Mock<ICourseRepository>();
             _mockRegistrationRepository = new Mock<IRegistrationRepository>();
@@ -60,19 +60,18 @@ namespace CoursesManager.Tests
             );
 
             _viewModel.ParentWindow = new Window
+            {
+                Content = new StackPanel
                 {
-                    Content = new StackPanel
-                    {
-                        Children =
+                    Children =
                         {
                             new TextBox { Name = "FirstName", Text = _viewModel.Student.FirstName },
                             new TextBox { Name = "LastName", Text = _viewModel.Student.LastName },
                             new TextBox { Name = "Email", Text = _viewModel.Student.Email },
                             new ComboBox { Name = "Course", SelectedItem = _viewModel.SelectedCourse }
                         }
-                    }
-                };
-                
+                }
+            };
         }
 
         [Test]
@@ -97,7 +96,6 @@ namespace CoursesManager.Tests
                 Times.Once);
         }
 
-
         [Test]
         public async Task Save_DuplicateEmail_ShowsError()
         {
@@ -119,7 +117,6 @@ namespace CoursesManager.Tests
                         It.Is<DialogResultType>(result =>
                             result.DialogText.Contains("bestaat al."))),
                 Times.Once);
-        
         }
 
         [Test]
