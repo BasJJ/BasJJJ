@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
-using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace CoursesManager.UI.Models
 {
-    public class Course : ICopyable<Course>, IDataErrorInfo
+    public class Course : IsObservable, ICopyable<Course>, IDataErrorInfo
     {
         public int ID { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -21,8 +21,12 @@ namespace CoursesManager.UI.Models
         public int LocationId { get; set; }
         public Location? Location { get; set; }
         public DateTime DateCreated { get; set; }
-        public ObservableCollection<Student>? students { get; set; }
-        public Image? Image { get; set; }
+        public ObservableCollection<Student>? Students { get; set; }
+
+        private BitmapImage? _image;
+        public BitmapImage? Image { get => _image; set => SetProperty(ref _image, value); }
+
+
 
         // Validation logic for IDataErrorInfo
         public string Error => null;
@@ -66,6 +70,11 @@ namespace CoursesManager.UI.Models
                         if (Location == null)
                             return "Locatie is verplicht.";
                         break;
+
+                    case nameof(Image):
+                        
+                        return null;
+
                 }
                 return null;
             }
@@ -104,10 +113,10 @@ namespace CoursesManager.UI.Models
                 StartDate = this.StartDate,
                 EndDate = this.EndDate,
                 LocationId = this.LocationId,
-                Location = this.Location, // Shallow copy
+                Location = this.Location, 
                 DateCreated = this.DateCreated,
-                students = this.students != null ? new ObservableCollection<Student>(this.students) : null, // Diepe kopie van de collectie
-                Image = this.Image // Shallow copy
+                Students = this.Students != null ? new ObservableCollection<Student>(this.Students) : null, 
+                Image = this.Image 
             };
         }
     }

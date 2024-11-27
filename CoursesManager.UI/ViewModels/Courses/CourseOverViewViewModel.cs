@@ -1,25 +1,16 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
-using CoursesManager.UI.Utils;
-using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.CoursesManager.UI.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
-using CoursesManager.UI.Dialogs.ResultTypes;
-using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
+using CoursesManager.UI.Models;
+using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
+using CoursesManager.UI.Utils;
 using CoursesManager.UI.ViewModels.Students;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
@@ -32,11 +23,20 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand ChangeCourseCommand { get; set; }
         public ICommand DeleteCourseCommand { get; set; }
 
-        public Course CurrentCourse { get; set; }
+        private bool _isDialogOpen;
+        private Course? _currentCourse;
+
+        public bool IsDialogOpen
+        {
+            get => _isDialogOpen;
+            set => SetProperty(ref _isDialogOpen, value);
+        }
+
+        public Course CurrentCourse { get => _currentCourse!; set => SetProperty(ref _currentCourse, value); }
         public ObservableCollection<Student>? Students { get; set; }
 
         public ObservableCollection<Course>? Courses { get; set; }
-        public ObservableCollection<CourseStudentPayment>? studentPayments { get; set; }
+        public ObservableCollection<CourseStudentPayment>? StudentPayments { get; set; }
 
         public CourseOverViewViewModel(ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
@@ -47,20 +47,19 @@ namespace CoursesManager.UI.ViewModels.Courses
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CurrentCourse = (Course)GlobalCache.Instance.Get("Opened Course");
-            Students = CurrentCourse.students;
-            ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
-            studentPayments = new ObservableCollection<CourseStudentPayment>();
+            Students = CurrentCourse.Students;
 
-            for (int i = 0; i < registration.Count - 1; i++)
+            if (Students is not null)
             {
-                CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
-                studentPayments.Add(studentPayment);
-            }
-        }
+                ObservableCollection<Registration> registration = DummyDataGenerator.GenerateRegistrations(Students.Count, 1);
+                StudentPayments = new ObservableCollection<CourseStudentPayment>();
 
-        public void LoadCourses()
-        {
-            Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
+                for (int i = 0; i < registration.Count - 1; i++)
+                {
+                    CourseStudentPayment studentPayment = new CourseStudentPayment(Students[i], registration[i]);
+                    StudentPayments.Add(studentPayment);
+                }
+            }
         }
 
 
@@ -76,10 +75,11 @@ namespace CoursesManager.UI.ViewModels.Courses
             {
                 var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>(CurrentCourse);
 
-                if (dialogResult?.Outcome == DialogOutcome.Success)
+                if (dialogResult.Outcome == DialogOutcome.Success)
                 {
-                    // Herlaad de lijst of voer andere acties uit
-                    LoadCourses();
+                    CurrentCourse = dialogResult.Data;
+                    
+                    
                 }
             });
         }
@@ -96,5 +96,13 @@ namespace CoursesManager.UI.ViewModels.Courses
                 _messageBroker.Publish(new OverlayActivationMessage(false));
             }
         }
+
+        private System.Windows.Visibility isImageVisible;
+
+        public System.Windows.Visibility IsImageVisible { get => isImageVisible; set => SetProperty(ref isImageVisible, value); }
+
+        private System.Windows.Visibility isPlaceholderVisible;
+
+        public System.Windows.Visibility IsPlaceholderVisible { get => isPlaceholderVisible; set => SetProperty(ref isPlaceholderVisible, value); }
     }
 }
