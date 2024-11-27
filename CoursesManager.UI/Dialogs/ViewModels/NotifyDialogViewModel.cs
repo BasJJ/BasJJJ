@@ -5,7 +5,7 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 
 namespace CoursesManager.UI.Dialogs.ViewModels;
 
-internal class NotifyDialogViewModel : DialogViewModel<DialogResultType>
+public class NotifyDialogViewModel : DialogViewModel<DialogResultType>
 {
     private string _title = null!;
     private bool _IsDialogOpen;
