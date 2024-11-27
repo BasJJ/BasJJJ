@@ -133,42 +133,49 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         private async void DeleteCourse()
         {
-            if (_courseRepository.HasActiveRegistrations(CurrentCourse))
-            {
-                var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(new DialogResultType
-                {
-                    DialogText = "Cursus heeft nog actieve registraties.",
-                    DialogTitle = "Error"
-                });
-            }
-            else
-            {
-                var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(new DialogResultType
-                {
-                    DialogTitle = "Bevestiging",
-                    DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
-                });
 
-                if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
+            await ExecuteWithOverlayAsync(async () =>
+            {
+                if (_courseRepository.HasActiveRegistrations(CurrentCourse))
                 {
-                    try
-                    {
-                        _courseRepository.SetInactive(CurrentCourse);
-
-                        _messageBroker.Publish(new CoursesChangedMessage());
-                        _navigationService.GoBackAndClearForward();
-                    }
-                    catch (Exception ex)
-                    {
-                        LogUtil.Error(ex.Message);
-                        await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(new DialogResultType
+                    var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(
+                        new DialogResultType
                         {
-                            DialogText = "Er is iets fout gegaan.",
+                            DialogText = "Cursus heeft nog actieve registraties.",
                             DialogTitle = "Error"
                         });
+                }
+                else
+                {
+                    var result = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                        new DialogResultType
+                        {
+                            DialogTitle = "Bevestiging",
+                            DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
+                        });
+
+                    if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
+                    {
+                        try
+                        {
+                            _courseRepository.SetInactive(CurrentCourse);
+
+                            _messageBroker.Publish(new CoursesChangedMessage());
+                            _navigationService.GoBackAndClearForward();
+                        }
+                        catch (Exception ex)
+                        {
+                            LogUtil.Error(ex.Message);
+                            await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(
+                                new DialogResultType
+                                {
+                                    DialogText = "Er is iets fout gegaan.",
+                                    DialogTitle = "Error"
+                                });
+                        }
                     }
                 }
-            }
+            });
         }
 
         private async void ChangeCourse()

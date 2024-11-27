@@ -10,6 +10,7 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.LocationRepository;
+using CoursesManager.UI.Messages;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
