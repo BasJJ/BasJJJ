@@ -1,8 +1,6 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
-using CoursesManager.UI.Models.Repositories.LocationRepository;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -10,13 +8,13 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
-using System.Windows.Controls;
+using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Repositories.LocationRepository;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
     class CourseDialogViewModel : DialogViewModel<Course>
     {
-
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
@@ -42,19 +40,9 @@ namespace CoursesManager.UI.ViewModels.Students
             set => SetProperty(ref _course, value);
         }
 
-        private bool _canSave;
-        public bool CanSave
-        {
-            get => _canSave;
-            private set => SetProperty(ref _canSave, value);
-        }
-
-
         public ICommand SaveCommand { get; }
 
-
         public ICommand CancelCommand { get; }
-
 
         public ICommand UploadCommand { get; }
         public ObservableCollection<string> Courses
@@ -67,8 +55,8 @@ namespace CoursesManager.UI.ViewModels.Students
         public CourseDialogViewModel(ICourseRepository courseRepository, IDialogService dialogService, ILocationRepository locationRepository, Course? course) : base(course)
         {
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
-            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             Course = course != null
                    ? course.Copy()
@@ -89,23 +77,26 @@ namespace CoursesManager.UI.ViewModels.Students
             Locations = new ObservableCollection<Location>(locationRepository.GetAll());
 
             Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
-            SaveCommand = new RelayCommand(ExecuteSave, () => CanSave);
+            SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
             CancelCommand = new RelayCommand(OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
-
-            Course.PropertyChanged += (_, _) => UpdateCanSave();
-            UpdateCanSave();
         }
+
+        private bool CanExecuteSave()
+        {
+            return !string.IsNullOrWhiteSpace(Course!.Name)
+                       && !string.IsNullOrWhiteSpace(Course.Code)
+                       && Course.StartDate != default
+                       && Course.EndDate != default
+                       && Course.Location != null
+                       && !string.IsNullOrWhiteSpace(Course.Description);
+        }
+
 
         private Course? OriginalCourse { get; }
         protected override void InvokeResponseCallback(DialogResult<Course> dialogResult)
         {
             ResponseCallback.Invoke(dialogResult);
-        }
-
-        private void NotifyCanExecuteChanged()
-        {
-            (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
         private async void ExecuteSave()
@@ -120,85 +111,39 @@ namespace CoursesManager.UI.ViewModels.Students
             }
         }
 
-        private void UpdateCanSave()
-        {
-            var fieldsAreValid = !string.IsNullOrWhiteSpace(Course!.Name)
-                                 && !string.IsNullOrWhiteSpace(Course.Code)
-                                 && Course.StartDate != default
-                                 && Course.EndDate != default
-                                 && Course.Location != null
-                                 && !string.IsNullOrWhiteSpace(Course.Description);
-
-            Console.WriteLine($"Fields Valid: {fieldsAreValid}");
-
-            var noValidationErrors = !HasValidationErrors();
-
-            Console.WriteLine($"No Validation Errors: {noValidationErrors}");
-
-            CanSave = fieldsAreValid && noValidationErrors;
-
-            NotifyCanExecuteChanged();
-        }
-
-
-        private bool HasValidationErrors()
-        {
-            if (Application.Current.MainWindow == null)
-            {
-                return false;
-            }
-
-            foreach (var child in LogicalTreeHelper.GetChildren(Application.Current.MainWindow))
-            {
-                if (child is DependencyObject dependencyObject && Validation.GetHasError(dependencyObject))
-                {
-
-                    if (dependencyObject is Image && Course!.Image == null)
-                        continue;
-
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
         private async Task OnSaveAsync()
         {
-
-            if (OriginalCourse == null)
+            try
             {
-                _courseRepository.Add(Course!);
-                await ShowSuccessDialog("Cursus succesvol toegevoegd.");
-            }
-            else
-            {
-                _courseRepository.Update(Course!);
-                await ShowSuccessDialog("Cursus succesvol bijgewerkt.");
-            }
-
-            var successDialogResult = DialogResult<Course>.Builder()
-                .SetSuccess(Course!, OriginalCourse == null ? "Cursus succesvol toegevoegd" : "Cursus succesvol bijgewerkt")
-                .Build();
-
-            InvokeResponseCallback(successDialogResult);
-        }
-
-
-        private async Task ShowSuccessDialog(string message)
-        {
-            IsDialogOpen = true;
-
-            await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                new DialogResultType
+                if (OriginalCourse == null)
                 {
-                    DialogTitle = "Succes",
-                    DialogText = message
+                    _courseRepository.Add(Course!);
+                }
+                else
+                {
+                    _courseRepository.Update(Course!);
+                }
+
+                var successDialogResult = DialogResult<Course>.Builder()
+                    .SetSuccess(Course!, OriginalCourse == null ? "Cursus succesvol toegevoegd" : "Cursus succesvol bijgewerkt")
+                    .Build();
+
+
+                throw new Exception(
+                    "Hey bas, misschien handig dit ook toe te passen als je dingen met de repo doet, was ik ook nog vergeten. Als er iets mis gaat met de communicatie met de database gaat het stuk.");
+
+                InvokeResponseCallback(successDialogResult);
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error(ex.Message);
+                await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(new DialogResultType
+                {
+                    DialogText = "Er is iets fout gegaan.",
+                    DialogTitle = "Error"
                 });
-
-            IsDialogOpen = false;
+            }
         }
-
 
         public void OnCancel()
         {

@@ -27,6 +27,8 @@
 
             <controls:ErrorDialogHeader HeaderTitle="{Binding Title}" />
 
+            <!--<controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />-->
+
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="10" />

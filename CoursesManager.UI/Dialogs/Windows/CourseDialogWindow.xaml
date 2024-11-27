@@ -321,7 +321,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" IsEnabled="{Binding CanSave}" />
+                        <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" />
                         <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" />
                     </Grid>
 
