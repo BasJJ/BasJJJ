@@ -115,7 +115,7 @@
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center" />
 
-                    <TextBlock Text="Behaald" 
+                    <TextBlock Text="Afgerond" 
                                Grid.Column="2" 
                                Foreground="White" 
                                FontWeight="Bold" 

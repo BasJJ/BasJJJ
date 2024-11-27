@@ -7,7 +7,6 @@ using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.ViewModels.Students;
-using CoursesManager.UI.Utils;
 using CoursesManager.UI.ViewModels;
 
 namespace CoursesManager.Tests.ViewModels
