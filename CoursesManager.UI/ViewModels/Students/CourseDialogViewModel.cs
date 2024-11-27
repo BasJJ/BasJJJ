@@ -3,13 +3,11 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.Models.Repositories.LocationRepository;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using System.Windows.Controls;
@@ -20,11 +18,10 @@ namespace CoursesManager.UI.ViewModels.Students
     {
 
         private readonly ICourseRepository _courseRepository;
-        private readonly IRegistrationRepository _registrationRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
-        private BitmapImage _imageSource;
-        private Course _course;
+        private BitmapImage? _imageSource;
+        private Course? _course;
 
         private bool _isDialogOpen;
         public bool IsDialogOpen
@@ -33,22 +30,30 @@ namespace CoursesManager.UI.ViewModels.Students
             set => SetProperty(ref _isDialogOpen, value);
         }
 
-        public BitmapImage ImageSource
+        public BitmapImage? ImageSource
         {
             get => _imageSource;
             set => SetProperty(ref _imageSource, value);
         }
 
-        public event EventHandler<Course> CourseAdded;
-
-        public Course Course
+        public Course? Course
         {
             get => _course;
             set => SetProperty(ref _course, value);
         }
 
+        private bool _canSave;
+        public bool CanSave
+        {
+            get => _canSave;
+            private set => SetProperty(ref _canSave, value);
+        }
+
+
         public ICommand SaveCommand { get; }
-        public ICommand CancelCommandd { get; }
+
+
+        public ICommand CancelCommand { get; }
 
 
         public ICommand UploadCommand { get; }
@@ -68,101 +73,117 @@ namespace CoursesManager.UI.ViewModels.Students
             Course = course != null
                    ? course.Copy()
                     : new Course
-    {
-                Name = string.Empty,
-                Code = string.Empty,
-                Description = string.Empty,
-                Location = null,
-                IsActive = false,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now,
-                Image = null,
+                    {
+                        Name = string.Empty,
+                        Code = string.Empty,
+                        Description = string.Empty,
+                        Location = null,
+                        IsActive = false,
+                        StartDate = DateTime.Now,
+                        EndDate = DateTime.Now,
+                        Image = null,
 
-            };
+                    };
 
+            OriginalCourse = course;
             Locations = new ObservableCollection<Location>(locationRepository.GetAll());
 
             Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
-            SaveCommand = new RelayCommand(async () => await OnSaveAsync());
-            CancelCommandd = new RelayCommand(OnCancel);
+            SaveCommand = new RelayCommand(ExecuteSave, () => CanSave);
+            CancelCommand = new RelayCommand(OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
+
+            Course.PropertyChanged += (_, _) => UpdateCanSave();
+            UpdateCanSave();
         }
 
+        private Course? OriginalCourse { get; }
         protected override void InvokeResponseCallback(DialogResult<Course> dialogResult)
         {
             ResponseCallback.Invoke(dialogResult);
         }
 
-        private bool AreFieldsValid()
+        private void NotifyCanExecuteChanged()
         {
-            var isValid = !Validation.GetHasError(Application.Current.MainWindow);
+            (SaveCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        }
+
+        private async void ExecuteSave()
+        {
+            try
+            {
+                await OnSaveAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private void UpdateCanSave()
+        {
+            var fieldsAreValid = !string.IsNullOrWhiteSpace(Course!.Name)
+                                 && !string.IsNullOrWhiteSpace(Course.Code)
+                                 && Course.StartDate != default
+                                 && Course.EndDate != default
+                                 && Course.Location != null
+                                 && !string.IsNullOrWhiteSpace(Course.Description);
+
+            Console.WriteLine($"Fields Valid: {fieldsAreValid}");
+
+            var noValidationErrors = !HasValidationErrors();
+
+            Console.WriteLine($"No Validation Errors: {noValidationErrors}");
+
+            CanSave = fieldsAreValid && noValidationErrors;
+
+            NotifyCanExecuteChanged();
+        }
+
+
+        private bool HasValidationErrors()
+        {
+            if (Application.Current.MainWindow == null)
+            {
+                return false;
+            }
+
             foreach (var child in LogicalTreeHelper.GetChildren(Application.Current.MainWindow))
             {
                 if (child is DependencyObject dependencyObject && Validation.GetHasError(dependencyObject))
                 {
-                    isValid = false;
-                    break;
+
+                    if (dependencyObject is Image && Course!.Image == null)
+                        continue;
+
+                    return true;
                 }
             }
-            return isValid;
+            return false;
         }
+
 
         private async Task OnSaveAsync()
         {
-            
-            if (!AreFieldsValid())
+
+            if (OriginalCourse == null)
             {
-                
-                return;
+                _courseRepository.Add(Course!);
+                await ShowSuccessDialog("Cursus succesvol toegevoegd.");
+            }
+            else
+            {
+                _courseRepository.Update(Course!);
+                await ShowSuccessDialog("Cursus succesvol bijgewerkt.");
             }
 
-            if (_courseRepository.GetAll().Any(c => c.Name.Equals(Course.Name, StringComparison.OrdinalIgnoreCase)))
-            {
-                
-                await ShowWarningDialog("De cursusnaam bestaat al");
-                return;
-            }
-
-            
-            _courseRepository.Add(Course);
-
-            
-            await ShowSuccessDialog("Cursus succesvol toegevoegd");
-
-            
             var successDialogResult = DialogResult<Course>.Builder()
-                .SetSuccess(Course, "Cursus succesvol toegevoegd")
+                .SetSuccess(Course!, OriginalCourse == null ? "Cursus succesvol toegevoegd" : "Cursus succesvol bijgewerkt")
                 .Build();
 
             InvokeResponseCallback(successDialogResult);
         }
 
-
-
-
-        private bool FieldsValidations()
-        {
-            // Hier kun je specifieke validatieberichten toevoegen als dat nodig is
-            if (string.IsNullOrEmpty(Course.Name?.Trim()))
-                return false;
-
-            if (string.IsNullOrEmpty(Course.Code?.Trim()))
-                return false;
-
-            if (Course.EndDate == DateTime.Now)
-                return false;
-
-            if (Course.StartDate == DateTime.Now)
-                return false;
-
-            if (Course.Location == null)
-                return false;
-
-            if (string.IsNullOrEmpty(Course.Description?.Trim()))
-                return false;
-
-            return true;
-        }
 
         private async Task ShowSuccessDialog(string message)
         {
@@ -178,19 +199,6 @@ namespace CoursesManager.UI.ViewModels.Students
             IsDialogOpen = false;
         }
 
-        private async Task ShowWarningDialog(string message)
-        {
-            IsDialogOpen = true;
-
-            await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                new DialogResultType
-                {
-                    DialogTitle = "Waarschuwing",
-                    DialogText = message
-                });
-
-            IsDialogOpen = false;
-        }
 
         public void OnCancel()
         {
@@ -211,7 +219,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
             if (openDialog.ShowDialog() == true)
             {
-                ImageSource = new BitmapImage(new Uri(openDialog.FileName));
+                Course!.Image = new BitmapImage(new Uri(openDialog.FileName));
             }
         }
     }

@@ -85,7 +85,7 @@ namespace CoursesManager.UI.ViewModels.Students
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
 
-            // Initialize students
+            // Initialize Students
             LoadStudents();
 
             // Commands

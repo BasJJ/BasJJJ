@@ -61,7 +61,7 @@
                             <materialDesign:PackIcon Kind="PlusCircleOutline" Width="50" Height="50" Foreground="#02008C" />
                         </Button>
 
-                        <!-- Stackpanel with code, dates and location-->
+                        
                         <StackPanel Grid.Column="2" VerticalAlignment="Center">
                             <Grid>
 
@@ -205,12 +205,12 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock HorizontalAlignment="Center" Grid.Column="0" Text="Cursus Activeren?" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
-                                    <Border Grid.Column="2" Margin="0,0,10,0" Grid.ColumnSpan="3" BorderThickness="0">
+                                    <Border Grid.Column="2" Margin="0,0,10,0" Grid.ColumnSpan="1" BorderThickness="0">
                                         <Border.Style>
                                             <Style TargetType="Border">
                                                 <Setter Property="BorderBrush" Value="Transparent" />
                                                 <Style.Triggers>
-                                                    <!-- Trigger voor validatiefouten -->
+                                                    
                                                     <Trigger Property="Validation.HasError" Value="True">
                                                         <Setter Property="BorderBrush" Value="Red"/>
                                                         <Setter Property="BorderThickness" Value="2"/>
@@ -218,7 +218,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <!-- CheckBox binnen de Border -->
+                                        
                                         <CheckBox Style="{DynamicResource CheckBoxStyle10}" 
                                                   IsChecked="{Binding Course.IsActive, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}">
                                             <CheckBox.ToolTip>
@@ -232,17 +232,17 @@
                         </StackPanel>
 
                         <Grid Grid.Column="0">
-                            <!-- Placeholder (zichtbaar als er geen afbeelding is) -->
+                            
                             <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10">
                                 <Rectangle.Style>
                                     <Style TargetType="Rectangle">
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Style.Triggers>
-                                            <!-- Verberg placeholder als afbeelding geladen is -->
-                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                            
+                                            <DataTrigger Binding="{Binding Course.Image}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Visible" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding ImageSource}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding Course.Image}" Value="{x:Null}">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -254,10 +254,25 @@
                                 <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" Foreground="DarkGray" />
                             </Viewbox>
 
-                            <!-- Border met afgeronde hoeken voor de afbeelding -->
-                            <Border Width="150" Height="150" CornerRadius="10" ClipToBounds="True" Panel.ZIndex="1">
-                                <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+
+                            <Border Width="150" Height="150" CornerRadius="10" BorderBrush="Transparent" BorderThickness="1">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <!-- Trigger voor als Image null is -->
+                                            <DataTrigger Binding="{Binding Course.Image}" Value="{x:Null}">
+                                                <Setter Property="BorderBrush" Value="Red" />
+                                                <Setter Property="BorderThickness" Value="2" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                                <!-- Afbeelding -->
+                                <Image Source="{Binding Course.Image , FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill" />
                             </Border>
+
+
                         </Grid>
 
 
@@ -306,8 +321,8 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" />
-                        <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommandd}" />
+                        <Button Grid.Row="0" Grid.Column="1" MinWidth="100" MinHeight="50" Content="Opslaan Cursus" Style="{StaticResource PrimaryButton}" Command="{Binding SaveCommand}" IsEnabled="{Binding CanSave}" />
+                        <Button Grid.Row="0" Grid.Column="3" MinWidth="100" MinHeight="50" Content="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" />
                     </Grid>
 
 
