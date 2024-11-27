@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Models;
 
-namespace CoursesManager.UI.Utils
+namespace CoursesManager.UI.Models
 {
     public class CourseStudentPayment : IsObservable
     {
@@ -17,9 +17,15 @@ namespace CoursesManager.UI.Utils
         public bool IsPaid
         {
             get => _isPaid;
-            set => SetProperty(ref _isPaid, value);
+            set
+            {
+                if (value == false && IsAchieved)
+                {
+                    return;
+                }
+                SetProperty(ref _isPaid, value);
+            }
         }
-
         public bool IsAchieved
         {
             get => _isAchieved;

@@ -1,7 +1,6 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
-using CoursesManager.MVVM.Dialogs;
-using CoursesManager.UI.Utils;
+
 using CoursesManager.UI.Models;
 using System;
 using System.Collections.ObjectModel;
