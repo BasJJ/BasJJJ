@@ -2,12 +2,12 @@
 
 namespace CoursesManager.MVVM.Data;
 
-public class NavigatableViewModel : ViewModel
+public class ViewModelWithNavigation : ViewModel
 {
     protected INavigationService _navigationService;
 
-    public NavigatableViewModel(INavigationService navigationService)
+    public ViewModelWithNavigation(INavigationService navigationService)
     {
         _navigationService = navigationService;
-    }           
+    }
 }

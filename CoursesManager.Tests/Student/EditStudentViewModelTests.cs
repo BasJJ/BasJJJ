@@ -1,20 +1,13 @@
-﻿using NUnit.Framework;
-using Moq;
-using CoursesManager.UI.ViewModels;
+﻿using Moq;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.UI.Services;
-using CoursesManager.UI.Dialogs.Enums;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using System.Windows;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.StudentRepository;
+using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.Tests
 {
@@ -75,7 +68,7 @@ namespace CoursesManager.Tests
             // Arrange
             _viewModel.ParentWindow = new Mock<Window>().Object; // Ensure ParentWindow is set
             _viewModel.SelectableCourses.First(c => c.ID == 2).IsSelected = true; // Select "Science" course
-    
+
             var confirmationResult = DialogResult<DialogResultType>.Builder()
                 .SetSuccess(new DialogResultType { Result = true }, "Confirmed")
                 .Build();
@@ -133,6 +126,5 @@ namespace CoursesManager.Tests
             // Ensure no other dialog calls were made
             _dialogServiceMock.VerifyNoOtherCalls();
         }
-
     }
 }

@@ -4,11 +4,11 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.Repositories.AddressRepository;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
-using CoursesManager.UI.Models.Repositories.LocationRepository;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
+using CoursesManager.UI.Repositories.AddressRepository;
+using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Repositories.LocationRepository;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.ViewModels;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.ViewModels.Students;
@@ -43,37 +43,37 @@ namespace CoursesManager.UI.Factory
             _dialogService = dialogService;
         }
 
-        public T CreateViewModel<T>(object parameter = null) where T : class
+        public T CreateViewModel<T>(object? parameter = null) where T : class
         {
             return typeof(T) switch
             {
-                Type vmType when vmType == typeof(StudentManagerViewModel) =>
-                    new StudentManagerViewModel(_dialogService, _studentRepository, _courseRepository,
-                        _registrationRepository, _messageBroker) as T,
-                Type vmType when vmType == typeof(EditStudentViewModel) =>
-                    new EditStudentViewModel(
-                        _studentRepository,
-                        _courseRepository,
-                        _registrationRepository,
-                        _dialogService,
-                        parameter as Student) as T,
-                Type vmType when vmType == typeof(AddStudentViewModel) =>
-                    new AddStudentViewModel(false, _studentRepository, _courseRepository, _registrationRepository,
-                        _dialogService) as T,
                 _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")
             };
         }
 
-        public T CreateViewModel<T>(INavigationService navigationService, object parameter = null)
-            where T : NavigatableViewModel
+        // If the viewmodel wants a navigation service put it in here
+        public T CreateViewModel<T>(INavigationService navigationService, object? parameter = null)
+            where T : ViewModelWithNavigation
         {
             return typeof(T) switch
             {
+                Type vmType when vmType == typeof(CourseOverViewViewModel) =>
+                    new CourseOverViewViewModel(_studentRepository, _registrationRepository, _courseRepository, _dialogService, _messageBroker, navigationService) as T,
+                Type vmType when vmType == typeof(StudentManagerViewModel) =>
+                    new StudentManagerViewModel(_dialogService, _studentRepository, _courseRepository,
+                        _registrationRepository, _messageBroker, navigationService) as T,
+                Type vmType when vmType == typeof(StudentDetailViewModel) =>
+                    new StudentDetailViewModel(
+                        _dialogService,
+                        _messageBroker,
+                        _registrationRepository,
+                        navigationService,
+                        parameter as Student) as T,
                 Type vmType when vmType == typeof(CoursesManagerViewModel) =>
                     new CoursesManagerViewModel(_courseRepository, _messageBroker, _dialogService, navigationService) as T,
-                Type vmType when vmType == typeof(CourseOverViewViewModel) =>
-                    new CourseOverViewViewModel(_courseRepository, _dialogService, _messageBroker, navigationService) as T,
-                _ => throw new ArgumentException($"Unknown viewmodel type: {typeof(T)}")
+
+                // Add other view model cases here...
+                _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")
             };
         }
     }

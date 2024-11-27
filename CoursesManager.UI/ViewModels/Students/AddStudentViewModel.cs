@@ -1,8 +1,5 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Dialogs;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
 using CoursesManager.UI.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,10 +9,18 @@ using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Services;
 using CoursesManager.UI.Dialogs.Enums;
+using CoursesManager.UI.Messages;
+using CoursesManager.UI.ViewModels;
+using CoursesManager.MVVM.Messages;
+using System.Windows.Media.Animation;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.StudentRepository;
+using CoursesManager.UI.Repositories.CourseRepository;
+
+namespace CoursesManager.UI.ViewModels.Students;
 
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
-    private Student _student;
     private readonly IStudentRepository _studentRepository;
     private readonly ICourseRepository _courseRepository;
     private readonly IRegistrationRepository _registrationRepository;
@@ -46,6 +51,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     }
 
     private bool _isReadyToClose;
+
     public bool IsReadyToClose
     {
         get => _isReadyToClose;
@@ -132,7 +138,6 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         // Validate required fields
         var errors = ValidationService.ValidateRequiredFields(parentContent);
 
-
         var existingEmails = _studentRepository.GetAll().Select(s => s.Email);
         var emailError = ValidationService.ValidateUniqueField(Student.Email, existingEmails, "Het emailadres");
         if (emailError != null)
@@ -191,7 +196,6 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
     private async void Cancel()
     {
-
         IsEndAnimationTriggered = true;
         await Task.Delay(150);
         var dialogResult = DialogResult<bool>.Builder()
@@ -204,5 +208,4 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         ResponseCallback?.Invoke(dialogResult);
     }
-
 }

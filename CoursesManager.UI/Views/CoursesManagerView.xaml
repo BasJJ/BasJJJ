@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:CoursesManager.UI.Views"
              xmlns:dvm="clr-namespace:CoursesManager.UI.ViewModels.Design"
              xmlns:rs="clr-namespace:CoursesManager.UI.Views.Controls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels" 
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 
@@ -89,6 +90,7 @@
                                                 </DataTrigger>
                                                 <MultiDataTrigger>
                                                     <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsActive}" Value="true" />
                                                         <Condition Binding="{Binding IsPayed}" Value="false" />
                                                         <Condition Binding="{Binding StartDate, Converter={StaticResource StartDateToBooleanConverter}}" Value="true" />
                                                     </MultiDataTrigger.Conditions>
@@ -108,6 +110,23 @@
 
                                     <!-- Placeholder Image -->
                                     <Rectangle Width="100" Height="100" Fill="#E0E0E0" RadiusX="5" RadiusY="5" Grid.Column="0" />
+
+                                    <Border Grid.Column="0" Width="100" Height="100" CornerRadius="10" BorderBrush="Transparent" BorderThickness="1">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <!-- Trigger voor als Image null is -->
+                                                    <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
+                                                        <Setter Property="BorderBrush" Value="Red" />
+                                                        <Setter Property="BorderThickness" Value="2" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+
+                                        <!-- Afbeelding -->
+                                        <Image Source="{Binding Image , FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill" />
+                                    </Border>
 
                                     <!-- Title and Subtitle -->
                                     <StackPanel Grid.Column="1" Margin="15,0,0,0">

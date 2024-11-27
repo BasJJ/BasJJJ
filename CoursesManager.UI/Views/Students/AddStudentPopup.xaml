@@ -12,7 +12,7 @@
         Background="Transparent"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
-        Width="550" Height="600">
+        Width="600" Height="600">
 
     <Window.Resources>
         <Storyboard x:Key="MainStory">
@@ -51,7 +51,7 @@
         </Style>
         </Grid.Style>
         <Grid>
-            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
+            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15" Margin="61,1,-61,-1">
                 <StackPanel>
                     <controls:PrimaryDialogHeader HeaderTitle="Cursist Toevoegen" />
                     <Grid Margin="10, 20">
@@ -171,7 +171,7 @@
                         <ComboBox x:Name="cmbCourses" ItemsSource="{Binding Courses}"
                               Style="{DynamicResource ComboBoxStyle}"
                               SelectedItem="{Binding SelectedCourse}"
-                              ItemContainerStyle="{Binding ComboBoxItem}"
+                              ItemContainerStyle="{StaticResource ComboBoxItem}"
                               local:ValidationProperties.IsRequired="True"
                               Tag="cursus"
                               Grid.Row="12" Grid.Column="1" Margin="5,0,10,10">

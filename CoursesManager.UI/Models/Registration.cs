@@ -16,6 +16,7 @@ namespace CoursesManager.UI.Models
         public DateTime RegistrationDate { get; set; }
         public bool PaymentStatus { get; set; }
         public bool IsActive { get; set; }
+        public bool IsAchieved { get; set; }
         public DateTime DateCreated { get; set; }
     }
 }

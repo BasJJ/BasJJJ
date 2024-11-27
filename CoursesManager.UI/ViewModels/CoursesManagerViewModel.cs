@@ -6,17 +6,17 @@ using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.UI.ViewModels.Students;
 using System.Diagnostics;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.CourseRepository;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class CoursesManagerViewModel : NavigatableViewModel
+    public class CoursesManagerViewModel : ViewModelWithNavigation
     {
         // Properties
         private readonly ICourseRepository _courseRepository;

@@ -4,16 +4,13 @@ using CoursesManager.MVVM.Navigation;
 using System.Windows.Input;
 using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Messages;
-using CoursesManager.UI.ViewModels.Courses;
-using System.Windows.Navigation;
 using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.ViewModels;
 
-public class MainWindowViewModel : NavigatableViewModel
+public class MainWindowViewModel : ViewModelWithNavigation
 {
     private readonly IMessageBroker _messageBroker;
-
 
     public ICommand CloseCommand { get; private set; }
 
@@ -31,6 +28,7 @@ public class MainWindowViewModel : NavigatableViewModel
     public ICommand GoToCourseManagementView { get; private set; }
 
     private INavigationService _navigationService;
+
     public INavigationService NavigationService
     {
         get => _navigationService;
@@ -38,6 +36,7 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private bool _isSidebarHidden;
+
     public bool IsSidebarHidden
     {
         get => _isSidebarHidden;
@@ -45,6 +44,7 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private bool _isMouseOverButton;
+
     public bool IsMouseOverButton
     {
         get => _isMouseOverButton;
@@ -52,6 +52,7 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private bool _isMouseOverBorder;
+
     public bool IsMouseOverBorder
     {
         get => _isMouseOverBorder;
@@ -59,6 +60,7 @@ public class MainWindowViewModel : NavigatableViewModel
     }
 
     private static bool _isDialogOpen;
+
     public bool IsDialogOpen
     {
         get => _isDialogOpen;

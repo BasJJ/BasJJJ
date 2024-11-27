@@ -12,6 +12,11 @@ public class NavigationService : INavigationService
 
     public void NavigateTo<TViewModel>() where TViewModel : ViewModel
     {
+        NavigateTo<TViewModel>(null);
+    }
+
+    public void NavigateTo<TViewModel>(object? parameter) where TViewModel : ViewModel
+    {
         if (!INavigationService.ViewModelFactories.TryGetValue(typeof(TViewModel), out var factory))
         {
             throw new InvalidOperationException($"No factory registered for {typeof(TViewModel).Name}");
@@ -26,27 +31,35 @@ public class NavigationService : INavigationService
 
         var existingViewModel = _backwardViewModels.OfType<TViewModel>().FirstOrDefault();
 
-        if (existingViewModel is not null)
+        NavigationStore.CurrentViewModel = existingViewModel ?? CreateViewModel<TViewModel>(factory, parameter);
+    }
+
+    private ViewModel CreateViewModel<TViewModel>(Delegate factory, object? parameter) where TViewModel : ViewModel
+    {
+        if (typeof(ViewModelWithNavigation).IsAssignableFrom(typeof(TViewModel)))
         {
-            NavigationStore.CurrentViewModel = existingViewModel;
-        }
-        else
-        {
-            if (typeof(NavigatableViewModel).IsAssignableFrom(typeof(TViewModel)))
+            if (factory is Func<object?, NavigationService, ViewModelWithNavigation> viewModelWithNavigationFactoryWithParams)
             {
-                if (factory is Func<NavigationService, NavigatableViewModel> navigatableviewModelFactory)
-                {
-                    NavigationStore.CurrentViewModel = navigatableviewModelFactory(this);
-                }
+                return viewModelWithNavigationFactoryWithParams(parameter, this);
             }
-            else
+
+            if (factory is Func<INavigationService, ViewModelWithNavigation> viewModelWithNavigationFactory)
             {
-                if (factory is Func<ViewModel> viewModelFactory)
-                {
-                    NavigationStore.CurrentViewModel = viewModelFactory();
-                }
+                return viewModelWithNavigationFactory(this);
             }
         }
+
+        if (factory is Func<ViewModel> simpleFactory)
+        {
+            return simpleFactory();
+        }
+
+        if (factory is Func<object?, ViewModel> simpleFactoryWithParams)
+        {
+            return simpleFactoryWithParams(parameter);
+        }
+
+        throw new InvalidOperationException($"Invalid factory type for {typeof(TViewModel).Name}");
     }
 
     public void GoBack()

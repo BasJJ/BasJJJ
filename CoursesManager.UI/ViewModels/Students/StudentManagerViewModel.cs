@@ -7,19 +7,18 @@ using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.Repositories;
-using CoursesManager.UI.Models.Repositories.CourseRepository;
-using CoursesManager.UI.Models.Repositories.RegistrationRepository;
-using CoursesManager.UI.Models.Repositories.StudentRepository;
-using CoursesManager.UI.Utils;
+using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.StudentRepository;
 
 namespace CoursesManager.UI.ViewModels.Students
 {
-    public class StudentManagerViewModel : ViewModel
+    public class StudentManagerViewModel : ViewModelWithNavigation
     {
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
@@ -28,9 +27,9 @@ namespace CoursesManager.UI.ViewModels.Students
         private readonly IRegistrationRepository _registrationRepository;
         public ObservableCollection<Student> Students { get; set; }
         public ObservableCollection<Student> FilteredStudentRecords { get; set; }
-        public ObservableCollection<CourseStudentPayment> DisplayedCourses { get; private set; }
 
         private string _searchText;
+
         public string SearchText
         {
             get => _searchText;
@@ -38,6 +37,7 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
         private Student _selectedStudent;
+
         public Student SelectedStudent
         {
             get => _selectedStudent;
@@ -51,6 +51,7 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
         private bool _isDialogOpen;
+
         public bool IsDialogOpen
         {
             get => _isDialogOpen;
@@ -58,6 +59,7 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
         private ObservableCollection<CourseStudentPayment> _coursePaymentList;
+
         public ObservableCollection<CourseStudentPayment> CoursePaymentList
         {
             get => _coursePaymentList;
@@ -70,20 +72,27 @@ namespace CoursesManager.UI.ViewModels.Students
         public ICommand EditStudentCommand { get; }
         public ICommand DeleteStudentCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand StudentDetailCommand { get; }
+        public ICommand CheckboxChangedCommand { get; }
 
-        #endregion
+
+        #endregion Commands
 
         public StudentManagerViewModel(
             IDialogService dialogService,
             IStudentRepository studentRepository,
             ICourseRepository courseRepository,
-            IRegistrationRepository registrationRepository, IMessageBroker messageBroker)
+            IRegistrationRepository registrationRepository,
+            IMessageBroker messageBroker,
+            INavigationService navigationService) : base(navigationService)
         {
             _messageBroker = messageBroker;
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _studentRepository = studentRepository ?? throw new ArgumentNullException(nameof(studentRepository));
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _registrationRepository = registrationRepository ?? throw new ArgumentNullException(nameof(registrationRepository));
+            _navigationService = navigationService;
+            CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
 
             // Initialize Students
             LoadStudents();
@@ -93,6 +102,8 @@ namespace CoursesManager.UI.ViewModels.Students
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
             DeleteStudentCommand = new RelayCommand<Student>(OpenDeleteStudentPopup, s => s != null);
             SearchCommand = new RelayCommand(FilterStudentRecords);
+            StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
+            CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
             ViewTitle = "Cursisten beheer";
         }
 
@@ -116,33 +127,56 @@ namespace CoursesManager.UI.ViewModels.Students
             }
             OnPropertyChanged(nameof(FilteredStudentRecords));
         }
+        private void OnCheckboxChanged(CourseStudentPayment payment)
+        {
+            if (payment == null || SelectedStudent == null) return;
+
+            var existingRegistration = _registrationRepository.GetAll()
+                .FirstOrDefault(r => r.CourseID == payment.Course?.ID && r.StudentID == SelectedStudent.Id);
+
+            if (existingRegistration != null)
+            {
+                existingRegistration.PaymentStatus = payment.IsPaid;
+                existingRegistration.IsAchieved = payment.IsAchieved;
+                _registrationRepository.Update(existingRegistration);
+            }
+            else if (payment.IsPaid || payment.IsAchieved)
+            {
+                _registrationRepository.Add(new Registration
+                {
+                    StudentID = SelectedStudent.Id,
+                    CourseID = payment.Course?.ID ?? 0,
+                    PaymentStatus = payment.IsPaid,
+                    IsAchieved = payment.IsAchieved,
+                    RegistrationDate = DateTime.Now,
+                    IsActive = true
+                });
+            }
+            UpdateStudentCourses();
+        }
 
         private void UpdateStudentCourses()
         {
-            if (SelectedStudent == null)
+            if (SelectedStudent == null) return;
+
+            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == SelectedStudent.Id);
+            CoursePaymentList.Clear();
+
+            foreach (var registration in registrations)
             {
-                DisplayedCourses = new ObservableCollection<CourseStudentPayment>();
-                OnPropertyChanged(nameof(DisplayedCourses));
-                return;
+                if (registration.Course != null)
+                {
+                    CoursePaymentList.Add(new CourseStudentPayment(registration.Course, registration));
+                }
             }
-
-            var registrations = _registrationRepository.GetAll()
-                .Where(r => r.StudentID == SelectedStudent.Id)
-                .ToList();
-
-            var coursePayments = registrations.Select(r => new CourseStudentPayment(
-                _courseRepository.GetById(r.CourseID), r))
-                .ToList();
-
-            DisplayedCourses = new ObservableCollection<CourseStudentPayment>(coursePayments);
-            OnPropertyChanged(nameof(DisplayedCourses));
+            OnPropertyChanged(nameof(CoursePaymentList));
         }
+
 
         private async void OpenAddStudentPopup()
         {
             await ExecuteWithOverlayAsync(async () =>
             {
-
                 var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
                 if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
@@ -175,12 +209,10 @@ namespace CoursesManager.UI.ViewModels.Students
 
                 if (dialogResult?.Outcome == DialogOutcome.Success)
                 {
-                    // Refresh the list or perform other actions
                     LoadStudents();
                 }
             });
         }
-
 
         private async void OpenDeleteStudentPopup(Student student)
         {
@@ -210,6 +242,16 @@ namespace CoursesManager.UI.ViewModels.Students
                     LoadStudents();
                 }
             });
+        }
+
+        private void OpenStudentDetailViewModel()
+        {
+            if (_navigationService == null)
+            {
+                throw new InvalidOperationException("Navigation service is not initialized.");
+            }
+
+            _navigationService.NavigateTo<StudentDetailViewModel>(SelectedStudent);
         }
 
         private async Task ExecuteWithOverlayAsync(Func<Task> action)
