@@ -16,6 +16,7 @@ using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.Tests
 {

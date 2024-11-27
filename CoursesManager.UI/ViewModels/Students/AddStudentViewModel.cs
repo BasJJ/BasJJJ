@@ -18,9 +18,10 @@ using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
 
+namespace CoursesManager.UI.ViewModels.Students;
+
 public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 {
-    private Student _student;
     private readonly IStudentRepository _studentRepository;
     private readonly ICourseRepository _courseRepository;
     private readonly IRegistrationRepository _registrationRepository;
@@ -51,6 +52,7 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     }
 
     private bool _isReadyToClose;
+
     public bool IsReadyToClose
     {
         get => _isReadyToClose;
@@ -137,7 +139,6 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         // Validate required fields
         var errors = ValidationService.ValidateRequiredFields(parentContent);
 
-
         var existingEmails = _studentRepository.GetAll().Select(s => s.Email);
         var emailError = ValidationService.ValidateUniqueField(Student.Email, existingEmails, "Het emailadres");
         if (emailError != null)
@@ -194,9 +195,8 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
         }
     }
 
-    private async void Cancel()   
+    private async void Cancel()
     {
-
         IsEndAnimationTriggered = true;
         await Task.Delay(150);
         var dialogResult = DialogResult<bool>.Builder()
@@ -209,5 +209,4 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
     {
         ResponseCallback?.Invoke(dialogResult);
     }
-
 }

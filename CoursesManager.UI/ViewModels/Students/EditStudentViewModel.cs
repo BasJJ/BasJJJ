@@ -12,7 +12,7 @@ using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
 
-namespace CoursesManager.UI.ViewModels
+namespace CoursesManager.UI.ViewModels.Students
 {
     public class EditStudentViewModel : DialogViewModel<Student>
     {
@@ -70,6 +70,7 @@ namespace CoursesManager.UI.ViewModels
             CancelCommand = new RelayCommand(OnCancel);
             ParentWindow = null;
         }
+
         public Student Student { get; }
         public Student StudentCopy { get; private set; }
         public ObservableCollection<SelectableCourse> SelectableCourses { get; private set; }
@@ -112,7 +113,6 @@ namespace CoursesManager.UI.ViewModels
                 await Task.Delay(150);
 
                 InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
-
             }
         }
 
@@ -230,7 +230,7 @@ namespace CoursesManager.UI.ViewModels
                             DialogTitle = dialogTitle,
                             DialogText = message
                         });
-                    
+
                     SetIsDialogOpen(false);
                     return result?.Data?.Result ?? false;
 

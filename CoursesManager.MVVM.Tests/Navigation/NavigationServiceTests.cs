@@ -4,11 +4,11 @@ using CoursesManager.MVVM.Navigation;
 
 namespace CoursesManager.MVVM.Tests.Navigation;
 
-internal class ViewModelWithNavigate : NavigatableViewModel
+internal class ViewModelWithNavigationWithNavigate : ViewModelWithNavigation
 {
     public INavigationService NavigationService { get; set; }
 
-    public ViewModelWithNavigate(INavigationService navigationService) : base(navigationService)
+    public ViewModelWithNavigationWithNavigate(INavigationService navigationService) : base(navigationService)
     {
         NavigationService = navigationService;
     }
@@ -16,12 +16,10 @@ internal class ViewModelWithNavigate : NavigatableViewModel
 
 internal class ViewModelWithoutNavigate : ViewModel
 {
-
 }
 
 internal class UnregisteredViewModelWithoutNavigate : ViewModel
 {
-
 }
 
 public class NavigationServiceTests
@@ -33,7 +31,7 @@ public class NavigationServiceTests
     {
         INavigationService.ViewModelFactories.Clear();
         INavigationService.RegisterViewModelFactory(() => new ViewModelWithoutNavigate());
-        INavigationService.RegisterViewModelFactory((object nav) => new ViewModelWithNavigate((INavigationService)nav));
+        INavigationService.RegisterViewModelFactory((nav) => new ViewModelWithNavigationWithNavigate((INavigationService)nav));
         _navigationService = new NavigationService();
     }
 
@@ -70,7 +68,7 @@ public class NavigationServiceTests
     {
         Assert.Throws<ArgumentNullException>(() =>
         {
-            INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((Func<object, ViewModelWithNavigate>)(Func<INavigationService, ViewModelWithNavigate>)null);
+            INavigationService.RegisterViewModelFactory<ViewModelWithNavigationWithNavigate>((Func<object, ViewModelWithNavigationWithNavigate>)(Func<INavigationService, ViewModelWithNavigationWithNavigate>)null);
         });
     }
 
@@ -79,7 +77,7 @@ public class NavigationServiceTests
     {
         INavigationService.ViewModelFactories.Clear();
 
-        INavigationService.RegisterViewModelFactory<ViewModelWithNavigate>((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory<ViewModelWithNavigationWithNavigate>((navigationService) => new ViewModelWithNavigationWithNavigate((INavigationService)navigationService));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtLeast(1));
     }
@@ -88,8 +86,8 @@ public class NavigationServiceTests
     public void RegisterViewModelFactoryWithNaviagtionService_OnlyAddedOnce()
     {
         INavigationService.ViewModelFactories.Clear();
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigate((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationWithNavigate((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationWithNavigate((INavigationService)navigationService));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
     }
@@ -206,7 +204,7 @@ public class NavigationServiceTests
     public void GoBack_CurrentViewModelChanges()
     {
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
 
         var beforeGoBack = _navigationService.NavigationStore.CurrentViewModel;
@@ -222,7 +220,7 @@ public class NavigationServiceTests
     public void GoForward_CurrentViewModelChanges()
     {
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.GoBack();
 
@@ -248,13 +246,13 @@ public class NavigationServiceTests
     public void NavigateTo_ClearsForwardStack()
     {
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.GoBack();
 
         var beforeNavigate = _navigationService.CanGoForward();
 
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
 
         var afterNavigate = _navigationService.CanGoForward();
 
@@ -267,7 +265,7 @@ public class NavigationServiceTests
         var beforeNavigate = _navigationService.CanGoBack();
 
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
 
         var afterNavigate = _navigationService.CanGoBack();
 
@@ -299,9 +297,9 @@ public class NavigationServiceTests
     [Test]
     public void NavigateTo_PassesItselfToViewModel()
     {
-        _navigationService.NavigateTo<ViewModelWithNavigate>();
+        _navigationService.NavigateTo<ViewModelWithNavigationWithNavigate>();
 
-        if (_navigationService.NavigationStore.CurrentViewModel is ViewModelWithNavigate currentVm)
+        if (_navigationService.NavigationStore.CurrentViewModel is ViewModelWithNavigationWithNavigate currentVm)
         {
             Assert.That(currentVm.NavigationService, Is.EqualTo(_navigationService));
         }

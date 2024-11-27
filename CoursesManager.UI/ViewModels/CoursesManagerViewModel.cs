@@ -12,10 +12,11 @@ using CoursesManager.UI.Repositories.CourseRepository;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class CoursesManagerViewModel : NavigatableViewModel
+    public class CoursesManagerViewModel : ViewModelWithNavigation
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
+
         private readonly IMessageBroker _messageBroker;
 
         private string _searchText = String.Empty;
