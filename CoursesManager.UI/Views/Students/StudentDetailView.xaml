@@ -177,5 +177,15 @@
         </Grid>
     </Border>
 </Grid>
+        <Border Panel.ZIndex="5"
+            x:Name="DialogOverlay"
+            Background="#80000000"
+            CornerRadius="15,15,15,15"
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            IsHitTestVisible="{Binding IsDialogOpen}">
+            <Grid />
+        </Border>
     </Grid>
 </UserControl>

@@ -103,7 +103,7 @@ namespace CoursesManager.UI.ViewModels.Students
         private async void OpenEditStudentPopup(Student student)
         {
             if (student == null)
-                await ExecuteWithOverlayAsync(async () =>
+                await ExecuteWithOverlayAsync(_messageBroker, async () =>
                 {
                     {
                         await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
@@ -117,7 +117,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 });
 
             if (student == null) return;
-            await ExecuteWithOverlayAsync(async () =>
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
                 var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
@@ -126,19 +126,6 @@ namespace CoursesManager.UI.ViewModels.Students
                     LoadStudentDetails();
                 }
             });
-        }
-
-        private async Task ExecuteWithOverlayAsync(Func<Task> action)
-        {
-            _messageBroker.Publish(new OverlayActivationMessage(true));
-            try
-            {
-                await action();
-            }
-            finally
-            {
-                _messageBroker.Publish(new OverlayActivationMessage(false));
-            }
         }
 
         protected void OnPropertyChanged(string propertyName)

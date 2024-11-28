@@ -28,22 +28,6 @@ namespace CoursesManager.UI.ViewModels.Students
             set => SetProperty(ref _isDialogOpen, value);
         }
 
-        private bool _isEndAnimationTriggered;
-
-        public bool IsEndAnimationTriggered
-        {
-            get => _isEndAnimationTriggered;
-            set => SetProperty(ref _isEndAnimationTriggered, value);
-        }
-
-        private bool _isStartAnimationTriggered;
-
-        public bool IsStartAnimationTriggered
-        {
-            get => _isStartAnimationTriggered;
-            set => SetProperty(ref _isStartAnimationTriggered, value);
-        }
-
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
@@ -109,8 +93,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 UpdateRegistrations();
                 await ShowDialogAsync(DialogType.Notify, "Cursist succesvol opgeslagen.", "Succes");
 
-                IsEndAnimationTriggered = true;
-                await Task.Delay(150);
+                await TriggerEndAnimationAsync();
 
                 InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
             }
@@ -165,8 +148,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
         private async void OnCancel()
         {
-            IsEndAnimationTriggered = true;
-            await Task.Delay(150);
+            await TriggerEndAnimationAsync();
             var dialogResult = DialogResult<Student>.Builder()
                 .SetCanceled("Wijzigingen zijn geannuleerd door de gebruiker.")
                 .Build();

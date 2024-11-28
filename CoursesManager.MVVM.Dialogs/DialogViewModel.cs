@@ -8,6 +8,26 @@ namespace CoursesManager.MVVM.Dialogs;
 /// <typeparam name="TDialogResultType">The type of the result data returned by the dialog.</typeparam>
 public abstract class DialogViewModel<TDialogResultType>(TDialogResultType? dialogResultType) : ViewModel
 {
+
+    /// <summary>
+    /// Enables dialogs to be closed with an animation.
+    /// </summary>
+    private bool _isEndAnimationTriggered;
+    public bool IsEndAnimationTriggered
+    {
+        get => _isEndAnimationTriggered;
+        set => SetProperty(ref _isEndAnimationTriggered, value);
+    }
+    /// <summary>
+    /// Enables dialogs to be opened with an animation.
+    /// </summary>
+    private bool _isStartAnimationTriggered;
+
+    public bool IsStartAnimationTriggered
+    {
+        get => _isStartAnimationTriggered;
+        set => SetProperty(ref _isStartAnimationTriggered, value);
+    }
     protected TDialogResultType? InitialData = dialogResultType;
 
     /// <summary>
@@ -38,4 +58,12 @@ public abstract class DialogViewModel<TDialogResultType>(TDialogResultType? dial
     {
         InvokeResponseCallback(dialogResult);
     }
+
+    public async Task TriggerEndAnimationAsync()
+    {
+        IsEndAnimationTriggered = true;
+        await Task.Delay(150);
+    }
+
+
 }

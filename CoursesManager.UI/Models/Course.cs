@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace CoursesManager.UI.Models
@@ -79,6 +80,8 @@ namespace CoursesManager.UI.Models
                 return null;
             }
         }
+
+        public BitmapImage? Image { get; set; }
 
         public string GenerateFilterString()
         {
