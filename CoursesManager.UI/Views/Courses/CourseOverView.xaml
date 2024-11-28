@@ -5,7 +5,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:CoursesManager.UI.ViewModels.Students" xmlns:navigation="clr-namespace:CoursesManager.MVVM.Navigation;assembly=CoursesManager.MVVM"
-             d:DataContext="{d:DesignInstance Type=viewmodels:CourseOverViewViewModel}"
+             xmlns:courses="clr-namespace:CoursesManager.UI.ViewModels.Courses"
+             d:DataContext="{d:DesignInstance Type=courses:CourseOverViewViewModel}"
              mc:Ignorable="d"
         d:DesignHeight="700" d:DesignWidth="1600" d:Background="{StaticResource SecondaryGradient}">
 
@@ -170,7 +171,7 @@
                     <TextBlock  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Text="Beschrijving:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Grid.ColumnSpan="3" />
                     <Border Style="{DynamicResource BorderStyle1}" Grid.Row="2" Grid.ColumnSpan="2" Padding="10 5 10 5">
                         <ScrollViewer Style="{DynamicResource ScrollViewerStyle1}" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" DataContext="{Binding CurrentCourse}">
-                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Description}" FontSize="16" TextWrapping="Wrap"/>
                         </ScrollViewer>
                     </Border>
                 </Grid>

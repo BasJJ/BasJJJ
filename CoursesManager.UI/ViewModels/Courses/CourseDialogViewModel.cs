@@ -61,6 +61,8 @@ namespace CoursesManager.UI.ViewModels.Students
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
+            IsStartAnimationTriggered = true;
+
             Course = course != null
                    ? course.Copy()
                     : new Course
@@ -142,6 +144,8 @@ namespace CoursesManager.UI.ViewModels.Students
                     )
                     .Build();
 
+                await TriggerEndAnimationAsync();
+
                 InvokeResponseCallback(successDialogResult);
             }
             catch (Exception ex)
@@ -157,11 +161,13 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
 
-        public void OnCancel()
+        public async void OnCancel()
         {
             var dialogResult = DialogResult<Course>.Builder()
                 .SetCanceled("Wijzigingen geannuleerd door de gebruiker.")
                 .Build();
+            
+            await TriggerEndAnimationAsync();
 
             InvokeResponseCallback(dialogResult);
         }

@@ -131,12 +131,15 @@ namespace CoursesManager.UI.ViewModels
 
         private async void OpenCourseDialog()
         {
-            var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>();
-
-            if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
-                LoadCourses();
-            }
+                var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>();
+
+                if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+                {
+                    LoadCourses();
+                }
+            });
         }
     }
 }

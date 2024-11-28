@@ -198,7 +198,6 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         private async void ChangeCourse()
         {
-
             await ExecuteWithOverlayAsync(async () =>
             {
                 var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>(CurrentCourse);

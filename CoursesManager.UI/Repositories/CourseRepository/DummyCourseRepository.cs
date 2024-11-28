@@ -65,7 +65,7 @@ public class DummyCourseRepository : ICourseRepository
 
     public bool HasActiveRegistrations(Course course)
     {
-        return true;
+        return false;
     }
 
     public void SetInactive(Course course)
