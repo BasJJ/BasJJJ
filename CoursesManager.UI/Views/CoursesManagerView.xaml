@@ -29,7 +29,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Searchbox -->
-            <rs:SearchBox SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <rs:SearchBox Margin="10 0 0 0" SearchCommand="{Binding SearchCommand}" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <!-- Toggle Switch Row -->
             <Grid Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -41,19 +41,20 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#02008C" FontWeight="Bold" FontSize="16" Margin="0 0 10 0">Cursus status</TextBlock>
                 <rs:Toggle Grid.Column="1" IsToggled="{Binding IsToggled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToggleCommand="{Binding ToggleCommand}"/>
             </Grid>
-
+            <Grid Grid.Column="4" Width="295" Margin="0 0 65 0">
             <!-- Add Course Button -->
-            <Button Grid.Column="4" Style="{StaticResource PrimaryButton}" Command="{Binding AddCourseCommand}" Margin="20 0 0 0">
+            <Button HorizontalAlignment="Right"  Style="{StaticResource PrimaryButton}" Command="{Binding AddCourseCommand}" Width="265">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <materialDesign:PackIcon Kind="Plus" Height="24" Width="24" VerticalAlignment="Center" Margin="0 0 10 0"/>
-                    <TextBlock Grid.Column="1">Cursus toevoegen</TextBlock>
+                    <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0 5 10 0"/>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center">Cursus toevoegen</TextBlock>
                 </Grid>
             </Button>
+            </Grid>
         </Grid>
 
         <!-- Scrollable Card Grid -->

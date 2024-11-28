@@ -105,9 +105,9 @@ namespace CoursesManager.UI.ViewModels.Courses
 
                 //na review verwijderen. dit zorgt ervoor dat het overzicht reflecteert wat er gebeurd in deze actie.
                 int paymentCounter = 0;
-                for (int i = 0; i < _registrationRepository.GetAll().Count; i++)
+                foreach (Registration registration in _registrationRepository.GetAll())
                 {
-                    if (_registrationRepository.GetById(i).CourseID == CurrentCourse.ID)
+                    if (registration.CourseID == CurrentCourse.ID)
                     {
                         paymentCounter++;
                     }
