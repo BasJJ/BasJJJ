@@ -8,13 +8,6 @@ namespace CoursesManager.UI.Dialogs.ViewModels;
 public class NotifyDialogViewModel : DialogViewModel<DialogResultType>
 {
     private string _title = null!;
-    private bool _IsDialogOpen;
-
-    public bool IsDialogOpen
-    {
-        get => _IsDialogOpen;
-        set => SetProperty(ref _IsDialogOpen, value);
-    }
     public string Title
     {
         get => _title;
@@ -32,20 +25,26 @@ public class NotifyDialogViewModel : DialogViewModel<DialogResultType>
 
     public NotifyDialogViewModel(DialogResultType? initialData) : base(initialData)
     {
+        IsStartAnimationTriggered = true;
+
         if (initialData is not null)
         {
             Message = initialData.DialogText;
             Title = initialData.DialogTitle;
         }
 
-        ConfirmationCommand = new RelayCommand(() =>
-        {
-            InvokeResponseCallback(DialogResult<DialogResultType>.Builder()
-                .SetSuccess(new DialogResultType
-                {
-                    Result = false
-                }).Build());
-        });
+        ConfirmationCommand = new RelayCommand(OnConfirmation);
+    }
+
+    private async void OnConfirmation()
+    {
+        await TriggerEndAnimationAsync();
+
+        InvokeResponseCallback(DialogResult<DialogResultType>.Builder()
+            .SetSuccess(new DialogResultType
+            {
+                Result = false
+            }).Build());
     }
 
     protected override void InvokeResponseCallback(DialogResult<DialogResultType> dialogResult)

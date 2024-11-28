@@ -23,31 +23,66 @@
             <GradientStop Color="#4DA6FF" Offset="0" />
             <GradientStop Color="#0066CC" Offset="1" />
         </RadialGradientBrush>
+        <Storyboard x:Key="MainStory">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="0" To="1" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="0" To="1" />
+        </Storyboard>
+
+        <Storyboard x:Key="ExitAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                             Duration="0:0:0.1" From="1" To="0" />
+            <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                             Duration="0:0:0.1" From="1" To="0" />
+        </Storyboard>
     </Window.Resources>
 
-    <!-- Move the background to the Border so it respects the CornerRadius -->
-    <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
+    <Grid Name="SizingGrid" RenderTransformOrigin="0.5, 0.5">
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="1" ScaleY="1"/>
+        </Grid.RenderTransform>
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsStartAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource MainStory}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsEndAnimationTriggered}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource ExitAnimation}"/>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
-            </Grid.RowDefinitions>
 
-            <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
+            <!-- Move the background to the Border so it respects the CornerRadius -->
+            <Border CornerRadius="15" Background="{StaticResource SecondaryGradient}" BorderBrush="Gray" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                    </Grid.RowDefinitions>
 
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
+                    <controls:PrimaryDialogHeader HeaderTitle="{Binding Title}" />
 
-                <Border Grid.Column="1"
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Grid.Column="1"
                         Width="50" Height="50"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -55,29 +90,31 @@
                         BorderBrush="Transparent"
                         Background="{StaticResource SphericalBlueGradient}">
 
-                    <materialDesign:PackIcon Kind="ExclamationBold"
+                            <materialDesign:PackIcon Kind="ExclamationBold"
                                              Height="48" Width="48"
                                              VerticalAlignment="Center"
                                              HorizontalAlignment="Center"
                                              Foreground="White" />
-                </Border>
+                        </Border>
 
-                <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" />
-            </Grid>
+                        <TextBlock Grid.Column="3" Text="{Binding Message, FallbackValue=Message}" FontSize="16" VerticalAlignment="Center" />
+                    </Grid>
 
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="80" />
-                    <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="80" />
-                    <ColumnDefinition Width="10" />
-                </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="2" Content="Ja" Style="{StaticResource PrimaryDialogButton}" Command="{Binding YesCommand}" />
-                <Button Grid.Column="4" Content="Nee" Style="{StaticResource ErrorDialogButton}" Command="{Binding NoCommand}" />
-            </Grid>
+                        <Button Grid.Column="2" Content="Ja" Style="{StaticResource PrimaryDialogButton}" Command="{Binding YesCommand}" />
+                        <Button Grid.Column="4" Content="Nee" Style="{StaticResource ErrorDialogButton}" Command="{Binding NoCommand}" />
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
-    </Border>
+    </Grid>
 </Window>
