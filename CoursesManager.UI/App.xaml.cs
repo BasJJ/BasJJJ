@@ -161,11 +161,15 @@ public partial class App : Application
     /// <param name="obj"></param>
     private static async void ApplicationCloseRequestedHandler(ApplicationCloseRequestedMessage obj)
     {
+        MessageBroker.Publish(new OverlayActivationMessage(true));
+
         var result = await DialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(new DialogResultType
         {
             DialogTitle = "CoursesManager",
             DialogText = "Wil je de app afsluiten?"
         });
+
+        MessageBroker.Publish(new OverlayActivationMessage(false));
 
         if (result.Data is null) return;
 
