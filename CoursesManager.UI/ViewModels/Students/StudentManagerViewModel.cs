@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Printing;
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -47,14 +50,6 @@ namespace CoursesManager.UI.ViewModels.Students
             }
         }
 
-        private bool _isDialogOpen;
-
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
-        }
-
         private ObservableCollection<CourseStudentPayment> _coursePaymentList;
 
         public ObservableCollection<CourseStudentPayment> CoursePaymentList
@@ -91,7 +86,7 @@ namespace CoursesManager.UI.ViewModels.Students
             _navigationService = navigationService;
             CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
 
-            // Initialize students
+            // Initialize Students
             LoadStudents();
 
             // Commands
@@ -213,32 +208,33 @@ namespace CoursesManager.UI.ViewModels.Students
 
         private async void OpenDeleteStudentPopup(Student student)
         {
-            if (student == null) return;
+            // TODO: Fix this shit
+            //if (student == null) return;
 
-            await ExecuteWithOverlayAsync(_messageBroker, async () =>
-            {
-                var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-            new DialogResultType
-            {
-                DialogTitle = "Bevestiging",
-                DialogText = "Wilt u deze cursist verwijderen?"
-            });
+            //await ExecuteWithOverlayAsync(_messageBroker, async () =>
+            //{
+            //    var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+            //        new DialogResultType
+            //        {
+            //            DialogTitle = "Bevestiging",
+            //            DialogText = "Wilt u deze cursist verwijderen?"
+            //        });
 
-                if (confirmation?.Data?.Result == true)
-                {
-                    student.Is_deleted = true;
-                    student.date_deleted = DateTime.Now;
-                    _studentRepository.Update(student);
-                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                        new DialogResultType
-                        {
-                            DialogTitle = "Informatie",
-                            DialogText = "Cursist succesvol verwijderd."
-                        });
+            //    if (confirmation?.Data?.Result == true)
+            //    {
+            //        student.Is_deleted = true;
+            //        student.date_deleted = DateTime.Now;
+            //        _studentRepository.Update(student);
+            //        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+            //            new DialogResultType
+            //            {
+            //                DialogTitle = "Informatie",
+            //                DialogText = "Cursist succesvol verwijderd."
+            //            });
 
-                    LoadStudents();
-                }
-            });
+            //        LoadStudents();
+            //    }
+            //});
         }
 
         private void OpenStudentDetailViewModel()

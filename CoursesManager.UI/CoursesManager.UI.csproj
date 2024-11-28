@@ -1,90 +1,80 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU;x64;x86</Platforms>
-    <ApplicationIcon>Resources\Icons\A3Logo.ico</ApplicationIcon>
-    <Version>$(ProductVersion)</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<ApplicationIcon>Resources\Icons\A3Logo.ico</ApplicationIcon>
+		<Version>$(ProductVersion)</Version>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove=".env" />
-    <None Remove="Resources\Icons\A3Logo.ico" />
-    <None Remove="Resources\Images\background.jpg" />
-    <None Remove="Resources\Images\CourseManagerA3.png" />
-    <None Remove="Resources\Images\picture1.jpg" />
-    <None Remove="Resources\Images\picture2.jpg" />
-    <None Remove="Resources\Images\picture3.jpg" />
-    <None Remove="Resources\Images\picture4.jpg" />
-    <None Remove="Resources\Images\picture5.jpg" />
-    <None Remove="Resources\Images\picture6.jpg" />
-    <None Remove="Resources\Images\picture7.jpg" />
-    <None Remove="Resources\Images\picture8.jpg" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove=".env" />
+		<None Remove="Resources\Icons\A3Logo.ico" />
+		<None Remove="Resources\Images\background.jpg" />
+		<None Remove="Resources\Images\CourseManagerA3.png" />
+		<None Remove="Resources\Images\picture1.jpg" />
+		<None Remove="Resources\Images\picture2.jpg" />
+		<None Remove="Resources\Images\picture3.jpg" />
+		<None Remove="Resources\Images\picture4.jpg" />
+		<None Remove="Resources\Images\picture5.jpg" />
+		<None Remove="Resources\Images\picture6.jpg" />
+		<None Remove="Resources\Images\picture7.jpg" />
+		<None Remove="Resources\Images\picture8.jpg" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include=".env">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Icons\A3Logo.ico" />
-  </ItemGroup>
+	<!-- Conditional inclusion of the .env file -->
+	<ItemGroup Condition="Exists('.env')">
+		<Content Include=".env">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Images\background.jpg" />
-    <Resource Include="Resources\Images\CourseManagerA3.png" />
-    <Resource Include="Resources\Images\picture4.jpg" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="Mysql.Data" Version="9.1.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
-    <PackageReference Include="Mysql.Data" Version="9.1.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\background.jpg" />
+		<Resource Include="Resources\Images\CourseManagerA3.png" />
+		<Resource Include="Resources\Images\picture4.jpg" />
+		<Resource Include="Resources\Icons\A3Logo.ico" />
+		<Resource Include="Resources\Images\picture1.jpg" />
+		<Resource Include="Resources\Images\picture2.jpg" />
+		<Resource Include="Resources\Images\picture3.jpg" />
+		<Resource Include="Resources\Images\picture5.jpg" />
+		<Resource Include="Resources\Images\picture6.jpg" />
+		<Resource Include="Resources\Images\picture7.jpg" />
+		<Resource Include="Resources\Images\picture8.jpg" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\CoursesManager.MVVM.Dialogs\CoursesManager.MVVM.Dialogs.csproj" />
+		<ProjectReference Include="..\CoursesManager.MVVM\CoursesManager.MVVM.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CoursesManager.MVVM.Dialogs\CoursesManager.MVVM.Dialogs.csproj" />
-    <ProjectReference Include="..\CoursesManager.MVVM\CoursesManager.MVVM.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Icons\A3Logo.ico" />
-    <Resource Include="Resources\Images\picture1.jpg" />
-    <Resource Include="Resources\Images\picture2.jpg" />
-    <Resource Include="Resources\Images\picture3.jpg" />
-    <Resource Include="Resources\Images\picture5.jpg" />
-    <Resource Include="Resources\Images\picture6.jpg" />
-    <Resource Include="Resources\Images\picture7.jpg" />
-    <Resource Include="Resources\Images\picture8.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repositories\AddressRepository\" />
-    <Folder Include="ViewModels\Design\" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<None Update="App.config">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
 </Project>

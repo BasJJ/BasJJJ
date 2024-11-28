@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows.Media.Imaging;
 
 namespace CoursesManager.UI.Models
 {
-    using Mysqlx.Crud;
-    using Org.BouncyCastle.Math;
-    // This class is used to generate dummy data for the students.
+    // This class is used to generate dummy data for the Students.
     // We can use this one until we have a database to store the data.
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Windows.Controls;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Xml.Linq;
 
     namespace CoursesManager.UI.Models
     {
@@ -109,7 +95,7 @@ namespace CoursesManager.UI.Models
                         EndDate = DateTime.Now.AddDays(_random.Next(31, 60)),
                         LocationId = _random.Next(1, count),
                         DateCreated = DateTime.Now,
-                        students = students,
+                        Students = students,
                         Image = getImage()
                     };
                     courses.Add(course);
