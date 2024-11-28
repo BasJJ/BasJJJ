@@ -81,8 +81,6 @@ namespace CoursesManager.UI.Models
             }
         }
 
-        public BitmapImage? Image { get; set; }
-
         public string GenerateFilterString()
         {
             var sb = new StringBuilder();

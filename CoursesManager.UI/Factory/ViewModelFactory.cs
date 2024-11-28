@@ -1,5 +1,4 @@
-﻿using System.CodeDom;
-using CoursesManager.MVVM.Data;
+﻿using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
@@ -10,6 +9,7 @@ using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.ViewModels;
+using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.UI.ViewModels.Students;
 
 namespace CoursesManager.UI.Factory

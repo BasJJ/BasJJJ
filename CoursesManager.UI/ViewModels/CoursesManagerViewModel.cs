@@ -12,6 +12,7 @@ using System.Diagnostics;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -97,11 +98,6 @@ namespace CoursesManager.UI.ViewModels
 
             FilterRecordsAsync();
         }
-
-        // Methods
-        private void OnSearchCommand() => FilterRecordsAsync();
-
-        private void OnToggleCommand() => FilterRecordsAsync();
 
         private async Task FilterRecordsAsync()
         {

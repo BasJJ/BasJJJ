@@ -10,12 +10,11 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
-using System.Diagnostics;
 using CoursesManager.UI.ViewModels.Students;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace CoursesManager.UI.ViewModels.Students
+namespace CoursesManager.UI.ViewModels.Courses
 {
     public class CourseOverViewViewModel : ViewModelWithNavigation
     {
@@ -223,13 +222,5 @@ namespace CoursesManager.UI.ViewModels.Students
                 _messageBroker.Publish(new OverlayActivationMessage(false));
             }
         }
-
-        private System.Windows.Visibility _isImageVisible;
-
-        public System.Windows.Visibility IsImageVisible { get => _isImageVisible; set => SetProperty(ref _isImageVisible, value); }
-
-        private System.Windows.Visibility _isPlaceholderVisible;
-
-        public System.Windows.Visibility IsPlaceholderVisible { get => _isPlaceholderVisible; set => SetProperty(ref _isPlaceholderVisible, value); }
     }
 }
