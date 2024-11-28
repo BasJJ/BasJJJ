@@ -62,7 +62,19 @@ namespace CoursesManager.UI.ViewModels.Students
             get => _coursePaymentList;
             set => SetProperty(ref _coursePaymentList, value);
         }
+        private bool _isToggled;
 
+        public bool IsToggled
+        {
+            get => _isToggled;
+            set
+            {
+                if (SetProperty(ref _isToggled, value))
+                {
+                    FilterStudentRecords();
+                }
+            }
+        }
         #region Commands
 
         public ICommand AddStudentCommand { get; }
@@ -71,6 +83,7 @@ namespace CoursesManager.UI.ViewModels.Students
         public ICommand SearchCommand { get; }
         public ICommand StudentDetailCommand { get; }
         public ICommand CheckboxChangedCommand { get; }
+        public ICommand ToggleIsDeletedCommand { get;  }
 
 
         #endregion Commands
@@ -93,7 +106,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
             // Initialize students
             LoadStudents();
-
+            IsToggled = true;
             // Commands
             AddStudentCommand = new RelayCommand(OpenAddStudentPopup);
             EditStudentCommand = new RelayCommand<Student>(OpenEditStudentPopup, s => s != null);
@@ -101,6 +114,7 @@ namespace CoursesManager.UI.ViewModels.Students
             SearchCommand = new RelayCommand(FilterStudentRecords);
             StudentDetailCommand = new RelayCommand(OpenStudentDetailViewModel);
             CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
+            ToggleIsDeletedCommand = new RelayCommand(() => FilterStudentRecords());
             ViewTitle = "Cursisten beheer";
         }
 
@@ -122,6 +136,22 @@ namespace CoursesManager.UI.ViewModels.Students
                 var filtered = Students.Where(s => s.TableFilter().ToLower().Contains(searchTerm)).ToList();
                 FilteredStudentRecords = new ObservableCollection<Student>(filtered);
             }
+
+            if (!IsToggled)
+            {
+                List<Student> filtered = new List<Student>();
+                var students = _studentRepository.GetAllStudents();
+                foreach (var student in students)
+                {
+                    if (student.Is_deleted)
+                    {
+                        filtered.Add(student);
+                    }
+                }
+                FilteredStudentRecords = new ObservableCollection<Student>(filtered);
+
+            }
+
             OnPropertyChanged(nameof(FilteredStudentRecords));
         }
         private void OnCheckboxChanged(CourseStudentPayment payment)

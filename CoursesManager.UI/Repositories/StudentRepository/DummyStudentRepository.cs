@@ -16,6 +16,10 @@ namespace CoursesManager.UI.Repositories.StudentRepository
         {
             return _students.Where(s => !s.Is_deleted).ToList();
         }
+        public List<Student> GetAllStudents()
+        {
+            return _students.ToList();
+        }
 
         public Student GetById(int id)
         {
@@ -45,6 +49,8 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             existingStudent.PostCode = student.PostCode;
             existingStudent.HouseNumber = student.HouseNumber;
             existingStudent.HouseNumberExtension = student.HouseNumberExtension;
+            existingStudent.Is_deleted = student.Is_deleted;
+
         }
 
         public void Delete(Student data)

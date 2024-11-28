@@ -2,7 +2,7 @@
 
 public interface IRepository<T>
 {
-    List<T> GetAll();
+    List<T> GetAll(); 
 
     T? GetById(int id);
 
