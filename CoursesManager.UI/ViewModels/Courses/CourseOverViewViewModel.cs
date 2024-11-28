@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Input;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
+using System.Diagnostics;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
@@ -101,6 +102,26 @@ namespace CoursesManager.UI.ViewModels.Courses
                 existingRegistration.PaymentStatus = payment.IsPaid;
                 existingRegistration.IsAchieved = payment.IsAchieved;
                 _registrationRepository.Update(existingRegistration);
+
+                //na review verwijderen. dit zorgt ervoor dat het overzicht reflecteert wat er gebeurd in deze actie.
+                int paymentCounter = 0;
+                for (int i = 0; i < _registrationRepository.GetAll().Count; i++)
+                {
+                    if (_registrationRepository.GetById(i).CourseID == CurrentCourse.ID)
+                    {
+                        paymentCounter++;
+                    }
+                }
+
+                if (paymentCounter == CurrentCourse.Participants)
+                {
+                    CurrentCourse.IsPayed = true;
+                }
+
+                if (!payment.IsPaid) {
+                    CurrentCourse.IsPayed = false;
+                }
+                //tot hier verwijderen
             }
             else if (payment.IsPaid || payment.IsAchieved)
             {
