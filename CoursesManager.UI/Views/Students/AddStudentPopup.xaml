@@ -51,7 +51,7 @@
         </Style>
         </Grid.Style>
         <Grid>
-            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15" Margin="61,1,-61,-1">
+            <Border Background="{StaticResource SecondaryGradient}" CornerRadius="15">
                 <StackPanel>
                     <controls:PrimaryDialogHeader HeaderTitle="Cursist Toevoegen" />
                     <Grid Margin="10, 20">
@@ -107,7 +107,7 @@
                                     local:ValidationProperties.IsDate="True"
                                     Tag="Geboortedatum"
                                     Grid.Row="4" Grid.Column="1" Margin="0,0,10,10" />
-    
+
                         <!-- Email -->
                         <TextBlock Text="Email*" Grid.Row="5" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
@@ -185,17 +185,6 @@
                         <Button Style="{DynamicResource ErrorDialogButton}" Content="Annuleren" Command="{Binding CancelCommand}" MinWidth="90" />
                     </StackPanel>
                 </StackPanel>
-            </Border>
-
-            <Border
-                x:Name="OverlayBorder"
-                Background="#80000000"
-                CornerRadius="15"
-                Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                IsHitTestVisible="{Binding IsDialogOpen}">
-                <Grid />
             </Border>
         </Grid>
         <Border Panel.ZIndex="5"

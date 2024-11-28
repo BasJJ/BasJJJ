@@ -109,11 +109,15 @@
                                     </Grid.ColumnDefinitions>
 
                                     <!-- Placeholder Image -->
+
                                     <Rectangle Width="100" Height="100" Fill="#E0E0E0" RadiusX="5" RadiusY="5" Grid.Column="0" />
+                                    <Viewbox Width="90" Height="90">
+                                        <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
+                                    </Viewbox>
 
                                     <!-- Title and Subtitle -->
                                     <StackPanel Grid.Column="1" Margin="15,0,0,0">
-                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="20" Foreground="#02008C" />
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" Foreground="#02008C" TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Code}" FontSize="14" Foreground="#02008C" />
                                         <TextBlock Text="{Binding StartDate, StringFormat={}{0:dd/MM/yyyy}}" FontSize="14" Foreground="#02008C" />
                                     </StackPanel>

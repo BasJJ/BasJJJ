@@ -13,6 +13,7 @@ namespace CoursesManager.UI.Models
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Xml.Linq;
 
     namespace CoursesManager.UI.Models
     {
@@ -51,15 +52,20 @@ namespace CoursesManager.UI.Models
             {
                 ObservableCollection<Course> courses = new ObservableCollection<Course>();
                 ObservableCollection<Student> student = new ObservableCollection<Student>();
-                
+                string name;
+                string code;
+                DateTime startDate;
 
                 for (int i = 1; i < count; i++)
                 {
+                    name = GenerateCourseName();
+                    code = GetCourseCode(name);
+                    startDate = DateTime.Now.AddDays(_random.Next(1, 30));
                     Course course = new Course
                     {
                         ID = i,
-                        Name = $"Cursus{i+7}",
-                        Code = GenerateRandomCourseCode(),
+                        Name = name,
+                        Code = $"{code}.{startDate.Year % 100}",
                         Description = "Wat is Lorem Ipsum?\r\nLorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam en ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar is ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door desktop publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten.\r\n\r\nWaarom gebruiken we het?\r\nHet is al geruime tijd een bekend gegeven dat een lezer, tijdens het bekijken van de layout van een pagina, afgeleid wordt door de tekstuele inhoud. Het belangrijke punt van het gebruik van Lorem Ipsum is dat het uit een min of meer normale verdeling van letters bestaat, in tegenstelling tot \"Hier uw tekst, hier uw tekst\" wat het tot min of meer leesbaar nederlands maakt. Veel desktop publishing pakketten en web pagina editors gebruiken tegenwoordig Lorem Ipsum als hun standaard model tekst, en een zoekopdracht naar \"lorem ipsum\" ontsluit veel websites die nog in aanbouw zijn. Verscheidene versies hebben zich ontwikkeld in de loop van de jaren, soms per ongeluk soms expres (ingevoegde humor en dergelijke).\r\n\r\n\r\nWaar komt het vandaan?\r\nIn tegenstelling tot wat algemeen aangenomen wordt is Lorem Ipsum niet zomaar willekeurige tekst. het heeft zijn wortels in een stuk klassieke latijnse literatuur uit 45 v.Chr. en is dus meer dan 2000 jaar oud. Richard McClintock, een professor latijn aan de Hampden-Sydney College in Virginia, heeft één van de meer obscure latijnse woorden, consectetur, uit een Lorem Ipsum passage opgezocht, en heeft tijdens het zoeken naar het woord in de klassieke literatuur de onverdachte bron ontdekt. Lorem Ipsum komt uit de secties 1.10.32 en 1.10.33 van \"de Finibus Bonorum et Malorum\" (De uitersten van goed en kwaad) door Cicero, geschreven in 45 v.Chr. Dit boek is een verhandeling over de theorie der ethiek, erg populair tijdens de renaissance. De eerste regel van Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", komt uit een zin in sectie 1.10.32.\r\n\r\nHet standaard stuk van Lorum Ipsum wat sinds de 16e eeuw wordt gebruikt is hieronder, voor wie er interesse in heeft, weergegeven. Secties 1.10.32 en 1.10.33 van \"de Finibus Bonorum et Malorum\" door Cicero zijn ook weergegeven in hun exacte originele vorm, vergezeld van engelse versies van de 1914 vertaling door H. Rackham.\r\n\r\nWaar kan ik het vinden?\r\nEr zijn vele variaties van passages van Lorem Ipsum beschikbaar maar het merendeel heeft te lijden gehad van wijzigingen in een of andere vorm, door ingevoegde humor of willekeurig gekozen woorden die nog niet half geloofwaardig ogen. Als u een passage uit Lorum Ipsum gaat gebruiken dient u zich ervan te verzekeren dat er niets beschamends midden in de tekst verborgen zit. Alle Lorum Ipsum generators op Internet hebben de eigenschap voorgedefinieerde stukken te herhalen waar nodig zodat dit de eerste echte generator is op internet. Het gebruikt een woordenlijst van 200 latijnse woorden gecombineerd met een handvol zinsstructuur modellen om een Lorum Ipsum te genereren die redelijk overkomt. De gegenereerde Lorum Ipsum is daardoor altijd vrij van herhaling, ingevoegde humor of ongebruikelijke woorden etc.",
                         Participants = i,
                         IsActive = _random.Next(0, 2) == 1, // Randomly true or false
@@ -114,18 +120,26 @@ namespace CoursesManager.UI.Models
             public static ObservableCollection<Registration> GenerateRegistrations(int studentCount, int courseCount)
             {
                 ObservableCollection<Registration> registrations = new ObservableCollection<Registration>();
-
+                bool PaymentStatus;
+                bool IsAchieved;
                 for (int i = 0; i < studentCount; i++)
                 {
+                    PaymentStatus = _random.Next(0, 2) == 1;
+                    if (PaymentStatus) {
+                        IsAchieved = _random.Next(0, 2) == 1;
+                    } else
+                    {
+                        IsAchieved = false;
+                    }
                     Registration registration = new Registration
                     {
                         ID = i + 1,
                         StudentID = _random.Next(1, studentCount + 1),
                         CourseID = _random.Next(1, courseCount + 1),
                         RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
-                        PaymentStatus = _random.Next(0, 2) == 1,
+                        PaymentStatus = PaymentStatus,
                         IsActive = _random.Next(0, 2) == 1,
-                        IsAchieved = _random.Next(0, 2) == 1,
+                        IsAchieved = IsAchieved,
                         DateCreated = DateTime.Now
                     };
 
@@ -192,6 +206,85 @@ namespace CoursesManager.UI.Models
                 return
                     $"{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}.{letters[_random.Next(letters.Length)]}{letters[_random.Next(letters.Length)]}";
             }
+
+            private static string GenerateCourseName()
+            {
+                string[] coursenames = {"Interculturele Communicatie",
+                    "Toegepaste Statistiek",
+                    "Bedrijfsethiek en Duurzaamheid",
+                    "Onderzoeksmethoden en Tools","Strategische Planning",
+                    "Kennisbeheer en Innovatie",
+                    "Professionele Vaardigheden",
+                    "Data-analyse en Visualisatie",
+                    "Wereldwijde Trends en Ontwikkelingen",
+                    "Digitale Transformatie",
+                    "Organisatie en Leiderschap",
+                    "Creatief Denken en Probleemoplossing",
+                    "Ontwikkeling van Projectvoorstellen",
+                    "Wet- en Regelgeving",
+                    "Multidisciplinaire Samenwerking",
+                    "Klantgerichtheid en Strategie",
+                    "Risicoanalyse en Management",
+                    "Cultureel Bewustzijn",
+                    "Efficiëntie in Teamverband",
+                    "Ethische Besluitvorming",
+                    "Visie en Toekomststrategie",
+                    "Digitalisering en IT-toepassingen",
+                    "Human Resources Management",
+                    "Marketing en Branding",
+                    "Duurzame Innovatie",
+                    "Professionele Netwerken en Relaties",
+                    "Procesoptimalisatie",
+                    "Effectieve Communicatietechnieken",
+                    "Analyseren en Rapporteren",
+                    "Onderzoek naar Nieuwe Technologieën" };
+                return coursenames[_random.Next(coursenames.Length)];
+            }
+
+            private static readonly Dictionary<string, string> CourseNameToCodeMap = new Dictionary<string, string>
+{
+    { "Interculturele Communicatie", "ICT.IO" },
+    { "Toegepaste Statistiek", "ICT.TS" },
+    { "Bedrijfsethiek en Duurzaamheid", "ICT.BD" },
+    { "Onderzoeksmethoden en Tools", "ICT.OT" },
+    { "Strategische Planning", "ICT.SP" },
+    { "Kennisbeheer en Innovatie", "ICT.KI" },
+    { "Professionele Vaardigheden", "ICT.PV" },
+    { "Data-analyse en Visualisatie", "ICT.DV" },
+    { "Wereldwijde Trends en Ontwikkelingen", "ICT.WT" },
+    { "Digitale Transformatie", "ICT.DT" },
+    { "Organisatie en Leiderschap", "ICT.OL" },
+    { "Creatief Denken en Probleemoplossing", "ICT.CD" },
+    { "Ontwikkeling van Projectvoorstellen", "ICT.OP" },
+    { "Wet- en Regelgeving", "ICT.WR" },
+    { "Multidisciplinaire Samenwerking", "ICT.MS" },
+    { "Klantgerichtheid en Strategie", "ICT.KS" },
+    { "Risicoanalyse en Management", "ICT.RM" },
+    { "Cultureel Bewustzijn", "ICT.CB" },
+    { "Efficiëntie in Teamverband", "ICT.ET" },
+    { "Ethische Besluitvorming", "ICT.EB" },
+    { "Visie en Toekomststrategie", "ICT.VT" },
+    { "Digitalisering en IT-toepassingen", "ICT.DI" },
+    { "Human Resources Management", "ICT.HR" },
+    { "Marketing en Branding", "ICT.MB" },
+    { "Duurzame Innovatie", "ICT.DI" },
+    { "Professionele Netwerken en Relaties", "ICT.PN" },
+    { "Procesoptimalisatie", "ICT.PO" },
+    { "Effectieve Communicatietechnieken", "ICT.EC" },
+    { "Analyseren en Rapporteren", "ICT.AR" },
+    { "Onderzoek naar Nieuwe Technologieën", "ICT.ON" }
+};
+
+
+            private static string GetCourseCode(string courseName)
+            {
+                if (CourseNameToCodeMap.TryGetValue(courseName, out string code))
+                {
+                    return code;
+                }
+                return "Code not found";
+            }
+
         }
     }
 }
