@@ -14,6 +14,14 @@
   <ItemGroup>
     <None Remove=".env" />
     <None Remove="Resources\Icons\A3Logo.ico" />
+    <None Remove="Resources\Images\picture1.jpg" />
+    <None Remove="Resources\Images\picture2.jpg" />
+    <None Remove="Resources\Images\picture3.jpg" />
+    <None Remove="Resources\Images\picture4.jpg" />
+    <None Remove="Resources\Images\picture5.jpg" />
+    <None Remove="Resources\Images\picture6.jpg" />
+    <None Remove="Resources\Images\picture7.jpg" />
+    <None Remove="Resources\Images\picture8.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +29,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Icons\A3Logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\picture4.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +48,13 @@
 
   <ItemGroup>
     <Resource Include="Resources\Icons\A3Logo.ico" />
+    <Resource Include="Resources\Images\picture1.jpg" />
+    <Resource Include="Resources\Images\picture2.jpg" />
+    <Resource Include="Resources\Images\picture3.jpg" />
+    <Resource Include="Resources\Images\picture5.jpg" />
+    <Resource Include="Resources\Images\picture6.jpg" />
+    <Resource Include="Resources\Images\picture7.jpg" />
+    <Resource Include="Resources\Images\picture8.jpg" />
   </ItemGroup>
 
   <ItemGroup>

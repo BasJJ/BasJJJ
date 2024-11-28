@@ -112,7 +112,10 @@
 
                                     <Rectangle Width="100" Height="100" Fill="#E0E0E0" RadiusX="5" RadiusY="5" Grid.Column="0" />
                                     <Viewbox Width="90" Height="90">
-                                        <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
+                                        <materialDesign:PackIcon Kind="Picture" Height="90" Width="90" VerticalAlignment="Center" Foreground="DarkGray"/>
+                                    </Viewbox>
+                                    <Viewbox Width="90" Height="90">
+                                        <Image Source="{Binding Image}" Height="90" Width="90" VerticalAlignment="Center" />
                                     </Viewbox>
 
                                     <!-- Title and Subtitle -->
