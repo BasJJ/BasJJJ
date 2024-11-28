@@ -110,11 +110,11 @@ namespace CoursesManager.UI.Models
                 IsActive = this.IsActive,
                 IsPayed = this.IsPayed,
                 Category = this.Category,
-                StartDate = this.StartDate,
-                EndDate = this.EndDate,
+                StartDate = new DateTime(this.StartDate.Ticks),
+                EndDate = new DateTime(this.EndDate.Ticks),
                 LocationId = this.LocationId,
                 Location = this.Location, 
-                DateCreated = this.DateCreated,
+                DateCreated = new DateTime(this.DateCreated.Ticks),
                 Students = this.Students != null ? new ObservableCollection<Student>(this.Students) : null, 
                 Image = this.Image 
             };

@@ -3,22 +3,20 @@ using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.ViewModels.Students;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Input;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
-using CoursesManager.UI.Dialogs.ViewModels;
-using CoursesManager.UI.Dialogs.ResultTypes;
+using CoursesManager.UI.ViewModels.Students;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
-namespace CoursesManager.UI.ViewModels.Courses
+namespace CoursesManager.UI.ViewModels.Students
 {
-    internal class CourseOverViewViewModel : ViewModelWithNavigation
+    public class CourseOverViewViewModel : ViewModelWithNavigation
     {
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
@@ -205,12 +203,12 @@ namespace CoursesManager.UI.ViewModels.Courses
             }
         }
 
-        private System.Windows.Visibility isImageVisible;
+        private System.Windows.Visibility _isImageVisible;
 
-        public System.Windows.Visibility IsImageVisible { get => isImageVisible; set => SetProperty(ref isImageVisible, value); }
+        public System.Windows.Visibility IsImageVisible { get => _isImageVisible; set => SetProperty(ref _isImageVisible, value); }
 
-        private System.Windows.Visibility isPlaceholderVisible;
+        private System.Windows.Visibility _isPlaceholderVisible;
 
-        public System.Windows.Visibility IsPlaceholderVisible { get => isPlaceholderVisible; set => SetProperty(ref isPlaceholderVisible, value); }
+        public System.Windows.Visibility IsPlaceholderVisible { get => _isPlaceholderVisible; set => SetProperty(ref _isPlaceholderVisible, value); }
     }
 }

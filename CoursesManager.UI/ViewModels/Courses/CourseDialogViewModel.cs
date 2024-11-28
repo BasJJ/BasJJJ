@@ -19,8 +19,8 @@ namespace CoursesManager.UI.ViewModels.Students
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
-        private BitmapImage? _imageSource;
-        private Course? _course;
+        
+        
 
         private bool _isDialogOpen;
         public bool IsDialogOpen
@@ -29,12 +29,14 @@ namespace CoursesManager.UI.ViewModels.Students
             set => SetProperty(ref _isDialogOpen, value);
         }
 
+        private BitmapImage? _imageSource;
         public BitmapImage? ImageSource
         {
             get => _imageSource;
             set => SetProperty(ref _imageSource, value);
         }
 
+        private Course? _course;
         public Course? Course
         {
             get => _course;
@@ -75,7 +77,7 @@ namespace CoursesManager.UI.ViewModels.Students
                     };
 
             OriginalCourse = course;
-            Locations = new ObservableCollection<Location>(locationRepository.GetAll());
+            Locations = new ObservableCollection<Location>(_locationRepository.GetAll());
 
             Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
@@ -116,35 +118,44 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             try
             {
+                
+                if (Course == null)
+                {
+                    throw new InvalidOperationException("Cursusgegevens ontbreken. Opslaan is niet mogelijk.");
+                }
+
+                
                 if (OriginalCourse == null)
                 {
-                    _courseRepository.Add(Course!);
+                    _courseRepository.Add(Course);
                 }
                 else
                 {
-                    _courseRepository.Update(Course!);
+                    _courseRepository.Update(Course);
                 }
 
+                
                 var successDialogResult = DialogResult<Course>.Builder()
-                    .SetSuccess(Course!, OriginalCourse == null ? "Cursus succesvol toegevoegd" : "Cursus succesvol bijgewerkt")
+                    .SetSuccess(
+                        Course,
+                        OriginalCourse == null ? "Cursus succesvol toegevoegd." : "Cursus succesvol bijgewerkt."
+                    )
                     .Build();
-
-
-                throw new Exception(
-                    "Hey bas, misschien handig dit ook toe te passen als je dingen met de repo doet, was ik ook nog vergeten. Als er iets mis gaat met de communicatie met de database gaat het stuk.");
 
                 InvokeResponseCallback(successDialogResult);
             }
             catch (Exception ex)
             {
+                
                 LogUtil.Error(ex.Message);
                 await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(new DialogResultType
                 {
-                    DialogText = "Er is iets fout gegaan.",
-                    DialogTitle = "Error"
+                    DialogText = "Er is iets fout gegaan. Probeer het later opnieuw.",
+                    DialogTitle = "Fout"
                 });
             }
         }
+
 
         public void OnCancel()
         {
