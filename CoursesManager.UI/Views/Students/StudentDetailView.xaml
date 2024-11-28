@@ -85,96 +85,72 @@
             <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
         </Border.Effect>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="3*" />
-            </Grid.RowDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="5" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
 
-            <!-- Header -->
-            <Border Background="#283593" Height="55" CornerRadius="15,15,0,0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*" /> <!-- Course Name -->
-                        <ColumnDefinition Width="1*" /> <!-- IsPaid -->
-                        <ColumnDefinition Width="1*" /> <!-- IsAchieved -->
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Cursus" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="18" 
-                               HorizontalAlignment="left" 
-                               VerticalAlignment="Center"
-                               Margin="20,0"/>
-
-                    <TextBlock Text="Betaald" 
-                               Grid.Column="1" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="18" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" />
-
-                    <TextBlock Text="Afgerond" 
-                               Grid.Column="2" 
-                               Foreground="White" 
-                               FontWeight="Bold" 
-                               FontSize="18" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" />
-                </Grid>
-            </Border>
-
-
-            <!-- Rows -->
-             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding CourseDetails}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderBrush="LightGray" BorderThickness="0.5">
-                                <Grid Height="40">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="3*" /> <!-- Course Name -->
-                                        <ColumnDefinition Width="1*" /> <!-- IsPaid -->
-                                        <ColumnDefinition Width="1*" /> <!-- IsAchieved -->
-                                    </Grid.ColumnDefinitions>
-
-                                    <!-- Course Name -->
-                                    <TextBlock Grid.Column="0"
-                                               Text="{Binding FullName}" 
-                                               HorizontalAlignment="left"
-                                               FontSize="14"
-                                               Margin="20,0"
-                                               VerticalAlignment="Center" />
-
-                                    <!-- IsPaid Checkbox -->
-                                    <CheckBox Grid.Column="1" 
-                                              IsChecked="{Binding IsPaid, Mode=TwoWay}" 
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center"
-                                              IsEnabled="False"
-                                              Style="{DynamicResource CheckBoxStyle2}"/>
-
-                                    <!-- IsAchieved Checkbox -->
-                                    <CheckBox Grid.Column="2" 
-                                              IsChecked="{Binding Course.IsAchieved, Mode=TwoWay}" 
-                                              HorizontalAlignment="Center" 
-                                              VerticalAlignment="Center" 
-                                              IsEnabled="False"
-                                              Style="{DynamicResource CheckBoxStyle2}" />
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+    <!-- Headerbar with title -->
+    <Border Grid.ColumnSpan="5" Grid.Row="0"  Width="Auto" Height="55" CornerRadius="15 15 0 0">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Opacity="0.3" BlurRadius="10" ShadowDepth="5" />
+        </Border.Effect>
+        <Grid Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="Auto" MinWidth="200" SharedSizeGroup="Column1" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
+                <ColumnDefinition Width="25"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" Text="Cursusnaam" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="left" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="3" Text="Betaald" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="center" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="5" Text="Afgerond" FontWeight="Bold" FontSize="20" Foreground="White" HorizontalAlignment="center" VerticalAlignment="Center" />
         </Grid>
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource PrimaryGradient}" />
+            </Style>
+        </Border.Style>
+    </Border>
+
+    <Grid Grid.Row="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="25" />
+        </Grid.ColumnDefinitions>
+        <!-- Scrollable Card Grid -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Style="{DynamicResource ScrollViewerStyle1}">
+            <ItemsControl ItemsSource="{Binding CourseDetails}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="225" SharedSizeGroup="Column1" />
+                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column2" />
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="Auto" MinWidth="100" SharedSizeGroup="Column3" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Margin="0 0 6 0" Text="{Binding FullName}" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                            <CheckBox Grid.Column="1" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center" IsChecked="{Binding IsPaid, Mode=OneWay}" IsEnabled="False" />
+                            <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center"  IsChecked="{Binding IsAchieved, Mode=OneWay}" IsEnabled="False"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Grid>
     </Border>
 </Grid>
     </Grid>
