@@ -154,9 +154,14 @@ namespace CoursesManager.UI.Models
                 ObservableCollection<Registration> registrations = new ObservableCollection<Registration>();
                 bool PaymentStatus;
                 bool IsAchieved;
+                int courseId;
+                int studentId;
                 for (int i = 0; i < studentCount * 3; i++)
                 {
                     PaymentStatus = _random.Next(0, 2) == 1;
+                    courseId = _random.Next(0, studentCount);
+                    studentId = _random.Next(0, studentCount);
+                    Debug.WriteLine(studentId);
                     if (PaymentStatus)
                     {
                         IsAchieved = _random.Next(0, 2) == 1;
@@ -165,36 +170,41 @@ namespace CoursesManager.UI.Models
                     {
                         IsAchieved = false;
                     }
-                    Registration registration = new Registration
+                    if (!registrations.Any(r => r.StudentID == studentId && r.CourseID == courseId))
                     {
-                        ID = i,
-                        StudentID = _random.Next(0, studentCount),
-                        CourseID = _random.Next(0, courseCount),
-                        RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
-                        PaymentStatus = PaymentStatus,
-                        IsActive = _random.Next(0, 2) == 1,
-                        IsAchieved = IsAchieved,
-                        DateCreated = DateTime.Now
-                    };
-                    registrations.Add(registration);
+                        Registration registration = new Registration
+                        {
+                            ID = i,
+                            StudentID = studentId,
+                            CourseID = courseId,
+                            RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
+                            PaymentStatus = PaymentStatus,
+                            IsActive = _random.Next(0, 2) == 1,
+                            IsAchieved = IsAchieved,
+                            DateCreated = DateTime.Now
+                        };
+                        registrations.Add(registration);
+                    }
                 }
                 bool isRegistered;
-                int extraRegistrations = studentCount * 3;
+                int extraRegistrations = registrations.Count();
 
                 for (int i = 0; i < studentCount; i++)
                 {
                     isRegistered = false;
-                    for (int j = 0; j < studentCount * 3; j ++)
+                    for (int j = 0; j < registrations.Count(); j ++)
                     {
                         int id = registrations[j].StudentID;
                         if (id == i)
                         {
                             isRegistered = true;
+                            break;
                         }
 
                     }
                     if (!isRegistered)
                     {
+                        Debug.WriteLine("i ran");
                         extraRegistrations++;
                         PaymentStatus = _random.Next(0, 2) == 1;
                         if (PaymentStatus)
@@ -205,7 +215,7 @@ namespace CoursesManager.UI.Models
                         {
                             IsAchieved = false;
                         }
-                        Registration registration = new Registration
+                        Registration extraRegistration = new Registration
                         {
                             ID = extraRegistrations + 1,
                             StudentID = i,
@@ -216,6 +226,7 @@ namespace CoursesManager.UI.Models
                             IsAchieved = IsAchieved,
                             DateCreated = DateTime.Now
                         };
+                        registrations.Add(extraRegistration);
                     }
                 }
 
