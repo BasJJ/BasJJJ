@@ -15,6 +15,7 @@ namespace CoursesManager.UI.Models
     using System.Diagnostics;
     using System.Linq;
     using System.Windows.Controls;
+    using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using System.Xml.Linq;
 
@@ -159,8 +160,8 @@ namespace CoursesManager.UI.Models
                 for (int i = 0; i < studentCount * 3; i++)
                 {
                     PaymentStatus = _random.Next(0, 2) == 1;
-                    courseId = _random.Next(0, studentCount);
-                    studentId = _random.Next(0, studentCount);
+                    courseId = _random.Next(0, courseCount );
+                    studentId = _random.Next(0, studentCount );
                     Debug.WriteLine(studentId);
                     if (PaymentStatus)
                     {
@@ -219,7 +220,7 @@ namespace CoursesManager.UI.Models
                         {
                             ID = extraRegistrations + 1,
                             StudentID = i,
-                            CourseID = _random.Next(1, courseCount + 1),
+                            CourseID = _random.Next(0, courseCount),
                             RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
                             PaymentStatus = PaymentStatus,
                             IsActive = _random.Next(0, 2) == 1,
@@ -233,16 +234,18 @@ namespace CoursesManager.UI.Models
                 return registrations;
             }
 
+
+
             private static string GetRandomFirstName()
             {
                 string[] firstNames =
-                    { "John", "Jane", "Michael", "Emily", "Chris", "Anna", "David", "Sarah", "Robert", "Emma", };
+                    { "Noah", "Emma", "Olivia", "Julia", "Chris", "Lucas", "David", "Sarah", "Robert", "Daan", };
                 return firstNames[_random.Next(firstNames.Length)];
             }
 
             private static string GetRandomInsertion()
             {
-                string[] insertions = { "", "van", "de", "der", "von", "van der" };
+                string[] insertions = { "", "", "", "van", "de", "van der" };
                 return insertions[_random.Next(insertions.Length)];
             }
 
@@ -250,8 +253,8 @@ namespace CoursesManager.UI.Models
             {
                 string[] lastNames =
                 {
-                    "Smith", "Johnson", "Brown", "Williams", "Jones", "Garcia", "Miller", "Davis", "Rodriguez",
-                    "Martinez"
+                    "Jong", "Jansen", "Vries", "Berg", "Dijk", "Bakker", "Janssen", "Visser", "Smit",
+                    "Meijer"
                 };
                 return lastNames[_random.Next(lastNames.Length)];
             }
