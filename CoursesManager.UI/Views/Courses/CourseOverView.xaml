@@ -67,9 +67,12 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Placeholder Image -->
-                    <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="10" RadiusY="10" Grid.Column="0" />
+                    <Rectangle Width="150" Height="150" Fill="#E0E0E0" RadiusX="5" RadiusY="5" Grid.Column="0" />
                     <Viewbox Width="140" Height="140">
                         <materialDesign:PackIcon Kind="Picture" Height="140" Width="140" VerticalAlignment="Center" Foreground="DarkGray"/>
+                    </Viewbox>
+                    <Viewbox Width="140" Height="140">
+                        <Image Source="{Binding CurrentCourse.Image}" Height="140" Width="140" VerticalAlignment="Center" />
                     </Viewbox>
                     <!-- Stackpanel with code, dates and location-->
                     <StackPanel Grid.Column="2" VerticalAlignment="Center" DataContext="{Binding CurrentCourse}">

@@ -37,6 +37,12 @@ namespace CoursesManager.UI.ViewModels
             get => _searchText;
             set { if (SetProperty(ref _searchText, value)) _ = FilterRecordsAsync(); }
         }
+        private bool _isPayed;
+        public bool IsPayed
+        {
+            get => _isPayed;
+            set => SetProperty(ref _isPayed, value);
+        }
 
         public bool IsToggled
         {

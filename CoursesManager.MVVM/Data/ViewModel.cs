@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using CoursesManager.MVVM.Messages;
+using CoursesManager.UI.Messages;
+using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -6,6 +8,13 @@ namespace CoursesManager.MVVM.Data;
 
 public abstract class ViewModel : IsObservable, INotifyDataErrorInfo
 {
+    private bool _isDialogOpen;
+    public bool IsDialogOpen
+    {
+        get => _isDialogOpen;
+        set => SetProperty(ref _isDialogOpen, value);
+    }
+
     private string? _viewTitle;
     public string? ViewTitle
     {
@@ -45,4 +54,17 @@ public abstract class ViewModel : IsObservable, INotifyDataErrorInfo
     }
 
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public async Task ExecuteWithOverlayAsync(IMessageBroker _messageBroker, Func<Task> action)
+    {
+        _messageBroker.Publish(new OverlayActivationMessage(true));
+        try
+        {
+            await action();
+        }
+        finally
+        {
+            _messageBroker.Publish(new OverlayActivationMessage(false));
+        }
+    }
 }
