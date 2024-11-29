@@ -57,7 +57,8 @@ namespace CoursesManager.UI.Models
                     name = GenerateCourseName(i);
                     code = GetCourseCode(name);
                     description = GetCourseDescription(name);
-                    startDate = DateTime.Now.AddDays(_random.Next(1, 30));
+                    startDate = DateTime.Now.AddDays(_random.Next(15, 60));
+                    Debug.WriteLine($"{name} - {startDate.ToString()}");
                     participants = 0;
                     paymentCounter = 0;
                     isPaid = false;
@@ -91,8 +92,8 @@ namespace CoursesManager.UI.Models
                         IsActive = _random.Next(0, 2) == 1,
                         IsPayed = isPaid, 
                         Category = $"Category{i % 3}",
-                        StartDate = DateTime.Now.AddDays(_random.Next(1, 30)),
-                        EndDate = DateTime.Now.AddDays(_random.Next(31, 60)),
+                        StartDate = startDate,
+                        EndDate = DateTime.Now.AddDays(_random.Next(91, 180)),
                         LocationId = _random.Next(1, count),
                         DateCreated = DateTime.Now,
                         Students = students,

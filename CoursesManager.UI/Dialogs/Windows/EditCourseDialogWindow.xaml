@@ -62,7 +62,7 @@
                         </Button>
 
                         <!-- Stackpanel with code, dates and location-->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="25 0 0 0">
                             <Grid>
 
                                 <Grid.RowDefinitions>

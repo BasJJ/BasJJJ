@@ -41,7 +41,7 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#02008C" FontWeight="Bold" FontSize="16" Margin="0 0 10 0">Cursus status</TextBlock>
                 <rs:Toggle Grid.Column="1" IsToggled="{Binding IsToggled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToggleCommand="{Binding ToggleCommand}"/>
             </Grid>
-            <Grid Grid.Column="4" Width="295" Margin="0 0 65 0">
+            <Grid Grid.Column="4" Width="295" Margin="0 0 105 0">
             <!-- Add Course Button -->
             <Button HorizontalAlignment="Right"  Style="{StaticResource PrimaryButton}" Command="{Binding AddCourseCommand}" Width="265">
                 <Grid>
@@ -116,25 +116,8 @@
                                         <materialDesign:PackIcon Kind="Picture" Height="90" Width="90" VerticalAlignment="Center" Foreground="DarkGray"/>
                                     </Viewbox>
                                     <Viewbox Width="90" Height="90">
-                                        <Image Source="{Binding Image}" Height="90" Width="90" VerticalAlignment="Center" />
+                                        <Image Source="{Binding Image , FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" Height="90" Width="90" VerticalAlignment="Center" />
                                     </Viewbox>
-
-                                    <Border Grid.Column="0" Width="100" Height="100" CornerRadius="10" BorderBrush="Transparent" BorderThickness="1">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Style.Triggers>
-                                                    <!-- Trigger voor als Image null is -->
-                                                    <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
-                                                        <Setter Property="BorderBrush" Value="Red" />
-                                                        <Setter Property="BorderThickness" Value="2" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-
-                                        <!-- Afbeelding -->
-                                        <Image Source="{Binding Image , FallbackValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill" />
-                                    </Border>
 
                                     <!-- Title and Subtitle -->
                                     <StackPanel Grid.Column="1" Margin="15,0,0,0">
