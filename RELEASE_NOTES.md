@@ -1,22 +1,24 @@
-# Release Notes - [CourseManager] - Versie [0.2]
-Uitgiftedatum: [Datum]
+# Release Notes - [CourseManager] - Versie [0.3]  
+**Uitgiftedatum:** [Datum]  
 
-## Nieuwe Features
-### CRUD-functionaliteit voor Cursisten
-We hebben volledige CRUD (Create, Read, Update, Delete) functionaliteit toegevoegd voor cursisten, waarmee gebruikers eenvoudig cursisten kunnen beheren binnen de applicatie.
+## Nieuwe Features  
 
-- **Toevoegen van cursisten**: Mogelijkheid om nieuwe cursisten toe te voegen met alle benodigde gegevens.
-- **Bekijken van cursisten**: Overzichtspagina en gedetailleerde weergave van elke cursist.
-- **Bewerken van cursisten**: Mogelijkheid om de gegevens van bestaande cursisten aan te passen.
-- **Verwijderen van cursisten**: Mogelijkheid om cursisten veilig uit het systeem te verwijderen.
+### Basis Database Implementatie  
+Een basis database structuur is toegevoegd aan de applicatie, wat zorgt voor verbeterde data-opslag en beheer. Dit legt de fundering voor toekomstige uitbreidingen en zorgt voor meer consistentie in de gegevensbeheerprocessen.  
 
-## Verbeteringen
-- Algemene optimalisaties voor een betere prestatie en stabiliteit van de applicatie.
-- Verbeterde validatie voor gegevensinvoer bij het aanmaken en bijwerken van cursisten.
+### Navigatie Sidebar  
+We hebben een navigatie sidebar toegevoegd voor een verbeterde gebruikerservaring.  
+- Maakt het navigeren tussen verschillende secties van de applicatie intuïtiever en sneller.  
+- Ondersteunt duidelijke categorisering van functionaliteiten.  
 
-## Bugfixes
-- Diverse kleine bugs opgelost die samenhangen met de weergave en bewerking van data. Start ontwikkeling Cursus Crud en overzicht.
+### Beheer van Cursussen  
+Het beheer van cursussen is volledig afgerond, inclusief de volgende functionaliteiten:  
+- **Toevoegen van cursussen**: Nieuwe cursussen kunnen worden aangemaakt met alle benodigde details.  
+- **Bekijken van cursussen**: Overzichtspagina en detailweergave van individuele cursussen.  
+- **Bewerken van cursussen**: Mogelijkheid om bestaande cursusinformatie te wijzigen.  
+- **Verwijderen van cursussen**: Veilig en eenvoudig verwijderen van niet langer benodigde cursussen.  
 
-## Overige Opmerkingen
-- Deze release bevat een update van de documentatie voor het gebruik van de nieuwe CRUD-functionaliteiten.
+### Registraties Weergave  
+Gebruikers kunnen nu alle registraties binnen de applicatie bekijken.  
 
+Met deze release wordt CourseManager nog gebruiksvriendelijker en krachtiger in het beheren van cursussen en registraties! 🎉
