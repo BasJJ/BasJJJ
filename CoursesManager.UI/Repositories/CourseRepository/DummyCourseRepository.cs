@@ -52,7 +52,7 @@ public class DummyCourseRepository : ICourseRepository
 
     public void Delete(Course course)
     {
-        Delete(course.ID);
+        _courses.Remove(course);
     }
 
     public void Delete(int id)
