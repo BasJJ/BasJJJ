@@ -62,12 +62,17 @@
                         </Button>
 
                         <!-- Stackpanel with code, dates and location-->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="25 0 0 0">
                             <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="45"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="5"/>
                                     <RowDefinition Height="Auto"/>
@@ -75,7 +80,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="0" HorizontalAlignment="Left" Height="69" Grid.RowSpan="2" VerticalAlignment="Top">
+                                <Grid Grid.Row="0" HorizontalAlignment="Left"  Grid.RowSpan="2" VerticalAlignment="Top" Grid.Column="0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -83,12 +88,41 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
-                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
-                                    <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
-                                    <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
-                                    <TextBox Grid.Column="2" Grid.Row="1" Text="{Binding Course.Code, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                                    <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" VerticalAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5" VerticalAlignment="Center"/>
+                                    <TextBox Grid.Column="2" Grid.Row="0" 
+                                             Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                                             FontWeight="Bold" FontSize="22" Foreground="Black" 
+                                             >
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxEditCourseStyle1}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Validation.HasError" Value="True">
+                                                        <Setter Property="BorderBrush" Value="Red"/>
+                                                        <Setter Property="BorderThickness" Value="2"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+
+                                    <TextBox Grid.Column="2" Grid.Row="1" 
+                                             Text="{Binding Course.Code, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                             FontWeight="Bold" FontSize="22" Foreground="Black"
+                                              Margin="0,10,0,0">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxEditCourseStyle1}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Validation.HasError" Value="True">
+                                                        <Setter Property="BorderBrush" Value="Red"/>
+                                                        <Setter Property="BorderThickness" Value="2"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
 
                                 </Grid>
 
@@ -117,8 +151,13 @@
                                     <DatePicker Grid.Row="1" Style="{StaticResource RoundedDatePickerStyle}" SelectedDate="{Binding Course.EndDate, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="30" Tag="DatePicker"  Grid.Column="2" Margin="0,0,5,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
 
                                 </Grid>
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                <Grid  Grid.Row="4" HorizontalAlignment="Left">
+                                <Grid  Grid.Row="0" HorizontalAlignment="Left" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
@@ -130,7 +169,7 @@
                                     </ComboBox>
                                 </Grid>
 
-                                <Grid Grid.Row="6" HorizontalAlignment="Left">
+                                <Grid Grid.Row="1" HorizontalAlignment="Left" Grid.Column="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="10"/>
@@ -143,6 +182,7 @@
                                         </CheckBox.ToolTip>
                                     </CheckBox>
 
+                                </Grid>
                                 </Grid>
                             </Grid>
                         </StackPanel>
