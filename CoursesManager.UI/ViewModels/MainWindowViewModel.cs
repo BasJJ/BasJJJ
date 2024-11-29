@@ -73,9 +73,8 @@ public class MainWindowViewModel : ViewModelWithNavigation
 
     public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
     {
-
         BackgroundImage = LoadImage($"Resources/Images/CourseManagerA3.png");
-            _navigationService = navigationService;
+        _navigationService = navigationService;
         _messageBroker = messageBroker;
         _messageBroker.Subscribe<OverlayActivationMessage, MainWindowViewModel>(OverlayActivationHandler, this);
 
@@ -149,10 +148,10 @@ public class MainWindowViewModel : ViewModelWithNavigation
         OverlayActivationMessage overlayActivationMessage = obj as OverlayActivationMessage;
         IsDialogOpen = overlayActivationMessage.IsVisible;
     }
+
     private static BitmapImage LoadImage(string relativePath)
     {
         var uri = new Uri($"pack://application:,,,/{relativePath}", UriKind.Absolute);
         return new BitmapImage(uri);
     }
-
 }
