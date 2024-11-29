@@ -72,7 +72,7 @@
 
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="45"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="5"/>
                                     <RowDefinition Height="Auto"/>
@@ -80,7 +80,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Grid Grid.Row="0" HorizontalAlignment="Left" Height="69" Grid.RowSpan="2" VerticalAlignment="Top" Grid.Column="0">
+                                <Grid Grid.Row="0" HorizontalAlignment="Left"  Grid.RowSpan="2" VerticalAlignment="Top" Grid.Column="0">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -90,8 +90,8 @@
                                         <ColumnDefinition Width="10"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" />
-                                    <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5"/>
+                                    <TextBlock HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Text="Cursus naam:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,0,5" VerticalAlignment="Center"/>
+                                    <TextBlock HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Text="Cursus code:" FontWeight="Bold" FontSize="22" Foreground="#02008C" Margin="0,0,7,5" VerticalAlignment="Center"/>
                                     <TextBox Grid.Column="2" Grid.Row="0" 
                                              Text="{Binding Course.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
                                              FontWeight="Bold" FontSize="22" Foreground="Black" 
