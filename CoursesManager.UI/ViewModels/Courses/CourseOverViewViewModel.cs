@@ -26,11 +26,11 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand DeleteCourseCommand { get; set; }
         public ICommand CheckboxChangedCommand { get; }
 
-
         private readonly IStudentRepository _studentRepository;
         private readonly IRegistrationRepository _registrationRepository;
 
         private Course _currentCourse;
+
         public Course CurrentCourse
         {
             get => _currentCourse;
@@ -38,6 +38,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         }
 
         private ObservableCollection<Student> _students;
+
         public ObservableCollection<Student> Students
         {
             get => _students;
@@ -45,12 +46,12 @@ namespace CoursesManager.UI.ViewModels.Courses
         }
 
         private ObservableCollection<CourseStudentPayment> _studentPayments;
+
         public ObservableCollection<CourseStudentPayment> StudentPayments
         {
             get => _studentPayments;
             private set => SetProperty(ref _studentPayments, value);
         }
-
 
         public CourseOverViewViewModel(IStudentRepository studentRepository, IRegistrationRepository registrationRepository, ICourseRepository courseRepository, IDialogService dialogService, IMessageBroker messageBroker, INavigationService navigationService) : base(navigationService)
         {
@@ -64,7 +65,6 @@ namespace CoursesManager.UI.ViewModels.Courses
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
-
 
             LoadCourseData();
         }
@@ -129,7 +129,8 @@ namespace CoursesManager.UI.ViewModels.Courses
                     CurrentCourse.IsPayed = true;
                 }
 
-                if (!payment.IsPaid) {
+                if (!payment.IsPaid)
+                {
                     CurrentCourse.IsPayed = false;
                 }
                 //tot hier verwijderen
@@ -151,7 +152,6 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         private async void DeleteCourse()
         {
-
             await ExecuteWithOverlayAsync(async () =>
             {
                 if (_courseRepository.HasActiveRegistrations(CurrentCourse))
@@ -176,7 +176,7 @@ namespace CoursesManager.UI.ViewModels.Courses
                     {
                         try
                         {
-                            _courseRepository.SetInactive(CurrentCourse);
+                            _courseRepository.Delete(CurrentCourse);
 
                             _messageBroker.Publish(new CoursesChangedMessage());
                             _navigationService.GoBackAndClearForward();
