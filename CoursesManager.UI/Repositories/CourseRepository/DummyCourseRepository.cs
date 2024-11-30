@@ -17,11 +17,16 @@ public class DummyCourseRepository : ICourseRepository
         return _courses?.ToList() ?? new List<Course>();
     }
 
+    public List<Course> RefreshAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public Course GetById(int id)
     {
-        if (id <= 0) throw new ArgumentException("Course ID must be greater than zero.", nameof(id));
+        if (id <= 0) throw new ArgumentException("Course Id must be greater than zero.", nameof(id));
 
-        return _courses.FirstOrDefault(c => c.ID == id);
+        return _courses.FirstOrDefault(c => c.Id == id);
     }
 
     public void Add(Course course)
@@ -29,7 +34,7 @@ public class DummyCourseRepository : ICourseRepository
         if (course == null) throw new ArgumentNullException(nameof(course), "Course cannot be null.");
 
         course.DateCreated = DateTime.Now;
-        course.ID = _courses.Any() ? _courses.Max(c => c.ID) + 1 : 1;
+        course.Id = _courses.Any() ? _courses.Max(c => c.Id) + 1 : 1;
         _courses.Add(course);
     }
 
@@ -37,8 +42,8 @@ public class DummyCourseRepository : ICourseRepository
     {
         if (course == null) throw new ArgumentNullException(nameof(course), "Course cannot be null.");
 
-        var existingCourse = GetById(course.ID);
-        if (existingCourse == null) throw new InvalidOperationException($"Course with ID {course.ID} does not exist.");
+        var existingCourse = GetById(course.Id);
+        if (existingCourse == null) throw new InvalidOperationException($"Course with Id {course.Id} does not exist.");
 
         existingCourse.Name = course.Name;
         existingCourse.Description = course.Description;
@@ -58,7 +63,7 @@ public class DummyCourseRepository : ICourseRepository
     public void Delete(int id)
     {
         var course = GetById(id);
-        if (course == null) throw new InvalidOperationException($"Course with ID {id} does not exist.");
+        if (course == null) throw new InvalidOperationException($"Course with Id {id} does not exist.");
 
         _courses.Remove(course);
     }

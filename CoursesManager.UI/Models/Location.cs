@@ -11,7 +11,5 @@ namespace CoursesManager.UI.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public Address Address { get; set; }
-        public string Capacity { get; set; }
-        public DateTime DateCreated { get; set; }
     }
 }

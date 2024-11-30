@@ -17,6 +17,11 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             return _students.Where(s => !s.Is_deleted).ToList();
         }
 
+        public List<Student> RefreshAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetById(int id)
         {
             return _students.FirstOrDefault(s => s.Id == id && !s.Is_deleted);
@@ -36,7 +41,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             if (student == null) throw new ArgumentNullException(nameof(student), "Student cannot be null.");
 
             var existingStudent = GetById(student.Id);
-            if (existingStudent == null) throw new InvalidOperationException($"Student with ID {student.Id} does not exist.");
+            if (existingStudent == null) throw new InvalidOperationException($"Student with Id {student.Id} does not exist.");
 
             existingStudent.FirstName = student.FirstName;
             existingStudent.LastName = student.LastName;
@@ -55,7 +60,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
         public void Delete(int id)
         {
             var student = GetById(id);
-            if (student == null) throw new InvalidOperationException($"Student with ID {id} does not exist.");
+            if (student == null) throw new InvalidOperationException($"Student with Id {id} does not exist.");
 
             student.Is_deleted = true;
             student.date_deleted = DateTime.Now;

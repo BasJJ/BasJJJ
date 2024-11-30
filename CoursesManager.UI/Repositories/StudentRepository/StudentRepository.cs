@@ -9,6 +9,11 @@ public class StudentRepository : IStudentRepository
         throw new NotImplementedException();
     }
 
+    public List<Student> RefreshAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public Student? GetById(int id)
     {
         throw new NotImplementedException();

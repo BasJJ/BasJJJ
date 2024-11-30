@@ -17,17 +17,21 @@ namespace CoursesManager.UI.Repositories.RegistrationRepository
             return _registrations.ToList();
         }
 
+        public List<Registration> RefreshAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public Registration GetById(int id)
         {
-            return _registrations.FirstOrDefault(r => r.ID == id);
+            return _registrations.FirstOrDefault(r => r.Id == id);
         }
 
         public void Add(Registration registration)
         {
             if (registration == null) throw new ArgumentNullException(nameof(registration), "Registration cannot be null.");
 
-            registration.DateCreated = DateTime.Now;
-            registration.ID = _registrations.Any() ? _registrations.Max(r => r.ID) + 1 : 1;
+            registration.Id = _registrations.Any() ? _registrations.Max(r => r.Id) + 1 : 1;
             _registrations.Add(registration);
         }
 
@@ -35,11 +39,11 @@ namespace CoursesManager.UI.Repositories.RegistrationRepository
         {
             if (registration == null) throw new ArgumentNullException(nameof(registration), "Registration cannot be null.");
 
-            var existingRegistration = GetById(registration.ID);
-            if (existingRegistration == null) throw new InvalidOperationException($"Registration with ID {registration.ID} does not exist.");
+            var existingRegistration = GetById(registration.Id);
+            if (existingRegistration == null) throw new InvalidOperationException($"Registration with Id {registration.Id} does not exist.");
 
-            existingRegistration.StudentID = registration.StudentID;
-            existingRegistration.CourseID = registration.CourseID;
+            existingRegistration.StudentId = registration.StudentId;
+            existingRegistration.CourseId = registration.CourseId;
             existingRegistration.RegistrationDate = registration.RegistrationDate;
             existingRegistration.PaymentStatus = registration.PaymentStatus;
             existingRegistration.IsActive = registration.IsActive;
@@ -53,7 +57,7 @@ namespace CoursesManager.UI.Repositories.RegistrationRepository
         public void Delete(int id)
         {
             var registration = GetById(id);
-            if (registration == null) throw new InvalidOperationException($"Registration with ID {id} does not exist.");
+            if (registration == null) throw new InvalidOperationException($"Registration with Id {id} does not exist.");
 
             _registrations.Remove(registration);
         }

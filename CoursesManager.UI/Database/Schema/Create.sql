@@ -19,6 +19,7 @@ CREATE TABLE locations (
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     CONSTRAINT id_UNIQUE UNIQUE (id),
+    CONSTRAINT name_UNIQUE UNIQUE (name),
     CONSTRAINT adress_id_fk FOREIGN KEY (adress_id) REFERENCES adresses (id)
 );
 

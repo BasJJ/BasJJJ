@@ -1,4 +1,7 @@
-CREATE PROCEDURE spCourses_DeleteById(IN p_id INT)
+CREATE PROCEDURE spLocations_Insert(
+    IN p_name varchar(255),
+    IN p_address_id INT
+)
 BEGIN
     DECLARE txn_started_by_me BOOLEAN DEFAULT FALSE;
 
@@ -17,12 +20,8 @@ BEGIN
         START TRANSACTION;
     END IF;
 
-    DELETE FROM courses WHERE id = p_id;
-
-    IF ROW_COUNT() = 0 THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'No course was found for the specified ID.';
-    END IF;
+    INSERT INTO locations (name, address_id, created_at, updated_at)
+    VALUES (p_name, p_address_id, NOW(), NOW());
 
     IF txn_started_by_me THEN
         COMMIT;

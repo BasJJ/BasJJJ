@@ -65,13 +65,13 @@ namespace CoursesManager.UI.Models
 
                     for (int j = 0; j < App.Registrations.Count; j++)
                     {
-                        if (App.Registrations[j].CourseID == i)
+                        if (App.Registrations[j].CourseId == i)
                         {
                             participants++;
-                            students.Add(App.Students[App.Registrations[j].StudentID]);
+                            students.Add(App.Students[App.Registrations[j].StudentId]);
                         }
 
-                        if (App.Registrations[j].CourseID == i && App.Registrations[j].PaymentStatus)
+                        if (App.Registrations[j].CourseId == i && App.Registrations[j].PaymentStatus)
                         {
                             paymentCounter++;
                         }
@@ -84,7 +84,7 @@ namespace CoursesManager.UI.Models
 
                     Course course = new Course
                     {
-                        ID = i,
+                        Id = i,
                         Name = name,
                         Code = $"{code}.{startDate.Year % 100}",
                         Description = description,
@@ -115,9 +115,7 @@ namespace CoursesManager.UI.Models
                     {
                         Id = i + 1,
                         Name = $"Location{i + 1}",
-                        Address = GenerateRandomAddress(),
-                        Capacity = $"{_random.Next(10, 100)}",
-                        DateCreated = DateTime.Now
+                        Address = GenerateRandomAddress()
                     };
 
                     locations.Add(location);
@@ -160,18 +158,17 @@ namespace CoursesManager.UI.Models
                     {
                         IsAchieved = false;
                     }
-                    if (!registrations.Any(r => r.StudentID == studentId && r.CourseID == courseId))
+                    if (!registrations.Any(r => r.StudentId == studentId && r.CourseId == courseId))
                     {
                         Registration registration = new Registration
                         {
-                            ID = i,
-                            StudentID = studentId,
-                            CourseID = courseId,
+                            Id = i,
+                            StudentId = studentId,
+                            CourseId = courseId,
                             RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
                             PaymentStatus = PaymentStatus,
                             IsActive = _random.Next(0, 2) == 1,
-                            IsAchieved = IsAchieved,
-                            DateCreated = DateTime.Now
+                            IsAchieved = IsAchieved
                         };
                         registrations.Add(registration);
                     }
@@ -184,7 +181,7 @@ namespace CoursesManager.UI.Models
                     isRegistered = false;
                     for (int j = 0; j < registrations.Count(); j ++)
                     {
-                        int id = registrations[j].StudentID;
+                        int id = registrations[j].StudentId;
                         if (id == i)
                         {
                             isRegistered = true;
@@ -207,14 +204,13 @@ namespace CoursesManager.UI.Models
                         }
                         Registration extraRegistration = new Registration
                         {
-                            ID = extraRegistrations + 1,
-                            StudentID = i,
-                            CourseID = _random.Next(0, courseCount),
+                            Id = extraRegistrations + 1,
+                            StudentId = i,
+                            CourseId = _random.Next(0, courseCount),
                             RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
                             PaymentStatus = PaymentStatus,
                             IsActive = _random.Next(0, 2) == 1,
-                            IsAchieved = IsAchieved,
-                            DateCreated = DateTime.Now
+                            IsAchieved = IsAchieved
                         };
                         registrations.Add(extraRegistration);
                     }

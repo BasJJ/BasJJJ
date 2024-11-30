@@ -19,7 +19,7 @@ namespace CoursesManager.UI.Converters
         {
             if (value is Course course && parameter is ObservableCollection<Course> selectedCourses)
             {
-                return selectedCourses.Any(c => c.ID == course.ID); // Check if course is selected
+                return selectedCourses.Any(c => c.Id == course.Id); // Check if course is selected
             }
             return false;
         }
@@ -36,14 +36,14 @@ namespace CoursesManager.UI.Converters
             {
                 if (isChecked)
                 {
-                    if (!selectedCourses.Any(c => c.ID == course.ID))
+                    if (!selectedCourses.Any(c => c.Id == course.Id))
                     {
                         selectedCourses.Add(course); // Add course if checkbox is checked
                     }
                 }
                 else
                 {
-                    selectedCourses.Remove(selectedCourses.FirstOrDefault(c => c.ID == course.ID)); // Remove course if unchecked
+                    selectedCourses.Remove(selectedCourses.FirstOrDefault(c => c.Id == course.Id)); // Remove course if unchecked
                 }
             }
             return Binding.DoNothing;

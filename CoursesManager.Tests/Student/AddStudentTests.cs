@@ -40,8 +40,8 @@ namespace CoursesManager.Tests
                 .Setup(repo => repo.GetAll())
                 .Returns(new List<Course>
                 {
-                    new Course { ID = 1, Name = "Math" },
-                    new Course { ID = 2, Name = "Science" }
+                    new Course { Id = 1, Name = "Math" },
+                    new Course { Id = 2, Name = "Science" }
                 });
 
             _mockStudentRepository

@@ -77,14 +77,13 @@ public class AddStudentViewModel : DialogViewModel<bool>, INotifyPropertyChanged
 
         var registration = new Registration
         {
-            StudentID = Student.Id,
+            StudentId = Student.Id,
             Student = Student,
-            CourseID = course!.ID,
+            CourseId = course!.Id,
             Course = course,
             RegistrationDate = DateTime.Now,
             PaymentStatus = false,
-            IsActive = true,
-            DateCreated = DateTime.Now
+            IsActive = true
         };
 
         _studentRepository.Add(Student);

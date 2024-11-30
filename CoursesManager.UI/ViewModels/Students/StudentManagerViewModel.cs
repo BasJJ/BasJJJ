@@ -124,7 +124,7 @@ namespace CoursesManager.UI.ViewModels.Students
             if (payment == null || SelectedStudent == null) return;
 
             var existingRegistration = _registrationRepository.GetAll()
-                .FirstOrDefault(r => r.CourseID == payment.Course?.ID && r.StudentID == SelectedStudent.Id);
+                .FirstOrDefault(r => r.CourseId == payment.Course?.Id && r.StudentId == SelectedStudent.Id);
 
             if (existingRegistration != null)
             {
@@ -136,8 +136,8 @@ namespace CoursesManager.UI.ViewModels.Students
             {
                 _registrationRepository.Add(new Registration
                 {
-                    StudentID = SelectedStudent.Id,
-                    CourseID = payment.Course?.ID ?? 0,
+                    StudentId = SelectedStudent.Id,
+                    CourseId = payment.Course?.Id ?? 0,
                     PaymentStatus = payment.IsPaid,
                     IsAchieved = payment.IsAchieved,
                     RegistrationDate = DateTime.Now,
@@ -151,7 +151,7 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             if (SelectedStudent == null) return;
 
-            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == SelectedStudent.Id);
+            var registrations = _registrationRepository.GetAll().Where(r => r.StudentId == SelectedStudent.Id);
             CoursePaymentList.Clear();
 
             foreach (var registration in registrations)

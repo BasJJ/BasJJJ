@@ -1,4 +1,4 @@
-CREATE PROCEDURE spCourses_DeleteById(IN p_id INT)
+CREATE PROCEDURE spLocations_DeleteById(IN p_id INT)
 BEGIN
     DECLARE txn_started_by_me BOOLEAN DEFAULT FALSE;
 
@@ -17,11 +17,11 @@ BEGIN
         START TRANSACTION;
     END IF;
 
-    DELETE FROM courses WHERE id = p_id;
+    DELETE FROM locations WHERE id = p_id;
 
     IF ROW_COUNT() = 0 THEN
         SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'No course was found for the specified ID.';
+            SET MESSAGE_TEXT = 'No location was found for the specified ID.';
     END IF;
 
     IF txn_started_by_me THEN

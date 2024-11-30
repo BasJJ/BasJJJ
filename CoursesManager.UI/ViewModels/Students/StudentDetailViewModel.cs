@@ -77,7 +77,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 return;
             }
 
-            var registrations = _registrationRepository.GetAll().Where(r => r.StudentID == Student.Id);
+            var registrations = _registrationRepository.GetAll().Where(r => r.StudentId == Student.Id);
             if (registrations == null)
             {
                 Debug.WriteLine("Registrations are null in LoadStudentDetails.");
@@ -89,7 +89,7 @@ namespace CoursesManager.UI.ViewModels.Students
             {
                 if (registration.Course == null)
                 {
-                    Debug.WriteLine($"Registration with ID {registration.ID} has no associated course.");
+                    Debug.WriteLine($"Registration with Id {registration.Id} has no associated course.");
                     continue;
                 }
 

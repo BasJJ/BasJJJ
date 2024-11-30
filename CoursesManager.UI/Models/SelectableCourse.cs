@@ -9,7 +9,7 @@ namespace CoursesManager.UI.Models
 {
     public class SelectableCourse : ViewModel
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         private bool _isSelected;
 

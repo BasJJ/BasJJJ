@@ -1,13 +1,11 @@
 ﻿using CoursesManager.UI.Models;
 using MySql.Data.MySqlClient;
-using System.Data;
+using CoursesManager.UI.Database;
 
 namespace CoursesManager.UI.DataAccess;
 
 public class CourseDataAccess : BaseDataAccess<Course>
 {
-    private const string ProcedureCourseDeleteById = "spCourse_DeleteById";
-
     public List<Course> GetAll()
     {
         throw new NotImplementedException();
@@ -31,7 +29,7 @@ public class CourseDataAccess : BaseDataAccess<Course>
     {
         try
         {
-            ExecuteNonProcedure(ProcedureCourseDeleteById, new MySqlParameter("@p_id", id));
+            ExecuteNonProcedure(StoredProcedures.CoursesDeleteById, new MySqlParameter("@p_id", id));
             LogUtil.Log("Course deleted successfully.");
         }
         catch (MySqlException ex)
