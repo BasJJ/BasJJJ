@@ -18,7 +18,7 @@ public class LocationDataAccess : BaseDataAccess<Location>
         }
         catch (MySqlException ex)
         {
-            throw new InvalidOperationException(ex.Message);
+            throw new InvalidOperationException(ex.Message, ex);
         }
     }
 

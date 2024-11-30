@@ -9,18 +9,23 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 {
     public List<Registration> GetAllRegistrationsByCourse(int courseId)
     {
-        var procRes = ExecuteProcedure(StoredProcedures.RegistrationsGetByCourseId, new MySqlParameter("@p_courseId", courseId));
-        
-        return procRes.Select(row => new Registration
+        try
         {
-            Id = Convert.ToInt32(row["id"]),
-            CourseId = Convert.ToInt32(row["course_id"]),
-            StudentId = Convert.ToInt32(row["student_id"]),
-            RegistrationDate = Convert.ToDateTime(row["registration_date"]),
-            PaymentStatus = Convert.ToBoolean(row["payment_status"]),
-            IsAchieved = Convert.ToBoolean(row["is_achieved"]),
-            IsActive = Convert.ToBoolean(row["is_active"])
-        }).ToList();
+            return ExecuteProcedure(StoredProcedures.RegistrationsGetByCourseId, new MySqlParameter("@p_courseId", courseId)).Select(row => new Registration
+            {
+                Id = Convert.ToInt32(row["id"]),
+                CourseId = Convert.ToInt32(row["course_id"]),
+                StudentId = Convert.ToInt32(row["student_id"]),
+                RegistrationDate = Convert.ToDateTime(row["registration_date"]),
+                PaymentStatus = Convert.ToBoolean(row["payment_status"]),
+                IsAchieved = Convert.ToBoolean(row["is_achieved"]),
+                IsActive = Convert.ToBoolean(row["is_active"])
+            }).ToList();
+        }
+        catch (MySqlException ex)
+        {
+            throw new InvalidOperationException(ex.Message, ex);
+        }
     }
 
     public List<Registration> GetAll()
