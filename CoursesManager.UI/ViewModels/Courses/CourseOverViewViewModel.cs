@@ -154,7 +154,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         {
             await ExecuteWithOverlayAsync(async () =>
             {
-                if (_courseRepository.HasActiveRegistrations(CurrentCourse))
+                if (_registrationRepository.GetAllRegistrationsByCourse(CurrentCourse).Any())
                 {
                     var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(
                         new DialogResultType

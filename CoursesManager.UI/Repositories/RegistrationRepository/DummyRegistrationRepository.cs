@@ -57,5 +57,10 @@ namespace CoursesManager.UI.Repositories.RegistrationRepository
 
             _registrations.Remove(registration);
         }
+
+        public List<Registration> GetAllRegistrationsByCourse(Course course)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

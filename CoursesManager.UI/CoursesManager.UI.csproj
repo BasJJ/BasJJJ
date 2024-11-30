@@ -12,7 +12,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove=".env" />
 		<None Remove="Resources\Icons\A3Logo.ico" />
 		<None Remove="Resources\Images\background.jpg" />
 		<None Remove="Resources\Images\CourseManagerA3.png" />
@@ -79,6 +78,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Database\Procedures\Registrations\" />
 	  <Folder Include="Database\Seed\" />
 	</ItemGroup>
 </Project>
