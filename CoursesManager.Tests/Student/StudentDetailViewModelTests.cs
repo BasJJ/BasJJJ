@@ -80,7 +80,6 @@ namespace CoursesManager.Tests.ViewModels
                 PaymentStatus = true,
                 IsActive = true,
                 IsAchieved = false,
-                DateCreated = DateTime.Now
             };
             
 
