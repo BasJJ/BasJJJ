@@ -138,7 +138,7 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="25" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="1" Margin="0 0 0 0" Text="{Binding FullName}" HorizontalAlignment="Left" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
+                                        <TextBlock Grid.Column="1" Margin="0 0 0 0" Text="{Binding FullName}" TextWrapping="Wrap" HorizontalAlignment="Left" FontWeight="Bold" FontSize="18" Foreground="#02008C" />
                                         <CheckBox Grid.Column="3" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center" IsChecked="{Binding IsPaid, Mode=OneWay}" IsEnabled="False" />
                                         <CheckBox Grid.Column="5" Style="{DynamicResource CheckBoxStyle2}" HorizontalAlignment="Center"  IsChecked="{Binding IsAchieved, Mode=OneWay}" IsEnabled="False"/>
                                     </Grid>
