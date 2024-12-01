@@ -31,7 +31,7 @@ namespace CoursesManager.UI.Models
                         HouseNumber = _random.Next(1, 300).ToString(),
                         AwaitingPayement = _random.Next(0, 2) == 1,
                         DateCreated = DateTime.Now,
-                        Is_deleted = _random.Next(0, 2) == 1,
+                        IsDeleted = _random.Next(0, 2) == 1,
                         //Courses = GenerateCourses(GenerateRandomSizeNumber())
                     };
 

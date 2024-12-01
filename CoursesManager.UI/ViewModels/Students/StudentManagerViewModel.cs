@@ -138,7 +138,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 var students = _studentRepository.GetAllStudents();
                 foreach (var student in students)
                 {
-                    if (student.Is_deleted)
+                    if (student.IsDeleted)
                     {
                         filtered.Add(student);
                     }
@@ -252,7 +252,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
             //    if (confirmation?.Data?.Result == true)
             //    {
-            //        student.Is_deleted = true;
+            //        student.IsDeleted = true;
             //        student.date_deleted = DateTime.Now;
             //        _studentRepository.Update(student);
             //        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
