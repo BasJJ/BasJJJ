@@ -1,4 +1,4 @@
-CREATE TABLE adresses (
+CREATE TABLE addresses (
     id INT AUTO_INCREMENT
         PRIMARY KEY,
     country VARCHAR(255) NOT NULL,
@@ -15,12 +15,12 @@ CREATE TABLE locations (
     id INT AUTO_INCREMENT
         PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    adress_id INT NOT NULL,
+    address_id INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     CONSTRAINT id_UNIQUE UNIQUE (id),
     CONSTRAINT name_UNIQUE UNIQUE (name),
-    CONSTRAINT adress_id_fk FOREIGN KEY (adress_id) REFERENCES adresses (id)
+    CONSTRAINT addresses_id_fk FOREIGN KEY (address_id) REFERENCES addresses (id) ON DELETE CASCADE
 );
 
 CREATE TABLE courses (
@@ -52,7 +52,7 @@ CREATE TABLE students (
         PRIMARY KEY,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(320) NOT NULL,
     phone VARCHAR(255) NULL,
     adress_id INT NOT NULL,
     is_deleted TINYINT DEFAULT 0 NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE registrations (
     id INT AUTO_INCREMENT
         PRIMARY KEY,
     course_id INT NOT NULL,
-    student_id INT NOT NULL,
+    student_id INT NULL,
     registration_date DATE NOT NULL,
     payment_status TINYINT DEFAULT 0 NOT NULL,
     is_active TINYINT DEFAULT 1 NOT NULL,
@@ -78,8 +78,8 @@ CREATE TABLE registrations (
     updated_at DATETIME NOT NULL,
     CONSTRAINT id_UNIQUE UNIQUE (id),
     CONSTRAINT registraton_UNIQUE UNIQUE (student_id, course_id),
-    CONSTRAINT course_id_fk FOREIGN KEY (course_id) REFERENCES courses (id),
-    CONSTRAINT student_id_fk FOREIGN KEY (student_id) REFERENCES students (id)
+    CONSTRAINT course_id_fk FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE,
+    CONSTRAINT student_id_fk FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE SET NULL
 );
 
 CREATE INDEX course_id_fk_idx
