@@ -2,13 +2,17 @@
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
+using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
+using CoursesManager.MVVM.Dialogs;
 using System.Diagnostics;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI.ViewModels
 {
@@ -16,7 +20,7 @@ namespace CoursesManager.UI.ViewModels
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
-
+        private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
 
         private string _searchText = String.Empty;
@@ -29,13 +33,32 @@ namespace CoursesManager.UI.ViewModels
         public ICommand AddCourseCommand { get; }
         public ICommand CourseOptionCommand { get; }
 
-        public ObservableCollection<Course> Courses { get; }
-        public ObservableCollection<Course> FilteredCourses { get; }
+        private ObservableCollection<Course> _courses;
+
+        public ObservableCollection<Course> Courses
+        {
+            get => _courses;
+            private set => SetProperty(ref _courses, value);
+        }
+
+        private ObservableCollection<Course> _filteredCourses;
+
+        public ObservableCollection<Course> FilteredCourses
+        {
+            get => _filteredCourses;
+            private set => SetProperty(ref _filteredCourses, value);
+        }
 
         public string SearchText
         {
             get => _searchText;
             set { if (SetProperty(ref _searchText, value)) _ = FilterRecordsAsync(); }
+        }
+        private bool _isPayed;
+        public bool IsPayed
+        {
+            get => _isPayed;
+            set => SetProperty(ref _isPayed, value);
         }
 
         public bool IsToggled
@@ -44,25 +67,37 @@ namespace CoursesManager.UI.ViewModels
             set { if (SetProperty(ref _isToggled, value)) _ = FilterRecordsAsync(); }
         }
 
-        // Contructor
-        public CoursesManagerViewModel(ICourseRepository CourseRepository, IRegistrationRepository registrationRepository, INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
+        // Constructor
+        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, IDialogService dialogService, INavigationService navigationService) : base(navigationService)
         {
+            _courseRepository = courseRepository;
+            _messageBroker = messageBroker;
+            _dialogService = dialogService;
+            
+            _messageBroker.Subscribe<CoursesChangedMessage, CoursesManagerViewModel>(OnCoursesChangedMessage, this);
+
             ViewTitle = "Cursus beheer";
             _messageBroker = messageBroker;
             SearchCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             ToggleCommand = new RelayCommand(() => _ = FilterRecordsAsync());
             CourseOptionCommand = new RelayCommand<Course>(OpenCourseOptions);
+            AddCourseCommand = new RelayCommand(OpenCourseDialog);
 
-            Courses = new ObservableCollection<Course>(CourseRepository.GetAll());
+            LoadCourses();
+        }
+
+        private void OnCoursesChangedMessage(CoursesChangedMessage obj)
+        {
+            LoadCourses();
+        }
+
+        private void LoadCourses()
+        {
+            Courses = new ObservableCollection<Course>(_courseRepository.GetAll());
             FilteredCourses = new ObservableCollection<Course>(Courses);
 
             FilterRecordsAsync();
         }
-
-        // Methods
-        private void OnSearchCommand() => FilterRecordsAsync();
-
-        private void OnToggleCommand() => FilterRecordsAsync();
 
         private async Task FilterRecordsAsync()
         {
@@ -92,6 +127,19 @@ namespace CoursesManager.UI.ViewModels
         {
             GlobalCache.Instance.Put("Opened Course", parameter, true);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
+        }
+
+        private async void OpenCourseDialog()
+        {
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
+            {
+                var dialogResult = await _dialogService.ShowDialogAsync<CourseDialogViewModel, Course>();
+
+                if (dialogResult != null && dialogResult.Data != null && dialogResult.Outcome == DialogOutcome.Success)
+                {
+                    LoadCourses();
+                }
+            });
         }
     }
 }

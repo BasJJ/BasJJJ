@@ -5,6 +5,8 @@ using System.Windows.Input;
 using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.ViewModels.Students;
+using System.Windows.Media.Imaging;
+using System;
 
 namespace CoursesManager.UI.ViewModels;
 
@@ -26,6 +28,8 @@ public class MainWindowViewModel : ViewModelWithNavigation
     public ICommand MouseLeaveBorderCommand { get; private set; }
     public ICommand GoToStudentManagementView { get; private set; }
     public ICommand GoToCourseManagementView { get; private set; }
+
+    public BitmapImage BackgroundImage { get; private set; }
 
     private INavigationService _navigationService;
 
@@ -69,7 +73,9 @@ public class MainWindowViewModel : ViewModelWithNavigation
 
     public MainWindowViewModel(INavigationService navigationService, IMessageBroker messageBroker) : base(navigationService)
     {
-        _navigationService = navigationService;
+
+        BackgroundImage = LoadImage($"Resources/Images/CourseManagerA3.png");
+            _navigationService = navigationService;
         _messageBroker = messageBroker;
         _messageBroker.Subscribe<OverlayActivationMessage, MainWindowViewModel>(OverlayActivationHandler, this);
 
@@ -143,4 +149,10 @@ public class MainWindowViewModel : ViewModelWithNavigation
         OverlayActivationMessage overlayActivationMessage = obj as OverlayActivationMessage;
         IsDialogOpen = overlayActivationMessage.IsVisible;
     }
+    private static BitmapImage LoadImage(string relativePath)
+    {
+        var uri = new Uri($"pack://application:,,,/{relativePath}", UriKind.Absolute);
+        return new BitmapImage(uri);
+    }
+
 }

@@ -15,10 +15,10 @@ using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.Views.Students;
-using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.UI.ViewModels.Students;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
-using CoursesManager.UI.ViewModels.Students;
+using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI;
 
@@ -98,10 +98,12 @@ public partial class App : Application
     {
         //This is a temporary static class that will hold all the data that is used in the application.
         //This is a temporary solution until we have a database.
-        Students = DummyDataGenerator.GenerateStudents(50);
+        Students = DummyDataGenerator.GenerateStudents(60);
+        Registrations = DummyDataGenerator.GenerateRegistrations(50, 30);
         Courses = DummyDataGenerator.GenerateCourses(30);
+        //Registrations = DummyDataGenerator.GenerateRegistrationBetter(Courses, Students);
         Locations = DummyDataGenerator.GenerateLocations(15);
-        Registrations = DummyDataGenerator.GenerateRegistrations(50, 41);
+
 
         foreach (var registration in Registrations)
         {
@@ -119,6 +121,7 @@ public partial class App : Application
     {
         DialogService.RegisterDialog<ConfirmationDialogViewModel, YesNoDialogWindow, DialogResultType>((initial) => new ConfirmationDialogViewModel(initial));
         DialogService.RegisterDialog<NotifyDialogViewModel, ConfirmationDialogWindow, DialogResultType>((initial) => new NotifyDialogViewModel(initial));
+        DialogService.RegisterDialog<ErrorDialogViewModel, ErrorDialogWindow, DialogResultType>((initial) => new ErrorDialogViewModel(initial));
 
         // Register Dialogs using the factory
         DialogService.RegisterDialog<EditStudentViewModel, EditStudentPopup, Student>(
@@ -137,6 +140,8 @@ public partial class App : Application
                 RegistrationRepository,
                 DialogService
             ));
+
+        DialogService.RegisterDialog<CourseDialogViewModel, CourseDialogWindow, Course>((initial) => new CourseDialogViewModel(CourseRepository, DialogService, LocationRepository, initial));
     }
 
     private void RegisterViewModels(ViewModelFactory viewModelFactory)
@@ -147,7 +152,7 @@ public partial class App : Application
 
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
-        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<CourseOverViewViewModel>());
+        INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CourseOverViewViewModel>(nav));
     }
 
     /// <summary>
@@ -156,11 +161,15 @@ public partial class App : Application
     /// <param name="obj"></param>
     private static async void ApplicationCloseRequestedHandler(ApplicationCloseRequestedMessage obj)
     {
+        MessageBroker.Publish(new OverlayActivationMessage(true));
+
         var result = await DialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(new DialogResultType
         {
             DialogTitle = "CoursesManager",
             DialogText = "Wil je de app afsluiten?"
         });
+
+        MessageBroker.Publish(new OverlayActivationMessage(false));
 
         if (result.Data is null) return;
 

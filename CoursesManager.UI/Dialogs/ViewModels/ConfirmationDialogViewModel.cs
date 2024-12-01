@@ -29,27 +29,37 @@ public class ConfirmationDialogViewModel : DialogViewModel<DialogResultType>
 
     public ConfirmationDialogViewModel(DialogResultType? initialData) : base(initialData)
     {
+        IsStartAnimationTriggered = true;
+
         if (initialData is not null)
         {
             Message = initialData.DialogText;
             Title = initialData.DialogTitle;
         }
 
-        YesCommand = new RelayCommand(() =>
-        {
-            InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
-            {
-                Result = true
-            }).Build());
-        });
+        YesCommand = new RelayCommand(OnYesCommand);
 
-        NoCommand = new RelayCommand(() =>
+        NoCommand = new RelayCommand(OnNoCommand);
+    }
+
+    private async void OnYesCommand()
+    {
+        await TriggerEndAnimationAsync();
+
+        InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
         {
-            InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
-            {
-                Result = false
-            }).Build());
-        });
+            Result = true
+        }).Build());
+    }
+
+    private async void OnNoCommand()
+    {
+        await TriggerEndAnimationAsync();
+
+        InvokeResponseCallback(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType
+        {
+            Result = false
+        }).Build());
     }
 
     protected override void InvokeResponseCallback(DialogResult<DialogResultType> dialogResult)

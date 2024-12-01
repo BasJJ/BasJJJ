@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Printing;
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -45,14 +48,6 @@ namespace CoursesManager.UI.ViewModels.Students
                     UpdateStudentCourses();
                 }
             }
-        }
-
-        private bool _isDialogOpen;
-
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
         }
 
         private ObservableCollection<CourseStudentPayment> _coursePaymentList;
@@ -104,7 +99,7 @@ namespace CoursesManager.UI.ViewModels.Students
             _navigationService = navigationService;
             CoursePaymentList = new ObservableCollection<CourseStudentPayment>();
 
-            // Initialize students
+            // Initialize Students
             LoadStudents();
             IsToggled = true;
             // Commands
@@ -202,7 +197,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
         private async void OpenAddStudentPopup()
         {
-            await ExecuteWithOverlayAsync(async () =>
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
                 var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
 
@@ -216,7 +211,7 @@ namespace CoursesManager.UI.ViewModels.Students
         private async void OpenEditStudentPopup(Student student)
         {
             if (student == null)
-                await ExecuteWithOverlayAsync(async () =>
+                await ExecuteWithOverlayAsync(_messageBroker, async () =>
                 {
                     {
                         await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
@@ -230,7 +225,7 @@ namespace CoursesManager.UI.ViewModels.Students
                 });
 
             if (student == null) return;
-            await ExecuteWithOverlayAsync(async () =>
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
                 var dialogResult = await _dialogService.ShowDialogAsync<EditStudentViewModel, Student>(student);
 
@@ -243,32 +238,33 @@ namespace CoursesManager.UI.ViewModels.Students
 
         private async void OpenDeleteStudentPopup(Student student)
         {
-            if (student == null) return;
+            // TODO: Fix this shit
+            //if (student == null) return;
 
-            await ExecuteWithOverlayAsync(async () =>
-            {
-                var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-            new DialogResultType
-            {
-                DialogTitle = "Bevestiging",
-                DialogText = "Wilt u deze cursist verwijderen?"
-            });
+            //await ExecuteWithOverlayAsync(_messageBroker, async () =>
+            //{
+            //    var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+            //        new DialogResultType
+            //        {
+            //            DialogTitle = "Bevestiging",
+            //            DialogText = "Wilt u deze cursist verwijderen?"
+            //        });
 
-                if (confirmation?.Data?.Result == true)
-                {
-                    student.Is_deleted = true;
-                    student.date_deleted = DateTime.Now;
-                    _studentRepository.Update(student);
-                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-                        new DialogResultType
-                        {
-                            DialogTitle = "Informatie",
-                            DialogText = "Cursist succesvol verwijderd."
-                        });
+            //    if (confirmation?.Data?.Result == true)
+            //    {
+            //        student.Is_deleted = true;
+            //        student.date_deleted = DateTime.Now;
+            //        _studentRepository.Update(student);
+            //        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+            //            new DialogResultType
+            //            {
+            //                DialogTitle = "Informatie",
+            //                DialogText = "Cursist succesvol verwijderd."
+            //            });
 
-                    LoadStudents();
-                }
-            });
+            //        LoadStudents();
+            //    }
+            //});
         }
 
         private void OpenStudentDetailViewModel()
@@ -281,17 +277,6 @@ namespace CoursesManager.UI.ViewModels.Students
             _navigationService.NavigateTo<StudentDetailViewModel>(SelectedStudent);
         }
 
-        private async Task ExecuteWithOverlayAsync(Func<Task> action)
-        {
-            _messageBroker.Publish(new OverlayActivationMessage(true));
-            try
-            {
-                await action();
-            }
-            finally
-            {
-                _messageBroker.Publish(new OverlayActivationMessage(false));
-            }
-        }
+
     }
 }

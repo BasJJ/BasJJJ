@@ -47,11 +47,12 @@ public class DummyCourseRepository : ICourseRepository
         existingCourse.StartDate = course.StartDate;
         existingCourse.EndDate = course.EndDate;
         existingCourse.LocationId = course.LocationId;
+        existingCourse.Image = course.Image;
     }
 
     public void Delete(Course course)
     {
-        Delete(course.ID);
+        _courses.Remove(course);
     }
 
     public void Delete(int id)
@@ -60,5 +61,15 @@ public class DummyCourseRepository : ICourseRepository
         if (course == null) throw new InvalidOperationException($"Course with ID {id} does not exist.");
 
         _courses.Remove(course);
+    }
+
+    public bool HasActiveRegistrations(Course course)
+    {
+        return false;
+    }
+
+    public void SetInactive(Course course)
+    {
+        course.IsActive = false;
     }
 }

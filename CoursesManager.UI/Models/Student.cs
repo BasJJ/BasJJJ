@@ -108,6 +108,13 @@ public class Student : ViewModel, ICopyable<Student>
         set => SetProperty(ref _courses, value);
     }
 
+    private ObservableCollection<Registration> _registrations;
+
+    public ObservableCollection<Registration> Registrations
+    {
+        get => _registrations;
+        set => SetProperty(ref _registrations, value);
+    }
 
     public string TableFilter()
     {
