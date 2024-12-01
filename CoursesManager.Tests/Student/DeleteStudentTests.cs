@@ -49,7 +49,7 @@ namespace CoursesManager.Tests
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "johndoe@example.com",
-                Is_deleted = false
+                IsDeleted = false
             };
 
             _mockStudentRepository.Setup(repo => repo.GetAll()).Returns(new List<Student> { _testStudent });
@@ -83,7 +83,7 @@ namespace CoursesManager.Tests
 
             // Act
             await Task.Run(() => _viewModel.DeleteStudentCommand.Execute(_testStudent));
-            _testStudent.Is_deleted = true;
+            _testStudent.IsDeleted = true;
             _testStudent.date_deleted = DateTime.Now;
 
             // Assert

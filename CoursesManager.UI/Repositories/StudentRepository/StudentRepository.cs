@@ -8,6 +8,12 @@ public class StudentRepository : IStudentRepository
     {
         throw new NotImplementedException();
     }
+    // I don't wanna ruin other view models in the app so i made this temporary 
+    public List<Student> GetAllStudents()
+    {
+        throw new NotImplementedException();
+
+    }
 
     public List<Student> RefreshAll()
     {

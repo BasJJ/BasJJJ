@@ -14,7 +14,11 @@ namespace CoursesManager.UI.Repositories.StudentRepository
 
         public List<Student> GetAll()
         {
-            return _students.Where(s => !s.Is_deleted).ToList();
+            return _students.Where(s => !s.IsDeleted).ToList();
+        }
+        public List<Student> GetAllStudents()
+        {
+            return _students.ToList();
         }
 
         public List<Student> RefreshAll()
@@ -24,7 +28,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
 
         public Student GetById(int id)
         {
-            return _students.FirstOrDefault(s => s.Id == id && !s.Is_deleted);
+            return _students.FirstOrDefault(s => s.Id == id && !s.IsDeleted);
         }
 
         public void Add(Student student)
@@ -50,6 +54,8 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             existingStudent.PostCode = student.PostCode;
             existingStudent.HouseNumber = student.HouseNumber;
             existingStudent.HouseNumberExtension = student.HouseNumberExtension;
+            existingStudent.IsDeleted = student.IsDeleted;
+
         }
 
         public void Delete(Student data)
@@ -62,7 +68,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             var student = GetById(id);
             if (student == null) throw new InvalidOperationException($"Student with Id {id} does not exist.");
 
-            student.Is_deleted = true;
+            student.IsDeleted = true;
             student.date_deleted = DateTime.Now;
         }
 
@@ -70,7 +76,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
         {
             if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be null or empty.", nameof(email));
 
-            return _students.Any(s => s.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && !s.Is_deleted);
+            return _students.Any(s => s.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && !s.IsDeleted);
         }
     }
 }
