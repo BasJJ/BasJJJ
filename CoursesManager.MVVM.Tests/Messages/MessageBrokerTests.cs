@@ -82,8 +82,8 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageOne());
 
-        Assert.IsTrue(shouldBeInvoked);
-        Assert.IsTrue(shouldNotBeInvoked);
+        Assert.That(shouldBeInvoked, Is.True);
+        Assert.That(shouldNotBeInvoked, Is.True);
     }
 
     [Test]
@@ -104,8 +104,8 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageTwo());
 
-        Assert.IsTrue(shouldBeInvoked);
-        Assert.IsTrue(shouldNotBeInvoked);
+        Assert.That(shouldBeInvoked, Is.True);
+        Assert.That(shouldNotBeInvoked, Is.True);
     }
 
     [Test]
@@ -126,13 +126,13 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageTwo());
 
-        Assert.IsFalse(ReferenceEquals(subscriberOneMessage, subscriberTwoMessage));
+        Assert.That(ReferenceEquals(subscriberOneMessage, subscriberTwoMessage), Is.False);
     }
 
     [Test]
     public void Publish_ReturnsFalse_WhenNoSubscribers()
     {
-        Assert.IsFalse(_messageBroker.Publish(new TestMessageOne()));
+        Assert.That(_messageBroker.Publish(new TestMessageOne()), Is.False);
     }
 
     [Test]
@@ -140,7 +140,7 @@ public class MessageBrokerTests
     {
         _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(_ => { }, this);
 
-        Assert.IsTrue(_messageBroker.Publish(new TestMessageOne()));
+        Assert.That(_messageBroker.Publish(new TestMessageOne()), Is.True);
     }
 
     [Test]
@@ -161,8 +161,8 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageOne());
 
-        Assert.IsTrue(shouldBeInvoked);
-        Assert.IsTrue(shouldAlsoBeInvoked);
+        Assert.That(shouldBeInvoked, Is.True);
+        Assert.That(shouldAlsoBeInvoked, Is.True);
     }
 
     [Test]
@@ -188,7 +188,7 @@ public class MessageBrokerTests
 
         _messageBroker.Unsubscribe<TestMessageOne>(Handler);
 
-        Assert.IsTrue(notInvoked);
+        Assert.That(notInvoked, Is.True);
     }
 
     [Test]
@@ -214,8 +214,8 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageOne());
 
-        Assert.IsTrue(handlerOneNotInvoked);
-        Assert.IsTrue(handlerTwoInvoked);
+        Assert.That(handlerOneNotInvoked, Is.True);
+        Assert.That(handlerTwoInvoked, Is.True);
     }
 
     [Test]
@@ -247,8 +247,8 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageOne());
 
-        Assert.IsTrue(handlerOneNotInvoked);
-        Assert.IsTrue(handlerTwoNotInvoked);
+        Assert.That(handlerOneNotInvoked, Is.True);
+        Assert.That(handlerTwoNotInvoked, Is.True);
     }
 
     [Test]
@@ -297,8 +297,7 @@ public class MessageBrokerTests
 
         _messageBroker.Publish(new TestMessageOne());
 
-        Assert.IsTrue(handlerOneNotInvoked);
-        Assert.IsTrue(handlerTwoNotInvoked);
+        Assert.That(handlerOneNotInvoked, Is.True);
+        Assert.That(handlerTwoNotInvoked, Is.True);
     }
-
 }

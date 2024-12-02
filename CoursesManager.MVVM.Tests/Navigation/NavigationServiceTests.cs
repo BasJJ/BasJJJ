@@ -95,7 +95,7 @@ public class NavigationServiceTests
     [Test]
     public void CanGoBack_ReturnsFalse_WhenNoForwardNavigationHasOccured()
     {
-        Assert.IsFalse(_navigationService.CanGoBack());
+        Assert.That(_navigationService.CanGoBack(), Is.False);
     }
 
     [Test]
@@ -104,7 +104,7 @@ public class NavigationServiceTests
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
 
-        Assert.IsTrue(_navigationService.CanGoBack());
+        Assert.That(_navigationService.CanGoBack(), Is.True);
     }
 
     [Test]
@@ -114,7 +114,7 @@ public class NavigationServiceTests
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.GoBack();
 
-        Assert.IsFalse(_navigationService.CanGoBack());
+        Assert.That(_navigationService.CanGoBack(), Is.False);
     }
 
     [Test]
@@ -125,13 +125,13 @@ public class NavigationServiceTests
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.GoBack();
 
-        Assert.IsTrue(_navigationService.CanGoBack());
+        Assert.That(_navigationService.CanGoBack(), Is.True);
     }
 
     [Test]
     public void CanGoForward_ReturnsFalse_WhenNoBackwardHasHappened()
     {
-        Assert.IsFalse(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.False);
     }
 
     [Test]
@@ -140,7 +140,7 @@ public class NavigationServiceTests
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
 
-        Assert.IsFalse(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.False);
     }
 
     [Test]
@@ -150,7 +150,7 @@ public class NavigationServiceTests
         _navigationService.NavigateTo<ViewModelWithoutNavigate>();
         _navigationService.GoBack();
 
-        Assert.IsTrue(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.True);
     }
 
     [Test]
@@ -164,7 +164,7 @@ public class NavigationServiceTests
         _navigationService.GoForward();
         _navigationService.GoForward();
 
-        Assert.IsFalse(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.False);
     }
 
     [Test]
@@ -177,7 +177,7 @@ public class NavigationServiceTests
         _navigationService.GoBack();
         _navigationService.GoForward();
 
-        Assert.IsTrue(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.True);
     }
 
     [Test]
@@ -196,8 +196,8 @@ public class NavigationServiceTests
 
         var shouldHaveBeenFalse = _navigationService.CanGoForward();
 
-        Assert.IsTrue(shouldHaveBeenTrue);
-        Assert.IsFalse(shouldHaveBeenFalse);
+        Assert.That(shouldHaveBeenTrue, Is.True);
+        Assert.That(shouldHaveBeenFalse, Is.False);
     }
 
     [Test]
@@ -225,7 +225,7 @@ public class NavigationServiceTests
 
         _navigationService.GoBackAndClearForward();
 
-        Assert.IsFalse(_navigationService.CanGoForward());
+        Assert.That(_navigationService.CanGoForward(), Is.False);
     }
 
     [Test]

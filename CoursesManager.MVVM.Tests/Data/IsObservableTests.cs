@@ -45,16 +45,6 @@ public class IsObservableTests
 
         testOn.Test = "initial";
 
-        Assert.IsFalse(testOn.PropertyChangedInvoked);
+        Assert.That(testOn.PropertyChangedInvoked, Is.False);
     }
-
-    //[Test]
-    //public void SetProperty_InvokesPropertyChanged_WhenValueChanges()
-    //{
-    //    var testOn = new TestOn();
-
-    //    testOn.Test = "new";
-
-    //    Assert.IsTrue(testOn.PropertyChangedInvoked);
-    //}
 }

@@ -20,7 +20,7 @@ public class RelayCommandTests
 
         var canExecute = command.CanExecute(null);
 
-        Assert.IsTrue(canExecute);
+        Assert.That(canExecute, Is.True);
     }
 
     [Test]
@@ -30,7 +30,7 @@ public class RelayCommandTests
 
         var canExecute = command.CanExecute(null);
 
-        Assert.IsFalse(canExecute);
+        Assert.That(canExecute, Is.False);
     }
 
     [Test]
@@ -41,6 +41,6 @@ public class RelayCommandTests
 
         command.Execute(null);
 
-        Assert.IsTrue(executed);
+        Assert.That(executed, Is.True);
     }
 }
