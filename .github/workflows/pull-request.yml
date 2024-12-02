@@ -28,8 +28,6 @@ jobs:
         run: echo "${{ secrets.ENV }}" > CoursesManager.UI/.env
 
       - name: Run unit tests
-        env:
-          ReportPortal__server__authentication__uuid: ${{ secrets.RP_UUID }}
         run: dotnet test --logger "trx;LogFileName=TestResults.trx"
 
       - name: Upload test results
