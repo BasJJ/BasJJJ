@@ -1,11 +1,12 @@
 name: Analyze
 
 on:
-  push:
-    branches:
-      - main.
-      - quality-check
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'quality-check'
 
 jobs:
   build:
