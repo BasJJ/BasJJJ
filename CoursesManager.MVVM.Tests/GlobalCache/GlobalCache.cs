@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using CoursesManager.MVVM.Exceptions;
 using NUnit.Framework;
 
 namespace GlobalCacheExample
@@ -138,12 +139,10 @@ namespace GlobalCacheExample
             // Act
             cache.Put("key1", "value1", isPermanent: true);
             // Attempt to overwrite a permanent item (should not overwrite)
-            cache.Put("key1", "value2", isPermanent: false);
 
-            // Assert: The value should still be "value1"
-            var result = cache.Get("key1");
-            Debug.WriteLine(result);
-            Assert.That(result, Is.EqualTo("value1"));
+            // Assert: the CantBeOverwrittenException should be thrown
+            Assert.Throws<CantBeOverwrittenException>(() => cache.Put("key1", "value2", isPermanent: false));
+
         }
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoursesManager.MVVM.Exceptions;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,9 +47,14 @@ public class GlobalCache
 
         lock (_lock)
         {
-            _cacheMap.TryGetValue(key, out var existingNode);
-            if (existingNode != null && (!existingNode.Value.IsPermanent))
+            if (_cacheMap.TryGetValue(key, out var existingNode) && existingNode != null)
             {
+                if (existingNode.Value.IsPermanent)
+                {
+                    throw new CantBeOverwrittenException($"The item with key '{key}' is permanent and cannot be overwritten.");
+                }
+
+                // Update the value if the item is not permanent
                 existingNode.Value = new CacheItem(key, value, isPermanent);
                 _usageOrder.Remove(existingNode);
                 _usageOrder.AddFirst(existingNode);
@@ -65,6 +71,11 @@ public class GlobalCache
 
             // The permanent item count will be updated in the CacheItem class itself
         }
+    }
+
+    private void OverwritingExistingNode(CacheItem existingNode) 
+    { 
+
     }
     private void EnsureCapacity()
     {
