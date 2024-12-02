@@ -107,8 +107,8 @@ public partial class App : Application
 
         foreach (var registration in Registrations)
         {
-            registration.Student = Students.FirstOrDefault(s => s.Id == registration.StudentID);
-            registration.Course = Courses.FirstOrDefault(c => c.ID == registration.CourseID);
+            registration.Student = Students.FirstOrDefault(s => s.Id == registration.StudentId);
+            registration.Course = Courses.FirstOrDefault(c => c.Id == registration.CourseId);
         }
 
         foreach (var course in Courses)

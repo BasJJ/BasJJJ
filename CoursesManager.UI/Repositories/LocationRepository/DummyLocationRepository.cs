@@ -23,6 +23,11 @@ namespace CoursesManager.UI.Repositories.LocationRepository
             return _locations.ToList();
         }
 
+        public List<Location> RefreshAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public Location GetById(int id)
         {
             return _locations.FirstOrDefault(l => l.Id == id);
@@ -30,7 +35,6 @@ namespace CoursesManager.UI.Repositories.LocationRepository
 
         public void Add(Location location)
         {
-            location.DateCreated = DateTime.Now;
             _locations.Add(location);
         }
 
@@ -41,7 +45,6 @@ namespace CoursesManager.UI.Repositories.LocationRepository
             {
                 existingLocation.Name = location.Name;
                 existingLocation.Address = location.Address;
-                existingLocation.Capacity = location.Capacity;
             }
         }
 

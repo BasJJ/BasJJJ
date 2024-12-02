@@ -8,6 +8,11 @@ public class AddressRepository : IAddressRepository
 {
     private readonly AddressDataAccess _addressDataAccess = new();
 
+    public List<Address> RefreshAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public List<Address> GetAll()
     {
         return _addressDataAccess.FetchAll();

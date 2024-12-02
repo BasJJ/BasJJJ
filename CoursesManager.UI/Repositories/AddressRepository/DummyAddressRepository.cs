@@ -9,6 +9,11 @@ public class DummyAddressRepository : IAddressRepository
         throw new NotImplementedException();
     }
 
+    public List<Address> RefreshAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public Address GetById(int id)
     {
         throw new NotImplementedException();

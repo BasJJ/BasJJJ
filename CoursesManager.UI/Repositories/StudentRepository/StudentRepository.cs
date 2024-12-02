@@ -15,6 +15,11 @@ public class StudentRepository : IStudentRepository
 
     }
 
+    public List<Student> RefreshAll()
+    {
+        throw new NotImplementedException();
+    }
+
     public Student? GetById(int id)
     {
         throw new NotImplementedException();

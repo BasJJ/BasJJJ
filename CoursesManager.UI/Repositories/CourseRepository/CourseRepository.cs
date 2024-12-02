@@ -10,6 +10,11 @@ namespace CoursesManager.UI.Repositories.CourseRepository
 
         public List<Course> GetAll()
         {
+            throw new NotImplementedException();
+        }
+
+        public List<Course> RefreshAll()
+        {
             return _courseDataAccess.GetAll();
         }
 
@@ -33,19 +38,9 @@ namespace CoursesManager.UI.Repositories.CourseRepository
         {
             ArgumentNullException.ThrowIfNull(course);
 
-            _courseDataAccess.Delete(course.ID);
+            _courseDataAccess.Delete(course.Id);
         }
 
         public void Delete(int id) => _courseDataAccess.Delete(id);
-
-        public bool HasActiveRegistrations(Course course)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetInactive(Course course)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

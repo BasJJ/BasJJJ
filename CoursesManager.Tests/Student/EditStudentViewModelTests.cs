@@ -42,15 +42,15 @@ namespace CoursesManager.Tests
             _courseRepositoryMock.Setup(repo => repo.GetAll())
                 .Returns(new List<Course>
                 {
-                    new Course { ID = 1, Name = "Math" },
-                    new Course { ID = 2, Name = "Science" }
+                    new Course { Id = 1, Name = "Math" },
+                    new Course { Id = 2, Name = "Science" }
                 });
 
             // Mock registration repository
             _registrationRepositoryMock.Setup(repo => repo.GetAll())
                 .Returns(new List<Registration>
                 {
-                    new Registration { StudentID = 1, CourseID = 1 }
+                    new Registration { StudentId = 1, CourseId = 1 }
                 });
 
             // Initialize ViewModel
@@ -67,7 +67,7 @@ namespace CoursesManager.Tests
         {
             // Arrange
             _viewModel.ParentWindow = new Mock<Window>().Object; // Ensure ParentWindow is set
-            _viewModel.SelectableCourses.First(c => c.ID == 2).IsSelected = true; // Select "Science" course
+            _viewModel.SelectableCourses.First(c => c.Id == 2).IsSelected = true; // Select "Science" course
 
             var confirmationResult = DialogResult<DialogResultType>.Builder()
                 .SetSuccess(new DialogResultType { Result = true }, "Confirmed")
@@ -92,7 +92,7 @@ namespace CoursesManager.Tests
                 Times.Once);
 
             _studentRepositoryMock.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Once);
-            _registrationRepositoryMock.Verify(repo => repo.Add(It.Is<Registration>(r => r.CourseID == 2)), Times.Once);
+            _registrationRepositoryMock.Verify(repo => repo.Add(It.Is<Registration>(r => r.CourseId == 2)), Times.Once);
 
             _dialogServiceMock.Verify(service =>
                     service.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
