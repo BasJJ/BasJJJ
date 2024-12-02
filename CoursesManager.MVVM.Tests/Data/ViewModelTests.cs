@@ -24,7 +24,7 @@ public class ViewModelTests
 
         _viewModel.AddError(propertyName, errorMessage);
 
-        Assert.IsTrue(_viewModel.HasErrors);
+        Assert.That(_viewModel.HasErrors, Is.True);
         var errors = _viewModel.GetErrors(propertyName) as List<string>;
         Assert.That(errors, Is.Not.Null);
         Assert.That(errors, Contains.Item(errorMessage));
@@ -39,7 +39,7 @@ public class ViewModelTests
 
         _viewModel.ClearErrors(propertyName);
 
-        Assert.IsFalse(_viewModel.HasErrors);
+        Assert.That(_viewModel.HasErrors, Is.False);
         var errors = _viewModel.GetErrors(propertyName) as List<string>;
         Assert.That(errors, Is.Not.Null);
         Assert.That(errors.Count, Is.EqualTo(0));
@@ -71,7 +71,7 @@ public class ViewModelTests
 
         _viewModel.AddError(propertyName, "Error message");
 
-        Assert.IsTrue(eventRaised);
+        Assert.That(eventRaised, Is.True);
     }
 
     [Test]
@@ -90,6 +90,6 @@ public class ViewModelTests
 
         _viewModel.ClearErrors(propertyName);
 
-        Assert.IsTrue(eventRaised);
+        Assert.That(eventRaised, Is.True);
     }
 }

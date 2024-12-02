@@ -17,7 +17,7 @@ public class RelayCommandGenericTests
 
         bool result = command.CanExecute("test");
 
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
     }
 
     [Test]
@@ -25,8 +25,8 @@ public class RelayCommandGenericTests
     {
         var command = new RelayCommand<string>(_ => { }, param => param == "valid");
 
-        Assert.IsTrue(command.CanExecute("valid"));
-        Assert.IsFalse(command.CanExecute("invalid"));
+        Assert.That(command.CanExecute("valid"), Is.True);
+        Assert.That(command.CanExecute("invalid"), Is.False);
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class RelayCommandGenericTests
 
         command.Execute("test");
 
-        Assert.IsTrue(actionExecuted);
+        Assert.That(actionExecuted, Is.True);
     }
 
     [Test]
@@ -75,7 +75,7 @@ public class RelayCommandGenericTests
 
         bool result = command.CanExecute(5);
 
-        Assert.IsFalse(result);
+        Assert.That(result, Is.False);
     }
 
     [Test]
@@ -85,6 +85,6 @@ public class RelayCommandGenericTests
 
         bool result = command.CanExecute(15);
 
-        Assert.IsTrue(result);
+        Assert.That(result, Is.True);
     }
 }
