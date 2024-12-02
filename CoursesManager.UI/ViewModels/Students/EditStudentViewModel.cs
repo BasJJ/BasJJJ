@@ -63,16 +63,16 @@ namespace CoursesManager.UI.ViewModels.Students
         private ObservableCollection<SelectableCourse> InitializeSelectableCourses()
         {
             var registeredCourseIds = _registrationRepository.GetAll()
-                .Where(r => r.StudentID == Student.Id)
-                .Select(r => r.CourseID)
+                .Where(r => r.StudentId == Student.Id)
+                .Select(r => r.CourseId)
                 .ToHashSet();
 
             var courses = _courseRepository.GetAll()
                 .Select(course => new SelectableCourse
                 {
-                    ID = course.ID,
+                    Id = course.Id,
                     Name = course.Name,
-                    IsSelected = registeredCourseIds.Contains(course.ID)
+                    IsSelected = registeredCourseIds.Contains(course.Id)
                 })
                 .ToList();
 
@@ -118,27 +118,27 @@ namespace CoursesManager.UI.ViewModels.Students
         private void UpdateRegistrations()
         {
             var existingRegistrations = _registrationRepository.GetAll()
-                .Where(r => r.StudentID == Student.Id)
+                .Where(r => r.StudentId == Student.Id)
                 .ToList();
 
             // Delete unselected registrations
             foreach (var registration in existingRegistrations)
             {
-                if (!SelectableCourses.Any(c => c.ID == registration.CourseID && c.IsSelected))
+                if (!SelectableCourses.Any(c => c.Id == registration.CourseId && c.IsSelected))
                 {
-                    _registrationRepository.Delete(registration.ID);
+                    _registrationRepository.Delete(registration.Id);
                 }
             }
 
             // Add new registrations
             foreach (var course in SelectableCourses.Where(c => c.IsSelected))
             {
-                if (!existingRegistrations.Any(r => r.CourseID == course.ID))
+                if (!existingRegistrations.Any(r => r.CourseId == course.Id))
                 {
                     _registrationRepository.Add(new Registration
                     {
-                        StudentID = Student.Id,
-                        CourseID = course.ID,
+                        StudentId = Student.Id,
+                        CourseId = course.Id,
                         RegistrationDate = DateTime.Now,
                         IsActive = true
                     });

@@ -2,6 +2,7 @@
 using System.Reflection;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
+using System.Data;
 
 namespace CoursesManager.UI.DataAccess;
 
@@ -144,6 +145,45 @@ public abstract class BaseDataAccess<T> where T : new()
         return model;
     }
 
+    public List<Dictionary<string, object>> ExecuteProcedure(string procedureName, params MySqlParameter[]? parameters)
+    {
+        using var mySqlConnection = GetConnection();
+        using var mySqlCommand = new MySqlCommand(procedureName, mySqlConnection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        if (parameters is not null)
+        {
+            mySqlCommand.Parameters.AddRange(parameters);
+        }
+
+        try
+        {
+            mySqlConnection.Open();
+
+            using var reader = mySqlCommand.ExecuteReader();
+
+            List<Dictionary<string, object>> results = new();
+            while (reader.Read())
+            {
+                Dictionary<string, object> row = new();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                }
+                results.Add(row);
+            }
+
+            return results;
+        }
+        catch (MySqlException exception)
+        {
+            LogUtil.Error($"Error executing procedure '{procedureName}': {exception.Message}");
+            throw;
+        }
+    }
+
     public bool ExecuteNonQuery(string query, params MySqlParameter[]? parameters)
     {
         using var mySqlConnection = GetConnection();
@@ -162,6 +202,33 @@ public abstract class BaseDataAccess<T> where T : new()
         catch (MySqlException exception)
         {
             LogUtil.Error(exception.Message);
+            throw;
+        }
+
+        return true;
+    }
+
+    public bool ExecuteNonProcedure(string procedureName, params MySqlParameter[]? parameters)
+    {
+        using var mySqlConnection = GetConnection();
+        using var mySqlCommand = new MySqlCommand(procedureName, mySqlConnection)
+        {
+            CommandType = CommandType.StoredProcedure
+        };
+
+        if (parameters is not null)
+        {
+            mySqlCommand.Parameters.AddRange(parameters);
+        }
+
+        try
+        {
+            mySqlConnection.Open();
+            mySqlCommand.ExecuteNonQuery();
+        }
+        catch (MySqlException exception)
+        {
+            LogUtil.Error($"Error executing procedure '{procedureName}': {exception.Message}");
             throw;
         }
 

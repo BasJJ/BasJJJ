@@ -4,6 +4,8 @@ public interface IRepository<T>
 {
     List<T> GetAll(); 
 
+    List<T> RefreshAll();
+
     T? GetById(int id);
 
     void Add(T data);

@@ -9,7 +9,7 @@ namespace CoursesManager.UI.Models
 {
     public class Course : IsObservable, ICopyable<Course>, IDataErrorInfo
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -103,7 +103,7 @@ namespace CoursesManager.UI.Models
         {
             return new Course
             {
-                ID = this.ID,
+                Id = this.Id,
                 Name = this.Name,
                 Code = this.Code,
                 Description = this.Description,

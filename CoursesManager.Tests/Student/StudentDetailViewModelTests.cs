@@ -40,7 +40,7 @@ namespace CoursesManager.Tests.ViewModels
                 {
                     new Course
                     {
-                        ID = 1,
+                        Id = 1,
                         Name = "Math 101",
                         Code = "MATH101",
                         Description = "Basic Mathematics",
@@ -71,16 +71,15 @@ namespace CoursesManager.Tests.ViewModels
 
             var registration = new Registration
             {
-                ID = 1,
-                StudentID = _testStudent.Id,
+                Id = 1,
+                StudentId = _testStudent.Id,
                 Student = _testStudent,
-                CourseID = _testStudent.Courses.First().ID,
+                CourseId = _testStudent.Courses.First().Id,
                 Course = _testStudent.Courses.First(),
                 RegistrationDate = DateTime.Now,
                 PaymentStatus = true,
                 IsActive = true,
                 IsAchieved = false,
-                DateCreated = DateTime.Now
             };
             
 
@@ -88,7 +87,7 @@ namespace CoursesManager.Tests.ViewModels
             _mockRegistrationRepository.Setup(repo => repo.GetAll())
                 .Returns(new List<Registration>
                 {
-                    new Registration { StudentID = 1, CourseID = 1 }
+                    new Registration { StudentId = 1, CourseId = 1 }
                 });
 
             _viewModel = new StudentDetailViewModel(

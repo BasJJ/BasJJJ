@@ -80,19 +80,19 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             Students = new ObservableCollection<Student>(
                 _studentRepository.GetAll()
-                    .Where(s => s.Courses != null && s.Courses.Any(c => c != null && c.ID == CurrentCourse.ID))
+                    .Where(s => s.Courses != null && s.Courses.Any(c => c != null && c.Id == CurrentCourse.Id))
             );
 
             var registrations = _registrationRepository.GetAll()
-                .Where(r => r.CourseID == CurrentCourse.ID)
+                .Where(r => r.CourseId == CurrentCourse.Id)
                 .ToList();
 
             var payments = registrations.Select(registration =>
             {
-                var student = _studentRepository.GetById(registration.StudentID);
+                var student = _studentRepository.GetById(registration.StudentId);
                 if (student == null)
                 {
-                    Console.WriteLine($"Warning: Student with ID {registration.StudentID} not found for registration ID {registration.ID}.");
+                    Console.WriteLine($"Warning: Student with Id {registration.StudentId} not found for registration Id {registration.Id}.");
                     return null;
                 }
                 return new CourseStudentPayment(student, registration);
@@ -106,7 +106,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             if (payment == null || CurrentCourse == null) return;
 
             var existingRegistration = _registrationRepository.GetAll()
-                .FirstOrDefault(r => r.CourseID == CurrentCourse.ID && r.StudentID == payment.Student?.Id);
+                .FirstOrDefault(r => r.CourseId == CurrentCourse.Id && r.StudentId == payment.Student?.Id);
 
             if (existingRegistration != null)
             {
@@ -118,7 +118,7 @@ namespace CoursesManager.UI.ViewModels.Courses
                 int paymentCounter = 0;
                 foreach (Registration registration in _registrationRepository.GetAll())
                 {
-                    if (registration.CourseID == CurrentCourse.ID)
+                    if (registration.CourseId == CurrentCourse.Id)
                     {
                         paymentCounter++;
                     }
@@ -139,8 +139,8 @@ namespace CoursesManager.UI.ViewModels.Courses
             {
                 _registrationRepository.Add(new Registration
                 {
-                    StudentID = payment.Student?.Id ?? 0,
-                    CourseID = CurrentCourse.ID,
+                    StudentId = payment.Student?.Id ?? 0,
+                    CourseId = CurrentCourse.Id,
                     PaymentStatus = payment.IsPaid,
                     IsAchieved = payment.IsAchieved,
                     RegistrationDate = DateTime.Now,
@@ -154,7 +154,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         {
             await ExecuteWithOverlayAsync(async () =>
             {
-                if (_courseRepository.HasActiveRegistrations(CurrentCourse))
+                if (_registrationRepository.GetAllRegistrationsByCourse(CurrentCourse).Any())
                 {
                     var result = await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(
                         new DialogResultType
