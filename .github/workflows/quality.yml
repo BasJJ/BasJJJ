@@ -48,7 +48,7 @@ jobs:
         shell: powershell
         env:
           ReportPortal__server__authentication__uuid: ${{ secrets.RP_UUID }}
-        run: dotnet test /p:CollectCoverage=true  /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json" -m:1 --% /p:CoverletOutputFormat=\"opencover,json\" /p:settings=./.runsettings
+        run: dotnet test /p:CollectCoverage=true  /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json" -m:1 --% /p:CoverletOutputFormat=\"opencover,json\"
       
       - name: Install SonarQube scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
