@@ -41,19 +41,24 @@ public class RelayCommandGenericTests
     }
 
     [Test]
+    public void Execute_CallsAction_WhenParameterIsValidObject()
+    {
+        bool actionExecuted = false;
+        var command = new RelayCommand<string>(_ => actionExecuted = true);
+        object value = "test";
+
+
+        command.Execute(value);
+
+        Assert.That(actionExecuted, Is.True);
+    }
+
+    [Test]
     public void Execute_ThrowsException_WhenParameterIsInvalid()
     {
         var command = new RelayCommand<string>(_ => { });
 
         Assert.Throws<ArgumentException>(() => command.Execute(123)); // 123 is an invalid type
-    }
-
-    [Test]
-    public void CanExecute_ThrowsException_WhenParameterIsInvalid()
-    {
-        var command = new RelayCommand<string>(_ => { });
-
-        Assert.Throws<ArgumentException>(() => command.CanExecute(123)); // 123 is an invalid type
     }
 
     [Test]
@@ -66,6 +71,14 @@ public class RelayCommandGenericTests
         command.Execute(expected);
 
         Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void CanExecute_ThrowsException_WhenParameterIsInvalid()
+    {
+        var command = new RelayCommand<string>(_ => { });
+
+        Assert.Throws<ArgumentException>(() => command.CanExecute(123)); // 123 is an invalid type
     }
 
     [Test]
@@ -86,5 +99,23 @@ public class RelayCommandGenericTests
         bool result = command.CanExecute(15);
 
         Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void CanExecute_ReturnsFalse_WhenParameterIsNull()
+    {
+        object testParam = null;
+        var command = new RelayCommand<int>(_ => { }, param => true);
+
+        Assert.That(command.CanExecute(testParam), Is.False);
+    }
+
+    [Test]
+    public void CanExecute_ReturnsTrue_WhenValidObjectIsProvided()
+    {
+        object testParam = 10;
+        var command = new RelayCommand<int>(_ => { }, param => true);
+
+        Assert.That(command.CanExecute(testParam), Is.True);
     }
 }
