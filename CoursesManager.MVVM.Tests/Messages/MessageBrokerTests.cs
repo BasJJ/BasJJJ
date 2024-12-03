@@ -1,5 +1,4 @@
 ﻿using CoursesManager.MVVM.Messages;
-using NUnit.Framework.Internal;
 
 namespace CoursesManager.MVVM.Tests.Messages;
 
@@ -188,6 +187,8 @@ public class MessageBrokerTests
 
         _messageBroker.Unsubscribe<TestMessageOne>(Handler);
 
+        _messageBroker.Publish(new TestMessageOne());
+
         Assert.That(notInvoked, Is.True);
     }
 
@@ -216,6 +217,31 @@ public class MessageBrokerTests
 
         Assert.That(handlerOneNotInvoked, Is.True);
         Assert.That(handlerTwoInvoked, Is.True);
+    }
+
+    [Test]
+    public void Unsubscribe_DoesNotBreak_WhenNotRegisteredHandlerIsUnsubscribed()
+    {
+        void HandlerOne(TestMessageOne obj) { }
+
+        Assert.DoesNotThrow(() =>
+        {
+            _messageBroker.Unsubscribe<TestMessageOne>(HandlerOne);
+        });
+    }
+
+    [Test]
+    public void Unsubscribe_DoesNotBreak_WhenHandlerWasNeverRegistered()
+    {
+        void HandlerOne(TestMessageOne obj) { }
+        void HandlerTwo(TestMessageOne obj) { }
+
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(HandlerTwo, this);
+
+        Assert.DoesNotThrow(() =>
+        {
+            _messageBroker.Unsubscribe<TestMessageOne>(HandlerOne);
+        });
     }
 
     [Test]
