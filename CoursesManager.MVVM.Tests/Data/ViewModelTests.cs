@@ -60,6 +60,17 @@ public class ViewModelTests
     }
 
     [Test]
+    public void GetErrors_ReturnsEmptyList_WhenPropertyNameIsNull()
+    {
+        string? propertyName = null;
+
+        var errors = _viewModel.GetErrors(propertyName) as List<string>;
+
+        Assert.That(errors, Is.Not.Null);
+        Assert.That(errors.Count, Is.EqualTo(0));
+    }
+
+    [Test]
     public void ErrorsChanged_EventIsRaised_WhenErrorIsAdded()
     {
         var propertyName = "TestProperty";

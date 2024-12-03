@@ -245,6 +245,34 @@ public class MessageBrokerTests
     }
 
     [Test]
+    public void Unsubscribe_DoesNotRemove_WhenHandlerIsOfDifferentMessageType()
+    {
+        var handlerOneHit = false;
+        var handlerTwoHit = false;
+
+        void HandlerOne(TestMessageOne obj)
+        {
+            handlerOneHit = true;
+        }
+
+        void HandlerTwo(TestMessageTwo obj)
+        {
+            handlerTwoHit = true;
+        }
+
+        _messageBroker.Subscribe<TestMessageOne, MessageBrokerTests>(HandlerOne, this);
+        _messageBroker.Subscribe<TestMessageTwo, MessageBrokerTests>(HandlerTwo, this);
+
+        _messageBroker.Unsubscribe<TestMessageOne>(HandlerOne);
+
+        _messageBroker.Publish(new TestMessageOne());
+        _messageBroker.Publish(new TestMessageTwo());
+
+        Assert.That(handlerOneHit, Is.False);
+        Assert.That(handlerTwoHit, Is.True);
+    }
+
+    [Test]
     public void UnsubscribeMe_ThrowsArgumentNullException_WhenNoRecipientProvided()
     {
         Assert.Throws<ArgumentNullException>(() =>

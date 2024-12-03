@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows.Input;
 
 namespace CoursesManager.MVVM.Commands
 {
@@ -16,6 +17,7 @@ namespace CoursesManager.MVVM.Commands
             _canExecute = canExecute;
         }
 
+        [ExcludeFromCodeCoverage] // Can't test CommandManager
         public event EventHandler? CanExecuteChanged
         {
             add => CommandManager.RequerySuggested += value;
@@ -32,6 +34,7 @@ namespace CoursesManager.MVVM.Commands
             _execute.Invoke();
         }
 
+        [ExcludeFromCodeCoverage] // Can't test CommandManager
         public void RaiseCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
