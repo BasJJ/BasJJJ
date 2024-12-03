@@ -14,6 +14,7 @@ using CoursesManager.UI.ViewModels.Students;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using CoursesManager.MVVM.Messages.DefaultMessages;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
