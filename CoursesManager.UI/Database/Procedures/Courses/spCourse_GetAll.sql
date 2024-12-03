@@ -1,15 +1,17 @@
 ﻿CREATE PROCEDURE spCourses_GetAll()
 BEGIN
-    SELECT 
-        id,
-        name,
-        code,
-        description,
-        location_id,
-        is_active,
-        start_date,
-        end_date,
-        created_at,
-        tile_image
-    FROM courses;
+    SELECT
+        courses.id,
+        courses.name,
+        courses.code,
+        courses.description,
+        courses.location_id,
+        courses.is_active,
+        courses.start_date,
+        courses.end_date,
+        courses.created_at,
+        courses.tile_image,
+        locations.name
+    FROM courses
+    LEFT JOIN locations ON courses.location_id = locations.id;
 END;

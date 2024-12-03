@@ -18,11 +18,16 @@ public class CourseDataAccess : BaseDataAccess<Course>
             // Converteer de resultaten naar een lijst van Course-objecten
             return results.Select(row => new Course
             {
-                Id = Convert.ToInt32(row["id"]),
-                Name = row["name"]?.ToString() ?? string.Empty,
-                Code = row["code"]?.ToString() ?? string.Empty,
-                Description = row["description"]?.ToString() ?? string.Empty,
-                LocationId = Convert.ToInt32(row["location_id"]),
+                Id = Convert.ToInt32(row["course_id"]),
+                Name = row["course_name"]?.ToString() ?? string.Empty,
+                Code = row["course_code"]?.ToString() ?? string.Empty,
+                Description = row["course_description"]?.ToString() ?? string.Empty,
+                LocationId = Convert.ToInt32(row["course_location_id"]),
+                Location = new Location
+                {
+                    Id = Convert.ToInt32(row["course_location_id"]),
+                    Name = row["location_name"]?.ToString() ?? string.Empty
+                },
                 IsActive = Convert.ToBoolean(row["is_active"]),
                 StartDate = Convert.ToDateTime(row["start_date"]),
                 EndDate = Convert.ToDateTime(row["end_date"]),

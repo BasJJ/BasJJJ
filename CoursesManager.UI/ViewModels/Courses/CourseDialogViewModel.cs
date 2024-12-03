@@ -82,7 +82,11 @@ namespace CoursesManager.UI.ViewModels.Students
                     };
 
             OriginalCourse = course;
-            Locations = new ObservableCollection<Location>(_locationRepository.GetAll());
+            var allLocations = _locationRepository.GetAll();
+            Locations = new ObservableCollection<Location>(allLocations);
+
+            // Stel de geselecteerde locatie in
+            SelectedLocation = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
 
             Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
@@ -219,6 +223,10 @@ namespace CoursesManager.UI.ViewModels.Students
                 return memoryStream.ToArray();
             }
         }
+
+        private object selectedLocation;
+
+        public object SelectedLocation { get => selectedLocation; set => SetProperty(ref selectedLocation, value); }
 
     }
 }
