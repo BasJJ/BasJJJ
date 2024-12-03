@@ -3,10 +3,10 @@ using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
 using System.Windows.Input;
 using CoursesManager.MVVM.Data;
-using CoursesManager.UI.Messages;
 using CoursesManager.UI.ViewModels.Students;
 using System.Windows.Media.Imaging;
 using System;
+using CoursesManager.MVVM.Messages.DefaultMessages;
 
 namespace CoursesManager.UI.ViewModels;
 

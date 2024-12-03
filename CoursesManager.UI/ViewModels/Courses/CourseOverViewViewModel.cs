@@ -13,6 +13,7 @@ using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.ViewModels.Students;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using CoursesManager.MVVM.Messages.DefaultMessages;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {

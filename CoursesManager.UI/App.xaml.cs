@@ -19,6 +19,7 @@ using CoursesManager.UI.ViewModels.Students;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.ViewModels.Courses;
+using CoursesManager.MVVM.Messages.DefaultMessages;
 
 namespace CoursesManager.UI;
 

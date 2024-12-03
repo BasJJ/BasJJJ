@@ -1,6 +1,6 @@
 ﻿using CoursesManager.MVVM.Messages;
 
-namespace CoursesManager.UI.Messages;
+namespace CoursesManager.MVVM.Messages.DefaultMessages;
 
 public class ApplicationCloseRequestedMessage : BaseMessage<ApplicationCloseRequestedMessage>
 {
