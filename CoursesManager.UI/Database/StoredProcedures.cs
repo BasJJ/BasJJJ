@@ -19,6 +19,7 @@ public static class StoredProcedures
     public const string LocationsWithAddressesGetAll = "spLocationsWithAddresses_GetAll";
     public const string LocationsInsert = "spLocations_Insert";
     public const string LocationsDeleteById = "spLocations_DeleteById";
+    public const string LocationsUpdate = "spLocations_Update";
 
     #endregion
 
