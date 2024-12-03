@@ -20,7 +20,9 @@ namespace CoursesManager.MVVM.Commands
         [ExcludeFromCodeCoverage] // Can't test CommandManager
         public event EventHandler? CanExecuteChanged
         {
+            [ExcludeFromCodeCoverage] // Can't test CommandManager
             add => CommandManager.RequerySuggested += value;
+            [ExcludeFromCodeCoverage] // Can't test CommandManager
             remove => CommandManager.RequerySuggested -= value;
         }
 

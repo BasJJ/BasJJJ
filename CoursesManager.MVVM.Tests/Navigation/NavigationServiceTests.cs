@@ -1,6 +1,8 @@
 ﻿using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 namespace CoursesManager.MVVM.Tests.Navigation;
 
@@ -12,10 +14,24 @@ internal class ViewModelWithNavigationForTest : ViewModelWithNavigation
     {
         NavigationService = navigationService;
     }
+
+    public ViewModelWithNavigationForTest(object? param, INavigationService? navigationService) : base(navigationService)
+    {
+        NavigationService = navigationService;
+    }
 }
 
 internal class ViewModelWithoutNavigate : ViewModel
 {
+    public ViewModelWithoutNavigate()
+    {
+        
+    }
+
+    public ViewModelWithoutNavigate(object? param)
+    {
+        
+    }
 }
 
 internal class UnregisteredViewModelWithoutNavigate : ViewModel
@@ -31,7 +47,7 @@ public class NavigationServiceTests
     {
         INavigationService.ViewModelFactories.Clear();
         INavigationService.RegisterViewModelFactory(() => new ViewModelWithoutNavigate());
-        INavigationService.RegisterViewModelFactory((nav) => new ViewModelWithNavigationForTest((INavigationService)nav));
+        INavigationService.RegisterViewModelFactory((nav) => new ViewModelWithNavigationForTest(nav));
         _navigationService = new NavigationService();
     }
 
@@ -68,7 +84,7 @@ public class NavigationServiceTests
     {
         Assert.Throws<ArgumentNullException>(() =>
         {
-            INavigationService.RegisterViewModelFactory<ViewModelWithNavigationForTest>((Func<object, ViewModelWithNavigationForTest>)(Func<INavigationService, ViewModelWithNavigationForTest>)null);
+            INavigationService.RegisterViewModelFactory((Func<INavigationService, ViewModelWithNavigationForTest>)null);
         });
     }
 
@@ -77,7 +93,7 @@ public class NavigationServiceTests
     {
         INavigationService.ViewModelFactories.Clear();
 
-        INavigationService.RegisterViewModelFactory<ViewModelWithNavigationForTest>((navigationService) => new ViewModelWithNavigationForTest((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationForTest(navigationService));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtLeast(1));
     }
@@ -86,8 +102,70 @@ public class NavigationServiceTests
     public void RegisterViewModelFactoryWithNaviagtionService_OnlyAddedOnce()
     {
         INavigationService.ViewModelFactories.Clear();
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationForTest((INavigationService)navigationService));
-        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationForTest((INavigationService)navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationForTest(navigationService));
+        INavigationService.RegisterViewModelFactory((navigationService) => new ViewModelWithNavigationForTest(navigationService));
+
+        Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParametersWithNaviagtionService_ThrowsArgumentException_WhenViewModelFactoryIsNull()
+    {
+        INavigationService.ViewModelFactories.Clear();
+
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            INavigationService.RegisterViewModelFactoryWithParameters<ViewModelWithNavigationForTest>((Func<object?, INavigationService, ViewModelWithNavigationForTest>)null);
+        });
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParametersWithNaviagtionService_RegistrationAdded()
+    {
+        INavigationService.ViewModelFactories.Clear();
+
+        INavigationService.RegisterViewModelFactoryWithParameters((param, navigationService) => new ViewModelWithNavigationForTest(param, navigationService));
+
+        Assert.That(INavigationService.ViewModelFactories.Count, Is.AtLeast(1));
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParametersWithNaviagtionService_OnlyAddedOnce()
+    {
+        INavigationService.ViewModelFactories.Clear();
+        INavigationService.RegisterViewModelFactoryWithParameters((param, navigationService) => new ViewModelWithNavigationForTest(param, navigationService));
+        INavigationService.RegisterViewModelFactoryWithParameters((param, navigationService) => new ViewModelWithNavigationForTest(param, navigationService));
+
+        Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParameters_ThrowsArgumentException_WhenViewModelFactoryIsNull()
+    {
+        INavigationService.ViewModelFactories.Clear();
+
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            INavigationService.RegisterViewModelFactoryWithParameters<ViewModelWithoutNavigate>(null);
+        });
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParameters_RegistrationAdded()
+    {
+        INavigationService.ViewModelFactories.Clear();
+
+        INavigationService.RegisterViewModelFactoryWithParameters((param) => new ViewModelWithoutNavigate(param));
+
+        Assert.That(INavigationService.ViewModelFactories.Count, Is.AtLeast(1));
+    }
+
+    [Test]
+    public void RegisterViewModelFactoryWithParameters_OnlyAddedOnce()
+    {
+        INavigationService.ViewModelFactories.Clear();
+        INavigationService.RegisterViewModelFactoryWithParameters((param) => new ViewModelWithoutNavigate(param));
+        INavigationService.RegisterViewModelFactoryWithParameters((param) => new ViewModelWithoutNavigate(param));
 
         Assert.That(INavigationService.ViewModelFactories.Count, Is.AtMost(1));
     }
