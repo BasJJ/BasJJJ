@@ -18,7 +18,7 @@ public class LocationRepository : BaseRepository, ILocationRepository
 
     public List<Location> GetAll()
     {
-        if (_allLocations.Count == 0 || ShouldRefresh)
+        if (_allLocations?.Count == 0 || ShouldRefresh)
         {
             return RefreshAll();
         }
