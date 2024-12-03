@@ -100,6 +100,17 @@ public class RelayCommandGenericTests
     }
 
     [Test]
+    public void CanExecute_ThrowsException_WhenNullParameterIsInvalid()
+    {
+        var command = new RelayCommand<int>(_ => { });
+
+        Assert.Throws<ArgumentException>(() =>
+        {
+            command.Execute(null);
+        });
+    }
+
+    [Test]
     public void Execute_ThrowsException_WhenParameterIsInvalid()
     {
         var command = new RelayCommand<string>(_ => { });
