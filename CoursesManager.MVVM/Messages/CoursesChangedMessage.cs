@@ -1,6 +1,4 @@
-﻿using CoursesManager.MVVM.Messages;
-
-namespace CoursesManager.UI.Messages;
+﻿namespace CoursesManager.MVVM.Messages;
 
 public class CoursesChangedMessage : BaseMessage<CoursesChangedMessage>
 {

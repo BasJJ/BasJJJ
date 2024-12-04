@@ -138,10 +138,10 @@ namespace GlobalCacheExample
 
             // Act
             cache.Put("key1", "value1", isPermanent: true);
-            // Attempt to overwrite a permanent item (should not overwrite)
+            // Attempt to overwrite a permanent item (should not overwrite) with a different type of object
 
             // Assert: the CantBeOverwrittenException should be thrown
-            Assert.Throws<CantBeOverwrittenException>(() => cache.Put("key1", "value2", isPermanent: false));
+            Assert.Throws<CantBeOverwrittenException>(() => cache.Put("key1", 1, isPermanent: false));
 
         }
         #endregion
