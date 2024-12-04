@@ -54,7 +54,7 @@ public class GlobalCache
                     throw new CantBeOverwrittenException($"The item with key '{key}' is permanent and cannot be overwritten.");
                 }
 
-                // Update the value if the item is not permanent
+                // Instead of creating a new item (if the item is a non-permanent item), we update the item to reduce memory usage and improve performance. 
                 existingNode.Value = new CacheItem(key, value, isPermanent);
                 _usageOrder.Remove(existingNode);
                 _usageOrder.AddFirst(existingNode);
@@ -73,10 +73,6 @@ public class GlobalCache
         }
     }
 
-    private void OverwritingExistingNode(CacheItem existingNode) 
-    { 
-
-    }
     private void EnsureCapacity()
     {
         if (_cacheMap.Count < _capacity)

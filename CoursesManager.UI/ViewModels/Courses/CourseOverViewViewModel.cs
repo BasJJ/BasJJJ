@@ -12,6 +12,7 @@ using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
 using CoursesManager.UI.ViewModels.Students;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace CoursesManager.UI.ViewModels.Courses
@@ -38,12 +39,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         }
 
         private ObservableCollection<Student> _students;
-
-        public ObservableCollection<Student> Students
-        {
-            get => _students;
-            private set => SetProperty(ref _students, value);
-        }
 
         private ObservableCollection<CourseStudentPayment> _studentPayments;
 
@@ -77,11 +72,6 @@ namespace CoursesManager.UI.ViewModels.Courses
             {
                 throw new InvalidOperationException("No course is currently opened. Ensure the course is loaded in the GlobalCache.");
             }
-
-            Students = new ObservableCollection<Student>(
-                _studentRepository.GetAll()
-                    .Where(s => s.Courses != null && s.Courses.Any(c => c != null && c.Id == CurrentCourse.Id))
-            );
 
             var registrations = _registrationRepository.GetAll()
                 .Where(r => r.CourseId == CurrentCourse.Id)
@@ -133,7 +123,8 @@ namespace CoursesManager.UI.ViewModels.Courses
                 {
                     CurrentCourse.IsPayed = false;
                 }
-                //tot hier verwijderen
+                //tot hier verwijderen. LET OP! bij verwijderen moet nog wel de koppeling gemaakt worden tussen opgehaalde DB info en UI attributen.
+                //(de tegels in het overzicht moeten de daadwerkelijke betaalstatus en aantal studenten doorgeven)
             }
             else if (payment.IsPaid || payment.IsAchieved)
             {
@@ -152,6 +143,7 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         private async void DeleteCourse()
         {
+
             await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
                 if (_registrationRepository.GetAllRegistrationsByCourse(CurrentCourse).Any())
@@ -171,7 +163,6 @@ namespace CoursesManager.UI.ViewModels.Courses
                             DialogTitle = "Bevestiging",
                             DialogText = "Weet je zeker dat je deze cursus wilt verwijderen?"
                         });
-
                     if (result.Outcome == DialogOutcome.Success && result.Data is not null && result.Data.Result)
                     {
                         try
