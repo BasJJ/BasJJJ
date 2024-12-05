@@ -38,7 +38,6 @@ namespace CoursesManager.Tests
             _registrationRepositoryMock = new Mock<IRegistrationRepository>();
             _dialogServiceMock = new Mock<IDialogService>();
 
-            // Mock course repository
             _courseRepositoryMock.Setup(repo => repo.GetAll())
                 .Returns(new List<Course>
                 {
@@ -46,14 +45,12 @@ namespace CoursesManager.Tests
                     new Course { Id = 2, Name = "Science" }
                 });
 
-            // Mock registration repository
             _registrationRepositoryMock.Setup(repo => repo.GetAll())
                 .Returns(new List<Registration>
                 {
                     new Registration { StudentId = 1, CourseId = 1 }
                 });
 
-            // Initialize ViewModel
             _viewModel = new EditStudentViewModel(
                 _studentRepositoryMock.Object,
                 _courseRepositoryMock.Object,
@@ -66,8 +63,8 @@ namespace CoursesManager.Tests
         public async Task OnSaveAsync_ShouldUpdateStudentAndRegistrations_WhenValidationSucceeds()
         {
             // Arrange
-            _viewModel.ParentWindow = new Mock<Window>().Object; // Ensure ParentWindow is set
-            _viewModel.SelectableCourses.First(c => c.Id == 2).IsSelected = true; // Select "Science" course
+            _viewModel.ParentWindow = new Mock<Window>().Object;
+            _viewModel.SelectableCourses.First(c => c.Id == 2).IsSelected = true;
 
             var confirmationResult = DialogResult<DialogResultType>.Builder()
                 .SetSuccess(new DialogResultType { Result = true }, "Confirmed")
@@ -104,7 +101,7 @@ namespace CoursesManager.Tests
         public async Task OnSaveAsync_ShouldNotSave_WhenValidationFails()
         {
             // Arrange
-            _viewModel.ParentWindow = null; // Simulate missing ParentWindow to cause validation failure
+            _viewModel.ParentWindow = null;
 
             _dialogServiceMock
                 .Setup(ds => ds.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
@@ -114,16 +111,13 @@ namespace CoursesManager.Tests
             await _viewModel.OnSaveAsync();
 
             // Assert
-            // Verify that the Student repository's Update method was not called
             _studentRepositoryMock.Verify(repo => repo.Update(It.IsAny<Student>()), Times.Never);
 
-            // Verify that the notification dialog was shown once
             _dialogServiceMock.Verify(ds =>
                     ds.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
                         It.Is<DialogResultType>(result => result.DialogText == "Parentvenster is niet ingesteld.")),
                 Times.Once);
 
-            // Ensure no other dialog calls were made
             _dialogServiceMock.VerifyNoOtherCalls();
         }
     }
