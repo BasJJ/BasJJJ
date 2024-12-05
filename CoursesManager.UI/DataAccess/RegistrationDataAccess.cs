@@ -47,4 +47,18 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
     {
         throw new NotImplementedException();
     }
+
+    public List<Registration> GetByStudentId(int studentId)
+    {
+        try
+        {
+            string query = "SELECT * FROM registrations WHERE student_id = @StudentId";
+            var parameters = new MySqlParameter[] { new MySqlParameter("@StudentId", studentId) };
+            return FetchAll(query, parameters);
+        }
+        catch (MySqlException ex)
+        {
+            throw new InvalidOperationException(ex.Message, ex);
+        }
+    }
 }

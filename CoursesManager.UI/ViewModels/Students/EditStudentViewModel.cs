@@ -86,5 +86,10 @@ namespace CoursesManager.UI.ViewModels.Students
                 }
             }
         }
+
+        public async Task SaveAsync()
+        {
+            await OnSaveAsync();
+        }
     }
 }

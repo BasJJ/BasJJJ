@@ -85,7 +85,7 @@ namespace CoursesManager.Tests
             _viewModel.SelectedCourse = "Math";
 
             // Act
-            await _viewModel.Save();
+            await _viewModel.SaveAsync();
 
             // Assert
             _mockStudentRepository.Verify(repo => repo.Add(It.IsAny<Student>()), Times.Once);
@@ -107,7 +107,7 @@ namespace CoursesManager.Tests
             _viewModel.SelectedCourse = "Math";
 
             // Act
-            await _viewModel.Save();
+            await _viewModel.SaveAsync();
 
             // Assert
             _mockStudentRepository.Verify(repo => repo.Add(It.IsAny<Student>()), Times.Never);
@@ -130,7 +130,7 @@ namespace CoursesManager.Tests
             _viewModel.SelectedCourse = "InvalidCourse";
 
             // Act
-            await _viewModel.Save();
+            await _viewModel.SaveAsync();
 
             // Assert
             _mockStudentRepository.Verify(repo => repo.Add(It.IsAny<Student>()), Times.Never);

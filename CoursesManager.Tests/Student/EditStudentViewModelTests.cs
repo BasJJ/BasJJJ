@@ -83,7 +83,7 @@ namespace CoursesManager.Tests
                 .ReturnsAsync(DialogResult<DialogResultType>.Builder().SetSuccess(new DialogResultType(), "Notification").Build());
 
             // Act
-            await _viewModel.OnSaveAsync();
+            await _viewModel.SaveAsync();
 
             // Assert
             _dialogServiceMock.Verify(service =>
@@ -111,7 +111,7 @@ namespace CoursesManager.Tests
                     It.Is<DialogResultType>(result => result.DialogText == "Parentvenster is niet ingesteld.")));
 
             // Act
-            await _viewModel.OnSaveAsync();
+            await _viewModel.SaveAsync();
 
             // Assert
             // Verify that the Student repository's Update method was not called

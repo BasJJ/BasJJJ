@@ -1,6 +1,7 @@
 ﻿using CoursesManager.UI.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace CoursesManager.UI.DataAccess
@@ -8,6 +9,7 @@ namespace CoursesManager.UI.DataAccess
     public class StudentDataAccess : BaseDataAccess<Student>
     {
         private readonly AddressDataAccess _addressDataAccess;
+        private readonly RegistrationDataAccess _registrationDataAccess;
 
         public StudentDataAccess()
         {
@@ -82,6 +84,12 @@ namespace CoursesManager.UI.DataAccess
                 };
 
                 ExecuteNonQuery(query, parameters);
+
+                foreach (var registration in student.Registrations)
+                {
+                    registration.StudentId = GetLastInsertedId();
+                    _registrationDataAccess.Add(registration);
+                }
             }
             catch (MySqlException ex)
             {
@@ -104,6 +112,8 @@ namespace CoursesManager.UI.DataAccess
             }
         }
 
+
+
         public void Delete(Student student)
         {
             ArgumentNullException.ThrowIfNull(student);
@@ -117,8 +127,7 @@ namespace CoursesManager.UI.DataAccess
 
             throw new NotImplementedException();
         }
-
-        protected override Student FillModel(MySqlDataReader reader)
+        protected  Student FillModel(MySqlDataReader reader)
         {
             var student = new Student
             {
@@ -140,6 +149,8 @@ namespace CoursesManager.UI.DataAccess
             {
                 student.Address = _addressDataAccess.FetchOneById(student.AddressId.Value);
             }
+
+            student.Registrations = new ObservableCollection<Registration>(_registrationDataAccess.GetByStudentId(student.Id));
 
             return student;
         }
