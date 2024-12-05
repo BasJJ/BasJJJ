@@ -14,9 +14,9 @@ using CoursesManager.UI.Messages;
 using CoursesManager.UI.Repositories;
 using System.IO;
 
-namespace CoursesManager.UI.ViewModels.Students
+namespace CoursesManager.UI.ViewModels.Courses
 {
-    class CourseDialogViewModel : DialogViewModel<Course>
+    public class CourseDialogViewModel : DialogViewModel<Course>
     {
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
