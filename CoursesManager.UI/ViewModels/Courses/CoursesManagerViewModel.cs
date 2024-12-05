@@ -125,7 +125,7 @@ namespace CoursesManager.UI.ViewModels
 
         private void OpenCourseOptions(Course parameter)
         {
-            GlobalCache.Instance.Put("Opened Course", parameter, true);
+            GlobalCache.Instance.Put("Opened Course", parameter, false);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
         }
 
