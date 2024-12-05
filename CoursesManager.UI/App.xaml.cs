@@ -10,7 +10,6 @@ using CoursesManager.UI.Messages;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Factory;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
@@ -104,7 +103,7 @@ public partial class App : Application
         //This is a temporary static class that will hold all the data that is used in the application.
         //This is a temporary solution until we have a database.
         Students = DummyDataGenerator.GenerateStudents(60);
-        Registrations = DummyDataGenerator.GenerateRegistrations(50, 30);
+        Registrations = DummyDataGenerator.GenerateRegistrations(Students, Courses);
         Courses = DummyDataGenerator.GenerateCourses(30);
         //Registrations = DummyDataGenerator.GenerateRegistrationBetter(Courses, Students);
         Locations = DummyDataGenerator.GenerateLocations(15);

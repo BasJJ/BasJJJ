@@ -1,25 +1,25 @@
 ﻿using CoursesManager.UI.Models;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using CoursesManager.UI.Database;
 
 namespace CoursesManager.UI.DataAccess
 {
     public class AddressDataAccess : BaseDataAccess<Address>
     {
-        
         public List<Address> GetAll()
         {
-            string query = "SELECT * FROM addresses";
-            return FetchAll(query);
+            string procedureName = StoredProcedures.GetAllAddresses;
+            return FetchAll(procedureName);
         }
 
         public Address? GetById(int id)
         {
             try
             {
-                string query = "SELECT * FROM addresses WHERE id = @Id";
-                var parameters = new MySqlParameter[] { new MySqlParameter("@Id", id) };
-                var addresses = FetchAll(query, parameters);
+                string procedureName = StoredProcedures.GetAddressById;
+                var parameters = new MySqlParameter[] { new MySqlParameter("@p_id", id) };
+                var addresses = FetchAll(procedureName, parameters);
                 return addresses.FirstOrDefault();
             }
             catch (MySqlException ex)
@@ -32,38 +32,20 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "INSERT INTO addresses (country, zipcode, city, street, house_number, house_number_extension, created_at, updated_at) " +
-                               "VALUES (@Country, @ZipCode, @City, @Street, @HouseNumber, @HouseNumberExtension, @CreatedAt, @UpdatedAt)";
-
-                var parameters = new Dictionary<string, object>
+                string procedureName = StoredProcedures.AddAddress;
+                var parameters = new MySqlParameter[]
                 {
-                    { "@Country", address.Country },
-                    { "@ZipCode", address.ZipCode },
-                    { "@City", address.City },
-                    { "@Street", address.Street },
-                    { "@HouseNumber", address.HouseNumber },
-                    { "@HouseNumberExtension", address.HouseNumberExtension ?? (object)DBNull.Value },
-                    { "@CreatedAt", DateTime.Now },
-                    { "@UpdatedAt", DateTime.Now }
+                    new MySqlParameter("@p_country", address.Country),
+                    new MySqlParameter("@p_zipcode", address.ZipCode),
+                    new MySqlParameter("@p_city", address.City),
+                    new MySqlParameter("@p_street", address.Street),
+                    new MySqlParameter("@p_house_number", address.HouseNumber),
+                    new MySqlParameter("@p_house_number_extension", address.HouseNumberExtension ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_created_at", DateTime.Now),
+                    new MySqlParameter("@p_updated_at", DateTime.Now)
                 };
 
-                ExecuteNonQuery(query, parameters);
-            }
-            catch (MySqlException ex)
-            {
-                throw new InvalidOperationException(ex.Message, ex);
-            }
-        }
-
-        public int GetLastInsertedId()
-        {
-            try
-            {
-                string query = "SELECT LAST_INSERT_ID()";
-                using var connection = GetConnection();
-                using var command = new MySqlCommand(query, connection);
-                connection.Open();
-                return Convert.ToInt32(command.ExecuteScalar());
+                ExecuteNonProcedure(procedureName, parameters);
             }
             catch (MySqlException ex)
             {
@@ -75,22 +57,20 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "UPDATE addresses SET country = @Country, zipcode = @ZipCode, city = @City, street = @Street, " +
-                               "house_number = @HouseNumber, house_number_extension = @HouseNumberExtension, updated_at = @UpdatedAt WHERE id = @Id";
-
-                var parameters = new Dictionary<string, object>
+                string procedureName = StoredProcedures.UpdateAddress;
+                var parameters = new MySqlParameter[]
                 {
-                    { "@Country", address.Country },
-                    { "@ZipCode", address.ZipCode },
-                    { "@City", address.City },
-                    { "@Street", address.Street },
-                    { "@HouseNumber", address.HouseNumber },
-                    { "@HouseNumberExtension", address.HouseNumberExtension ?? (object)DBNull.Value },
-                    { "@UpdatedAt", DateTime.Now },
-                    { "@Id", address.Id }
+                    new MySqlParameter("@p_id", address.Id),
+                    new MySqlParameter("@p_country", address.Country),
+                    new MySqlParameter("@p_zipcode", address.ZipCode),
+                    new MySqlParameter("@p_city", address.City),
+                    new MySqlParameter("@p_street", address.Street),
+                    new MySqlParameter("@p_house_number", address.HouseNumber),
+                    new MySqlParameter("@p_house_number_extension", address.HouseNumberExtension ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_updated_at", DateTime.Now)
                 };
 
-                ExecuteNonQuery(query, parameters);
+                ExecuteNonProcedure(procedureName, parameters);
             }
             catch (MySqlException ex)
             {
@@ -102,9 +82,9 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "DELETE FROM addresses WHERE id = @Id";
-                var parameters = new MySqlParameter[] { new MySqlParameter("@Id", id) };
-                ExecuteNonQuery(query, parameters);
+                string procedureName = StoredProcedures.DeleteAddress;
+                var parameters = new MySqlParameter[] { new MySqlParameter("@p_id", id) };
+                ExecuteNonProcedure(procedureName, parameters);
             }
             catch (MySqlException ex)
             {

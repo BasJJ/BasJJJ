@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CoursesManager.UI.Database;
 
 namespace CoursesManager.UI.DataAccess
 {
@@ -14,14 +15,15 @@ namespace CoursesManager.UI.DataAccess
         public StudentDataAccess()
         {
             _addressDataAccess = new AddressDataAccess();
+            _registrationDataAccess = new RegistrationDataAccess();
         }
 
         public List<Student> GetAll()
         {
             try
             {
-                string query = "SELECT * FROM students";
-                return FetchAll(query);
+                string procedureName = StoredProcedures.GetAllStudents;
+                return FetchAll(procedureName);
             }
             catch (MySqlException ex)
             {
@@ -33,8 +35,8 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "SELECT * FROM students WHERE is_deleted = 0";
-                return FetchAll(query);
+                string procedureName = StoredProcedures.GetNotDeletedStudents;
+                return FetchAll(procedureName);
             }
             catch (MySqlException ex)
             {
@@ -46,8 +48,8 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "SELECT * FROM students WHERE is_deleted = 1";
-                return FetchAll(query);
+                string procedureName = StoredProcedures.GetDeletedStudents;
+                return FetchAll(procedureName);
             }
             catch (MySqlException ex)
             {
@@ -65,25 +67,23 @@ namespace CoursesManager.UI.DataAccess
                 // Get the newly created address ID
                 int addressId = _addressDataAccess.GetLastInsertedId();
 
-                string query = "INSERT INTO students (first_name, last_name, email, phone, address_id, is_deleted, deleted_at, created_at, updated_at, insertion, date_of_birth) " +
-                               "VALUES (@FirstName, @LastName, @Email, @Phone, @AddressId, @IsDeleted, @DeletedAt, @CreatedAt, @UpdatedAt, @Insertion, @DateOfBirth)";
-
-                var parameters = new Dictionary<string, object>
+                string procedureName = StoredProcedures.AddStudent;
+                var parameters = new MySqlParameter[]
                 {
-                    { "@FirstName", student.FirstName },
-                    { "@LastName", student.LastName },
-                    { "@Email", student.Email },
-                    { "@Phone", student.Phone },
-                    { "@AddressId", addressId },
-                    { "@IsDeleted", student.IsDeleted },
-                    { "@DeletedAt", student.DeletedAt ?? (object)DBNull.Value },
-                    { "@CreatedAt", DateTime.Now },
-                    { "@UpdatedAt", DateTime.Now },
-                    { "@Insertion", student.Insertion ?? (object)DBNull.Value },
-                    { "@DateOfBirth", student.DateOfBirth }
+                    new MySqlParameter("@p_first_name", student.FirstName),
+                    new MySqlParameter("@p_last_name", student.LastName),
+                    new MySqlParameter("@p_email", student.Email),
+                    new MySqlParameter("@p_phone", student.Phone),
+                    new MySqlParameter("@p_address_id", addressId),
+                    new MySqlParameter("@p_is_deleted", student.IsDeleted),
+                    new MySqlParameter("@p_deleted_at", student.DeletedAt ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_created_at", DateTime.Now),
+                    new MySqlParameter("@p_updated_at", DateTime.Now),
+                    new MySqlParameter("@p_insertion", student.Insertion ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_date_of_birth", student.DateOfBirth)
                 };
 
-                ExecuteNonQuery(query, parameters);
+                ExecuteNonProcedure(procedureName, parameters);
 
                 foreach (var registration in student.Registrations)
                 {
@@ -101,9 +101,9 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                string query = "SELECT * FROM students WHERE id = @Id";
-                var parameters = new MySqlParameter[] { new MySqlParameter("@Id", id) };
-                var students = FetchAll(query, parameters);
+                string procedureName = StoredProcedures.GetStudentById;
+                var parameters = new MySqlParameter[] { new MySqlParameter("@p_id", id) };
+                var students = FetchAll(procedureName, parameters);
                 return students.FirstOrDefault();
             }
             catch (MySqlException ex)
@@ -111,8 +111,6 @@ namespace CoursesManager.UI.DataAccess
                 throw new InvalidOperationException(ex.Message, ex);
             }
         }
-
-
 
         public void Delete(Student student)
         {
@@ -127,7 +125,8 @@ namespace CoursesManager.UI.DataAccess
 
             throw new NotImplementedException();
         }
-        protected  Student FillModel(MySqlDataReader reader)
+
+        protected Student FillModel(MySqlDataReader reader)
         {
             var student = new Student
             {
@@ -147,7 +146,7 @@ namespace CoursesManager.UI.DataAccess
 
             if (student.AddressId.HasValue)
             {
-                student.Address = _addressDataAccess.FetchOneById(student.AddressId.Value);
+                student.Address = _addressDataAccess.GetById(student.AddressId.Value);
             }
 
             student.Registrations = new ObservableCollection<Registration>(_registrationDataAccess.GetByStudentId(student.Id));
@@ -156,5 +155,3 @@ namespace CoursesManager.UI.DataAccess
         }
     }
 }
-
-
