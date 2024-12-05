@@ -150,14 +150,9 @@ namespace CoursesManager.UI.ViewModels.Students
 
         protected abstract Task OnSaveAsync();
 
-        protected void InvokeResponseCallback(DialogResult<bool> dialogResult)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void InvokeResponseCallback(DialogResult<Student> dialogResult)
         {
-            throw new NotImplementedException();
+            ResponseCallback?.Invoke(dialogResult);
         }
     }
 }

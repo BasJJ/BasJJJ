@@ -17,7 +17,7 @@ public class AddStudentViewModel : StudentViewModelBase, INotifyPropertyChanged
     public event EventHandler<Student>? StudentAdded;
 
     public AddStudentViewModel(
-        bool initial,
+        Student? student,
         IStudentRepository studentRepository,
         ICourseRepository courseRepository,
         IRegistrationRepository registrationRepository,
@@ -60,6 +60,6 @@ public class AddStudentViewModel : StudentViewModelBase, INotifyPropertyChanged
 
         StudentAdded?.Invoke(this, Student);
         await TriggerEndAnimationAsync();
-        InvokeResponseCallback(DialogResult<bool>.Builder().SetSuccess(true, "Success").Build());
+        InvokeResponseCallback(DialogResult<Student>.Builder().SetSuccess(Student, "Success").Build());
     }
 }

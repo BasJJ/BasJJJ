@@ -27,6 +27,7 @@ namespace CoursesManager.Tests
         private Mock<IRegistrationRepository> _mockRegistrationRepository;
         private Mock<IDialogService> _mockDialogService;
         private AddStudentViewModel _viewModel;
+        private Student _student;
 
         [SetUp]
         public void SetUp()
@@ -36,6 +37,7 @@ namespace CoursesManager.Tests
             _mockRegistrationRepository = new Mock<IRegistrationRepository>();
             _mockDialogService = new Mock<IDialogService>();
 
+            _student = new Student();
             _mockCourseRepository
                 .Setup(repo => repo.GetAll())
                 .Returns(new List<Course>
@@ -52,7 +54,7 @@ namespace CoursesManager.Tests
                 });
 
             _viewModel = new AddStudentViewModel(
-                initial: true,
+                _student,
                 studentRepository: _mockStudentRepository.Object,
                 courseRepository: _mockCourseRepository.Object,
                 registrationRepository: _mockRegistrationRepository.Object,

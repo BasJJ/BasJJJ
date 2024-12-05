@@ -137,9 +137,9 @@ public partial class App : Application
                 DialogService,
                 student));
 
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>(
-            (initial) => new AddStudentViewModel(
-                initial,
+        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, Student>(
+            (student) => new AddStudentViewModel(
+                student,
                 StudentRepository,
                 CourseRepository,
                 RegistrationRepository,
