@@ -98,7 +98,7 @@ namespace CoursesManager.UI.Models
                         LocationId = _random.Next(1, count),
                         DateCreated = DateTime.Now,
                         Students = students
-                        //Image = getImage()
+                        
                     };
                     courses.Add(course);
                 }

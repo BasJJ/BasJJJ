@@ -6,11 +6,11 @@ public static class StoredProcedures
 
     public const string CoursesDeleteById = "spCourses_DeleteById";
 
-    public const string CourseAddById = "spCourse_AddById";
+    public const string CourseAdd = "spCourse_Add";
 
     public const string CourseGetAll = "spCourse_GetAll";
 
-    public const string CourseEditById = "spCourse_EditById";
+    public const string CourseEdit = "spCourse_Edit";
 
     #endregion
 

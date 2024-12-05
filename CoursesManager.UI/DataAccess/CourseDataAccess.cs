@@ -49,7 +49,7 @@ public class CourseDataAccess : BaseDataAccess<Course>
         try
         {
             ExecuteNonProcedure(
-                StoredProcedures.CourseAddById,
+                StoredProcedures.CourseAdd,
                 new MySqlParameter("@p_coursename", course.Name),
                 new MySqlParameter("@p_coursecode", course.Code),
                 new MySqlParameter("@p_location_id", course.Location.Id),
@@ -83,7 +83,7 @@ public class CourseDataAccess : BaseDataAccess<Course>
         try
         {
             ExecuteNonProcedure(
-                StoredProcedures.CourseEditById,
+                StoredProcedures.CourseEdit,
                 new MySqlParameter("@p_id", course.Id),
                 new MySqlParameter("@p_coursename", course.Name),
                 new MySqlParameter("@p_coursecode", course.Code),

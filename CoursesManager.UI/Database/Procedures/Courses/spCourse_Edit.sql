@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE spCourse_EditById(
+﻿CREATE PROCEDURE spCourse_Edit(
     IN p_id INT,
     IN p_coursename NVARCHAR(255),
     IN p_coursecode NVARCHAR(255),
