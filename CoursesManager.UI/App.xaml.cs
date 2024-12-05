@@ -18,6 +18,7 @@ using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Students;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Services;
 using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI;
@@ -49,6 +50,10 @@ public partial class App : Application
         // Initialize Dummy Data
         SetupDummyDataTemporary();
         InitializeRepositories();
+
+        var studentCleanupService = new StudentCleanupService(StudentRepository);
+        studentCleanupService.CleanupDeletedStudents();
+
 
         // Set MainWindow's DataContext
         MainWindow mw = new()
