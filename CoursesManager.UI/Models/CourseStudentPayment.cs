@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoursesManager.MVVM.Data;
-using CoursesManager.UI.Models;
+﻿using CoursesManager.MVVM.Data;
 
 namespace CoursesManager.UI.Models
 {
