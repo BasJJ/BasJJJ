@@ -31,6 +31,9 @@ namespace CoursesManager.Tests
             _messageBrokerMock = new Mock<IMessageBroker>();
             _navigationServiceMock = new Mock<INavigationService>();
 
+            var dialogResult = DialogResult<Student>.Builder()
+                .SetSuccess(new Student { Id = 3, FirstName = "New", LastName = "Student", Email = "newstudent@example.com" }, "Confirmed")
+                .Build();
             var students = new List<Student>
             {
                 new Student { Id = 1, FirstName = "John", LastName = "Doe", Email = "john@example.com" },
@@ -53,12 +56,13 @@ namespace CoursesManager.Tests
         public void AddStudentCommand_ShouldInvokeDialogAndReloadStudents()
         {
             // Arrange
-            var dialogResult = DialogResult<bool>.Builder()
-                .SetSuccess(true, "Confirmed")
+            var newStudent = new Student { Id = 3, FirstName = "New", LastName = "Student", Email = "newstudent@example.com" };
+            var dialogResult = DialogResult<Student>.Builder()
+                .SetSuccess(newStudent, "Confirmed")
                 .Build();
 
             _dialogServiceMock
-                .Setup(ds => ds.ShowDialogAsync<AddStudentViewModel, bool>(true))
+                .Setup(ds => ds.ShowDialogAsync<AddStudentViewModel, Student>(It.IsAny<Student>()))
                 .ReturnsAsync(dialogResult);
 
             // Act
@@ -66,7 +70,7 @@ namespace CoursesManager.Tests
 
             // Assert
             _dialogServiceMock.Verify(ds =>
-                    ds.ShowDialogAsync<AddStudentViewModel, bool>(true),
+                    ds.ShowDialogAsync<AddStudentViewModel, Student>(It.IsAny<Student>()),
                 Times.Once);
 
             _studentRepositoryMock.Verify(repo => repo.GetAll(), Times.AtLeastOnce);
@@ -148,14 +152,14 @@ namespace CoursesManager.Tests
                 new Student { Id = 2, FirstName = "ActiveStudent", IsDeleted = false }
             };
 
-            _studentRepositoryMock.Setup(repo => repo.GetAllStudents()).Returns(students);
+            _studentRepositoryMock.Setup(repo => repo.GetDeletedStudents()).Returns(students);
             _viewModel.IsToggled = false;
 
             // Act
             _viewModel.ToggleIsDeletedCommand.Execute(null);
 
             // Assert
-            var deletedStudents = _studentRepositoryMock.Object.GetAllStudents()
+            var deletedStudents = _studentRepositoryMock.Object.GetDeletedStudents()
                 .Where(s => s.IsDeleted).ToList();
 
             Assert.That(deletedStudents.Count, Is.EqualTo(1));
