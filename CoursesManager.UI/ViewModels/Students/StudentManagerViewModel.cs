@@ -33,7 +33,6 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
         private Student _selectedStudent;
-
         public Student SelectedStudent
         {
             get => _selectedStudent;
@@ -47,7 +46,6 @@ namespace CoursesManager.UI.ViewModels.Students
         }
 
         private ObservableCollection<CourseStudentPayment> _coursePaymentList;
-
         public ObservableCollection<CourseStudentPayment> CoursePaymentList
         {
             get => _coursePaymentList;

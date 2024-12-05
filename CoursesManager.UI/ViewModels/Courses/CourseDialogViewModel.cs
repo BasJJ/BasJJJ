@@ -12,9 +12,9 @@ using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Messages;
 
-namespace CoursesManager.UI.ViewModels.Students
+namespace CoursesManager.UI.ViewModels.Courses
 {
-    class CourseDialogViewModel : DialogViewModel<Course>
+    public class CourseDialogViewModel : DialogViewModel<Course>
     {
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
