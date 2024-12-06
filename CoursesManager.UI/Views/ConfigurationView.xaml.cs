@@ -17,7 +17,7 @@ namespace CoursesManager.UI.Views
     /// <summary>
     /// Interaction logic for ConfigurationView.xaml
     /// </summary>
-    public partial class ConfigurationView : Window
+    public partial class ConfigurationView : UserControl
     {
         public ConfigurationView()
         {
