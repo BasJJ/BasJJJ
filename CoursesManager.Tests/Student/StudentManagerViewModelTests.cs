@@ -20,6 +20,7 @@ namespace CoursesManager.Tests
         private Mock<IMessageBroker> _messageBrokerMock;
         private Mock<INavigationService> _navigationServiceMock;
         private StudentManagerViewModel _viewModel;
+        private List<Student> students = new List<Student>();
 
         [SetUp]
         public void Setup()
@@ -31,16 +32,13 @@ namespace CoursesManager.Tests
             _messageBrokerMock = new Mock<IMessageBroker>();
             _navigationServiceMock = new Mock<INavigationService>();
 
-            var dialogResult = DialogResult<Student>.Builder()
-                .SetSuccess(new Student { Id = 3, FirstName = "New", LastName = "Student", Email = "newstudent@example.com" }, "Confirmed")
-                .Build();
-            var students = new List<Student>
+            students = new List<Student>
             {
                 new Student { Id = 1, FirstName = "John", LastName = "Doe", Email = "john@example.com" },
                 new Student { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane@example.com" }
             };
 
-            _studentRepositoryMock.Setup(repo => repo.GetAll()).Returns(students);
+            _studentRepositoryMock.Setup(repo => repo.GetNotDeletedStudents()).Returns(students);
 
             _viewModel = new StudentManagerViewModel(
                 _dialogServiceMock.Object,
@@ -50,13 +48,16 @@ namespace CoursesManager.Tests
                 _messageBrokerMock.Object,
                 _navigationServiceMock.Object
             );
+
+            _viewModel.LoadStudents();
+
         }
 
         [Test]
-        public void AddStudentCommand_ShouldInvokeDialogAndReloadStudents()
+        public async Task AddStudentCommand_ShouldInvokeDialogAndReloadStudents()
         {
             // Arrange
-            var newStudent = new Student { Id = 3, FirstName = "New", LastName = "Student", Email = "newstudent@example.com" };
+            var newStudent = new Student { Id = 4, FirstName = "New", LastName = "Student", Email = "newstudent@example.com" };
             var dialogResult = DialogResult<Student>.Builder()
                 .SetSuccess(newStudent, "Confirmed")
                 .Build();
@@ -66,19 +67,20 @@ namespace CoursesManager.Tests
                 .ReturnsAsync(dialogResult);
 
             // Act
-            _viewModel.AddStudentCommand.Execute(null);
+            await Task.Run(() => _viewModel.AddStudentCommand.Execute(null));
 
             // Assert
             _dialogServiceMock.Verify(ds =>
                     ds.ShowDialogAsync<AddStudentViewModel, Student>(It.IsAny<Student>()),
                 Times.Once);
 
-            _studentRepositoryMock.Verify(repo => repo.GetAll(), Times.AtLeastOnce);
-            Assert.That(_viewModel.Students.Count, Is.EqualTo(2));
+            _studentRepositoryMock.Verify(repo => repo.GetNotDeletedStudents(), Times.AtLeastOnce);
+            Assert.That(_viewModel.Students.Count, Is.EqualTo(2)); //Must be fixed
         }
 
+
         [Test]
-        public void EditStudentCommand_WithValidStudent_ShouldInvokeDialog()
+        public async Task EditStudentCommand_WithValidStudent_ShouldInvokeDialog()
         {
             // Arrange
             var student = new Student { Id = 1, FirstName = "John" };
@@ -99,7 +101,7 @@ namespace CoursesManager.Tests
                     ds.ShowDialogAsync<EditStudentViewModel, Student>(student),
                 Times.Once);
 
-            _studentRepositoryMock.Verify(repo => repo.GetAll(), Times.AtLeastOnce);
+            _studentRepositoryMock.Verify(repo => repo.GetNotDeletedStudents(), Times.AtLeastOnce);
         }
 
         [Test]
@@ -123,7 +125,6 @@ namespace CoursesManager.Tests
                     ds.ShowDialogAsync<EditStudentViewModel, Student>(It.IsAny<Student>()),
                 Times.Never);
         }
-
 
         [Test]
         public void OpenStudentDetailViewModel_ShouldNavigateToStudentDetail()
@@ -153,6 +154,7 @@ namespace CoursesManager.Tests
             };
 
             _studentRepositoryMock.Setup(repo => repo.GetDeletedStudents()).Returns(students);
+            _studentRepositoryMock.Setup(repo => repo.GetAll()).Returns(students);
             _viewModel.IsToggled = false;
 
             // Act
@@ -165,6 +167,7 @@ namespace CoursesManager.Tests
             Assert.That(deletedStudents.Count, Is.EqualTo(1));
             Assert.That(deletedStudents.First().IsDeleted, Is.True);
         }
+
 
         [Test]
         public async Task CheckboxChangedCommand_ShouldUpdateRegistration_WhenCheckboxesAreUpdated()

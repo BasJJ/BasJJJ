@@ -103,8 +103,8 @@ public partial class App : Application
         //This is a temporary static class that will hold all the data that is used in the application.
         //This is a temporary solution until we have a database.
         Students = DummyDataGenerator.GenerateStudents(60);
-        Registrations = DummyDataGenerator.GenerateRegistrations(Students, Courses);
         Courses = DummyDataGenerator.GenerateCourses(30);
+        Registrations = DummyDataGenerator.GenerateRegistrations(Students, Courses);
         //Registrations = DummyDataGenerator.GenerateRegistrationBetter(Courses, Students);
         Locations = DummyDataGenerator.GenerateLocations(15);
 

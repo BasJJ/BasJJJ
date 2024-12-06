@@ -41,7 +41,6 @@ public class AddStudentViewModel : StudentViewModelBase, INotifyPropertyChanged
         }
 
         var course = _courseRepository.GetAll().FirstOrDefault(c => c.Name == SelectedCourse);
-
         var registration = new Registration
         {
             StudentId = Student.Id,

@@ -109,7 +109,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
         public void LoadStudents()
         {
-            Students = new ObservableCollection<Student>(_studentRepository.GetNotDeletedStudents());
+            Students = new ObservableCollection<Student>(_studentRepository.GetNotDeletedStudents() ?? new List<Student>());
             FilteredStudentRecords = new ObservableCollection<Student>(Students);
         }
 
@@ -175,7 +175,7 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             if (SelectedStudent == null) return;
 
-            var registrations = _registrationRepository.GetAll().Where(r => r.StudentId == SelectedStudent.Id);
+            var registrations = _registrationRepository.GetAll()?.Where(r => r.StudentId == SelectedStudent.Id) ?? Enumerable.Empty<Registration>();
             CoursePaymentList.Clear();
 
             foreach (var registration in registrations)
@@ -187,7 +187,6 @@ namespace CoursesManager.UI.ViewModels.Students
             }
             OnPropertyChanged(nameof(CoursePaymentList));
         }
-
 
         private async void OpenAddStudentPopup()
         {

@@ -56,12 +56,14 @@ namespace CoursesManager.UI.ViewModels.Students
 
         protected ObservableCollection<SelectableCourse> InitializeSelectableCourses()
         {
-            var registeredCourseIds = _registrationRepository.GetAll()
+            var registrations = _registrationRepository.GetAll() ?? new List<Registration>();
+            var registeredCourseIds = registrations
                 .Where(r => r.StudentId == Student.Id)
                 .Select(r => r.CourseId)
                 .ToHashSet();
 
-            var courses = _courseRepository.GetAll()
+            var courses = _courseRepository.GetAll() ?? new List<Course>();
+            var selectableCourses = courses
                 .Select(course => new SelectableCourse
                 {
                     Id = course.Id,
@@ -70,8 +72,9 @@ namespace CoursesManager.UI.ViewModels.Students
                 })
                 .ToList();
 
-            return new ObservableCollection<SelectableCourse>(courses);
+            return new ObservableCollection<SelectableCourse>(selectableCourses);
         }
+
 
         protected async Task<bool> ValidateFields()
         {
