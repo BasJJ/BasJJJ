@@ -24,7 +24,7 @@ public class EnvManager<T>
 
     public static T Values => _values.Value;
 
-    public EnvManager() { }
+    
 
     private static void LoadValues(T model)
     {

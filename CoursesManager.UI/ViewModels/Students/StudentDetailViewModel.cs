@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -40,7 +39,6 @@ namespace CoursesManager.UI.ViewModels.Students
                 OnPropertyChanged(nameof(CourseDetails));
             }
         }
-
         public StudentDetailViewModel(
             IDialogService dialogService,
             IMessageBroker messageBroker,
@@ -68,7 +66,6 @@ namespace CoursesManager.UI.ViewModels.Students
                 }
             }
         }
-
         private void LoadStudentDetails()
         {
             if (Student == null)
