@@ -81,5 +81,6 @@
 	  <Folder Include="Database\Procedures\Locations\" />
 	  <Folder Include="Database\Procedures\Registrations\" />
 	  <Folder Include="Database\Seed\" />
+	  <Folder Include="Interfaces\" />
 	</ItemGroup>
 </Project>

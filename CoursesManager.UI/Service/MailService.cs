@@ -4,14 +4,20 @@ using System.Net.Mail;
 using System.Collections.Generic;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
+using CoursesManager.MVVM.Mail.MailService;
+using CoursesManager.MVVM.Mail;
+using CoursesManager.MVVM.Mail.MailTemplate;
+using ZstdSharp.Unsafe;
+using System.ComponentModel.DataAnnotations;
 
-public class MailService
+public class MailService : IMailService
 {
     private readonly SmtpConfig _smtpConfig;
+    //Uncomment wanneer Encryption Service klaar is
+    //private readonly EncryptionService _encryptionService;
 
     public MailService()
     {
-        // Haal de MailConnectionString op via EnvManager
         var mailConnectionString = EnvManager<EnvModel>.Values.MailConnectionString;
 
         if (string.IsNullOrWhiteSpace(mailConnectionString))
@@ -21,40 +27,71 @@ public class MailService
 
         _smtpConfig = ParseConnectionString(mailConnectionString);
     }
-
-    public void SendEmail(string toEmail, string subject, string body)
+    public async Task<MailResult> SendMail(IMailTemplate mailTemplate)
     {
-        if (_smtpConfig == null)
-        {
-            throw new Exception("SMTP-configuratie is niet geladen.");
-        }
-
         try
         {
-            using (var smtpClient = new SmtpClient(_smtpConfig.Server, _smtpConfig.Port))
+            var emailMessage = mailTemplate.GenerateMail();
+            using var smtpClient = new SmtpClient(_smtpConfig.Server, _smtpConfig.Port)
             {
-                smtpClient.Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password);
-                smtpClient.EnableSsl = _smtpConfig.EnableSsl;
-
-                MailMessage mail = new MailMessage
-                {
-                    From = new MailAddress(_smtpConfig.User),
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = true // Stel in op true als de body HTML bevat
-                };
-
-                mail.To.Add(toEmail);
-
-                smtpClient.Send(mail);
-
-                Console.WriteLine("E-mail succesvol verzonden.");
-            }
+                Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password), // _smtpConfig.Password aanpassen naar _encryptionService.Decrypt(_smtpConfig.Password) wanneer EncryptionService klaar is
+                EnableSsl = _smtpConfig.EnableSsl
+            };
+            await smtpClient.SendMailAsync(emailMessage);
+            return new MailResult
+            {
+                Outcome = MailOutcome.Success,
+                MailMessage = emailMessage
+            };
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"E-mail verzenden mislukt: {ex.Message}");
+            return new MailResult
+            {
+                Outcome = MailOutcome.Failure,
+                MailMessage = mailTemplate.GenerateMail()
+            };
         }
+    }
+
+    public async Task<List<MailResult>> SendMail(IEnumerable<IMailTemplate> mailTemplates)
+    {
+        var mailResults = new List<MailResult>();
+
+        var tasks = mailTemplates.Select(async template =>
+        {
+            try
+            {
+                var emailMessage = template.GenerateMail();
+
+                using var smtpClient = new SmtpClient(_smtpConfig.Server, _smtpConfig.Port)
+                {
+                    Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password), // _smtpConfig.Password aanpassen naar _encryptionService.Decrypt(_smtpConfig.Password) wanneer EncryptionService klaar is
+                    EnableSsl = _smtpConfig.EnableSsl
+                };
+
+                await smtpClient.SendMailAsync(emailMessage);
+
+                mailResults.Add(new MailResult
+                {
+                    Outcome = MailOutcome.Success,
+                    MailMessage = emailMessage
+                });
+            }
+            catch (Exception ex)
+            {
+                mailResults.Add(new MailResult
+                {
+                    Outcome = MailOutcome.Failure,
+                    MailMessage = template.GenerateMail()
+                });
+
+                Console.WriteLine($"Fout bij verzenden: {ex.Message}");
+            }
+        });
+        await Task.WhenAll(tasks);
+
+        return mailResults;
     }
 
     private SmtpConfig ParseConnectionString(string connectionString)
