@@ -1,10 +1,12 @@
-﻿namespace CoursesManager.UI.Service
+﻿using System;
+
+namespace CoursesManager.UI.Service
 {
     public class StartupManager
     {
-        private readonly ConfigurationService _configurationService;
+        private readonly IConfigurationService _configurationService;
 
-        public StartupManager(ConfigurationService configurationService)
+        public StartupManager(IConfigurationService configurationService)
         {
             _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
         }
@@ -15,7 +17,7 @@
             {
                 if (!_configurationService.ValidateSettings())
                 {
-                    Console.WriteLine("Configuratie is ongeldig. start de configuratie-instellingen.");
+                    Console.WriteLine("Configuratie is ongeldig. start de configuratie-instellingen");
                     OpenConfigurationUI();
                 }
                 else

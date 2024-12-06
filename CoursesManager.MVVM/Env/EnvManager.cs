@@ -20,9 +20,11 @@ public class EnvManager<T>
         return model;
     });
 
+    private static readonly Dictionary<string, string> _envData = new();
+
     public static T Values => _values.Value;
 
-    private EnvManager() { }
+    public EnvManager() { }
 
     private static void LoadValues(T model)
     {
@@ -47,8 +49,80 @@ public class EnvManager<T>
             };
 
             field.SetValue(model, value);
+
+            
+            _envData[envKey] = value.ToString()!;
         }
     }
+
+    public T Load()
+    {
+        var model = new T();
+
+        DotEnv.Fluent()
+            .WithExceptions()
+            .WithEnvFiles(FindEnvFiles().ToArray())
+            .Load();
+
+        LoadValues(model);
+        return model;
+    }
+
+    public void Save(T config)
+    {
+        if (config == null)
+        {
+            throw new ArgumentNullException(nameof(config));
+        }
+
+        var envFields = config.GetType().GetFields().Where(f => f.IsPublic);
+
+        foreach (var field in envFields)
+        {
+            var envKey = field.Name;
+            var value = field.GetValue(config)?.ToString();
+
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                _envData[envKey] = value;
+            }
+        }
+
+        SaveToFile();
+    }
+
+
+
+    public static void UpdateValue(string key, string value)
+    {
+        if (!_envData.ContainsKey(key))
+        {
+            throw new Exception($"Key '{key}' bestaat niet in de .env-data.");
+        }
+
+        _envData[key] = value;
+    }
+
+    public static void SaveToFile()
+    {
+        var startDirectory = Directory.GetCurrentDirectory();
+        var envFilePath = Path.Combine(startDirectory, ".env");
+
+        try
+        {
+            using var writer = new StreamWriter(envFilePath);
+            foreach (var kvp in _envData)
+            {
+                writer.WriteLine($"{kvp.Key}={kvp.Value}");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error while saving .env file: {ex.Message}");
+        }
+    }
+
+
 
     private static List<string> FindEnvFiles()
     {

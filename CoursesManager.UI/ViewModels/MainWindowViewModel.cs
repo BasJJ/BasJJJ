@@ -29,6 +29,8 @@ public class MainWindowViewModel : ViewModelWithNavigation
     public ICommand GoToStudentManagementView { get; private set; }
     public ICommand GoToCourseManagementView { get; private set; }
 
+    public ICommand GoToConfigurationView { get; private set; }
+
     public BitmapImage BackgroundImage { get; private set; }
 
     private INavigationService _navigationService;
@@ -128,6 +130,13 @@ public class MainWindowViewModel : ViewModelWithNavigation
             NavigationService.NavigateTo<CoursesManagerViewModel>();
             IsSidebarHidden = false;
         });
+
+        GoToConfigurationView = new RelayCommand(() =>
+        {
+            NavigationService.NavigateTo<ConfigurationViewModel>();
+            IsSidebarHidden = false;
+        });
+
     }
 
     private async void UpdateSidebarVisibility()

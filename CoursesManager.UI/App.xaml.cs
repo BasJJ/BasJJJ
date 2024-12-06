@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Env;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.ViewModels;
 using CoursesManager.MVVM.Messages;
@@ -18,6 +19,7 @@ using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Students;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Service;
 using CoursesManager.UI.ViewModels.Courses;
 
 namespace CoursesManager.UI;
@@ -42,6 +44,8 @@ public partial class App : Application
     public static IMessageBroker MessageBroker { get; set; } = new MessageBroker();
     public static IDialogService DialogService { get; set; } = new DialogService();
 
+    public static IConfigurationService ConfigurationService { get; set; } = new ConfigurationService(new EncryptionService("hello"));
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -65,7 +69,8 @@ public partial class App : Application
             StudentRepository,
             AddressRepository,
             MessageBroker,
-            DialogService);
+            DialogService,
+            ConfigurationService);
 
         // Register ViewModel
 
@@ -153,6 +158,9 @@ public partial class App : Application
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CoursesManagerViewModel>(nav));
 
         INavigationService.RegisterViewModelFactory((nav) => viewModelFactory.CreateViewModel<CourseOverViewViewModel>(nav));
+
+        INavigationService.RegisterViewModelFactory(() => viewModelFactory.CreateViewModel<ConfigurationViewModel>());
+
     }
 
     /// <summary>

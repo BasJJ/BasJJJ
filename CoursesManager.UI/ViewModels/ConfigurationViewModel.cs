@@ -1,37 +1,34 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
+using CoursesManager.MVVM.Data;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Service;
 
 namespace CoursesManager.UI.ViewModels
 {
-    public class ConfigurationViewModel : INotifyPropertyChanged
+    public class ConfigurationViewModel : ViewModel
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private  readonly  ConfigurationService _configurationService;
+        private readonly IConfigurationService _configurationService;
 
         private EnvModel _appConfig;
 
         public EnvModel AppConfig
         {
             get => _appConfig;
-            set
-            {
-                _appConfig = value;
-                OnPropertyChanged(nameof(AppConfig));
-            }
+            set => SetProperty(ref _appConfig, value);
         }
 
-        public ICommand SaveCommand { get;  }
 
-        public ConfigurationViewModel(ConfigurationService configurationService)
+        public ICommand SaveCommand { get; }
+
+        public ConfigurationViewModel(IConfigurationService configurationService)
         {
             _configurationService = configurationService;
 
             InitializeSettings();
-            
+
             SaveCommand = new RelayCommand(ValidateAndSave, CanSave);
         }
 
@@ -49,7 +46,7 @@ namespace CoursesManager.UI.ViewModels
                     throw new InvalidOperationException("Instellingen zijn ongeldig. Controleer de ingevoerde waarden.");
                 }
 
-               
+
                 _configurationService.SaveEnvSettings(AppConfig);
                 Console.WriteLine("Instellingen succesvol opgeslagen!");
             }
@@ -59,18 +56,11 @@ namespace CoursesManager.UI.ViewModels
             }
         }
 
-       
+
         private bool CanSave()
         {
             return !string.IsNullOrWhiteSpace(AppConfig.ConnectionString) &&
                    !string.IsNullOrWhiteSpace(AppConfig.MailConnectionString);
         }
-
-        
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
     }
 }
