@@ -19,6 +19,7 @@ public static class StoredProcedures
     #region Registrations
 
     public const string RegistrationsGetByCourseId = "spRegistrations_GetByCourseId";
+    public const string RegistrationsGetByStudentId = "spRegistrations_GetByStudentId"; 
 
     #endregion
 
