@@ -52,9 +52,21 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
     {
         try
         {
-            string query = "SELECT * FROM registrations WHERE student_id = @StudentId";
-            var parameters = new MySqlParameter[] { new MySqlParameter("@StudentId", studentId) };
-            return FetchAll(query, parameters);
+            var result = ExecuteProcedure("GetRegistrationsByStudentId", new MySqlParameter[]
+            {
+                new MySqlParameter("@p_student_id", studentId)
+            });
+
+            return result.Select(row => new Registration
+            {
+                Id = Convert.ToInt32(row["id"]),
+                CourseId = Convert.ToInt32(row["course_id"]),
+                StudentId = Convert.ToInt32(row["student_id"]),
+                RegistrationDate = Convert.ToDateTime(row["registration_date"]),
+                PaymentStatus = Convert.ToBoolean(row["payment_status"]),
+                IsAchieved = Convert.ToBoolean(row["is_achieved"]),
+                IsActive = Convert.ToBoolean(row["is_active"])
+            }).ToList();
         }
         catch (MySqlException ex)
         {
