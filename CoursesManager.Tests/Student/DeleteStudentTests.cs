@@ -84,7 +84,7 @@ namespace CoursesManager.Tests
             // Act
             await Task.Run(() => _viewModel.DeleteStudentCommand.Execute(_testStudent));
             _testStudent.IsDeleted = true;
-            _testStudent.date_deleted = DateTime.Now;
+            _testStudent.DeletedAt = DateTime.Now;
 
             // Assert
             _mockStudentRepository.Verify(repo => repo.Update(_testStudent), Times.Once);
