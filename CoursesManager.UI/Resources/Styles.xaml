@@ -353,6 +353,29 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle1">
+        <Setter Property="Background" Value="#F5F5F5" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Cursor" Value="Arrow" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="15"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FontFamily" Value="Courier New" />
+    </Style>
+
 
     <!-- DataGrid Style -->
     <Style x:Key="CustomDataGridStyle" TargetType="DataGrid">

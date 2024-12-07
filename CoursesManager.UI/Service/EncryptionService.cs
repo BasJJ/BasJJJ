@@ -48,28 +48,7 @@ namespace CoursesManager.UI.Service
                 throw new ArgumentException("De tekst om te ontsleutelen mag niet leeg zijn.", nameof(encryptedText));
             }
 
-            var parts = encryptedText.Split(':');
-            if (parts.Length != 2)
-            {
-                Console.WriteLine($"Decryptie mislukt: Ongeldig formaat. Tekst: {encryptedText}");
-                throw new FormatException("De versleutelde tekst is in een ongeldig formaat.");
-            }
-
-            var iv = Convert.FromBase64String(parts[0]);
-            var encryptedBytes = Convert.FromBase64String(parts[1]);
-
-            using (var aes = Aes.Create())
-            {
-                aes.Key = Convert.FromBase64String(key);
-                aes.IV = iv;
-
-                using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
-                {
-                    var decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
-                    return System.Text.Encoding.UTF8.GetString(decryptedBytes);
-                }
-            }
+            return encryptedText;
         }
-
     }
 }

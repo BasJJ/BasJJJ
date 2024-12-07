@@ -4,8 +4,8 @@ namespace CoursesManager.UI.Models
 {
     public class EnvModel
     {
-        public string ConnectionString { get; set; }
-        public string MailConnectionString { get; set; }
+        public string ConnectionString = string.Empty;
+        public string MailConnectionString = string.Empty;
 
     }
 }

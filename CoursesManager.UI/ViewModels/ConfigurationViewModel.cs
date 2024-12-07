@@ -13,6 +13,8 @@ namespace CoursesManager.UI.ViewModels
     {
         private readonly IConfigurationService _configurationService;
 
+        
+
         private string _dbServer;
         public string DbServer
         {
@@ -38,8 +40,17 @@ namespace CoursesManager.UI.ViewModels
         public string DbPassword
         {
             get => _dbPassword;
-            set => SetProperty(ref _dbPassword, value);
+            set
+            {
+                if (SetProperty(ref _dbPassword, value))
+                {
+                    OnPropertyChanged(nameof(MaskedDbPassword));
+                }
+            }
         }
+
+        public string MaskedDbPassword => new string('●', _dbPassword?.Length ?? 0);
+
 
         private string _dbName;
         public string DbName
@@ -74,8 +85,15 @@ namespace CoursesManager.UI.ViewModels
         public string MailPassword
         {
             get => _mailPassword;
-            set => SetProperty(ref _mailPassword, value);
+            set {
+                if (SetProperty(ref _mailPassword, value))
+                {
+                    OnPropertyChanged(nameof(MaskedMailPassword));
+                }
+            }
         }
+
+        public string MaskedMailPassword => new string('●', _mailPassword?.Length ?? 0);
 
         private EnvModel _appConfig;
         public EnvModel AppConfig
