@@ -11,23 +11,32 @@ public class EnvManager<T>
     {
         var model = new T();
 
+        var envfiles = FindEnvFiles();
+
+        if (envfiles.Count == 0)
+        {
+            return model;
+        }
+
+
         DotEnv.Fluent()
             .WithExceptions()
-            .WithEnvFiles(FindEnvFiles().ToArray())
+            .WithEnvFiles(envfiles.ToArray())
             .Load();
 
         LoadValues(model);
         return model;
     });
 
-    private static readonly Dictionary<string, string> _envData = new();
+
 
     public static T Values => _values.Value;
 
-    
+
 
     private static void LoadValues(T model)
     {
+
         ArgumentNullException.ThrowIfNull(model);
 
         var envFields = model.GetType().GetFields().Where(f => f.IsPublic);
@@ -36,7 +45,11 @@ public class EnvManager<T>
         {
             var envKey = field.Name;
 
-            if (!EnvReader.HasValue(envKey)) throw new Exception($"Environment value with key: {envKey} not found.");
+            if (!EnvReader.HasValue(envKey))
+            {
+                Console.WriteLine($"Waarde voor sleutel '{envKey}' niet gevonden in .env.");
+                throw new Exception($"Environment value met sleutel: {envKey} niet gevonden.");
+            }
 
             object value = field.FieldType.Name switch
             {
@@ -48,12 +61,11 @@ public class EnvManager<T>
                 _ => throw new Exception($"Invalid type in model: {field.FieldType}")
             };
 
+            Console.WriteLine($"Sleutel: {envKey}, Waarde: {value}");
             field.SetValue(model, value);
-
-            
-            _envData[envKey] = value.ToString()!;
         }
     }
+
 
     public T Load()
     {
@@ -68,19 +80,22 @@ public class EnvManager<T>
         return model;
     }
 
-    public void Save(T config)
+    public static void Save()
     {
-        if (config == null)
+
+        Dictionary<string, string> _envData = new();
+
+        if (Values == null)
         {
-            throw new ArgumentNullException(nameof(config));
+            throw new ArgumentNullException();
         }
 
-        var envFields = config.GetType().GetFields().Where(f => f.IsPublic);
+        var envFields = Values.GetType().GetFields().Where(f => f.IsPublic);
 
         foreach (var field in envFields)
         {
             var envKey = field.Name;
-            var value = field.GetValue(config)?.ToString();
+            var value = field.GetValue(Values)?.ToString();
 
             if (!string.IsNullOrWhiteSpace(value))
             {
@@ -88,22 +103,12 @@ public class EnvManager<T>
             }
         }
 
-        SaveToFile();
+        SaveToFile(_envData);
     }
 
 
 
-    public static void UpdateValue(string key, string value)
-    {
-        if (!_envData.ContainsKey(key))
-        {
-            throw new Exception($"Key '{key}' bestaat niet in de .env-data.");
-        }
-
-        _envData[key] = value;
-    }
-
-    public static void SaveToFile()
+    public static void SaveToFile(Dictionary<string, string> envdata)
     {
         var startDirectory = Directory.GetCurrentDirectory();
         var envFilePath = Path.Combine(startDirectory, ".env");
@@ -111,7 +116,7 @@ public class EnvManager<T>
         try
         {
             using var writer = new StreamWriter(envFilePath);
-            foreach (var kvp in _envData)
+            foreach (var kvp in envdata)
             {
                 writer.WriteLine($"{kvp.Key}={kvp.Value}");
             }
@@ -131,15 +136,24 @@ public class EnvManager<T>
 
         try
         {
-            var files = Directory.GetFiles(startDirectory, "*.env", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(startDirectory, "*.env", SearchOption.TopDirectoryOnly);
 
-            envFiles.AddRange(files);
+            if (files.Length == 0)
+            {
+                Console.WriteLine("Geen .env-bestanden gevonden in de huidige directory.");
+            }
+            else
+            {
+                Console.WriteLine($"Gevonden .env-bestand(en): {string.Join(", ", files)}");
+                envFiles.AddRange(files);
+            }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error while searching for .env files: {ex.Message}");
+            Console.WriteLine($"Fout bij het zoeken naar .env-bestanden: {ex.Message}");
         }
 
         return envFiles;
     }
+
 }

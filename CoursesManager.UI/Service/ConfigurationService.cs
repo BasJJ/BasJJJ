@@ -7,9 +7,7 @@ namespace CoursesManager.UI.Service
     public class ConfigurationService : IConfigurationService
     {
 
-        private readonly Lazy<EnvManager<EnvModel>> _envManager = new(() => new EnvManager<EnvModel>());
         private readonly EncryptionService _encryptionService;
-
 
 
         public ConfigurationService( EncryptionService encryptionService)
@@ -17,43 +15,61 @@ namespace CoursesManager.UI.Service
             _encryptionService = encryptionService ?? throw new ArgumentNullException(nameof(encryptionService));
         }
 
-        public void SaveEnvSettings(EnvModel appConfig)
+        public void SaveEnvSettings(Dictionary<string, string> dbParams, Dictionary<string, string> mailParams)
         {
-            if (appConfig == null)
+            if (dbParams == null || mailParams == null)
             {
-                throw new ArgumentNullException(nameof(appConfig));
+                throw new ArgumentNullException("Parameters voor opslaan mogen niet null zijn.");
             }
 
-            var encryptedConfig = new EnvModel
-            {
-                ConnectionString = _encryptionService.Encrypt(appConfig.ConnectionString),
-                MailConnectionString = _encryptionService.Encrypt(appConfig.MailConnectionString)
-            };
+            var dbConnectionString = BuildConnectionString(dbParams);
+            var mailConnectionString = BuildConnectionString(mailParams);
 
-            _envManager.Value.Save(encryptedConfig); // Gebruik Lazy<T>.Value
+            EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Encrypt(dbConnectionString);
+            EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Encrypt(mailConnectionString);
+
+           EnvManager<EnvModel>.Save();
         }
+
 
         public EnvModel GetDecryptedEnvSettings()
         {
-            var encryptedConfig = _envManager.Value.Load(); // Gebruik Lazy<T>.Value
+            EnvManager<EnvModel>.Values.ConnectionString =
+                _encryptionService.Decrypt(EnvManager<EnvModel>.Values.ConnectionString);
 
-            if (encryptedConfig == null)
+            EnvManager<EnvModel>.Values.MailConnectionString =
+                _encryptionService.Decrypt(EnvManager<EnvModel>.Values.MailConnectionString);
+
+            return EnvManager<EnvModel>.Values;
+        }
+
+
+
+
+        public Dictionary<string, string> GetDatabaseParameters()
+        {
+            var decryptedConfig = GetDecryptedEnvSettings();
+            if (string.IsNullOrWhiteSpace(decryptedConfig.ConnectionString))
             {
-                return new EnvModel();
+                Console.WriteLine("Geen ConnectionString gevonden in de gedecrypteerde instellingen.");
+                return new Dictionary<string, string>();
             }
 
-            var decryptedConfig = new EnvModel
-            {
-                ConnectionString = !string.IsNullOrWhiteSpace(encryptedConfig.ConnectionString)
-                    ? _encryptionService.Decrypt(encryptedConfig.ConnectionString)
-                    : string.Empty, 
-                MailConnectionString = !string.IsNullOrWhiteSpace(encryptedConfig.MailConnectionString)
-                    ? _encryptionService.Decrypt(encryptedConfig.MailConnectionString)
-                    : string.Empty 
-            };
-
-            return decryptedConfig;
+            return ParseConnectionString(decryptedConfig.ConnectionString);
         }
+
+        public Dictionary<string, string> GetMailParameters()
+        {
+            var decryptedConfig = GetDecryptedEnvSettings();
+            if (string.IsNullOrWhiteSpace(decryptedConfig.MailConnectionString))
+            {
+                Console.WriteLine("Geen MailConnectionString gevonden in de gedecrypteerde instellingen.");
+                return new Dictionary<string, string>();
+            }
+
+            return ParseConnectionString(decryptedConfig.MailConnectionString);
+        }
+
 
 
         public bool ValidateSettings()
@@ -75,6 +91,43 @@ namespace CoursesManager.UI.Service
                 _ => throw new ArgumentException("Ongeldige sleutel voor connectiestring.", nameof(key))
             };
         }
+
+        private Dictionary<string, string> ParseConnectionString(string connectionString)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Console.WriteLine("ConnectionString is leeg of null.");
+                return new Dictionary<string, string>();
+            }
+
+            try
+            {
+                var result = connectionString
+                    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .Where(part => part.Contains("="))
+                    .Select(part => part.Split('='))
+                    .ToDictionary(split => split[0].Trim(), split => split[1].Trim());
+
+                foreach (var kvp in result)
+                {
+                    Console.WriteLine($"Parsed: {kvp.Key} = {kvp.Value}");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout bij het parsen van de connectionstring: {ex.Message}");
+                return new Dictionary<string, string>();
+            }
+        }
+
+
+        private string BuildConnectionString(Dictionary<string, string> parameters)
+        {
+            return string.Join(";", parameters.Select(kv => $"{kv.Key}={kv.Value}"));
+        }
+
 
     }
 }

@@ -36,19 +36,19 @@
 
                     <StackPanel Margin="0,10,0,0" VerticalAlignment="Top">
                         <TextBlock Text="Server" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.FirstName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding DbServer, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Poort" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.LastName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding DbPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Gebruiker" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding DbUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding DbPassword, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Database" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding DbName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                     </StackPanel>
                 </StackPanel>
 
@@ -59,16 +59,16 @@
 
                     <StackPanel Margin="0,10,0,0" VerticalAlignment="Top">
                         <TextBlock Text="Server" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.Insertion}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding MailServer, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Poort" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.DateOfBirth}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding MailPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Email" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding MailUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                         <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding Student.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                        <TextBox Text="{Binding MailPassword, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

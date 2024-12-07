@@ -44,12 +44,14 @@ namespace CoursesManager.UI.Service
         {
             if (string.IsNullOrWhiteSpace(encryptedText))
             {
+                Console.WriteLine("Decryptie mislukt: lege of ontbrekende tekst.");
                 throw new ArgumentException("De tekst om te ontsleutelen mag niet leeg zijn.", nameof(encryptedText));
             }
 
             var parts = encryptedText.Split(':');
             if (parts.Length != 2)
             {
+                Console.WriteLine($"Decryptie mislukt: Ongeldig formaat. Tekst: {encryptedText}");
                 throw new FormatException("De versleutelde tekst is in een ongeldig formaat.");
             }
 

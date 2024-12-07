@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Service
 {
     public interface IConfigurationService
     {
-        void SaveEnvSettings(EnvModel appConfig);
         EnvModel GetDecryptedEnvSettings();
         bool ValidateSettings();
+        Dictionary<string, string> GetDatabaseParameters();
+        Dictionary<string, string> GetMailParameters();
+        void SaveEnvSettings(Dictionary<string, string> dbParams, Dictionary<string, string> mailParams);
     }
 }
