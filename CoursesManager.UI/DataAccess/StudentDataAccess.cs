@@ -112,18 +112,61 @@ namespace CoursesManager.UI.DataAccess
             }
         }
 
-        public void Delete(Student student)
+        public void Update(Student student)
         {
-            ArgumentNullException.ThrowIfNull(student);
+            try
+            {
+                // Update the address first
+                _addressDataAccess.Update(student.Address);
 
-            throw new NotImplementedException();
+                // Get the newly created address ID
+                int addressId = _addressDataAccess.GetLastInsertedId();
+
+                ExecuteNonProcedure(
+                    StoredProcedures.EditStudent,
+                    new MySqlParameter("@p_first_name", student.FirstName),
+                    new MySqlParameter("@p_last_name", student.LastName),
+                    new MySqlParameter("@p_email", student.Email),
+                    new MySqlParameter("@p_phone", student.Phone),
+                    new MySqlParameter("@p_address_id", addressId),
+                    new MySqlParameter("@p_is_deleted", student.IsDeleted),
+                    new MySqlParameter("@p_deleted_at", student.DeletedAt ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_created_at", DateTime.Now),
+                    new MySqlParameter("@p_updated_at", DateTime.Now),
+                    new MySqlParameter("@p_insertion", student.Insertion ?? (object)DBNull.Value),
+                    new MySqlParameter("@p_date_of_birth", student.DateOfBirth)
+                );
+
+                LogUtil.Log("Course updated successfully.");
+            }
+            catch (MySqlException ex)
+            {
+                LogUtil.Error($"MySQL error in Update: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error($"General error in Update: {ex.Message}");
+                throw;
+            }
         }
 
         public void DeleteById(int id)
         {
-            ArgumentNullException.ThrowIfNull(id);
-
-            throw new NotImplementedException();
+            try
+            {
+                ExecuteNonProcedure(StoredProcedures.CoursesDeleteById, new MySqlParameter("@p_id", id));
+                LogUtil.Log("Course deleted successfully.");
+            }
+            catch (MySqlException ex)
+            {
+                throw new InvalidOperationException(ex.Message, ex);
+            }
+            catch (Exception ex)
+            {
+                LogUtil.Error($"General error in Update: {ex.Message}");
+                throw;
+            }
         }
 
         protected Student FillModel(MySqlDataReader reader)
