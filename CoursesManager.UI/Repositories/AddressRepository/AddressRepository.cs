@@ -1,5 +1,4 @@
-﻿using CoursesManager.MVVM.Env;
-using CoursesManager.UI.DataAccess;
+﻿using CoursesManager.UI.DataAccess;
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Repositories.AddressRepository;
@@ -8,12 +7,12 @@ public class AddressRepository : IAddressRepository
 {
     private readonly AddressDataAccess _addressDataAccess = new();
 
-    public List<Address> RefreshAll()
+    public List<Address> GetAll()
     {
-        throw new NotImplementedException();
+        return _addressDataAccess.GetAll();
     }
 
-    public List<Address> GetAll()
+    public List<Address> RefreshAll()
     {
         return _addressDataAccess.FetchAll();
     }

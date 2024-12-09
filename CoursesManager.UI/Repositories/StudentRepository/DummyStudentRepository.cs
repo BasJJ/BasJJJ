@@ -14,10 +14,6 @@ namespace CoursesManager.UI.Repositories.StudentRepository
 
         public List<Student> GetAll()
         {
-            return _students.Where(s => !s.IsDeleted).ToList();
-        }
-        public List<Student> GetAllStudents()
-        {
             return _students.ToList();
         }
 
@@ -35,7 +31,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
         {
             if (student == null) throw new ArgumentNullException(nameof(student), "Student cannot be null.");
 
-            student.DateCreated = DateTime.Now;
+            student.CreatedAt = DateTime.Now;
             student.Id = _students.Any() ? _students.Max(s => s.Id) + 1 : 1;
             _students.Add(student);
         }
@@ -50,10 +46,10 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             existingStudent.FirstName = student.FirstName;
             existingStudent.LastName = student.LastName;
             existingStudent.Email = student.Email;
-            existingStudent.PhoneNumber = student.PhoneNumber;
-            existingStudent.PostCode = student.PostCode;
-            existingStudent.HouseNumber = student.HouseNumber;
-            existingStudent.HouseNumberExtension = student.HouseNumberExtension;
+            existingStudent.Phone = student.Phone;
+            existingStudent.Address.ZipCode = student.Address.ZipCode;
+            existingStudent.Address.HouseNumber = student.Address.HouseNumber;
+            existingStudent.Address.HouseNumberExtension = student.Address.HouseNumberExtension;
             existingStudent.IsDeleted = student.IsDeleted;
 
         }
@@ -69,7 +65,7 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             if (student == null) throw new InvalidOperationException($"Student with Id {id} does not exist.");
 
             student.IsDeleted = true;
-            student.date_deleted = DateTime.Now;
+            student.DeletedAt = DateTime.Now;
         }
 
         public bool EmailExists(string email)
@@ -77,6 +73,16 @@ namespace CoursesManager.UI.Repositories.StudentRepository
             if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Email cannot be null or empty.", nameof(email));
 
             return _students.Any(s => s.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && !s.IsDeleted);
+        }
+
+        public List<Student> GetNotDeletedStudents()
+        {
+            return _students.Where(s => !s.IsDeleted).ToList();
+        }
+
+        public List<Student> GetDeletedStudents()
+        {
+            return _students.Where(s => s.IsDeleted).ToList();
         }
     }
 }

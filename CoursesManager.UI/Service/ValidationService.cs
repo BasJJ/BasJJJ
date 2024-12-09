@@ -88,14 +88,17 @@ namespace CoursesManager.UI.Services
         {
             if (parent == null) yield break;
 
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                yield return child;
+            var queue = new Queue<DependencyObject>();
+            queue.Enqueue(parent);
 
-                foreach (var descendant in GetAllControls(child))
+            while (queue.Count > 0)
+            {
+                var current = queue.Dequeue();
+                yield return current;
+
+                foreach (var child in LogicalTreeHelper.GetChildren(current).OfType<DependencyObject>())
                 {
-                    yield return descendant;
+                    queue.Enqueue(child);
                 }
             }
         }

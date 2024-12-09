@@ -38,13 +38,13 @@
                     <TextBox Text="{Binding Student.Email}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Postcode" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.PostCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Address.ZipCode}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Straatnaam" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.StreetName}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Address.Street}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                     
                     <TextBlock Text="Land" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Address.Country}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                 </StackPanel>
 
@@ -57,13 +57,13 @@
                     <TextBox Text="{Binding Student.DateOfBirth}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Telefoonnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.PhoneNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Phone}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Huisnummer" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Address.HouseNumber}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
 
                     <TextBlock Text="Stad" Margin="0,0,0,5" />
-                    <TextBox Text="{Binding Student.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
+                    <TextBox Text="{Binding Student.Address.City}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle}" IsReadOnly="True" Margin="0,0,0,15" />
                 </StackPanel>
             </Grid>
 
