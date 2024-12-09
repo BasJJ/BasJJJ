@@ -137,7 +137,7 @@ namespace CoursesManager.UI.DataAccess
                     new MySqlParameter("@p_date_of_birth", student.DateOfBirth)
                 );
 
-                LogUtil.Log("Course updated successfully.");
+                LogUtil.Log($"Student: {student.Id} updated successfully");
             }
             catch (MySqlException ex)
             {

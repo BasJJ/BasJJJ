@@ -43,9 +43,32 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
         throw new NotImplementedException();
     }
 
-    public void Update(Registration data)
+    public void Update(Registration registration)
     {
-        throw new NotImplementedException();
+        try
+        {
+            ExecuteNonProcedure(
+                StoredProcedures.EditRegistration,
+                new MySqlParameter("@p_is_achieved", registration.IsAchieved),
+                new MySqlParameter("@p_is_active", registration.IsActive),
+                new MySqlParameter("@p_payment_status", registration.PaymentStatus),
+                new MySqlParameter("@p_registration_date", registration.RegistrationDate),
+                new MySqlParameter("@p_student_id", registration.StudentId),
+                new MySqlParameter("@p_course_id", registration.CourseId)
+            );
+
+            LogUtil.Log($"Registration updated successfully for Student ID: {registration.StudentId}, Course ID: {registration.CourseId}");
+        }
+        catch (MySqlException ex)
+        {
+            LogUtil.Error($"MySQL error in Update: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LogUtil.Error($"General error in Update: {ex.Message}");
+            throw;
+        }
     }
 
     public List<Registration> GetByStudentId(int studentId)
