@@ -129,15 +129,15 @@
                         <!-- PostCode -->
                         <TextBlock Text="Postcode*" Grid.Row="7" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.PostCode, UpdateSourceTrigger=PropertyChanged}"
-                             local:ValidationProperties.IsRequired="True"
-                             Tag="Postcode"
-                             Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
+                                 Text="{Binding Student.Address.ZipCode, UpdateSourceTrigger=PropertyChanged}"
+                                 local:ValidationProperties.IsRequired="True"
+                                 Tag="Postcode"
+                                 Grid.Row="8" Grid.Column="0" Margin="0,0,10,10" />
 
                         <!-- Huisnummer -->
                         <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.HouseNumber, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Student.Address.Phone, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Huisnummer"
                              Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />
@@ -145,7 +145,7 @@
                         <!-- Straatnaam -->
                         <TextBlock Text="Straatnaam*" Grid.Row="9" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.StreetName, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Student.Address.Street, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Straatnaam"
                              Grid.Row="10" Grid.Column="0" Margin="0,0,10,10" />
@@ -153,7 +153,7 @@
                         <!-- Land -->
                         <TextBlock Text="Land*" Grid.Row="9" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.Country, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Student.Address.Country, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Land"
                              Grid.Row="10" Grid.Column="1" Margin="0,0,10,10" />
@@ -161,7 +161,7 @@
                         <!-- Stad -->
                         <TextBlock Text="Stad*" Grid.Row="11" Grid.Column="0" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.City, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Student.Address.City, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Stad"
                              Grid.Row="12" Grid.Column="0" Margin="0,0,10,10" />

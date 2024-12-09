@@ -1,41 +1,49 @@
 ﻿using CoursesManager.UI.Models;
+using CoursesManager.UI.DataAccess;
+using MySql.Data.MySqlClient;
 
 namespace CoursesManager.UI.Repositories.StudentRepository;
 
 public class StudentRepository : IStudentRepository
 {
+    private readonly StudentDataAccess _studentDataAccess = new();
+
     public List<Student> GetAll()
     {
-        throw new NotImplementedException();
+        return _studentDataAccess.GetAll();
     }
-    // I don't wanna ruin other view models in the app so i made this temporary 
-    public List<Student> GetAllStudents()
-    {
-        throw new NotImplementedException();
 
+    public List<Student> GetNotDeletedStudents()
+    {
+        return _studentDataAccess.GetNotDeletedStudents();
+    }
+
+    public List<Student> GetDeletedStudents()
+    {
+        return _studentDataAccess.GetDeletedStudents();
     }
 
     public List<Student> RefreshAll()
     {
-        throw new NotImplementedException();
+        return _studentDataAccess.FetchAll();
     }
 
     public Student? GetById(int id)
     {
-        throw new NotImplementedException();
+        return _studentDataAccess.GetById(id);
     }
 
-    public void Add(Student data)
+    public void Add(Student student)
+    {
+        _studentDataAccess.Add(student);
+    }
+
+    public void Update(Student student)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Student data)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(Student data)
+    public void Delete(Student student)
     {
         throw new NotImplementedException();
     }

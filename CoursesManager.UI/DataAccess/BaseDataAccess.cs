@@ -121,6 +121,13 @@ public abstract class BaseDataAccess<T> where T : new()
         return ExecuteNonQuery(query, parameters);
     }
 
+    public int GetLastInsertedId()
+    {
+        using var connection = GetConnection();
+        using var command = new MySqlCommand("SELECT LAST_INSERT_ID()", connection);
+        connection.Open();
+        return Convert.ToInt32(command.ExecuteScalar());
+    }
     protected T FillModel(MySqlDataReader mySqlReader, PropertyInfo[] properties)
     {
         T model = new();

@@ -59,7 +59,7 @@ namespace CoursesManager.Tests.ViewModels
                             {
                                 Id = 1,
                                 Country = "USA",
-                                Zipcode = "12345",
+                                ZipCode = "12345",
                                 City = "City",
                                 Street = "Street",
                                 HouseNumber = "123"
