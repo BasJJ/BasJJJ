@@ -30,22 +30,22 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 
     public List<Registration> GetAll()
     {
-        throw new NotImplementedException();
+        return new List<Registration>();
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+
     }
 
     public void Add(Registration data)
     {
-        throw new NotImplementedException();
+
     }
 
     public void Update(Registration data)
     {
-        throw new NotImplementedException();
+
     }
 
     public List<Registration> GetByStudentId(int studentId)

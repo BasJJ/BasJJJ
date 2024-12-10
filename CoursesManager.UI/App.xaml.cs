@@ -4,6 +4,7 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.ViewModels;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.UI.DataAccess;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Dialogs.Windows;
 using CoursesManager.UI.Messages;
@@ -82,20 +83,18 @@ public partial class App : Application
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
         // Navigate to the Initial ViewModel
-        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<CoursesManagerViewModel>();
 
         mw.Show();
-
-        NavigationService.NavigateTo<StudentManagerViewModel>();
     }
 
     private void InitializeRepositories()
     {
-        CourseRepository = new DummyCourseRepository(Courses);
+        CourseRepository = new CourseRepository();
         StudentRepository = new DummyStudentRepository(Students);
-        RegistrationRepository = new DummyRegistrationRepository(Registrations);
+        RegistrationRepository = new RegistrationRepository();
         AddressRepository = new DummyAddressRepository();
-        LocationRepository = new DummyLocationRepository();
+        LocationRepository = new LocationRepository();
     }
 
     private static void SetupDummyDataTemporary()
