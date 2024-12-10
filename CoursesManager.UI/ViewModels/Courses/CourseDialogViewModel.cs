@@ -11,6 +11,8 @@ using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Messages;
+using CoursesManager.UI.Repositories;
+using System.IO;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
@@ -19,15 +21,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
-        
-        
-
-        private bool _isDialogOpen;
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
-        }
 
         private BitmapImage? _imageSource;
         public BitmapImage? ImageSource
@@ -48,10 +41,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand CancelCommand { get; }
 
         public ICommand UploadCommand { get; }
-        public ObservableCollection<string> Courses
-        {
-            get; set;
-        }
 
         public ObservableCollection<Location> Locations { get; set; }
 
@@ -63,25 +52,27 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             IsStartAnimationTriggered = true;
 
-            Course = course != null
-                   ? course.Copy()
-                    : new Course
-                    {
-                        Name = string.Empty,
-                        Code = string.Empty,
-                        Description = string.Empty,
-                        Location = null,
-                        IsActive = false,
-                        StartDate = DateTime.Now,
-                        EndDate = DateTime.Now,
-                        Image = null,
-
-                    };
-
             OriginalCourse = course;
-            Locations = new ObservableCollection<Location>(_locationRepository.GetAll());
+            var allLocations = _locationRepository.GetAll();
+            Locations = new ObservableCollection<Location>(allLocations);
 
-            Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
+            Course = course != null
+                ? course.Copy()
+                : new Course
+                {
+                    Name = string.Empty,
+                    Code = string.Empty,
+                    Description = string.Empty,
+                    Location = null,
+                    IsActive = false,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    Image = null,
+
+                };
+
+            Course.Location = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
+
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
             CancelCommand = new RelayCommand(OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
@@ -120,23 +111,28 @@ namespace CoursesManager.UI.ViewModels.Courses
         {
             try
             {
-                
                 if (Course == null)
                 {
                     throw new InvalidOperationException("Cursusgegevens ontbreken. Opslaan is niet mogelijk.");
                 }
 
-                
+                LogUtil.Log($"Attempting to save course: {Course.Name}, {Course.Code}, {Course.LocationId}");
+
+                if (Course.Location != null) Course.LocationId = Course.Location.Id;
+
                 if (OriginalCourse == null)
                 {
                     _courseRepository.Add(Course);
+                    LogUtil.Log("Course added successfully via repository.");
                 }
                 else
                 {
                     _courseRepository.Update(Course);
+                    LogUtil.Log("Course updated successfully via repository.");
                 }
 
-                
+
+
                 var successDialogResult = DialogResult<Course>.Builder()
                     .SetSuccess(
                         Course,
@@ -150,8 +146,8 @@ namespace CoursesManager.UI.ViewModels.Courses
             }
             catch (Exception ex)
             {
-                
-                LogUtil.Error(ex.Message);
+                LogUtil.Error($"Error in OnSaveAsync: {ex.Message}");
+
                 await _dialogService.ShowDialogAsync<ErrorDialogViewModel, DialogResultType>(new DialogResultType
                 {
                     DialogText = "Er is iets fout gegaan. Probeer het later opnieuw.",
@@ -159,6 +155,7 @@ namespace CoursesManager.UI.ViewModels.Courses
                 });
             }
         }
+
 
 
         public async void OnCancel()
@@ -182,8 +179,36 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             if (openDialog.ShowDialog() == true)
             {
-                Course!.Image = new BitmapImage(new Uri(openDialog.FileName));
+                
+                var bitmap = new BitmapImage(new Uri(openDialog.FileName));
+
+              
+                Course.Image = ConvertImageToByteArray(bitmap);
+
+                
+                ImageSource = bitmap;
             }
         }
+
+
+
+        public static byte[] ConvertImageToByteArray(BitmapImage image)
+        {
+            if (image == null) throw new ArgumentNullException(nameof(image));
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var encoder = new JpegBitmapEncoder
+                {
+                    QualityLevel = 90 
+                };
+
+                encoder.Frames.Add(BitmapFrame.Create(image));
+                encoder.Save(memoryStream);
+
+                return memoryStream.ToArray();
+            }
+        }
+
     }
 }

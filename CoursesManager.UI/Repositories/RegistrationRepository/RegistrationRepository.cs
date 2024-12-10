@@ -12,6 +12,7 @@ public class RegistrationRepository : BaseRepository, IRegistrationRepository
     public RegistrationRepository()
     {
         _registrationDataAccess = new RegistrationDataAccess();
+        _allRegistrations = new();
         _allRegistrations = GetAll();
     }
 
