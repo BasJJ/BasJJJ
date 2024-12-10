@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
+using CoursesManager.UI.Service;
 
 namespace CoursesManager.UI.Service
 {
@@ -17,32 +18,49 @@ namespace CoursesManager.UI.Service
 
         public void SaveEnvSettings(Dictionary<string, string> dbParams, Dictionary<string, string> mailParams)
         {
-            if (dbParams == null || mailParams == null)
-            {
-                throw new ArgumentNullException("Parameters voor opslaan mogen niet null zijn.");
-            }
+            Console.WriteLine("Encryptie van instellingen gestart...");
 
             var dbConnectionString = BuildConnectionString(dbParams);
             var mailConnectionString = BuildConnectionString(mailParams);
 
+            Console.WriteLine($"Oorspronkelijke DB ConnectionString: {dbConnectionString}");
+            Console.WriteLine($"Oorspronkelijke Mail ConnectionString: {mailConnectionString}");
+
             EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Encrypt(dbConnectionString);
             EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Encrypt(mailConnectionString);
+
+            Console.WriteLine($"Versleutelde DB ConnectionString: {EnvManager<EnvModel>.Values.ConnectionString}");
+            Console.WriteLine($"Versleutelde Mail ConnectionString: {EnvManager<EnvModel>.Values.MailConnectionString}");
 
             EnvManager<EnvModel>.Save();
         }
 
 
+        public string SafeDecrypt(string encryptedText)
+        {
+            try
+            {
+                return _encryptionService.Decrypt(encryptedText);
+            }
+            catch
+            {
+                Console.WriteLine("Fout bij decryptie. Mogelijk onjuiste sleutel of waarde niet versleuteld.");
+                return encryptedText; 
+            }
+        }
+
 
         public EnvModel GetDecryptedEnvSettings()
         {
             EnvManager<EnvModel>.Values.ConnectionString =
-                _encryptionService.Decrypt(EnvManager<EnvModel>.Values.ConnectionString);
+                SafeDecrypt(EnvManager<EnvModel>.Values.ConnectionString);
 
             EnvManager<EnvModel>.Values.MailConnectionString =
-                _encryptionService.Decrypt(EnvManager<EnvModel>.Values.MailConnectionString);
+                SafeDecrypt(EnvManager<EnvModel>.Values.MailConnectionString);
 
             return EnvManager<EnvModel>.Values;
         }
+
 
 
 
