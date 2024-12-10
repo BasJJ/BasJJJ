@@ -44,11 +44,39 @@ namespace CoursesManager.UI.Service
         {
             if (string.IsNullOrWhiteSpace(encryptedText))
             {
-                Console.WriteLine("Decryptie mislukt: lege of ontbrekende tekst.");
                 throw new ArgumentException("De tekst om te ontsleutelen mag niet leeg zijn.", nameof(encryptedText));
             }
 
-            return encryptedText;
+            
+            var parts = encryptedText.Split(':');
+            if (parts.Length != 2)
+            {
+                Console.WriteLine("Waarschuwing: De tekst lijkt niet versleuteld te zijn. Originele tekst wordt geretourneerd.");
+                return encryptedText; 
+            }
+
+            try
+            {
+                var iv = Convert.FromBase64String(parts[0]);
+                var encryptedBytes = Convert.FromBase64String(parts[1]);
+
+                using (var aes = Aes.Create())
+                {
+                    aes.Key = Convert.FromBase64String(key);
+                    aes.IV = iv;
+
+                    using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                    {
+                        var decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+                        return System.Text.Encoding.UTF8.GetString(decryptedBytes);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout bij het ontsleutelen: {ex.Message}");
+                throw;
+            }
         }
     }
 }

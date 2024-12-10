@@ -28,8 +28,9 @@ namespace CoursesManager.UI.Service
             EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Encrypt(dbConnectionString);
             EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Encrypt(mailConnectionString);
 
-           EnvManager<EnvModel>.Save();
+            EnvManager<EnvModel>.Save();
         }
+
 
 
         public EnvModel GetDecryptedEnvSettings()
@@ -78,18 +79,6 @@ namespace CoursesManager.UI.Service
 
             return !string.IsNullOrWhiteSpace(config.ConnectionString) &&
                    !string.IsNullOrWhiteSpace(config.MailConnectionString);
-        }
-
-        public string GetConnectionString(string key)
-        {
-            var config = GetDecryptedEnvSettings();
-
-            return key switch
-            {
-                "Database" => config.ConnectionString,
-                "Mail" => config.MailConnectionString,
-                _ => throw new ArgumentException("Ongeldige sleutel voor connectiestring.", nameof(key))
-            };
         }
 
         private Dictionary<string, string> ParseConnectionString(string connectionString)

@@ -156,6 +156,7 @@ namespace CoursesManager.UI.ViewModels
                     { "Password", MailPassword }
                 };
 
+                // Save encrypted data
                 _configurationService.SaveEnvSettings(dbParams, mailParams);
                 Console.WriteLine("Instellingen succesvol opgeslagen!");
             }
@@ -164,6 +165,7 @@ namespace CoursesManager.UI.ViewModels
                 Console.WriteLine($"Fout bij opslaan: {ex.Message}");
             }
         }
+
 
         private bool CanSave()
         {

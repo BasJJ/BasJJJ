@@ -331,13 +331,12 @@
         </Setter>
     </Style>
 
-    <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle">
-        <Setter Property="IsReadOnly" Value="True" />
-        <Setter Property="Background" Value="#F5F5F5" />
+    <Style TargetType="TextBox" x:Key="EditableMaterialTextBoxStyle">
+        <Setter Property="Background" Value="#FFFFFF" />
         <Setter Property="BorderBrush" Value="#E0E0E0" />
         <Setter Property="Foreground" Value="Black" />
-        <Setter Property="Cursor" Value="Arrow" />
-        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Cursor" Value="IBeam" />
+        <Setter Property="Focusable" Value="True" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
@@ -353,6 +352,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
     <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle1">
         <Setter Property="Background" Value="#F5F5F5" />
         <Setter Property="BorderBrush" Value="#E0E0E0" />
