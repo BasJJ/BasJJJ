@@ -26,7 +26,11 @@ public static class StoredProcedures
     #region Registrations
 
     public const string RegistrationsGetByCourseId = "spRegistrations_GetByCourseId";
-    public const string RegistrationsGetByStudentId = "spRegistrations_GetByStudentId"; 
+    public const string RegistrationsGetByStudentId = "spRegistrations_GetByStudentId";
+    public const string EditRegistrations = "spRegistrations_Edit";
+    public const string AddRegistrations = "spRegistrations_Add";
+    public const string GetAllRegistrations = "spRegistrations_GetAll";
+    public const string DeleteRegistrations = "spRegistrations_Delete";
 
     #endregion
 

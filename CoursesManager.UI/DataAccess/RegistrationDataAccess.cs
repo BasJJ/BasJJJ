@@ -30,22 +30,85 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 
     public List<Registration> GetAll()
     {
-        return new List<Registration>();
+        return FetchAll(StoredProcedures.GetAllRegistrations);
     }
 
-    public void Delete(int id)
+    public void Delete(Registration registration)
     {
-
+        try {
+            ExecuteNonProcedure(
+                    StoredProcedures.DeleteRegistrations,
+                    new MySqlParameter("@p_id", registration.Id)
+                );
+        LogUtil.Log($"Registration deleted successfully for Registration ID: {registration.Id}");
+        }
+        catch (MySqlException ex)
+        {
+            LogUtil.Error($"MySQL error in Update: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LogUtil.Error($"General error in Update: {ex.Message}");
+            throw;
+        }
     }
 
-    public void Add(Registration data)
+    public void Add(Registration registration)
     {
+        try
+        {
+            ExecuteNonProcedure(
+                StoredProcedures.AddRegistrations,
+                new MySqlParameter("@p_is_achieved", registration.IsAchieved),
+                new MySqlParameter("@p_is_active", registration.IsActive),
+                new MySqlParameter("@p_payment_status", registration.PaymentStatus),
+                new MySqlParameter("@p_registration_date", registration.RegistrationDate),
+                new MySqlParameter("@p_student_id", registration.StudentId),
+                new MySqlParameter("@p_course_id", registration.CourseId)
+            );
 
+            LogUtil.Log($"Registration added successfully for Student ID: {registration.StudentId}, Course ID: {registration.CourseId}");
+        }
+        catch (MySqlException ex)
+        {
+            LogUtil.Error($"MySQL error in Update: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LogUtil.Error($"General error in Update: {ex.Message}");
+            throw;
+        }
     }
 
-    public void Update(Registration data)
+    public void Update(Registration registration)
     {
+        try
+        {
+            ExecuteNonProcedure(
+                StoredProcedures.EditRegistrations,
+                new MySqlParameter("@p_id", registration.Id),
+                new MySqlParameter("@p_is_achieved", registration.IsAchieved),
+                new MySqlParameter("@p_is_active", registration.IsActive),
+                new MySqlParameter("@p_payment_status", registration.PaymentStatus),
+                new MySqlParameter("@p_registration_date", registration.RegistrationDate),
+                new MySqlParameter("@p_student_id", registration.StudentId),
+                new MySqlParameter("@p_course_id", registration.CourseId)
+            );
 
+            LogUtil.Log($"Registration updated successfully for Student ID: {registration.StudentId}, Course ID: {registration.CourseId}");
+        }
+        catch (MySqlException ex)
+        {
+            LogUtil.Error($"MySQL error in Update: {ex.Message}");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LogUtil.Error($"General error in Update: {ex.Message}");
+            throw;
+        }
     }
 
     public List<Registration> GetByStudentId(int studentId)
