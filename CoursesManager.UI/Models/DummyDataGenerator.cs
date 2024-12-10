@@ -88,27 +88,29 @@ namespace CoursesManager.UI.Models
         {
             ObservableCollection<Registration> registrations = new ObservableCollection<Registration>();
 
-            foreach (var student in students)
-            {
-                int courseId = _random.Next(0, courses.Count);
-                Course course = courses[courseId];
-
-                Registration registration = new Registration
+            for (int i = 0; i < 5; i++) {
+                foreach (var student in students)
                 {
-                    Id = registrations.Count,
-                    StudentId = student.Id,
-                    Student = student,
-                    CourseId = course.Id,
-                    Course = course,
-                    RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
-                    PaymentStatus = _random.Next(0, 2) == 1,
-                    IsActive = _random.Next(0, 2) == 1,
-                    IsAchieved = _random.Next(0, 2) == 1
-                };
+                    int courseId = _random.Next(0, courses.Count);
+                    Course course = courses[courseId];
 
-                student.Registrations.Add(registration);
-                course.Students.Add(student);
-                registrations.Add(registration);
+                    Registration registration = new Registration
+                    {
+                        Id = registrations.Count,
+                        StudentId = student.Id,
+                        Student = student,
+                        CourseId = course.Id,
+                        Course = course,
+                        RegistrationDate = DateTime.Now.AddDays(-_random.Next(1, 30)),
+                        PaymentStatus = _random.Next(0, 2) == 1,
+                        IsActive = _random.Next(0, 2) == 1,
+                        IsAchieved = _random.Next(0, 2) == 1
+                    };
+
+                    student.Registrations.Add(registration);
+                    course.Students.Add(student);
+                    registrations.Add(registration);
+                }
             }
 
             return registrations;

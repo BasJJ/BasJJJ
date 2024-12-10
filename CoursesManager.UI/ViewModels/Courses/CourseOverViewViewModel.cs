@@ -27,6 +27,10 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand DeleteCourseCommand { get; set; }
         public ICommand CheckboxChangedCommand { get; }
 
+        public ICommand CertificateMailCommand { get; set; }
+        public ICommand PaymentMailCommand { get; set; }
+        public ICommand StartCourseMailCommand { get; set; }
+
         private readonly IStudentRepository _studentRepository;
         private readonly IRegistrationRepository _registrationRepository;
 
@@ -36,6 +40,27 @@ namespace CoursesManager.UI.ViewModels.Courses
         {
             get => _currentCourse;
             private set => SetProperty(ref _currentCourse, value);
+        }
+
+        private bool _isPaid;
+        public bool IsPaid
+        {
+            get => _isPaid;
+            set => SetProperty(ref _isPaid, value);
+        }
+
+        private bool _hasStarted;
+        public bool HasStarted
+        {
+            get => _hasStarted;
+            set => SetProperty(ref _hasStarted, value);
+        }
+
+        private bool _isFinished;
+        public bool IsFinished
+        {
+            get => _isFinished;
+            set => SetProperty(ref _isFinished, value);
         }
 
         private ObservableCollection<Student> _students;
@@ -61,6 +86,11 @@ namespace CoursesManager.UI.ViewModels.Courses
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
 
+            PaymentMailCommand = new RelayCommand(SendPaymentMail);
+            StartCourseMailCommand = new RelayCommand(SendStartCourseMail);
+            CertificateMailCommand = new RelayCommand(SendCertificateMail);
+
+
             LoadCourseData();
         }
 
@@ -71,6 +101,20 @@ namespace CoursesManager.UI.ViewModels.Courses
             if (CurrentCourse == null)
             {
                 throw new InvalidOperationException("No course is currently opened. Ensure the course is loaded in the GlobalCache.");
+            }
+
+            IsPaid = !CurrentCourse.IsPayed;
+            HasStarted = false;
+            IsFinished = false;
+            if ((CurrentCourse.StartDate - DateTime.Now).TotalDays <= 7 && CurrentCourse.StartDate > DateTime.Now)
+            {
+                HasStarted = true;
+            }
+            if (CurrentCourse.EndDate <= DateTime.Now)
+            {
+                HasStarted = false;
+                IsPaid = false;
+                IsFinished = true;
             }
 
             var registrations = _registrationRepository.GetAll()
@@ -185,6 +229,21 @@ namespace CoursesManager.UI.ViewModels.Courses
                     }
                 }
             });
+        }
+
+        public void SendPaymentMail()
+        {
+
+        }
+
+        public void SendStartCourseMail()
+        {
+
+        }
+
+        public void SendCertificateMail()
+        {
+
         }
 
         private async void ChangeCourse()
