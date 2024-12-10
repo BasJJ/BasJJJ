@@ -1,5 +1,4 @@
-﻿using CoursesManager.UI.Mailing.MailTemplates;
-using CoursesManager.UI.Models;
+﻿using CoursesManager.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.UI.DataAccess
 {
-    internal class MailTemplateDataAccess : BaseDataAccess<MailTemplate>
+    internal class MailTemplateDataAccess : BaseDataAccess<Template>
     {
     }
 }
