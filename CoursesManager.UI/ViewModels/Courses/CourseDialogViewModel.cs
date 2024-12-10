@@ -22,16 +22,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
 
-
-        
-
-        private bool _isDialogOpen;
-        public bool IsDialogOpen
-        {
-            get => _isDialogOpen;
-            set => SetProperty(ref _isDialogOpen, value);
-        }
-
         private BitmapImage? _imageSource;
         public BitmapImage? ImageSource
         {
@@ -51,10 +41,6 @@ namespace CoursesManager.UI.ViewModels.Courses
         public ICommand CancelCommand { get; }
 
         public ICommand UploadCommand { get; }
-        public ObservableCollection<string> Courses
-        {
-            get; set;
-        }
 
         public ObservableCollection<Location> Locations { get; set; }
 
@@ -66,29 +52,27 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             IsStartAnimationTriggered = true;
 
-            Course = course != null
-                   ? course.Copy()
-                    : new Course
-                    {
-                        Name = string.Empty,
-                        Code = string.Empty,
-                        Description = string.Empty,
-                        Location = null,
-                        IsActive = false,
-                        StartDate = DateTime.Now,
-                        EndDate = DateTime.Now,
-                        Image = null,
-
-                    };
-
             OriginalCourse = course;
             var allLocations = _locationRepository.GetAll();
             Locations = new ObservableCollection<Location>(allLocations);
 
-            // Stel de geselecteerde locatie in
-            SelectedLocation = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
+            Course = course != null
+                ? course.Copy()
+                : new Course
+                {
+                    Name = string.Empty,
+                    Code = string.Empty,
+                    Description = string.Empty,
+                    Location = null,
+                    IsActive = false,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    Image = null,
 
-            Courses = new ObservableCollection<string>(_courseRepository.GetAll().Select(c => c.Name));
+                };
+
+            Course.Location = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
+
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
             CancelCommand = new RelayCommand(OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
@@ -133,6 +117,8 @@ namespace CoursesManager.UI.ViewModels.Courses
                 }
 
                 LogUtil.Log($"Attempting to save course: {Course.Name}, {Course.Code}, {Course.LocationId}");
+
+                if (Course.Location != null) Course.LocationId = Course.Location.Id;
 
                 if (OriginalCourse == null)
                 {
@@ -223,10 +209,6 @@ namespace CoursesManager.UI.ViewModels.Courses
                 return memoryStream.ToArray();
             }
         }
-
-        private object selectedLocation;
-
-        public object SelectedLocation { get => selectedLocation; set => SetProperty(ref selectedLocation, value); }
 
     }
 }

@@ -21,7 +21,14 @@ namespace CoursesManager.UI.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int LocationId { get; set; }
-        public Location? Location { get; set; }
+
+        private Location? _location;
+
+        public Location? Location
+        {
+            get => _location;
+            set => SetProperty(ref _location, value);
+        }
         public DateTime DateCreated { get; set; }
         public ObservableCollection<Student>? Students { get; set; }
 
@@ -137,7 +144,7 @@ namespace CoursesManager.UI.Models
                 StartDate = new DateTime(this.StartDate.Ticks),
                 EndDate = new DateTime(this.EndDate.Ticks),
                 LocationId = this.LocationId,
-                Location = this.Location, 
+                Location = this.Location?.Copy(), 
                 DateCreated = new DateTime(this.DateCreated.Ticks),
                 Students = this.Students != null ? new ObservableCollection<Student>(this.Students) : null,
                 Image = this.Image != null ? (byte[])this.Image.Clone() : null

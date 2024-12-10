@@ -83,18 +83,16 @@ public partial class App : Application
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
         // Navigate to the Initial ViewModel
-        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<CoursesManagerViewModel>();
 
         mw.Show();
-
-        NavigationService.NavigateTo<StudentManagerViewModel>();
     }
 
     private void InitializeRepositories()
     {
         CourseRepository = new CourseRepository();
         StudentRepository = new DummyStudentRepository(Students);
-        RegistrationRepository = new DummyRegistrationRepository(Registrations);
+        RegistrationRepository = new RegistrationRepository();
         AddressRepository = new DummyAddressRepository();
         LocationRepository = new LocationRepository();
     }

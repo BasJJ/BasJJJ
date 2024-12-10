@@ -3,7 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" d:DataContext="{d:DesignInstance Type=students:CourseDialogViewModel}"
+        xmlns:local="clr-namespace:CoursesManager.UI.Dialogs.Windows" 
+        xmlns:controls="clr-namespace:CoursesManager.UI.Views.Controls" 
+        xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStyle="None" Background="Transparent"
@@ -220,7 +223,7 @@
                                             <ComboBox Grid.Column="2" 
                                               ItemsSource="{Binding Locations}" 
                                               DisplayMemberPath="Name" 
-                                              SelectedItem="{Binding SelectedLocation, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                              SelectedItem="{Binding Course.Location, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
                                               Width="180" Height="30">
 
                                                 <ComboBox.Style>
