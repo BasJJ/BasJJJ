@@ -4,13 +4,13 @@ using CoursesManager.MVVM.Dialogs;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.ViewModels;
 using CoursesManager.MVVM.Messages;
+using CoursesManager.UI.DataAccess;
 using CoursesManager.UI.Dialogs.ViewModels;
 using CoursesManager.UI.Dialogs.Windows;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Factory;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Models.CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.LocationRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.StudentRepository;
@@ -18,6 +18,7 @@ using CoursesManager.UI.Views.Students;
 using CoursesManager.UI.ViewModels.Students;
 using CoursesManager.UI.Repositories.AddressRepository;
 using CoursesManager.UI.Repositories.CourseRepository;
+using CoursesManager.UI.Services;
 using CoursesManager.UI.ViewModels.Courses;
 using CoursesManager.MVVM.Messages.DefaultMessages;
 
@@ -51,6 +52,10 @@ public partial class App : Application
         SetupDummyDataTemporary();
         InitializeRepositories();
 
+        var studentCleanupService = new StudentCleanupService(StudentRepository);
+        studentCleanupService.CleanupDeletedStudents();
+
+
         // Set MainWindow's DataContext
         MainWindow mw = new()
         {
@@ -79,20 +84,18 @@ public partial class App : Application
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
         // Navigate to the Initial ViewModel
-        NavigationService.NavigateTo<StudentManagerViewModel>();
+        NavigationService.NavigateTo<CoursesManagerViewModel>();
 
         mw.Show();
-
-        NavigationService.NavigateTo<StudentManagerViewModel>();
     }
 
     private void InitializeRepositories()
     {
-        CourseRepository = new DummyCourseRepository(Courses);
+        CourseRepository = new CourseRepository();
         StudentRepository = new DummyStudentRepository(Students);
-        RegistrationRepository = new DummyRegistrationRepository(Registrations);
+        RegistrationRepository = new RegistrationRepository();
         AddressRepository = new DummyAddressRepository();
-        LocationRepository = new DummyLocationRepository();
+        LocationRepository = new LocationRepository();
     }
 
     private static void SetupDummyDataTemporary()
@@ -100,8 +103,8 @@ public partial class App : Application
         //This is a temporary static class that will hold all the data that is used in the application.
         //This is a temporary solution until we have a database.
         Students = DummyDataGenerator.GenerateStudents(60);
-        Registrations = DummyDataGenerator.GenerateRegistrations(50, 30);
         Courses = DummyDataGenerator.GenerateCourses(30);
+        Registrations = DummyDataGenerator.GenerateRegistrations(Students, Courses);
         //Registrations = DummyDataGenerator.GenerateRegistrationBetter(Courses, Students);
         Locations = DummyDataGenerator.GenerateLocations(15);
 
@@ -133,9 +136,9 @@ public partial class App : Application
                 DialogService,
                 student));
 
-        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, bool>(
-            (initial) => new AddStudentViewModel(
-                initial,
+        DialogService.RegisterDialog<AddStudentViewModel, AddStudentPopup, Student>(
+            (student) => new AddStudentViewModel(
+                student,
                 StudentRepository,
                 CourseRepository,
                 RegistrationRepository,

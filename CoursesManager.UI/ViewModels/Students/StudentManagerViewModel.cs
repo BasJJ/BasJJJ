@@ -1,7 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Printing;
-using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -10,7 +7,6 @@ using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
-using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.RegistrationRepository;
@@ -113,7 +109,7 @@ namespace CoursesManager.UI.ViewModels.Students
 
         public void LoadStudents()
         {
-            Students = new ObservableCollection<Student>(_studentRepository.GetAll());
+            Students = new ObservableCollection<Student>(_studentRepository.GetNotDeletedStudents() ?? new List<Student>());
             FilteredStudentRecords = new ObservableCollection<Student>(Students);
         }
 
@@ -133,7 +129,7 @@ namespace CoursesManager.UI.ViewModels.Students
             if (!IsToggled)
             {
                 List<Student> filtered = new List<Student>();
-                var students = _studentRepository.GetAllStudents();
+                var students = _studentRepository.GetAll();
                 foreach (var student in students)
                 {
                     if (student.IsDeleted)
@@ -179,7 +175,7 @@ namespace CoursesManager.UI.ViewModels.Students
         {
             if (SelectedStudent == null) return;
 
-            var registrations = _registrationRepository.GetAll().Where(r => r.StudentId == SelectedStudent.Id);
+            var registrations = _registrationRepository.GetAll()?.Where(r => r.StudentId == SelectedStudent.Id) ?? Enumerable.Empty<Registration>();
             CoursePaymentList.Clear();
 
             foreach (var registration in registrations)
@@ -192,14 +188,13 @@ namespace CoursesManager.UI.ViewModels.Students
             OnPropertyChanged(nameof(CoursePaymentList));
         }
 
-
         private async void OpenAddStudentPopup()
         {
             await ExecuteWithOverlayAsync(_messageBroker, async () =>
             {
-                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, bool>(true);
+                var dialogResult = await _dialogService.ShowDialogAsync<AddStudentViewModel, Student>(new Student());
 
-                if (dialogResult?.Data == true && dialogResult.Outcome == DialogOutcome.Success)
+                if (dialogResult?.Outcome == DialogOutcome.Success)
                 {
                     LoadStudents();
                 }
@@ -236,33 +231,32 @@ namespace CoursesManager.UI.ViewModels.Students
 
         private async void OpenDeleteStudentPopup(Student student)
         {
-            // TODO: Fix this shit
-            //if (student == null) return;
+            if (student == null) return;
 
-            //await ExecuteWithOverlayAsync(_messageBroker, async () =>
-            //{
-            //    var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
-            //        new DialogResultType
-            //        {
-            //            DialogTitle = "Bevestiging",
-            //            DialogText = "Wilt u deze cursist verwijderen?"
-            //        });
+            await ExecuteWithOverlayAsync(_messageBroker, async () =>
+            {
+                var confirmation = await _dialogService.ShowDialogAsync<ConfirmationDialogViewModel, DialogResultType>(
+                    new DialogResultType
+                    {
+                        DialogTitle = "Bevestiging",
+                        DialogText = "Wilt u deze cursist verwijderen?"
+                    });
 
-            //    if (confirmation?.Data?.Result == true)
-            //    {
-            //        student.IsDeleted = true;
-            //        student.date_deleted = DateTime.Now;
-            //        _studentRepository.Update(student);
-            //        await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
-            //            new DialogResultType
-            //            {
-            //                DialogTitle = "Informatie",
-            //                DialogText = "Cursist succesvol verwijderd."
-            //            });
+                if (confirmation?.Data?.Result == true)
+                {
+                    student.IsDeleted = true;
+                    student.DeletedAt = DateTime.Now;
+                    _studentRepository.Update(student);
+                    await _dialogService.ShowDialogAsync<NotifyDialogViewModel, DialogResultType>(
+                        new DialogResultType
+                        {
+                            DialogTitle = "Informatie",
+                            DialogText = "Cursist succesvol verwijderd."
+                        });
 
-            //        LoadStudents();
-            //    }
-            //});
+                    LoadStudents();
+                }
+            });
         }
 
         private void OpenStudentDetailViewModel()
@@ -274,7 +268,5 @@ namespace CoursesManager.UI.ViewModels.Students
 
             _navigationService.NavigateTo<StudentDetailViewModel>(SelectedStudent);
         }
-
-
     }
 }

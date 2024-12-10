@@ -30,21 +30,47 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 
     public List<Registration> GetAll()
     {
-        throw new NotImplementedException();
+        return new List<Registration>();
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+
     }
 
     public void Add(Registration data)
     {
-        throw new NotImplementedException();
+
     }
 
     public void Update(Registration data)
     {
-        throw new NotImplementedException();
+
+    }
+
+    public List<Registration> GetByStudentId(int studentId)
+    {
+        try
+        {
+            var result = ExecuteProcedure("GetRegistrationsByStudentId", new MySqlParameter[]
+            {
+                new MySqlParameter("@p_student_id", studentId)
+            });
+
+            return result.Select(row => new Registration
+            {
+                Id = Convert.ToInt32(row["id"]),
+                CourseId = Convert.ToInt32(row["course_id"]),
+                StudentId = Convert.ToInt32(row["student_id"]),
+                RegistrationDate = Convert.ToDateTime(row["registration_date"]),
+                PaymentStatus = Convert.ToBoolean(row["payment_status"]),
+                IsAchieved = Convert.ToBoolean(row["is_achieved"]),
+                IsActive = Convert.ToBoolean(row["is_active"])
+            }).ToList();
+        }
+        catch (MySqlException ex)
+        {
+            throw new InvalidOperationException(ex.Message, ex);
+        }
     }
 }
