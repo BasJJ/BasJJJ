@@ -69,7 +69,7 @@ namespace CoursesManager.UI.Factory
                         navigationService,
                         parameter as Student) as T,
                 Type vmType when vmType == typeof(CoursesManagerViewModel) =>
-                    new CoursesManagerViewModel(_courseRepository, _registrationRepository, _messageBroker, _dialogService, navigationService) as T,
+                    new CoursesManagerViewModel(_courseRepository, _messageBroker, _dialogService, navigationService) as T,
 
                 // Add other view model cases here...
                 _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")

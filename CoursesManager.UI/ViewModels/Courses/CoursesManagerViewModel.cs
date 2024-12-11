@@ -68,7 +68,7 @@ namespace CoursesManager.UI.ViewModels
         }
 
         // Constructor
-        public CoursesManagerViewModel(ICourseRepository courseRepository, IRegistrationRepository registrationRepository, IMessageBroker messageBroker, IDialogService dialogService, INavigationService navigationService) : base(navigationService)
+        public CoursesManagerViewModel(ICourseRepository courseRepository, IMessageBroker messageBroker, IDialogService dialogService, INavigationService navigationService) : base(navigationService)
         {
             _courseRepository = courseRepository;
             _messageBroker = messageBroker;
