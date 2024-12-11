@@ -33,14 +33,14 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
         return FetchAll(StoredProcedures.GetAllRegistrations);
     }
 
-    public void Delete(Registration registration)
+    public void Delete(int id)
     {
         try {
             ExecuteNonProcedure(
                     StoredProcedures.DeleteRegistrations,
-                    new MySqlParameter("@p_id", registration.Id)
+                    new MySqlParameter("@p_id", id)
                 );
-        LogUtil.Log($"Registration deleted successfully for Registration ID: {registration.Id}");
+        LogUtil.Log($"Registration deleted successfully for Registration ID: {id}");
         }
         catch (MySqlException ex)
         {

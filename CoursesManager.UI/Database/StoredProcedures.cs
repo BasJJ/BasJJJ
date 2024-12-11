@@ -48,6 +48,7 @@ public static class StoredProcedures
 
     public const string AddStudent = "spStudents_Add";
     public const string EditStudent = "spStudents_Edit";
+    public const string DeleteStudent = "spStudents_Delete";
     public const string GetStudentById = "spStudents_GetById";
     public const string GetAllStudents = "spStudents_GetAll";
     public const string GetNotDeletedStudents = "spStudents_GetNotDeleted";

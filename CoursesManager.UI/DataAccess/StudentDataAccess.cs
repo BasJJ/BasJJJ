@@ -155,8 +155,8 @@ namespace CoursesManager.UI.DataAccess
         {
             try
             {
-                ExecuteNonProcedure(StoredProcedures.CoursesDeleteById, new MySqlParameter("@p_id", id));
-                LogUtil.Log("Course deleted successfully.");
+                ExecuteNonProcedure(StoredProcedures.DeleteStudent, new MySqlParameter("@p_id", id));
+                LogUtil.Log($"Student ID: {id} deleted successfully.");
             }
             catch (MySqlException ex)
             {
