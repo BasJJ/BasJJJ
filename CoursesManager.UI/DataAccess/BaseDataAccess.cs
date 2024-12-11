@@ -3,16 +3,40 @@ using System.Reflection;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
 using System.Data;
+using CoursesManager.UI.Service;
 
 namespace CoursesManager.UI.DataAccess;
 
 public abstract class BaseDataAccess<T> where T : new()
 {
-
-    private readonly string _connectionString = EnvManager<EnvModel>.Values.ConnectionString;
+    private readonly string _encryptedConnectionString;
+    private readonly EncryptionService _encryptionService;
     protected readonly string _modelTableName;
 
-    protected MySqlConnection GetConnection() => new(_connectionString);
+    protected BaseDataAccess(EncryptionService encryptionService) : this(encryptionService, typeof(T).Name.ToLower()) { }
+
+    protected BaseDataAccess(EncryptionService encryptionService, string modelTableName)
+    {
+        _encryptionService = encryptionService ?? throw new ArgumentNullException(nameof(encryptionService));
+        _encryptedConnectionString = EnvManager<EnvModel>.Values.ConnectionString;
+        _modelTableName = modelTableName;
+    }
+
+    private string GetDecryptedConnectionString()
+    {
+        if (string.IsNullOrWhiteSpace(_encryptedConnectionString))
+        {
+            throw new InvalidOperationException("De versleutelde connectionstring is leeg of niet ingesteld.");
+        }
+
+        return _encryptionService.Decrypt(_encryptedConnectionString);
+    }
+
+    protected MySqlConnection GetConnection()
+    {
+        string decryptedConnectionString = GetDecryptedConnectionString();
+        return new MySqlConnection(decryptedConnectionString);
+    }
 
     /// <inheritdoc />
     protected BaseDataAccess() : this(typeof(T).Name.ToLower()) { }

@@ -331,8 +331,10 @@
         </Setter>
     </Style>
 
+    
+
     <Style TargetType="TextBox" x:Key="EditableMaterialTextBoxStyle">
-        <Setter Property="Background" Value="#FFFFFF" />
+        <Setter Property="Background" Value="#F5F5F5" />
         <Setter Property="BorderBrush" Value="#E0E0E0" />
         <Setter Property="Foreground" Value="Black" />
         <Setter Property="Cursor" Value="IBeam" />
@@ -351,19 +353,20 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="FontFamily" Value="Courier New" />
     </Style>
 
 
-    <Style TargetType="TextBox" x:Key="ReadOnlyMaterialTextBoxStyle1">
+
+    <Style TargetType="PasswordBox" x:Key="EditableMaterialPasswordBoxStyle">
         <Setter Property="Background" Value="#F5F5F5" />
         <Setter Property="BorderBrush" Value="#E0E0E0" />
         <Setter Property="Foreground" Value="Black" />
-        <Setter Property="Cursor" Value="Arrow" />
-        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Cursor" Value="IBeam" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="TextBox">
+                <ControlTemplate TargetType="PasswordBox">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="1"
@@ -376,6 +379,8 @@
         </Setter>
         <Setter Property="FontFamily" Value="Courier New" />
     </Style>
+
+
 
 
     <!-- DataGrid Style -->

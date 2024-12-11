@@ -40,13 +40,7 @@ namespace CoursesManager.UI.ViewModels
         public string DbPassword
         {
             get => _dbPassword;
-            set
-            {
-                if (SetProperty(ref _dbPassword, value))
-                {
-                    OnPropertyChanged(nameof(MaskedDbPassword));
-                }
-            }
+            set => SetProperty(ref _dbPassword, value);
         }
 
         public string MaskedDbPassword => new string('●', _dbPassword?.Length ?? 0);
@@ -85,12 +79,7 @@ namespace CoursesManager.UI.ViewModels
         public string MailPassword
         {
             get => _mailPassword;
-            set {
-                if (SetProperty(ref _mailPassword, value))
-                {
-                    OnPropertyChanged(nameof(MaskedMailPassword));
-                }
-            }
+            set => SetProperty(ref _mailPassword, value);
         }
 
         public string MaskedMailPassword => new string('●', _mailPassword?.Length ?? 0);

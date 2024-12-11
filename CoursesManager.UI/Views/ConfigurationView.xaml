@@ -45,7 +45,7 @@
                         <TextBox Text="{Binding DbUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
 
                         <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MaskedDbPassword, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle1}" Margin="0,0,300,15" />
+                        <TextBox Text="{Binding DbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,300,15" Style="{StaticResource EditableMaterialTextBoxStyle}" />
 
 
 
@@ -70,7 +70,8 @@
                         <TextBox Text="{Binding MailUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}" Margin="0,0,300,15" />
 
                         <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MaskedMailPassword, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ReadOnlyMaterialTextBoxStyle1}"  Margin="0,0,300,15" />
+                        <TextBox Text="{Binding MailPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,300,15" Style="{StaticResource EditableMaterialTextBoxStyle}" />
+
                     </StackPanel>
                 </StackPanel>
             </Grid>
