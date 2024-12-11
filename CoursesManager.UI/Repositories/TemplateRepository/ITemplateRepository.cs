@@ -8,10 +8,5 @@ namespace CoursesManager.UI.Repositories.TemplateRepository
 {
     public interface ITemplateRepository
     {
-
-        //CertificateMail GetCertificateMail();
-        //CourseStartNotificationMail GetCourseStartNotificationMail();
-        //PaymentNotifactionMail GetPaymentNotifactionMail();
-
     }
 }

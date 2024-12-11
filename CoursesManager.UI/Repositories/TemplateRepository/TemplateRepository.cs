@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoursesManager.UI.DataAccess;
+using CoursesManager.UI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,21 +8,18 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.UI.Repositories.TemplateRepository
 {
-    internal class TemplateRepository : ITemplateRepository
+    public class TemplateRepository : ITemplateRepository
     {
-        //public CertificateMail GetCertificateMail()
-        //{
+        private readonly TemplateDataAccess _TemplatedataAccess;
+        public TemplateRepository() 
+        {
+            TemplateDataAccess templateDataAccess = new TemplateDataAccess();
+            _TemplatedataAccess = templateDataAccess;
+        }
+        public Template? GetTemplateByName(string name)
+        {
+            return _TemplatedataAccess.GetByName(name);
+        }
 
-        //}
-
-        //public CourseStartNotificationMail GetCourseStartNotificationMail()
-        //{
-            
-        //}
-
-        //public PaymentNotifactionMail GetPaymentNotifactionMail()
-        //{
-            
-        //}
     }
 }

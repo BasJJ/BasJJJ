@@ -1,10 +1,12 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
 using CoursesManager.MVVM.Dialogs;
+using CoursesManager.MVVM.Mail.MailService;
 using CoursesManager.MVVM.Messages;
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Mailing;
 using CoursesManager.UI.Messages;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.CourseRepository;
@@ -22,6 +24,8 @@ namespace CoursesManager.UI.ViewModels.Courses
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
+
+        private IMailProvider mailProvider;
 
         public ICommand ChangeCourseCommand { get; set; }
         public ICommand DeleteCourseCommand { get; set; }
@@ -85,13 +89,13 @@ namespace CoursesManager.UI.ViewModels.Courses
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
-
             PaymentMailCommand = new RelayCommand(SendPaymentMail);
             StartCourseMailCommand = new RelayCommand(SendStartCourseMail);
             CertificateMailCommand = new RelayCommand(SendCertificateMail);
 
 
             LoadCourseData();
+            mailProvider = new MailProvider();
         }
 
         private void LoadCourseData()
@@ -233,17 +237,17 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         public void SendPaymentMail()
         {
-
+            mailProvider.SendPaymentNotifications(CurrentCourse);
         }
 
         public void SendStartCourseMail()
         {
-
+            mailProvider.SendCourseStartNotifications(CurrentCourse);
         }
 
         public void SendCertificateMail()
         {
-
+            mailProvider.SendCertificates(CurrentCourse);
         }
 
         private async void ChangeCourse()

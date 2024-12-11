@@ -13,6 +13,7 @@ public static class StoredProcedures
     public const string LocationsWithAddressesGetAll = "spLocationsWithAddresses_GetAll";
     public const string LocationsInsert = "spLocations_Insert";
     public const string LocationsDeleteById = "spLocations_DeleteById";
+    public const string LocationUpdate = "spLocations_Update";
 
     #endregion
 
@@ -40,6 +41,14 @@ public static class StoredProcedures
     public const string GetAllStudents = "spStudents_GetAll";
     public const string GetNotDeletedStudents = "spStudents_GetNotDeleted";
     public const string GetDeletedStudents = "spStudents_GetDeleted";
+
+    #endregion
+
+    #region Templates
+    public const string GetAllTemplates = "spTemplates_GetAll";
+    public const string GetTemplateByName = "spTemplates_GetByName";
+    public const string UpdateTemplate = "spTemplates_Update";
+
 
     #endregion
 }

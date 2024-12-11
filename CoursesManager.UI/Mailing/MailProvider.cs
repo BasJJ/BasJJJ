@@ -1,11 +1,17 @@
 ﻿using CoursesManager.MVVM.Mail;
 using CoursesManager.UI.Models;
+using CoursesManager.UI.Repositories.RegistrationRepository;
+using CoursesManager.UI.Repositories.TemplateRepository;
 
 
 namespace CoursesManager.UI.Mailing
 {
     public class MailProvider : IMailProvider
     {
+        RegistrationRepository registrationRepository = new RegistrationRepository();
+        TemplateRepository templateRepository = new TemplateRepository();
+        List<Registration> courseRegistrations = new List<Registration>();
+
         public byte GeneratePDF(Course course)
         {
             throw new NotImplementedException();
@@ -23,7 +29,18 @@ namespace CoursesManager.UI.Mailing
 
         public Task<List<MailResult>> SendPaymentNotifications(Course course)
         {
-            throw new NotImplementedException();
+            courseRegistrations = registrationRepository.GetAllRegistrationsByCourse(course);
+            Template template = templateRepository.GetTemplateByName("PaymentMail");
+            foreach (Registration registration in courseRegistrations)
+            {
+                if (!registration.PaymentStatus)
+                {
+
+                }
+
+}
+
+
+            }
         }
     }
-}

@@ -8,8 +8,9 @@ namespace CoursesManager.UI.Models
 {
     public class Template
     {
+        public int Id { get; set; }
         public string HtmlString { get; set; }
-        public Course Course { get; set; }
-        public Student Student { get; set; }
+        public string Name { get; set; }
+
     }
 }

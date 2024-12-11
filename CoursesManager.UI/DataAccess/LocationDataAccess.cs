@@ -49,7 +49,7 @@ public class LocationDataAccess : BaseDataAccess<Location>
     {
         try
         {
-            ExecuteNonProcedure(StoredProcedures.CoursesDeleteById, [
+            ExecuteNonProcedure(StoredProcedures.LocationUpdate, [
                 new MySqlParameter("@p_location_id", data.Id),
                 new MySqlParameter("@p_new_name", data.Name),
                 new MySqlParameter("@p_new_address_id", data.Address.Id)
