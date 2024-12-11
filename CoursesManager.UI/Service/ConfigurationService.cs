@@ -23,14 +23,12 @@ namespace CoursesManager.UI.Service
             var dbConnectionString = BuildConnectionString(dbParams);
             var mailConnectionString = BuildConnectionString(mailParams);
 
-            Console.WriteLine($"Oorspronkelijke DB ConnectionString: {dbConnectionString}");
-            Console.WriteLine($"Oorspronkelijke Mail ConnectionString: {mailConnectionString}");
+            
 
             EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Encrypt(dbConnectionString);
             EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Encrypt(mailConnectionString);
 
-            Console.WriteLine($"Versleutelde DB ConnectionString: {EnvManager<EnvModel>.Values.ConnectionString}");
-            Console.WriteLine($"Versleutelde Mail ConnectionString: {EnvManager<EnvModel>.Values.MailConnectionString}");
+          
 
             EnvManager<EnvModel>.Save();
         }
@@ -97,6 +95,8 @@ namespace CoursesManager.UI.Service
 
             return !string.IsNullOrWhiteSpace(config.ConnectionString) &&
                    !string.IsNullOrWhiteSpace(config.MailConnectionString);
+
+            // checken of env bestaat, zo niet dan is het false: als het wel true is dan moet de ConnectionString gevalideerd worden
         }
 
         private Dictionary<string, string> ParseConnectionString(string connectionString)

@@ -34,8 +34,8 @@ public abstract class BaseDataAccess<T> where T : new()
 
     protected MySqlConnection GetConnection()
     {
-        string decryptedConnectionString = GetDecryptedConnectionString();
-        return new MySqlConnection(decryptedConnectionString);
+        //string decryptedConnectionString = GetDecryptedConnectionString();
+        return new MySqlConnection(EnvManager<EnvModel>.Values.ConnectionString);
     }
 
     /// <inheritdoc />

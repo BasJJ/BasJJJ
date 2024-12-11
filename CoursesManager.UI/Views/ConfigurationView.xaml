@@ -3,87 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:students="clr-namespace:CoursesManager.UI.ViewModels.Students"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1100" Background="{StaticResource SecondaryGradient}">
-    <Grid>
 
+    <Grid Margin="20" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="80" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-        <!-- Left: Form Section -->
-        <Grid Margin="20,100,20,20" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
-                
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- Form Fields -->
-            <Grid Grid.Row="0" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Database Server Instellingen" FontSize="32" Margin="0,0,0,20" />
 
-                </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Server:" HorizontalAlignment="Left" VerticalAlignment="Center"  Margin="0,0,10,0" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding DbServer, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
-                <!-- First Column -->
-                <StackPanel Margin="20,0,20,0">
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Poort:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding DbPort, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
-                    <TextBlock Text="Database Server Instellingen" FontSize="36"></TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Gebruiker:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding DbUser, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
-                    <StackPanel Margin="0,10,0,0" VerticalAlignment="Top">
-                        <TextBlock Text="Server" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding DbServer, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Wachtwoord:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding DbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
-                        <TextBlock Text="Poort" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding DbPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
-
-                        <TextBlock Text="Gebruiker" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding DbUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
-
-                        <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding DbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,300,15" Style="{StaticResource EditableMaterialTextBoxStyle}" />
-
-
-
-                        <TextBlock Text="Database" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding DbName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Second Column -->
-                <StackPanel Margin="20,0,10,0" Grid.Column="1">
-
-                    <TextBlock Text="Mail Server Instellingen" FontSize="36"></TextBlock>
-
-                    <StackPanel Margin="0,10,0,0" VerticalAlignment="Top">
-                        <TextBlock Text="Server" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MailServer, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
-
-                        <TextBlock Text="Poort" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MailPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}"  Margin="0,0,300,15" />
-
-                        <TextBlock Text="Email" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MailUser, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource EditableMaterialTextBoxStyle}" Margin="0,0,300,15" />
-
-                        <TextBlock Text="Wachtwoord" Margin="0,0,0,5" />
-                        <TextBox Text="{Binding MailPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,300,15" Style="{StaticResource EditableMaterialTextBoxStyle}" />
-
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
-
-            <!-- Wijzigen Button -->
-            <Button Command="{Binding SaveCommand }" 
-                    Content="Opslaan"
-                     Grid.Row="1" 
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Margin="20"
-                     Style="{StaticResource PrimaryButton}" />
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Database:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding DbName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
         </Grid>
+
+        <!-- Mail Settings -->
+        <Grid Grid.Row="1" Grid.Column="3" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Mail Server Instellingen" FontSize="32" Margin="0,0,0,20" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Server:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MailServer, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Poort:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MailPort, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Email:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MailUser, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Wachtwoord:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MailPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+        </Grid>
+
+        <!-- Save Button -->
+        <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Command="{Binding SaveCommand}" Content="Opslaan" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20" Style="{StaticResource PrimaryButton}" />
     </Grid>
 </UserControl>

@@ -82,8 +82,10 @@ public partial class App : Application
         // Subscribe to Application Close Messages
         MessageBroker.Subscribe<ApplicationCloseRequestedMessage, App>(ApplicationCloseRequestedHandler, this);
 
-        // Navigate to the Initial ViewModel
-        NavigationService.NavigateTo<CoursesManagerViewModel>();
+
+        var startupmanager = new StartupManager(ConfigurationService, NavigationService);
+        startupmanager.CheckConfigurationOnStartup();
+
 
         mw.Show();
     }
