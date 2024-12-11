@@ -20,7 +20,6 @@ namespace CoursesManager.UI.ViewModels
     {
         // Properties
         private readonly ICourseRepository _courseRepository;
-        private readonly IRegistrationRepository _registrationRepository;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
 
@@ -74,7 +73,6 @@ namespace CoursesManager.UI.ViewModels
             _courseRepository = courseRepository;
             _messageBroker = messageBroker;
             _dialogService = dialogService;
-            _registrationRepository = registrationRepository;
 
             _messageBroker.Subscribe<CoursesChangedMessage, CoursesManagerViewModel>(OnCoursesChangedMessage, this);
 
@@ -99,7 +97,6 @@ namespace CoursesManager.UI.ViewModels
             FilteredCourses = new ObservableCollection<Course>(Courses);
 
             FilterRecordsAsync();
-            //InitializeUpdateCoursePaymentStatus();
         }
 
         private async Task FilterRecordsAsync()
@@ -131,50 +128,6 @@ namespace CoursesManager.UI.ViewModels
             GlobalCache.Instance.Put("Opened Course", parameter, false);
             _navigationService.NavigateTo<CourseOverViewViewModel>();
         }
-
-        //private void InitializeUpdateCoursePaymentStatus()
-        //{
-        //    var allCourses = _courseRepository.GetAll();
-
-        //    foreach (var course in allCourses)
-        //    {
-        //        UpdateCoursePaymentStatus(course.Id);
-        //    }
-        //}
-
-        //private void UpdateCoursePaymentStatus(int courseId)
-        //{
-        //    var course = _courseRepository.GetById(courseId);
-
-        //    if (course == null)
-        //    {
-        //        //throw new Exception($"Cursus met ID {courseId} niet gevonden.");
-        //        Debug.WriteLine($"Cursus met ID {courseId} niet gevonden. Sla over.");
-        //        return;
-        //    }
-
-        //    var registrations = _registrationRepository.GetAllRegistrationsByCourse(course);
-
-        //    if (registrations == null || registrations.Count == 0)
-        //    {
-        //        course.IsPayed = true;
-        //        _courseRepository.Update(course);
-        //        return;
-        //    }
-
-        //    foreach (var registration in registrations)
-        //    {
-        //        if (!registration.PaymentStatus)
-        //        {
-        //            course.IsPayed = false;
-        //            _courseRepository.Update(course);
-        //            return;
-        //        }
-        //    }
-
-        //    course.IsPayed = true;
-        //    _courseRepository.Update(course);
-        //}
 
         private async void OpenCourseDialog()
         {

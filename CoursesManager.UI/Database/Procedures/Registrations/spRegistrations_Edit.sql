@@ -7,7 +7,6 @@ CREATE DEFINER=`courses_manager`@`%` PROCEDURE `spRegistrations_Edit`(
     IN p_payment_status TINYINT,
     IN p_is_active TINYINT,
     IN p_is_achieved TINYINT,
-    IN p_created_at DATETIME,
     IN p_updated_at DATETIME
 )
 BEGIN
@@ -19,8 +18,7 @@ BEGIN
         payment_status = p_payment_status,
         is_active = p_is_active,
         is_achieved = p_is_achieved,
-        created_at = p_created_at,
-        updated_at = p_updated_at
+        updated_at = NOW()
     WHERE id = p_id;
 END$$
 DELIMITER ;

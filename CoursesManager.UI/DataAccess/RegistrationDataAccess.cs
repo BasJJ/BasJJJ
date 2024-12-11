@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using CoursesManager.UI.Database;
+using System.Linq;
 
 namespace CoursesManager.UI.DataAccess;
 
@@ -30,17 +31,27 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 
     public List<Registration> GetAll()
     {
-        return FetchAll(StoredProcedures.GetAllRegistrations);
+        return ExecuteProcedure(StoredProcedures.LocationsWithAddressesGetAll).Select(row => new Registration
+        {
+            Id = Convert.ToInt32(row["id"]),
+            CourseId = Convert.ToInt32(row["course_id"]),
+            StudentId = Convert.ToInt32(row["student_id"]),
+            RegistrationDate = Convert.ToDateTime(row["registration_date"]),
+            PaymentStatus = Convert.ToBoolean(row["payment_status"]),
+            IsActive = Convert.ToBoolean(row["is_active"]),
+            IsAchieved = Convert.ToBoolean(row["is_achieved"])
+        }).ToList();
     }
 
     public void Delete(int id)
     {
-        try {
+        try
+        {
             ExecuteNonProcedure(
                     StoredProcedures.DeleteRegistrations,
                     new MySqlParameter("@p_id", id)
                 );
-        LogUtil.Log($"Registration deleted successfully for Registration ID: {id}");
+            LogUtil.Log($"Registration deleted successfully for Registration ID: {id}");
         }
         catch (MySqlException ex)
         {

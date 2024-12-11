@@ -8,7 +8,6 @@ CREATE DEFINER=`courses_manager`@`%` PROCEDURE `spStudents_Edit`(
     IN p_address_id INT,
     IN p_is_deleted BOOLEAN,
     IN p_deleted_at DATETIME,
-    IN p_created_at DATETIME,
     IN p_updated_at DATETIME,
     IN p_insertion VARCHAR(255),
     IN p_date_of_birth DATE
@@ -22,9 +21,8 @@ BEGIN
         phone = p_phone,
         address_id = p_address_id,
         is_deleted = p_is_deleted,
-        deleted_at = p_deleted_at,
-        created_at = p_created_at,
-        updated_at = p_updated_at,
+        deleted_at = NOW(),
+        updated_at = NOW(),
         insertion = p_insertion,
         date_of_birth = p_date_of_birth
     WHERE id = p_id;

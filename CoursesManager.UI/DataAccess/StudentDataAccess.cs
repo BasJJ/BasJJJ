@@ -124,6 +124,7 @@ namespace CoursesManager.UI.DataAccess
 
                 ExecuteNonProcedure(
                     StoredProcedures.EditStudent,
+                    new MySqlParameter("@p_id", student.Id),
                     new MySqlParameter("@p_first_name", student.FirstName),
                     new MySqlParameter("@p_last_name", student.LastName),
                     new MySqlParameter("@p_email", student.Email),
