@@ -43,7 +43,7 @@ public partial class App : Application
     public static IMessageBroker MessageBroker { get; set; } = new MessageBroker();
     public static IDialogService DialogService { get; set; } = new DialogService();
 
-    public static IConfigurationService ConfigurationService { get; set; } = new ConfigurationService(new EncryptionService("hello"));
+    public static IConfigurationService ConfigurationService { get; set; } = new ConfigurationService(new EncryptionService("SmpjQzNZMWdCdW11bTlER2owdFRzOHIzQUpWWmhYQ0U="));
 
     protected override void OnStartup(StartupEventArgs e)
     {

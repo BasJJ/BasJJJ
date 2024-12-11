@@ -67,19 +67,6 @@ public class EnvManager<T>
     }
 
 
-    public T Load()
-    {
-        var model = new T();
-
-        DotEnv.Fluent()
-            .WithExceptions()
-            .WithEnvFiles(FindEnvFiles().ToArray())
-            .Load();
-
-        LoadValues(model);
-        return model;
-    }
-
     public static void Save()
     {
 

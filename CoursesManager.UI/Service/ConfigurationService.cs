@@ -135,6 +135,5 @@ namespace CoursesManager.UI.Service
             return string.Join(";", parameters.Select(kv => $"{kv.Key}={kv.Value}"));
         }
 
-
     }
 }

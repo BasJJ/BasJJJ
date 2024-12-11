@@ -28,7 +28,7 @@
 	<!-- Conditional inclusion of the .env file -->
 	<ItemGroup Condition="Exists('.env')">
 		<Content Include=".env">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 

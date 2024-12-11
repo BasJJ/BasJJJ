@@ -8,6 +8,7 @@ namespace CoursesManager.UI.DataAccess;
 
 public abstract class BaseDataAccess<T> where T : new()
 {
+
     private readonly string _connectionString = EnvManager<EnvModel>.Values.ConnectionString;
     protected readonly string _modelTableName;
 
