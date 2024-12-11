@@ -31,7 +31,7 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
 
     public List<Registration> GetAll()
     {
-        return ExecuteProcedure(StoredProcedures.LocationsWithAddressesGetAll).Select(row => new Registration
+        return ExecuteProcedure(StoredProcedures.GetAllRegistrations).Select(row => new Registration
         {
             Id = Convert.ToInt32(row["id"]),
             CourseId = Convert.ToInt32(row["course_id"]),
