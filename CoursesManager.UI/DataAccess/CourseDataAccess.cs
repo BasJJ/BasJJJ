@@ -47,9 +47,11 @@ public class CourseDataAccess : BaseDataAccess<Course>
                 m.Students = new(students.Where(s => s.Registrations.Any(r => r.CourseId == m.Id)));
                 m.Participants = m.Students.Count;
                 m.IsPayed = true;
+                m.Registrations = new();
                 foreach (var student in m.Students)
                 {
                     var registration = student.Registrations?.FirstOrDefault(r => r.CourseId == m.Id);
+                    m.Registrations.Add(registration);
 
                     if (registration is not null)
                     {

@@ -14,6 +14,7 @@ public class MailService
     public async Task<MailResult> SendMail(MailMessage mailMessage)
     {
         SmtpConfig _smtpConfig;
+       
         try
         {
             var mailConnectionString = EnvManager<EnvModel>.Values.MailConnectionString;
@@ -27,10 +28,12 @@ public class MailService
 
             using var smtpClient = new SmtpClient(_smtpConfig.Server, _smtpConfig.Port)
             {
+                UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password),
                 EnableSsl = _smtpConfig.EnableSsl
             };
-
+            MailAddress mailAddress = new MailAddress(_smtpConfig.User);
+            mailMessage.From = mailAddress;
             await smtpClient.SendMailAsync(mailMessage);
 
             return new MailResult

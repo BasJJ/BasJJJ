@@ -4,11 +4,9 @@ using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.TemplateRepository;
 using DinkToPdf;
-using DinkToPdf.Contracts;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Mail;
-using System.Windows.Controls;
+
 
 
 namespace CoursesManager.UI.Mailing
@@ -57,26 +55,21 @@ namespace CoursesManager.UI.Mailing
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + "\n");
-                Console.WriteLine(ex.StackTrace + "\n");
-                Debug.WriteLine(ex.Message + "\n");
-                Debug.WriteLine(ex.StackTrace + "\n");
+                LogUtil.Error(ex.Message);
+                throw;
             }
-            return new byte[0];
         }
 
         public async Task<List<MailResult>> SendCertificates(Course course)
         {
-            Template template = templateRepository.GetTemplateByName("CertificateMail");
-
-
             try
             {
+                Template template = templateRepository.GetTemplateByName("CertificateMail");
                 foreach (Student student in course.Students)
                 {
                     //byte[] certificate = GeneratePDF(course, student);
                     template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
-                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
+                    messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                 }
                 if (messages.Any())
                 {
@@ -85,20 +78,22 @@ namespace CoursesManager.UI.Mailing
             }
             catch (Exception ex)
             {
+                LogUtil.Error(ex.Message);
+                throw;
             }
             return mailResults;
         }
 
         public async Task<List<MailResult>> SendCourseStartNotifications(Course course)
         {
-            Template template = templateRepository.GetTemplateByName("CourseStartMail");
 
             try
             {
+                Template template = templateRepository.GetTemplateByName("CourseStartMail");
                 foreach (Student student in course.Students)
                 {
                     template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
-                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
+                    messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                 }
                 if (messages.Any())
                 {
@@ -107,13 +102,15 @@ namespace CoursesManager.UI.Mailing
             }
             catch (Exception ex)
             {
+                LogUtil.Error(ex.Message);
+                throw;
             }
             return mailResults;
         }
 
         public async Task<List<MailResult>> SendPaymentNotifications(Course course)
         {
-            courseRegistrations = registrationRepository.GetAllRegistrationsByCourse(course);
+            courseRegistrations = course.Registrations;
             Template template = templateRepository.GetTemplateByName("PaymentMail");
             try
             {
@@ -122,10 +119,9 @@ namespace CoursesManager.UI.Mailing
 
                     if (!registration.PaymentStatus)
                     {
-
-                        Student student = course.Students.FirstOrDefault(s => s.Id == registration.Student.Id);
-                        template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, "iets.nl");
-                        messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
+                        Student student = course.Students.FirstOrDefault(s => s.Id == registration.StudentId);
+                        template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, $"https://tinyurl.com/CourseManager/{student.Id}");
+                        messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                     }
                 }
 
@@ -137,7 +133,8 @@ namespace CoursesManager.UI.Mailing
             }
             catch (Exception ex)
             {
-                throw new SomethingWentAllToShiiiiitException();
+                LogUtil.Error(ex.Message);
+                throw;
             }
         }
 
@@ -158,6 +155,7 @@ namespace CoursesManager.UI.Mailing
             message.To.Add(toMail);
             message.Subject = subject;
             message.Body = body;
+            message.IsBodyHtml = true;
 
             if (certificate != null)
             {
