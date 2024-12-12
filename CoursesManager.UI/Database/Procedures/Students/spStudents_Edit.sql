@@ -13,8 +13,8 @@ CREATE DEFINER=`courses_manager`@`%` PROCEDURE `spStudents_Edit`(
 BEGIN
     UPDATE students
     SET
-        first_name = p_first_name,
-        last_name = p_last_name,
+        firstname = p_first_name,
+        lastname = p_last_name,
         email = p_email,
         phone = p_phone,
         address_id = p_address_id,
