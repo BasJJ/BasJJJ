@@ -51,7 +51,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         // Initialize Dummy Data
-        SetupDummyDataTemporary();
+        //SetupDummyDataTemporary();
         InitializeRepositories();
 
         // Set MainWindow's DataContext
@@ -93,9 +93,9 @@ public partial class App : Application
     private void InitializeRepositories()
     {
         CourseRepository = new CourseRepository();
-        StudentRepository = new DummyStudentRepository(Students);
+        StudentRepository = new StudentRepository();
         RegistrationRepository = new RegistrationRepository();
-        AddressRepository = new DummyAddressRepository();
+        AddressRepository = new AddressRepository();
         LocationRepository = new LocationRepository();
     }
 
