@@ -24,9 +24,7 @@ namespace CoursesManager.UI.ViewModels.Courses
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly IMessageBroker _messageBroker;
-
-        private IMailProvider mailProvider;
-
+        private readonly IMailProvider _mailProvider;
         public ICommand ChangeCourseCommand { get; set; }
         public ICommand DeleteCourseCommand { get; set; }
         public ICommand CheckboxChangedCommand { get; }
@@ -85,6 +83,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             _courseRepository = courseRepository;
             _dialogService = dialogService;
             _messageBroker = messageBroker;
+            _mailProvider = new MailProvider();
 
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
@@ -95,7 +94,7 @@ namespace CoursesManager.UI.ViewModels.Courses
 
 
             LoadCourseData();
-            mailProvider = new MailProvider();
+
         }
 
         private void LoadCourseData()
@@ -237,17 +236,17 @@ namespace CoursesManager.UI.ViewModels.Courses
 
         public async void SendPaymentMail()
         {
-            await mailProvider.SendPaymentNotifications(CurrentCourse);
+            await _mailProvider.SendPaymentNotifications(CurrentCourse);
         }
 
         public async void SendStartCourseMail()
         {
-           await mailProvider.SendCourseStartNotifications(CurrentCourse);
+           await _mailProvider.SendCourseStartNotifications(CurrentCourse);
         }
 
         public async void SendCertificateMail()
         {
-            await mailProvider.SendCertificates(CurrentCourse);
+            await _mailProvider.SendCertificates(CurrentCourse);
         }
 
         private async void ChangeCourse()
