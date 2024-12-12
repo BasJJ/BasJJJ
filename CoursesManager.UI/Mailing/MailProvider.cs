@@ -5,6 +5,7 @@ using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.TemplateRepository;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Mail;
 using System.Windows.Controls;
@@ -50,7 +51,18 @@ namespace CoursesManager.UI.Mailing
                 WebSettings = { DefaultEncoding = "utf-8" }
             });
 
-            return converter.Convert(doc);
+            try
+            {
+                return converter.Convert(doc);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "\n");
+                Console.WriteLine(ex.StackTrace + "\n");
+                Debug.WriteLine(ex.Message + "\n");
+                Debug.WriteLine(ex.StackTrace + "\n");
+            }
+            return new byte[0];
         }
 
         public async Task<List<MailResult>> SendCertificates(Course course)
@@ -62,9 +74,9 @@ namespace CoursesManager.UI.Mailing
             {
                 foreach (Student student in course.Students)
                 {
-                    byte[] certificate = GeneratePDF(course, student);
+                    //byte[] certificate = GeneratePDF(course, student);
                     template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
-                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, certificate));
+                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
                 }
                 if (messages.Any())
                 {
