@@ -1,6 +1,7 @@
 ﻿using CoursesManager.UI.Database;
 using CoursesManager.UI.Models;
 using MySql.Data.MySqlClient;
+using System;
 using System.Data;
 
 namespace CoursesManager.UI.DataAccess
@@ -10,30 +11,31 @@ namespace CoursesManager.UI.DataAccess
 
         public List<Template> GetAll()
         {
+            string procedureName = StoredProcedures.GetAllTemplates;
             try
             {
-                string procedureName = StoredProcedures.GetAllTemplates;
                 return ExecuteProcedure(procedureName).Select(row => ToTemplate(row)).ToList();
 
             }
             catch (MySqlException ex)
             {
-                throw new InvalidOperationException(ex.Message, ex);
+                LogUtil.Error($"Error executing procedure '{procedureName}': {ex.Message}");
+                throw;
             }
         }
 
         public Template? GetByName(string name)
         {
-
+            string procedureName = StoredProcedures.GetTemplateByName;
             try
             {
-                string procedureName = StoredProcedures.GetTemplateByName;
                 return ExecuteProcedure(procedureName).Select(row => ToTemplate(row)).FirstOrDefault();
 
             }
             catch (MySqlException ex)
             {
-                throw new InvalidOperationException(ex.Message, ex);
+                LogUtil.Error($"Error executing procedure '{procedureName}': {ex.Message}");
+                throw;
             }
 
         }
@@ -53,17 +55,20 @@ namespace CoursesManager.UI.DataAccess
             }
             catch (MySqlException ex)
             {
-                throw new InvalidOperationException(ex.Message, ex);
+                LogUtil.Error(ex.Message);
+                throw;
             }
         }
 
-        private Template ToTemplate(DataRow row)
+        private Template ToTemplate(Dictionary<string, object> row)
         {
             return new Template
             {
                 Id = Convert.ToInt32(row["id"]),
                 HtmlString = row["html"]?.ToString() ?? string.Empty,
-                Name = row["name"]?.ToString() ?? string.Empty
+                SubjectString = row["subject"]?.ToString() ?? string.Empty,
+                Name = row["name"]?.ToString() ?? string.Empty,
+
             };
         }
     }

@@ -51,4 +51,9 @@ public static class StoredProcedures
 
 
     #endregion
+
+    #region Certificates
+    public const string AddCertificate = "spCertificates_Add";
+
+    #endregion
 }

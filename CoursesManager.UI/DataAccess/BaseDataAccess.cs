@@ -258,4 +258,5 @@ public abstract class BaseDataAccess<T> where T : new()
 
         return false;
     }
+
 }

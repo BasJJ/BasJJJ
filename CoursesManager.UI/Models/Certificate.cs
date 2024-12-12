@@ -11,5 +11,6 @@ namespace CoursesManager.UI.Models
         public int Id { get; set; }
         public string PdfString { get; set; }
         public int StudentCode { get; set; }
+        public string CourseCode { get; set; }
     }
 }

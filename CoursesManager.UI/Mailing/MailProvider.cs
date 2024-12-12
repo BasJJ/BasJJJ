@@ -3,44 +3,72 @@ using CoursesManager.MVVM.Mail;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.RegistrationRepository;
 using CoursesManager.UI.Repositories.TemplateRepository;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System.IO;
 using System.Net.Mail;
+using System.Windows.Controls;
 
 
 namespace CoursesManager.UI.Mailing
 {
     public class MailProvider : IMailProvider
     {
-        MailService mailService = new MailService();
-        RegistrationRepository registrationRepository = new RegistrationRepository();
-        TemplateRepository templateRepository = new TemplateRepository();
-        List<Registration> courseRegistrations = new List<Registration>();
-        List<MailMessage> messages = new List<MailMessage>();
-        List<MailResult> mailResults = new List<MailResult>();
+        //service classes
+        private readonly MailService mailService = new MailService();
+        private readonly RegistrationRepository registrationRepository = new RegistrationRepository();
+        private readonly TemplateRepository templateRepository = new TemplateRepository();
 
-        public byte GeneratePDF(Course course)
+        // private attributes
+        private List<Registration> courseRegistrations = new List<Registration>();
+        private List<MailMessage> messages = new List<MailMessage>();
+        private List<MailResult> mailResults = new List<MailResult>();
+
+        public byte[] GeneratePDF(Course course, Student student)
         {
-            throw new NotImplementedException();
+            string htmlContent = templateRepository.GetTemplateByName("Certificate").HtmlString;
+
+            htmlContent = htmlContent
+                .Replace("{{Cursus naam}}", course.Name)
+                .Replace("{{Student naam}}", $"{student.FirstName} {student.LastName}")
+                .Replace("{{Datum behalen cursus}}", course.EndDate.ToString("yyyy-MM-dd"));
+
+            var converter = new SynchronizedConverter(new PdfTools());
+            var doc = new HtmlToPdfDocument
+            {
+                GlobalSettings = new GlobalSettings
+                {
+                    ColorMode = ColorMode.Color,
+                    Orientation = DinkToPdf.Orientation.Portrait,
+                    PaperSize = PaperKind.A4,
+                }
+            };
+
+            doc.Objects.Add(new ObjectSettings
+            {
+                HtmlContent = htmlContent,
+                WebSettings = { DefaultEncoding = "utf-8" }
+            });
+
+            return converter.Convert(doc);
         }
 
-        public Task<List<MailResult>> SendCertificates(Course course)
+        public async Task<List<MailResult>> SendCertificates(Course course)
         {
             Template template = templateRepository.GetTemplateByName("CertificateMail");
+
 
             try
             {
                 foreach (Student student in course.Students)
                 {
-                    template.HtmlString = FillNameAndCourseTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name);
-                    MailMessage message = new MailMessage();
-                    message.To.Add(student.Email);
-                    message.Subject = template.SubjectString;
-                    message.Body = template.HtmlString;
-                    //message.Attachments = Certificate;
-                    messages.Add(message);
+                    byte[] certificate = GeneratePDF(course, student);
+                    template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
+                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, certificate));
                 }
                 if (messages.Any())
                 {
-                    await mailService.SendMail(messages);
+                    mailResults = await mailService.SendMail(messages);
                 }
             }
             catch (Exception ex)
@@ -57,12 +85,8 @@ namespace CoursesManager.UI.Mailing
             {
                 foreach (Student student in course.Students)
                 {
-                    template.HtmlString = FillNameAndCourseTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name);
-                    MailMessage message = new MailMessage();
-                    message.To.Add(student.Email);
-                    message.Subject = template.SubjectString;
-                    message.Body = template.HtmlString;
-                    messages.Add(message);
+                    template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
+                    messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
                 }
                 if (messages.Any())
                 {
@@ -86,19 +110,16 @@ namespace CoursesManager.UI.Mailing
 
                     if (!registration.PaymentStatus)
                     {
+
                         Student student = course.Students.FirstOrDefault(s => s.Id == registration.Student.Id);
-                        template.HtmlString = FillPaymentTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, "iets.nl");
-                        MailMessage message = new MailMessage();
-                        message.To.Add(student.Email);
-                        message.Subject = template.SubjectString;
-                        message.Body = template.HtmlString;
-                        messages.Add(message);
+                        template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, "iets.nl");
+                        messages.Add(CreateMessage(student.Email, template.SubjectString, template.HtmlString, null));
                     }
                 }
 
                 if (messages.Any())
                 {
-                    await mailService.SendMail(messages);
+                    return await mailService.SendMail(messages);
                 }
                 return mailResults;
             }
@@ -108,21 +129,36 @@ namespace CoursesManager.UI.Mailing
             }
         }
 
-        private string FillNameAndCourseTemplate(string template, string name, string courseName)
+        private string FillTemplate(string template, string name, string courseName, string? URL)
         {
             template = template.Replace("[Naam]", name);
             template = template.Replace("[Cursusnaam]", courseName);
-
+            if (URL != null)
+            {
+                template = template.Replace("[Betaal Link]", URL);
+            }
             return template;
         }
 
-        private string FillPaymentTemplate(string template, string name, string courseName, string URL)
+        private MailMessage CreateMessage(string toMail, string subject, string body, byte[]? certificate)
         {
-            template = template.Replace("[Naam]", name);
-            template = template.Replace("[Cursusnaam]", courseName);
-            template = template.Replace("[Betaal Link]", URL);
+            MailMessage message = new MailMessage();
+            message.To.Add(toMail);
+            message.Subject = subject;
+            message.Body = body;
 
-            return template;
+            if (certificate != null)
+            {
+                foreach (var certBytes in certificate)
+                {
+                    // Convert byte array to MemoryStream and create an attachment
+                    using var stream = new MemoryStream(certBytes);
+                    var attachment = new Attachment(stream, "certificate.pdf", "application/pdf");
+                    message.Attachments.Add(attachment);
+                }
+            }
+
+            return message;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoursesManager.UI.Repositories.CertificateRepository
 {
-    internal class ICertificateRepository
+    public class ICertificateRepository
     {
     }
 }

@@ -8,6 +8,6 @@ namespace CoursesManager.UI.Mailing
         public Task<List<MailResult>> SendCertificates(Course course);
         public Task<List<MailResult>> SendCourseStartNotifications(Course course);
         public Task<List<MailResult>> SendPaymentNotifications(Course course);
-        public byte GeneratePDF(Course course);
+        public byte[] GeneratePDF(Course course, Student student);
     }
 }
