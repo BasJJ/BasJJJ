@@ -1,7 +1,9 @@
 ﻿
+using System.Windows;
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
+using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.Models;
 using CoursesManager.UI.Service;
 
@@ -104,7 +106,12 @@ namespace CoursesManager.UI.ViewModels
             _mailPassword = mailPassword;
             _appConfig = appConfig;
             InitializeSettings();
-            SaveCommand = new RelayCommand(ValidateAndSave, CanSave);
+            SaveCommand = new RelayCommand(ValidateAndSave);
+
+            if (!CanSave() || !_configurationService.ValidateSettings())
+            {
+                MessageBox.Show("Instellingen zijn ongeldig. Controleer de ingevoerde waarden.");
+            }
         }
 
         public void InitializeSettings()
@@ -132,7 +139,7 @@ namespace CoursesManager.UI.ViewModels
             {
                 if (!CanSave())
                 {
-                    throw new InvalidOperationException("Instellingen zijn ongeldig. Controleer de ingevoerde waarden.");
+                    MessageBox.Show("Instellingen zijn ongeldig. Controleer de ingevoerde waarden.");
                 }
 
                 var dbParams = new Dictionary<string, string>
@@ -154,7 +161,18 @@ namespace CoursesManager.UI.ViewModels
 
                 // Save encrypted data
                 _configurationService.SaveEnvSettings(dbParams, mailParams);
-                Console.WriteLine("Instellingen succesvol opgeslagen!");
+
+                if (!_configurationService.ValidateSettings())
+                {
+                    MessageBox.Show("Instellingen zijn ongeldig. Controleer de ingevoerde waarden.");
+                    INavigationService.CanNavigate = false;
+                    return;
+                }
+
+                INavigationService.CanNavigate = true;
+
+
+                MessageBox.Show("Instellingen succesvol opgeslagen!");
             }
             catch (Exception ex)
             {

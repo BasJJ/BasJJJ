@@ -2,6 +2,7 @@
 using System.IO;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
+using MySql.Data.MySqlClient;
 
 
 namespace CoursesManager.UI.Service
@@ -12,7 +13,7 @@ namespace CoursesManager.UI.Service
         private readonly EncryptionService _encryptionService;
 
 
-        public ConfigurationService( EncryptionService encryptionService)
+        public ConfigurationService(EncryptionService encryptionService)
         {
             _encryptionService = encryptionService ?? throw new ArgumentNullException(nameof(encryptionService));
         }
@@ -24,12 +25,12 @@ namespace CoursesManager.UI.Service
             var dbConnectionString = BuildConnectionString(dbParams);
             var mailConnectionString = BuildConnectionString(mailParams);
 
-            
+
 
             EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Encrypt(dbConnectionString);
             EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Encrypt(mailConnectionString);
 
-          
+
 
             EnvManager<EnvModel>.Save();
 
@@ -48,7 +49,7 @@ namespace CoursesManager.UI.Service
             catch
             {
                 Console.WriteLine("Fout bij decryptie. Mogelijk onjuiste sleutel of waarde niet versleuteld.");
-                return encryptedText; 
+                return encryptedText;
             }
         }
 
@@ -96,46 +97,50 @@ namespace CoursesManager.UI.Service
 
         public bool ValidateSettings()
         {
-            
+
             var envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
             if (!File.Exists(envFilePath))
             {
                 Console.WriteLine("Geen .env-bestand gevonden. Gebruiker moet instellingen invullen.");
-                return false; 
+                return false;
             }
 
-            
+
             try
             {
                 var config = GetDecryptedEnvSettings();
 
-                
+
                 if (string.IsNullOrWhiteSpace(config.ConnectionString) ||
                     string.IsNullOrWhiteSpace(config.MailConnectionString))
                 {
                     Console.WriteLine("De ConnectionString of MailConnectionString is leeg of ongeldig.");
-                    return false; 
+                    return false;
                 }
 
-                
+
                 if (!ValidateConnectionString(config.ConnectionString))
                 {
                     Console.WriteLine("De ConnectionString is ongeldig.");
                     return false;
                 }
 
-                return true; 
+                using (var connection = new MySqlConnection(config.ConnectionString))
+                {
+                    connection.Open();
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Fout bij het valideren van instellingen: {ex.Message}");
-                return false; 
+                return false;
             }
         }
 
         private bool ValidateConnectionString(string connectionString)
         {
-           
             return connectionString.Contains("Server=") &&
                    connectionString.Contains("Database=") &&
                    connectionString.Contains("User=") &&

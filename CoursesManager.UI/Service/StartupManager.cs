@@ -24,6 +24,7 @@ namespace CoursesManager.UI.Service
                 if (!_configurationService.ValidateSettings())
                 {
                     Console.WriteLine("Configuratie is ongeldig. start de configuratie-instellingen");
+                    INavigationService.CanNavigate = false;
                     OpenConfigurationUi();
                 }
                 else
@@ -41,10 +42,8 @@ namespace CoursesManager.UI.Service
 
         private void OpenConfigurationUi()
         {
-
             Console.WriteLine("Configuratie-UI wordt geopend...");
             _navigationService.NavigateTo<ConfigurationViewModel>();
-
         }
     }
 }
