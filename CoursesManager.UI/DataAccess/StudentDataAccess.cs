@@ -25,7 +25,11 @@ namespace CoursesManager.UI.DataAccess
             {
                 string procedureName = StoredProcedures.GetAllStudents;
                 var results = ExecuteProcedure(procedureName);
-                return results.Select(FillDataModel).ToList();
+
+                var addresses = _addressDataAccess.GetAll();
+                var registrations = _registrationDataAccess.GetAll();
+
+                return results.Select(row => FillDataModel(row, addresses, registrations)).ToList();
             }
             catch (MySqlException ex)
             {
@@ -39,7 +43,11 @@ namespace CoursesManager.UI.DataAccess
             {
                 string procedureName = StoredProcedures.GetNotDeletedStudents;
                 var results = ExecuteProcedure(procedureName);
-                return results.Select(FillDataModel).ToList();
+
+                var addresses = _addressDataAccess.GetAll();
+                var registrations = _registrationDataAccess.GetAll();
+
+                return results.Select(row => FillDataModel(row, addresses, registrations)).ToList();
             }
             catch (MySqlException ex)
             {
@@ -53,7 +61,11 @@ namespace CoursesManager.UI.DataAccess
             {
                 string procedureName = StoredProcedures.GetDeletedStudents;
                 var results = ExecuteProcedure(procedureName);
-                return results.Select(FillDataModel).ToList();
+
+                var addresses = _addressDataAccess.GetAll();
+                var registrations = _registrationDataAccess.GetAll();
+
+                return results.Select(row => FillDataModel(row, addresses, registrations)).ToList();
             }
             catch (MySqlException ex)
             {
@@ -66,6 +78,11 @@ namespace CoursesManager.UI.DataAccess
             try
             {
                 // Add the address first
+                if (student.Address == null)
+                {
+                    throw new ArgumentNullException(nameof(student.Address), "Student address cannot be null.");
+                }
+
                 _addressDataAccess.Add(student.Address);
 
                 // Get the newly created address ID
@@ -89,11 +106,22 @@ namespace CoursesManager.UI.DataAccess
 
                 ExecuteNonProcedure(procedureName, parameters);
 
-                foreach (var registration in student.Registrations)
+                int studentId = GetLastInsertedId();
+
+                if (student.Registrations != null)
                 {
-                    registration.StudentId = GetLastInsertedId();
-                    registration.CourseId = registration.Course.Id;
-                    _registrationDataAccess.Add(registration);
+                    foreach (var registration in student.Registrations)
+                    {
+                        if (registration.Course == null)
+                        {
+                            throw new ArgumentNullException(nameof(registration.Course),
+                                "Registration course cannot be null.");
+                        }
+
+                        registration.StudentId = studentId;
+                        registration.CourseId = registration.Course.Id;
+                        _registrationDataAccess.Add(registration);
+                    }
                 }
             }
             catch (MySqlException ex)
@@ -109,7 +137,9 @@ namespace CoursesManager.UI.DataAccess
                 string procedureName = StoredProcedures.GetStudentById;
                 var parameters = new MySqlParameter[] { new MySqlParameter("@p_id", id) };
                 var results = ExecuteProcedure(procedureName, parameters);
-                return results.Select(FillDataModel).FirstOrDefault();
+                var addresses = _addressDataAccess.GetAll();
+                var registrations = _registrationDataAccess.GetAll();
+                return results.Select(row => FillDataModel(row, addresses, registrations)).FirstOrDefault();
             }
             catch (MySqlException ex)
             {
@@ -131,7 +161,7 @@ namespace CoursesManager.UI.DataAccess
             throw new NotImplementedException();
         }
 
-        protected Student FillDataModel(Dictionary<string, object> row)
+        protected Student FillDataModel(Dictionary<string, object> row, List<Address> addresses, List<Registration> registrations)
         {
             LogUtil.Info($"Processing row: {string.Join(", ", row.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
 
@@ -153,10 +183,10 @@ namespace CoursesManager.UI.DataAccess
 
             if (student.AddressId.HasValue)
             {
-                student.Address = _addressDataAccess.GetById(student.AddressId.Value);
+                student.Address = addresses.FirstOrDefault(a => a.Id == student.AddressId.Value);
             }
 
-            student.Registrations = new ObservableCollection<Registration>(_registrationDataAccess.GetByStudentId(student.Id));
+            student.Registrations = new ObservableCollection<Registration>(registrations.Where(r => r.StudentId == student.Id));
 
             return student;
         }
