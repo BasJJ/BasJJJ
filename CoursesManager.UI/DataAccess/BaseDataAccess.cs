@@ -3,15 +3,34 @@ using System.Reflection;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
 using System.Data;
+using CoursesManager.UI.Service;
 
 namespace CoursesManager.UI.DataAccess;
 
 public abstract class BaseDataAccess<T> where T : new()
 {
-    private readonly string _connectionString = EnvManager<EnvModel>.Values.ConnectionString;
+   
     protected readonly string _modelTableName;
 
-    protected MySqlConnection GetConnection() => new(_connectionString);
+    protected BaseDataAccess(EncryptionService encryptionService) : this(encryptionService, typeof(T).Name.ToLower()) { }
+
+    protected BaseDataAccess(EncryptionService encryptionService, string modelTableName)
+    {
+        _modelTableName = modelTableName;
+    }
+
+
+    protected MySqlConnection GetConnection()
+    {
+        var connectionString = EnvManager<EnvModel>.Values.ConnectionString;
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new InvalidOperationException("De ConnectionString is leeg of ongeldig.");
+        }
+
+        return new MySqlConnection(connectionString);
+    }
 
     /// <inheritdoc />
     protected BaseDataAccess() : this(typeof(T).Name.ToLower()) { }
