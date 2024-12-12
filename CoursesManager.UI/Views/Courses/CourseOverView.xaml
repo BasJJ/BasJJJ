@@ -152,7 +152,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock HorizontalAlignment="Right" Text="Locatie:" FontWeight="Bold" FontSize="22" Foreground="#02008C" />
-                                <TextBlock Grid.Column="2" Text="{Binding Location}" FontWeight="Bold" FontSize="22" Foreground="Black" />
+                                <TextBlock Grid.Column="2" Text="{Binding Location.Name}" FontWeight="Bold" FontSize="22" Foreground="Black" />
                             </Grid>
                         </Grid>
                     </StackPanel>

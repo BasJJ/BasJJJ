@@ -56,7 +56,7 @@ namespace CoursesManager.UI.Models
                     Location = GenerateRandomLocation(),
                     DateCreated = DateTime.Now,
                     Students = new ObservableCollection<Student>(),
-                    Image = GetImage()
+                    
                 };
 
                 courses.Add(course);
