@@ -13,7 +13,6 @@ public class RegistrationRepository : BaseRepository, IRegistrationRepository
     {
         _registrationDataAccess = new RegistrationDataAccess();
         _allRegistrations = new();
-        _allRegistrations = GetAll();
     }
 
     public List<Registration> GetAll()
