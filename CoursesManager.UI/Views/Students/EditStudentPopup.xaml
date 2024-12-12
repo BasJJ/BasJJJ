@@ -98,7 +98,7 @@
                         <!-- Tussenvoegsel -->
                         <TextBlock Text="Tussenvoegsel" Grid.Row="1" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                         Text="{Binding StudentCopy.Insertion, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding StudentCopy.Insertion. , UpdateSourceTrigger=PropertyChanged}"
                          Tag="Tussenvoegsel"
                          Grid.Row="2" Grid.Column="1" Margin="0,0,10,10" />
 

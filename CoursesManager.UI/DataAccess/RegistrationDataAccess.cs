@@ -39,7 +39,12 @@ public class RegistrationDataAccess : BaseDataAccess<Registration>
             RegistrationDate = Convert.ToDateTime(row["registration_date"]),
             PaymentStatus = Convert.ToBoolean(row["payment_status"]),
             IsActive = Convert.ToBoolean(row["is_active"]),
-            IsAchieved = Convert.ToBoolean(row["is_achieved"])
+            IsAchieved = Convert.ToBoolean(row["is_achieved"]),
+            Course = new Course
+            {
+                Id = Convert.ToInt32(row["course_id"]),
+                Name = row["course_name"].ToString(),
+            }
         }).ToList();
     }
 
