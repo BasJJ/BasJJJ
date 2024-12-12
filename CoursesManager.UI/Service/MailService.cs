@@ -6,7 +6,6 @@ using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
 using CoursesManager.MVVM.Mail.MailService;
 using CoursesManager.MVVM.Mail;
-using CoursesManager.MVVM.Mail.MailTemplate;
 using ZstdSharp.Unsafe;
 using System.ComponentModel.DataAnnotations;
 
