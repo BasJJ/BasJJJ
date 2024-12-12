@@ -235,19 +235,19 @@ namespace CoursesManager.UI.ViewModels.Courses
             });
         }
 
-        public void SendPaymentMail()
+        public async void SendPaymentMail()
         {
-            mailProvider.SendPaymentNotifications(CurrentCourse);
+            await mailProvider.SendPaymentNotifications(CurrentCourse);
         }
 
-        public void SendStartCourseMail()
+        public async void SendStartCourseMail()
         {
-            mailProvider.SendCourseStartNotifications(CurrentCourse);
+           await mailProvider.SendCourseStartNotifications(CurrentCourse);
         }
 
-        public void SendCertificateMail()
+        public async void SendCertificateMail()
         {
-            mailProvider.SendCertificates(CurrentCourse);
+            await mailProvider.SendCertificates(CurrentCourse);
         }
 
         private async void ChangeCourse()

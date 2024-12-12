@@ -8,6 +8,7 @@ namespace CoursesManager.UI.Models
 {
     public class Certificate
     {
+        public int Id { get; set; }
         public string PdfString { get; set; }
         public int StudentCode { get; set; }
     }

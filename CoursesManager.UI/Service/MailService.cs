@@ -27,7 +27,7 @@ public class MailService : IMailService
 
         _smtpConfig = ParseConnectionString(mailConnectionString);
     }
-    public async Task<MailResult> SendMail(IMailTemplate mailTemplate)
+    public async Task<MailResult> SendMail(MailMessage mailTemplate)
     {
         try
         {
@@ -54,7 +54,7 @@ public class MailService : IMailService
         }
     }
 
-    public async Task<List<MailResult>> SendMail(IEnumerable<IMailTemplate> mailTemplates)
+    public async Task<List<MailResult>> SendMail(List<MailMessage> mailTemplates)
     {
         var mailResults = new List<MailResult>();
 
