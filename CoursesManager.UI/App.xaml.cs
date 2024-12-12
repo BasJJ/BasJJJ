@@ -48,7 +48,7 @@ public partial class App : Application
         base.OnStartup(e);
 
         // Initialize Dummy Data
-       // SetupDummyDataTemporary();
+        //SetupDummyDataTemporary();
         InitializeRepositories();
 
         var studentCleanupService = new StudentCleanupService(StudentRepository);
