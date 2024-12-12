@@ -137,7 +137,7 @@
                         <!-- Huisnummer -->
                         <TextBlock Text="Huisnummer*" Grid.Row="7" Grid.Column="1" Margin="0,0,0,5" />
                         <TextBox Style="{DynamicResource TextBoxEditStudentStyle1}"
-                             Text="{Binding Student.Address.Phone, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding Student.Address.HouseNumber, UpdateSourceTrigger=PropertyChanged}"
                              local:ValidationProperties.IsRequired="True"
                              Tag="Huisnummer"
                              Grid.Row="8" Grid.Column="1" Margin="0,0,10,10" />

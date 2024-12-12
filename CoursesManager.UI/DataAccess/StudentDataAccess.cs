@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using CoursesManager.UI.Database;
 
@@ -23,7 +24,8 @@ namespace CoursesManager.UI.DataAccess
             try
             {
                 string procedureName = StoredProcedures.GetAllStudents;
-                return FetchAll(procedureName);
+                var results = ExecuteProcedure(procedureName);
+                return results.Select(FillDataModel).ToList();
             }
             catch (MySqlException ex)
             {
@@ -36,7 +38,8 @@ namespace CoursesManager.UI.DataAccess
             try
             {
                 string procedureName = StoredProcedures.GetNotDeletedStudents;
-                return FetchAll(procedureName);
+                var results = ExecuteProcedure(procedureName);
+                return results.Select(FillDataModel).ToList();
             }
             catch (MySqlException ex)
             {
@@ -49,7 +52,8 @@ namespace CoursesManager.UI.DataAccess
             try
             {
                 string procedureName = StoredProcedures.GetDeletedStudents;
-                return FetchAll(procedureName);
+                var results = ExecuteProcedure(procedureName);
+                return results.Select(FillDataModel).ToList();
             }
             catch (MySqlException ex)
             {
@@ -70,8 +74,8 @@ namespace CoursesManager.UI.DataAccess
                 string procedureName = StoredProcedures.AddStudent;
                 var parameters = new MySqlParameter[]
                 {
-                    new MySqlParameter("@p_first_name", student.FirstName),
-                    new MySqlParameter("@p_last_name", student.LastName),
+                    new MySqlParameter("@p_firstname", student.FirstName),
+                    new MySqlParameter("@p_lastname", student.LastName),
                     new MySqlParameter("@p_email", student.Email),
                     new MySqlParameter("@p_phone", student.Phone),
                     new MySqlParameter("@p_address_id", addressId),
@@ -88,6 +92,7 @@ namespace CoursesManager.UI.DataAccess
                 foreach (var registration in student.Registrations)
                 {
                     registration.StudentId = GetLastInsertedId();
+                    registration.CourseId = registration.Course.Id;
                     _registrationDataAccess.Add(registration);
                 }
             }
@@ -103,8 +108,8 @@ namespace CoursesManager.UI.DataAccess
             {
                 string procedureName = StoredProcedures.GetStudentById;
                 var parameters = new MySqlParameter[] { new MySqlParameter("@p_id", id) };
-                var students = FetchAll(procedureName, parameters);
-                return students.FirstOrDefault();
+                var results = ExecuteProcedure(procedureName, parameters);
+                return results.Select(FillDataModel).FirstOrDefault();
             }
             catch (MySqlException ex)
             {
@@ -126,22 +131,24 @@ namespace CoursesManager.UI.DataAccess
             throw new NotImplementedException();
         }
 
-        protected Student FillModel(MySqlDataReader reader)
+        protected Student FillDataModel(Dictionary<string, object> row)
         {
+            LogUtil.Info($"Processing row: {string.Join(", ", row.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
+
             var student = new Student
             {
-                Id = reader.GetInt32("id"),
-                FirstName = reader.GetString("first_name"),
-                LastName = reader.GetString("last_name"),
-                Email = reader.GetString("email"),
-                Phone = reader.GetString("phone"),
-                IsDeleted = reader.GetBoolean("is_deleted"),
-                DeletedAt = reader.IsDBNull(reader.GetOrdinal("deleted_at")) ? (DateTime?)null : reader.GetDateTime("deleted_at"),
-                CreatedAt = reader.GetDateTime("created_at"),
-                UpdatedAt = reader.GetDateTime("updated_at"),
-                AddressId = reader.IsDBNull(reader.GetOrdinal("address_id")) ? (int?)null : reader.GetInt32("address_id"),
-                DateOfBirth = reader.GetDateTime("date_of_birth"),
-                Insertion = reader.IsDBNull(reader.GetOrdinal("insertion")) ? null : reader.GetString("insertion")
+                Id = row.ContainsKey("id") && row["id"] != null ? Convert.ToInt32(row["id"]) : 0,
+                FirstName = row.ContainsKey("firstname") && row["firstname"] != null ? row["firstname"].ToString() : string.Empty,
+                LastName = row.ContainsKey("lastname") && row["lastname"] != null ? row["lastname"].ToString() : string.Empty,
+                Email = row.ContainsKey("email") && row["email"] != null ? row["email"].ToString() : string.Empty,
+                Phone = row.ContainsKey("phone") && row["phone"] != null ? row["phone"].ToString() : string.Empty,
+                IsDeleted = row.ContainsKey("is_deleted") && row["is_deleted"] != null && Convert.ToBoolean(row["is_deleted"]),
+                DeletedAt = row.ContainsKey("deleted_at") && row["deleted_at"] != null ? Convert.ToDateTime(row["deleted_at"]) : (DateTime?)null,
+                CreatedAt = row.ContainsKey("created_at") && row["created_at"] != null ? Convert.ToDateTime(row["created_at"]) : DateTime.MinValue,
+                UpdatedAt = row.ContainsKey("updated_at") && row["updated_at"] != null ? Convert.ToDateTime(row["updated_at"]) : DateTime.MinValue,
+                AddressId = row.ContainsKey("address_id") && row["address_id"] != null ? Convert.ToInt32(row["address_id"]) : (int?)null,
+                DateOfBirth = row.ContainsKey("date_of_birth") && row["date_of_birth"] != null ? Convert.ToDateTime(row["date_of_birth"]) : DateTime.MinValue,
+                Insertion = row.ContainsKey("insertion") && row["insertion"] != null ? row["insertion"].ToString() : null
             };
 
             if (student.AddressId.HasValue)

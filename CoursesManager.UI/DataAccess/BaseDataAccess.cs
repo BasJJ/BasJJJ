@@ -191,6 +191,31 @@ public abstract class BaseDataAccess<T> where T : new()
         }
     }
 
+    protected T FillDataModel(Dictionary<string, object> row)
+    {
+        T model = new();
+        PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var property in properties)
+        {
+            if (!row.ContainsKey(property.Name) || row[property.Name] is DBNull)
+            {
+                continue;
+            }
+
+            try
+            {
+                property.SetValue(model, Convert.ChangeType(row[property.Name], property.PropertyType));
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidCastException($"Error converting column '{property.Name}' to property '{property.Name}' of type '{property.PropertyType}'.", exception);
+            }
+        }
+
+        return model;
+    }
+
     public bool ExecuteNonQuery(string query, params MySqlParameter[]? parameters)
     {
         using var mySqlConnection = GetConnection();
