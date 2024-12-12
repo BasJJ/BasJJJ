@@ -11,23 +11,21 @@ using System.ComponentModel.DataAnnotations;
 
 public class MailService
 {
-    private readonly SmtpConfig _smtpConfig;
+    private SmtpConfig? _smtpConfig;
 
-    public MailService()
-    {
-        var mailConnectionString = EnvManager<EnvModel>.Values.MailConnectionString;
-
-        if (string.IsNullOrWhiteSpace(mailConnectionString))
-        {
-            throw new Exception("MailConnectionString is niet ingesteld in .env");
-        }
-
-        _smtpConfig = ParseConnectionString(mailConnectionString);
-    }
     public async Task<MailResult> SendMail(MailMessage mailMessage)
     {
         try
         {
+            var mailConnectionString = EnvManager<EnvModel>.Values.MailConnectionString;
+
+            if (string.IsNullOrWhiteSpace(mailConnectionString))
+            {
+                throw new Exception("MailConnectionString is niet ingesteld in .env");
+            }
+
+            _smtpConfig = ParseConnectionString(mailConnectionString);
+
             using var smtpClient = new SmtpClient(_smtpConfig.Server, _smtpConfig.Port)
             {
                 Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password),
