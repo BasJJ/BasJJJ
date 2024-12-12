@@ -34,7 +34,7 @@
 
     <Grid Name="SizingGrid" RenderTransformOrigin="0.5, 0.5">
         <Grid.RenderTransform>
-            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="1" ScaleY="1"/>
+            <ScaleTransform x:Name="WindowScaleTransform" ScaleX="0" ScaleY="0"/>
         </Grid.RenderTransform>
         <Grid.Style>
             <Style TargetType="Grid">

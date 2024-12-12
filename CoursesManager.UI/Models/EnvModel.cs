@@ -1,4 +1,4 @@
-﻿using System.Dynamic;
+﻿
 
 namespace CoursesManager.UI.Models
 {

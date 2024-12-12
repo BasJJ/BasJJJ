@@ -92,19 +92,10 @@ namespace CoursesManager.UI.ViewModels
 
         public ICommand SaveCommand { get; }
 
-        public ConfigurationViewModel(IConfigurationService configurationService, string dbServer, string dbPort, string dbUser, string dbPassword, string dbName, string mailServer, string mailPort, string mailUser, string mailPassword, EnvModel appConfig)
+        public ConfigurationViewModel(IConfigurationService configurationService)
         {
             _configurationService = configurationService;
-            _dbServer = dbServer;
-            _dbPort = dbPort;
-            _dbUser = dbUser;
-            _dbPassword = dbPassword;
-            _dbName = dbName;
-            _mailServer = mailServer;
-            _mailPort = mailPort;
-            _mailUser = mailUser;
-            _mailPassword = mailPassword;
-            _appConfig = appConfig;
+            
             InitializeSettings();
             SaveCommand = new RelayCommand(ValidateAndSave);
 
