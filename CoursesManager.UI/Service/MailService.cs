@@ -11,10 +11,9 @@ using System.ComponentModel.DataAnnotations;
 
 public class MailService
 {
-    private SmtpConfig? _smtpConfig;
-
     public async Task<MailResult> SendMail(MailMessage mailMessage)
     {
+        SmtpConfig _smtpConfig;
         try
         {
             var mailConnectionString = EnvManager<EnvModel>.Values.MailConnectionString;

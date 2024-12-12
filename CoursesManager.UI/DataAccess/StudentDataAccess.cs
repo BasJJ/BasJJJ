@@ -118,9 +118,8 @@ namespace CoursesManager.UI.DataAccess
             {
                 // Update the address first
                 _addressDataAccess.Update(student.Address);
-
-                // Get the newly created address ID
-                int addressId = _addressDataAccess.GetLastInsertedId();
+                
+                int? addressId = student.AddressId;
 
                 ExecuteNonProcedure(
                     StoredProcedures.EditStudent,
