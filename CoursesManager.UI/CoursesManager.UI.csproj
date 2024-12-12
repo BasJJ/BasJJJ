@@ -36,7 +36,7 @@
 	<!-- Conditional inclusion of the .env file -->
 	<ItemGroup>
 	  <Content Include=".env">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
 

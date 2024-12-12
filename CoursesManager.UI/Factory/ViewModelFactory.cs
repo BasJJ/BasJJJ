@@ -25,7 +25,17 @@ namespace CoursesManager.UI.Factory
         private readonly IMessageBroker _messageBroker;
         private readonly IDialogService _dialogService;
         private readonly IConfigurationService _configurationService;
-        
+        private string _dbName;
+        private string _dbServer;
+        private string _dbPort;
+        private string _dbUser;
+        private string _dbPassword;
+        private string _mailServer;
+        private string _mailPort;
+        private string _mailUser;
+        private string _mailPassword;
+        private EnvModel _appConfig;
+
 
         public ViewModelFactory(
             ICourseRepository courseRepository,
@@ -53,7 +63,21 @@ namespace CoursesManager.UI.Factory
             return typeof(T) switch
             {
                 Type vmType when vmType == typeof(ConfigurationViewModel) =>
-                    new ConfigurationViewModel(_configurationService) as T,
+                    new ConfigurationViewModel(
+                        _configurationService,
+                        _dbServer,
+                        _dbPort,
+                        _dbUser,
+                        _dbPassword,
+                        _dbName,
+                        _mailServer,
+                        _mailPort,
+                        _mailUser,
+                        _mailPassword,
+                        _appConfig
+
+                    // Voeg hier andere parameters toe als nodig
+                    ) as T,
 
                 _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")
             };
@@ -80,7 +104,7 @@ namespace CoursesManager.UI.Factory
                 Type vmType when vmType == typeof(CoursesManagerViewModel) =>
                     new CoursesManagerViewModel(_courseRepository, _messageBroker, _dialogService, navigationService) as T,
 
-                
+
 
                 // Add other view model cases here...
                 _ => throw new ArgumentException($"Unknown ViewModel type: {typeof(T)}")

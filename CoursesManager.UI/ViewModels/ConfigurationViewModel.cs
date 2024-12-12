@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Windows.Input;
 using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Data;
@@ -13,7 +11,7 @@ namespace CoursesManager.UI.ViewModels
     {
         private readonly IConfigurationService _configurationService;
 
-        
+
 
         private string _dbServer;
         public string DbServer
@@ -43,7 +41,6 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _dbPassword, value);
         }
 
-        public string MaskedDbPassword => new string('●', _dbPassword?.Length ?? 0);
 
 
         private string _dbName;
@@ -82,7 +79,7 @@ namespace CoursesManager.UI.ViewModels
             set => SetProperty(ref _mailPassword, value);
         }
 
-        public string MaskedMailPassword => new string('●', _mailPassword?.Length ?? 0);
+        
 
         private EnvModel _appConfig;
         public EnvModel AppConfig
@@ -93,9 +90,19 @@ namespace CoursesManager.UI.ViewModels
 
         public ICommand SaveCommand { get; }
 
-        public ConfigurationViewModel(IConfigurationService configurationService)
+        public ConfigurationViewModel(IConfigurationService configurationService, string dbServer, string dbPort, string dbUser, string dbPassword, string dbName, string mailServer, string mailPort, string mailUser, string mailPassword, EnvModel appConfig)
         {
             _configurationService = configurationService;
+            _dbServer = dbServer;
+            _dbPort = dbPort;
+            _dbUser = dbUser;
+            _dbPassword = dbPassword;
+            _dbName = dbName;
+            _mailServer = mailServer;
+            _mailPort = mailPort;
+            _mailUser = mailUser;
+            _mailPassword = mailPassword;
+            _appConfig = appConfig;
             InitializeSettings();
             SaveCommand = new RelayCommand(ValidateAndSave, CanSave);
         }

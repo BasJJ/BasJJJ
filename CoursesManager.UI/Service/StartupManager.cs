@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using CoursesManager.MVVM.Navigation;
 using CoursesManager.UI.ViewModels;
 
@@ -24,7 +24,7 @@ namespace CoursesManager.UI.Service
                 if (!_configurationService.ValidateSettings())
                 {
                     Console.WriteLine("Configuratie is ongeldig. start de configuratie-instellingen");
-                    OpenConfigurationUI();
+                    OpenConfigurationUi();
                 }
                 else
                 {
@@ -35,11 +35,11 @@ namespace CoursesManager.UI.Service
             catch (Exception ex)
             {
                 Console.WriteLine($"Fout tijdens configuratiecontrole: {ex.Message}");
-                OpenConfigurationUI();
+                OpenConfigurationUi();
             }
         }
 
-        private void OpenConfigurationUI()
+        private void OpenConfigurationUi()
         {
 
             Console.WriteLine("Configuratie-UI wordt geopend...");

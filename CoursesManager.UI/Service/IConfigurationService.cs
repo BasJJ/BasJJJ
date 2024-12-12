@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿
 using CoursesManager.UI.Models;
 
 namespace CoursesManager.UI.Service

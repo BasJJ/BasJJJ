@@ -24,4 +24,6 @@ namespace CoursesManager.UI.Views
             InitializeComponent();
         }
     }
+
+
 }

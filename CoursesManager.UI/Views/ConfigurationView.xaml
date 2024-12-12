@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CoursesManager.UI.Helpers"
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1100" Background="{StaticResource SecondaryGradient}">
 
@@ -47,7 +48,15 @@
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding DbUser, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Wachtwoord:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding DbPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+            <PasswordBox Grid.Row="4" 
+                         Grid.Column="1" 
+                         Style="{StaticResource PasswordBoxEditCourseStyle1}" 
+                         Margin="0,10,0,10" 
+                         local:PasswordBoxHelper.BoundPassword="{Binding DbPassword, Mode=TwoWay}" 
+                         local:PasswordBoxHelper.BindPassword="True" />
+
+
+
 
             <TextBlock Grid.Row="5" Grid.Column="0" Text="Database:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding DbName, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
@@ -80,7 +89,8 @@
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MailUser, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
 
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Wachtwoord:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,10,0" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MailPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxEditStudentStyle1}" Margin="0,10,0,10" />
+            <PasswordBox Grid.Row="4"  Grid.Column="1" Style="{DynamicResource PasswordBoxEditCourseStyle1}" Margin="0,10,0,10" local:PasswordBoxHelper.BoundPassword="{Binding MailPassword, Mode=TwoWay}" local:PasswordBoxHelper.BindPassword="True" />
+
         </Grid>
 
         <!-- Save Button -->

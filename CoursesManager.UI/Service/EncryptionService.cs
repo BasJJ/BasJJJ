@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Security.Cryptography;
 
 
@@ -6,7 +6,7 @@ namespace CoursesManager.UI.Service
 {
     public class EncryptionService
     {
-        private string key;
+        private string _key;
 
         public EncryptionService(string key)
         {
@@ -15,7 +15,7 @@ namespace CoursesManager.UI.Service
                 throw new ArgumentException("de sleutel mag niet leeg zijn", nameof(key));
             }
 
-            this.key = key;
+            this._key = key;
         }
 
         public string Encrypt(string plainText)
@@ -27,7 +27,7 @@ namespace CoursesManager.UI.Service
 
             using (var aes = Aes.Create())
             {
-                aes.Key = Convert.FromBase64String(key);
+                aes.Key = Convert.FromBase64String(_key);
                 aes.GenerateIV();
 
                 using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
@@ -62,7 +62,7 @@ namespace CoursesManager.UI.Service
 
                 using (var aes = Aes.Create())
                 {
-                    aes.Key = Convert.FromBase64String(key);
+                    aes.Key = Convert.FromBase64String(_key);
                     aes.IV = iv;
 
                     using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))

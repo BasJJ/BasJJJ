@@ -1,7 +1,8 @@
-﻿using System.Configuration;
+﻿
+using System.IO;
 using CoursesManager.MVVM.Env;
 using CoursesManager.UI.Models;
-using CoursesManager.UI.Service;
+
 
 namespace CoursesManager.UI.Service
 {
@@ -31,6 +32,10 @@ namespace CoursesManager.UI.Service
           
 
             EnvManager<EnvModel>.Save();
+
+            EnvManager<EnvModel>.Values.ConnectionString = _encryptionService.Decrypt(EnvManager<EnvModel>.Values.ConnectionString);
+            EnvManager<EnvModel>.Values.MailConnectionString = _encryptionService.Decrypt(EnvManager<EnvModel>.Values.MailConnectionString);
+
         }
 
 
@@ -91,13 +96,53 @@ namespace CoursesManager.UI.Service
 
         public bool ValidateSettings()
         {
-            var config = GetDecryptedEnvSettings();
+            
+            var envFilePath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            if (!File.Exists(envFilePath))
+            {
+                Console.WriteLine("Geen .env-bestand gevonden. Gebruiker moet instellingen invullen.");
+                return false; 
+            }
 
-            return !string.IsNullOrWhiteSpace(config.ConnectionString) &&
-                   !string.IsNullOrWhiteSpace(config.MailConnectionString);
+            
+            try
+            {
+                var config = GetDecryptedEnvSettings();
 
-            // checken of env bestaat, zo niet dan is het false: als het wel true is dan moet de ConnectionString gevalideerd worden
+                
+                if (string.IsNullOrWhiteSpace(config.ConnectionString) ||
+                    string.IsNullOrWhiteSpace(config.MailConnectionString))
+                {
+                    Console.WriteLine("De ConnectionString of MailConnectionString is leeg of ongeldig.");
+                    return false; 
+                }
+
+                
+                if (!ValidateConnectionString(config.ConnectionString))
+                {
+                    Console.WriteLine("De ConnectionString is ongeldig.");
+                    return false;
+                }
+
+                return true; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout bij het valideren van instellingen: {ex.Message}");
+                return false; 
+            }
         }
+
+        private bool ValidateConnectionString(string connectionString)
+        {
+           
+            return connectionString.Contains("Server=") &&
+                   connectionString.Contains("Database=") &&
+                   connectionString.Contains("User=") &&
+                   connectionString.Contains("Password=");
+        }
+
+
 
         private Dictionary<string, string> ParseConnectionString(string connectionString)
         {

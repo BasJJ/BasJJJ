@@ -7,7 +7,7 @@ namespace CoursesManager.MVVM.Env;
 public class EnvManager<T>
     where T : new()
 {
-    private static readonly Lazy<T> _values = new(() =>
+    private static Lazy<T> _values = new(() =>
     {
         var model = new T();
 
@@ -70,7 +70,7 @@ public class EnvManager<T>
     public static void Save()
     {
 
-        Dictionary<string, string> _envData = new();
+        Dictionary<string, string> envData = new();
 
         if (Values == null)
         {
@@ -86,11 +86,11 @@ public class EnvManager<T>
 
             if (!string.IsNullOrWhiteSpace(value))
             {
-                _envData[envKey] = value;
+                envData[envKey] = value;
             }
         }
 
-        SaveToFile(_envData);
+        SaveToFile(envData);
     }
 
 
