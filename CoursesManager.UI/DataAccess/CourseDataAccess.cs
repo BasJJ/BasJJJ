@@ -9,6 +9,7 @@ namespace CoursesManager.UI.DataAccess;
 public class CourseDataAccess : BaseDataAccess<Course>
 {
     private readonly StudentDataAccess _studentDataAccess = new();
+    private readonly Registration _registrationDataAccess = new();
 
     public List<Course> GetAll()
     {
@@ -47,16 +48,18 @@ public class CourseDataAccess : BaseDataAccess<Course>
                 m.Students = new(students.Where(s => s.Registrations.Any(r => r.CourseId == m.Id)));
                 m.Participants = m.Students.Count;
                 m.IsPayed = true;
+                m.Registrations = new();
+
                 foreach (var student in m.Students)
                 {
                     var registration = student.Registrations?.FirstOrDefault(r => r.CourseId == m.Id);
+                    m.Registrations.Add(registration);
 
                     if (registration is not null)
                     {
-                        if (!registration.PaymentStatus)
+                        if (m.IsPayed)
                         {
-                            m.IsPayed = false;
-                            break;
+                            m.IsPayed = registration.PaymentStatus;
                         }
                     }
                 }
