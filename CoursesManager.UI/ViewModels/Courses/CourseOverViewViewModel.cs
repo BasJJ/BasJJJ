@@ -150,28 +150,6 @@ namespace CoursesManager.UI.ViewModels.Courses
                 existingRegistration.PaymentStatus = payment.IsPaid;
                 existingRegistration.IsAchieved = payment.IsAchieved;
                 _registrationRepository.Update(existingRegistration);
-
-                //na review verwijderen. dit zorgt ervoor dat het overzicht reflecteert wat er gebeurd in deze actie.
-                int paymentCounter = 0;
-                foreach (Registration registration in _registrationRepository.GetAll())
-                {
-                    if (registration.CourseId == CurrentCourse.Id)
-                    {
-                        paymentCounter++;
-                    }
-                }
-
-                if (paymentCounter == CurrentCourse.Participants)
-                {
-                    CurrentCourse.IsPayed = true;
-                }
-
-                if (!payment.IsPaid)
-                {
-                    CurrentCourse.IsPayed = false;
-                }
-                //tot hier verwijderen. LET OP! bij verwijderen moet nog wel de koppeling gemaakt worden tussen opgehaalde DB info en UI attributen.
-                //(de tegels in het overzicht moeten de daadwerkelijke betaalstatus en aantal studenten doorgeven)
             }
             else if (payment.IsPaid || payment.IsAchieved)
             {
