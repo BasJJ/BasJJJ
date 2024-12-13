@@ -20,7 +20,6 @@ namespace CoursesManager.UI.Mailing
 
         // private attributes
         private List<Registration> courseRegistrations = new List<Registration>();
-        private List<MailMessage> messages = new List<MailMessage>();
         private List<MailResult> mailResults = new List<MailResult>();
 
         public byte[] GeneratePDF(Course course, Student student)
@@ -64,10 +63,12 @@ namespace CoursesManager.UI.Mailing
         {
             try
             {
-                Template template = templateRepository.GetTemplateByName("CertificateMail");
+                List<MailMessage> messages = new();
+                Template originalTemplate = templateRepository.GetTemplateByName("CertificateMail");
                 foreach (Student student in course.Students)
                 {
                     //byte[] certificate = GeneratePDF(course, student);
+                    var template = originalTemplate.Copy();
                     template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
                     messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                 }
@@ -89,9 +90,12 @@ namespace CoursesManager.UI.Mailing
 
             try
             {
-                Template template = templateRepository.GetTemplateByName("CourseStartMail");
+                List<MailMessage> messages = new();
+                Template originalTemplate = templateRepository.GetTemplateByName("CourseStartMail");
+
                 foreach (Student student in course.Students)
                 {
+                    var template = originalTemplate.Copy();
                     template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, null);
                     messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                 }
@@ -110,8 +114,9 @@ namespace CoursesManager.UI.Mailing
 
         public async Task<List<MailResult>> SendPaymentNotifications(Course course)
         {
+            List<MailMessage> messages = new List<MailMessage>();
             courseRegistrations = course.Registrations;
-            Template template = templateRepository.GetTemplateByName("PaymentMail");
+            Template originalTemplate = templateRepository.GetTemplateByName("PaymentMail");
             try
             {
                 foreach (Registration registration in courseRegistrations)
@@ -120,6 +125,7 @@ namespace CoursesManager.UI.Mailing
                     if (!registration.PaymentStatus)
                     {
                         Student student = course.Students.FirstOrDefault(s => s.Id == registration.StudentId);
+                        var template = originalTemplate.Copy();
                         template.HtmlString = FillTemplate(template.HtmlString, $"{student.FirstName} {student.LastName}", course.Name, $"https://tinyurl.com/CourseManager/{student.Id}");
                         messages.Add(CreateMessage("jarnogerrets@gmail.com", template.SubjectString, template.HtmlString, null));
                     }

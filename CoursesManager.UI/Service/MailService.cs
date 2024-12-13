@@ -30,7 +30,7 @@ public class MailService
             {
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(_smtpConfig.User, _smtpConfig.Password),
-                EnableSsl = _smtpConfig.EnableSsl
+                EnableSsl = true
             };
             MailAddress mailAddress = new MailAddress(_smtpConfig.User);
             mailMessage.From = mailAddress;
@@ -65,8 +65,7 @@ public class MailService
             Server = settings["Server"],
             Port = int.Parse(settings["Port"]),
             User = settings["User"],
-            Password = settings["Password"],
-            EnableSsl = bool.Parse(settings["EnableSsl"])
+            Password = settings["Password"]
         };
     }
 
