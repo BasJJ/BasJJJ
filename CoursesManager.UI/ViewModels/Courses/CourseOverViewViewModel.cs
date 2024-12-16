@@ -120,48 +120,49 @@ namespace CoursesManager.UI.ViewModels.Courses
                 IsFinished = true;
             }
 
-            var registrations = _registrationRepository.GetAll()
-                .Where(r => r.CourseId == CurrentCourse.Id)
+            var registrations = _registrationRepository.GetAllRegistrationsByCourse(CurrentCourse);
+
+            var payments = registrations
+                .Where(registration => registration.Student != null)
+                .Select(registration => new CourseStudentPayment(registration.Student, registration))
                 .ToList();
 
-            var payments = registrations.Select(registration =>
-            {
-                var student = _studentRepository.GetById(registration.StudentId);
-                if (student == null)
-                {
-                    Console.WriteLine($"Warning: Student with Id {registration.StudentId} not found for registration Id {registration.Id}.");
-                    return null;
-                }
-                return new CourseStudentPayment(student, registration);
-            }).Where(payment => payment != null);
-
             StudentPayments = new ObservableCollection<CourseStudentPayment>(payments);
+            OnPropertyChanged(nameof(StudentPayments));
         }
 
         private void OnCheckboxChanged(CourseStudentPayment payment)
         {
             if (payment == null || CurrentCourse == null) return;
 
-            var existingRegistration = _registrationRepository.GetAll()
-                .FirstOrDefault(r => r.CourseId == CurrentCourse.Id && r.StudentId == payment.Student?.Id);
+            var currentRegistration = _registrationRepository.GetAllRegistrationsByCourse(CurrentCourse).FirstOrDefault(r => r.StudentId == payment.Student?.Id);
 
-            if (existingRegistration != null)
+            if (currentRegistration != null)
             {
-                existingRegistration.PaymentStatus = payment.IsPaid;
-                existingRegistration.IsAchieved = payment.IsAchieved;
-                _registrationRepository.Update(existingRegistration);
-            }
-            else if (payment.IsPaid || payment.IsAchieved)
-            {
-                _registrationRepository.Add(new Registration
+                try
                 {
-                    StudentId = payment.Student?.Id ?? 0,
-                    CourseId = CurrentCourse.Id,
-                    PaymentStatus = payment.IsPaid,
-                    IsAchieved = payment.IsAchieved,
-                    RegistrationDate = DateTime.Now,
-                    IsActive = true
-                });
+                    // Haal de true of false checkbox op voor paid, achieved en update de velden zodra deze gewijzigd worden.
+                    currentRegistration.PaymentStatus = payment.IsPaid;
+                    currentRegistration.IsAchieved = payment.IsAchieved;
+                    _registrationRepository.Update(currentRegistration);
+
+                    // Haal alle registrations van de CurrentCourse op en check of alle studenten betaald hebben zet dan CurrentCourse.IsPayed op true, zo niet dan false.
+                    var allCurrentRegistrations = _registrationRepository.GetAllRegistrationsByCourse(CurrentCourse);
+                    if (allCurrentRegistrations.All(r => r.PaymentStatus))
+                    {
+                        CurrentCourse.IsPayed = true;
+                        _courseRepository.Update(CurrentCourse);
+                    }
+                    else
+                    {
+                        CurrentCourse.IsPayed = false;
+                    }
+                }
+                catch
+                (Exception ex)
+                {
+                    throw new Exception("No registration found");
+                }
             }
             LoadCourseData();
         }
