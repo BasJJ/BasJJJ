@@ -85,6 +85,8 @@ namespace CoursesManager.UI.ViewModels.Courses
             _messageBroker = messageBroker;
             _mailProvider = new MailProvider();
 
+            _messageBroker.Subscribe<StudentPaymentUpdatedMessage, CourseOverViewViewModel>(OnregistrationUpdated, this);
+
             ChangeCourseCommand = new RelayCommand(ChangeCourse);
             DeleteCourseCommand = new RelayCommand(DeleteCourse);
             CheckboxChangedCommand = new RelayCommand<CourseStudentPayment>(OnCheckboxChanged);
@@ -165,6 +167,7 @@ namespace CoursesManager.UI.ViewModels.Courses
                 }
             }
             LoadCourseData();
+            _messageBroker.Publish(new CoursePaymentUpdatedMessage());
         }
 
         private async void DeleteCourse()
@@ -211,6 +214,11 @@ namespace CoursesManager.UI.ViewModels.Courses
                     }
                 }
             });
+        }
+
+        public void OnregistrationUpdated(StudentPaymentUpdatedMessage obj)
+        {
+            LoadCourseData();
         }
 
         public async void SendPaymentMail()
