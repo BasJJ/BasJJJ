@@ -1,18 +1,15 @@
 ﻿using CoursesManager.MVVM.Commands;
 using CoursesManager.MVVM.Dialogs;
-using CoursesManager.UI.Models;
-using Microsoft.Win32;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using CoursesManager.UI.Dialogs.ResultTypes;
 using CoursesManager.UI.Dialogs.ViewModels;
+using CoursesManager.UI.Models;
 using CoursesManager.UI.Repositories.CourseRepository;
 using CoursesManager.UI.Repositories.LocationRepository;
-using CoursesManager.UI.Messages;
-using CoursesManager.UI.Repositories;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace CoursesManager.UI.ViewModels.Courses
 {
@@ -21,6 +18,9 @@ namespace CoursesManager.UI.ViewModels.Courses
         private readonly ICourseRepository _courseRepository;
         private readonly IDialogService _dialogService;
         private readonly ILocationRepository _locationRepository;
+
+        private Course? OriginalCourse { get; }
+        public ObservableCollection<Location> Locations { get; set; }
 
         private BitmapImage? _imageSource;
         public BitmapImage? ImageSource
@@ -37,59 +37,61 @@ namespace CoursesManager.UI.ViewModels.Courses
         }
 
         public ICommand SaveCommand { get; }
-
         public ICommand CancelCommand { get; }
-
         public ICommand UploadCommand { get; }
 
-        public ObservableCollection<Location> Locations { get; set; }
 
-        public CourseDialogViewModel(ICourseRepository courseRepository, IDialogService dialogService, ILocationRepository locationRepository, Course? course) : base(course)
+        public CourseDialogViewModel(ICourseRepository courseRepository, IDialogService dialogService,
+            ILocationRepository locationRepository, Course? course) : base(course)
         {
             _courseRepository = courseRepository ?? throw new ArgumentNullException(nameof(courseRepository));
             _locationRepository = locationRepository ?? throw new ArgumentNullException(nameof(locationRepository));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
 
             IsStartAnimationTriggered = true;
-
             OriginalCourse = course;
-            var allLocations = _locationRepository.GetAll();
-            Locations = new ObservableCollection<Location>(allLocations);
 
-            Course = course != null
-                ? course.Copy()
-                : new Course
-                {
-                    Name = string.Empty,
-                    Code = string.Empty,
-                    Description = string.Empty,
-                    Location = null,
-                    IsActive = false,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now,
-                    Image = null,
 
-                };
-
-            Course.Location = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
-
+            Locations = new ObservableCollection<Location>(_locationRepository.GetAll());
+            InitializeCourse(course);
             SaveCommand = new RelayCommand(ExecuteSave, CanExecuteSave);
             CancelCommand = new RelayCommand(OnCancel);
             UploadCommand = new RelayCommand(UploadImage);
+
         }
 
-        private bool CanExecuteSave()
+
+        private void InitializeCourse(Course? course)
         {
-            return !string.IsNullOrWhiteSpace(Course!.Name)
-                       && !string.IsNullOrWhiteSpace(Course.Code)
-                       && Course.StartDate != default
-                       && Course.EndDate != default
-                       && Course.Location != null
-                       && !string.IsNullOrWhiteSpace(Course.Description);
+            Course = course?.Copy() ?? new Course
+            {
+                Name = string.Empty,
+                Code = string.Empty,
+                Description = string.Empty,
+                Location = null,
+                IsActive = false,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                Image = null,
+
+            };
+
+            Course.Location = Locations.FirstOrDefault(l => l.Id == Course.LocationId);
+
+
         }
 
+        private bool CanExecuteSave() =>
 
-        private Course? OriginalCourse { get; }
+              !string.IsNullOrWhiteSpace(Course!.Name)
+           && !string.IsNullOrWhiteSpace(Course.Code)
+           && Course.StartDate != default
+           && Course.EndDate != default
+           && Course.Location != null
+           && !string.IsNullOrWhiteSpace(Course.Description);
+
+
+
         protected override void InvokeResponseCallback(DialogResult<Course> dialogResult)
         {
             ResponseCallback.Invoke(dialogResult);
@@ -116,19 +118,15 @@ namespace CoursesManager.UI.ViewModels.Courses
                     throw new InvalidOperationException("Cursusgegevens ontbreken. Opslaan is niet mogelijk.");
                 }
 
-                LogUtil.Log($"Attempting to save course: {Course.Name}, {Course.Code}, {Course.LocationId}");
-
                 if (Course.Location != null) Course.LocationId = Course.Location.Id;
 
                 if (OriginalCourse == null)
                 {
                     _courseRepository.Add(Course);
-                    LogUtil.Log("Course added successfully via repository.");
                 }
                 else
                 {
                     _courseRepository.Update(Course);
-                    LogUtil.Log("Course updated successfully via repository.");
                 }
 
 
@@ -163,7 +161,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             var dialogResult = DialogResult<Course>.Builder()
                 .SetCanceled("Wijzigingen geannuleerd door de gebruiker.")
                 .Build();
-            
+
             await TriggerEndAnimationAsync();
 
             InvokeResponseCallback(dialogResult);
@@ -179,13 +177,13 @@ namespace CoursesManager.UI.ViewModels.Courses
 
             if (openDialog.ShowDialog() == true)
             {
-                
+
                 var bitmap = new BitmapImage(new Uri(openDialog.FileName));
 
-              
-                Course.Image = ConvertImageToByteArray(bitmap);
 
-                
+                Course!.Image = ConvertImageToByteArray(bitmap);
+
+
                 ImageSource = bitmap;
             }
         }
@@ -200,7 +198,7 @@ namespace CoursesManager.UI.ViewModels.Courses
             {
                 var encoder = new JpegBitmapEncoder
                 {
-                    QualityLevel = 90 
+                    QualityLevel = 90
                 };
 
                 encoder.Frames.Add(BitmapFrame.Create(image));
